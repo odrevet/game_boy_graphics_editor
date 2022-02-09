@@ -1,2 +1,3 @@
-# GBDK_graphic_editor
-Sprite viewer / editor for the Game Boy Dev Kit  
+# gbdk_graphic_editor
+
+Edit GBDK graphics from .c source files
