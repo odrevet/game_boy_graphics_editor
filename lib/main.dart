@@ -33,8 +33,7 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  var intensity = List.filled(64, 0, growable: false);
-  var arr = <int>[];
+  var intensity = List.filled(64, 0, growable: true);
   var spriteSize = 8;
   var spriteCount = 0;
   var spriteIndex = 0;
@@ -64,12 +63,10 @@ class _EditorState extends State<Editor> {
       if (name != "" && values.isNotEmpty) {
         setState(() {
           this.name = name;
-          arr.clear();
-          arr = getIntensityFromRaw(values, spriteSize);
+          intensity.clear();
+          intensity = getIntensityFromRaw(values, spriteSize);
           spriteIndex = 0;
-          spriteCount = arr.length ~/ (spriteSize * spriteSize);
-          intensity = arr.sublist((spriteSize * spriteSize) * spriteIndex,
-              (spriteSize * spriteSize) * (spriteIndex + 1));
+          spriteCount = intensity.length ~/ (spriteSize * spriteSize);
         });
       }
     }
@@ -79,8 +76,6 @@ class _EditorState extends State<Editor> {
     if (spriteIndex > 0) {
       setState(() {
         spriteIndex -= 1;
-        intensity = arr.sublist((spriteSize * spriteSize) * spriteIndex,
-            (spriteSize * spriteSize) * (spriteIndex + 1));
       });
     }
   }
@@ -89,8 +84,6 @@ class _EditorState extends State<Editor> {
     if (spriteIndex + 1 < spriteCount) {
       setState(() {
         spriteIndex += 1;
-        intensity = arr.sublist((spriteSize * spriteSize) * spriteIndex,
-            (spriteSize * spriteSize) * (spriteIndex + 1));
       });
     }
   }
@@ -118,6 +111,8 @@ class _EditorState extends State<Editor> {
             )
           ],
         ),
-        body: PixelGridWidget(intensity: intensity));
+        body: PixelGridWidget(
+            intensity: intensity.sublist((spriteSize * spriteSize) * spriteIndex,
+                (spriteSize * spriteSize) * (spriteIndex + 1))));
   }
 }
