@@ -111,8 +111,34 @@ class _EditorState extends State<Editor> {
             )
           ],
         ),
-        body: PixelGridWidget(
-            intensity: intensity.sublist((spriteSize * spriteSize) * spriteIndex,
-                (spriteSize * spriteSize) * (spriteIndex + 1))));
+        body: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              child: PixelGridWidget(
+                  intensity: intensity.sublist(
+                      (spriteSize * spriteSize) * spriteIndex,
+                      (spriteSize * spriteSize) * (spriteIndex + 1))),
+            ),
+            Expanded(
+                child: ListView(
+              padding: const EdgeInsets.all(100.0),
+              children: <Widget>[
+                PixelGridWidget(
+                    intensity: intensity.sublist(
+                        (spriteSize * spriteSize) * 0,
+                        (spriteSize * spriteSize) * 1)),
+                PixelGridWidget(
+                    intensity: intensity.sublist(
+                        (spriteSize * spriteSize) * 0,
+                        (spriteSize * spriteSize) * 1)),
+                PixelGridWidget(
+                    intensity: intensity.sublist(
+                        (spriteSize * spriteSize) * 0,
+                        (spriteSize * spriteSize) * 1))
+              ],
+            ))
+          ],
+        ));
   }
 }
