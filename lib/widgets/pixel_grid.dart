@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pixel_widget.dart';
+import 'pixel.dart';
 
 class PixelGridWidget extends StatefulWidget {
   final List intensity;

@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:gbdk_graphic_editor/pixel_grid_widget.dart';
+import 'package:gbdk_graphic_editor/widgets/pixel_grid.dart';
 
-import 'pixel_widget.dart';
+import 'widgets/pixel.dart';
 
 void main() {
   runApp(const MyApp());
