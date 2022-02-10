@@ -121,23 +121,18 @@ class _EditorState extends State<Editor> {
                       (spriteSize * spriteSize) * (spriteIndex + 1))),
             ),
             Expanded(
-                child: ListView(
-              padding: const EdgeInsets.all(100.0),
-              children: <Widget>[
-                PixelGridWidget(
-                    intensity: intensity.sublist(
-                        (spriteSize * spriteSize) * 0,
-                        (spriteSize * spriteSize) * 1)),
-                PixelGridWidget(
-                    intensity: intensity.sublist(
-                        (spriteSize * spriteSize) * 0,
-                        (spriteSize * spriteSize) * 1)),
-                PixelGridWidget(
-                    intensity: intensity.sublist(
-                        (spriteSize * spriteSize) * 0,
-                        (spriteSize * spriteSize) * 1))
-              ],
-            ))
+                child: ListView.separated(
+                  itemCount: spriteCount,
+                  itemBuilder: (context, index) {
+                    return PixelGridWidget(
+                        intensity: intensity.sublist(
+                            (spriteSize * spriteSize) * index,
+                            (spriteSize * spriteSize) * (index + 1)));
+                  },
+                  separatorBuilder: (context, index) {
+                    return const Divider();
+                  },
+                ))
           ],
         ));
   }
