@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:gbdk_graphic_editor/pixel_grid_widget.dart';
 
 import 'pixel_widget.dart';
 
@@ -38,22 +39,7 @@ class _EditorState extends State<Editor> {
   var spriteCount = 0;
   var spriteIndex = 0;
 
-  Widget _buildEditor(BuildContext context, int index) {
-    return GestureDetector(
-      child: GridTile(
-        child: GestureDetector(
-          onTap: () => setState(() {
-            if (intensity[index] == 3) {
-              intensity[index] = 0;
-            } else {
-              intensity[index] += 1;
-            }
-          }),
-          child: PixelWidget(intensity: intensity[index]),
-        ),
-      ),
-    );
-  }
+
 
   String _convertToBinary(String hex) {
     return int.parse(hex).toRadixString(2).padLeft(spriteSize, "0");
@@ -154,15 +140,6 @@ class _EditorState extends State<Editor> {
             )
           ],
         ),
-        body: AspectRatio(
-          aspectRatio: 1.0,
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 8,
-            ),
-            itemBuilder: _buildEditor,
-            itemCount: spriteSize * spriteSize,
-          ),
-        ));
+        body: PixelGridWidget(intensity: intensity));
   }
 }
