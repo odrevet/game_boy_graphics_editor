@@ -4,7 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/pixel_grid.dart';
 
-import 'widgets/pixel.dart';
+import 'utils.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,12 +40,6 @@ class _EditorState extends State<Editor> {
   var spriteIndex = 0;
   String name = "";
 
-
-
-  String _convertToBinary(String hex) {
-    return int.parse(hex).toRadixString(2).padLeft(spriteSize, "0");
-  }
-
   void _selectFolder() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -60,7 +54,7 @@ class _EditorState extends State<Editor> {
       var matches = regExp.allMatches(source);
 
       var name = "";
-      var values = [];
+      var values = <String>[];
 
       for (Match match in matches) {
         name = match.group(1)!;
@@ -71,26 +65,7 @@ class _EditorState extends State<Editor> {
         setState(() {
           this.name = name;
           arr.clear();
-        });
-
-        for (var index = 0; index < values.length; index += 2) {
-          var lo = _convertToBinary(values[index]);
-          var hi = _convertToBinary(values[index + 1]);
-
-          var combined = "";
-          for (var index = 0; index < spriteSize; index++) {
-            combined += hi[index] + lo[index];
-          }
-
-          for (var index = 0; index < spriteSize * 2; index += 2) {
-            setState(() {
-              arr.add(
-                  int.parse(combined[index] + combined[index + 1], radix: 2));
-            });
-          }
-        }
-
-        setState(() {
+          arr = getIntensityFromRaw(values, spriteSize);
           spriteIndex = 0;
           spriteCount = arr.length ~/ (spriteSize * spriteSize);
           intensity = arr.sublist((spriteSize * spriteSize) * spriteIndex,
@@ -111,7 +86,7 @@ class _EditorState extends State<Editor> {
   }
 
   _spriteIndexUp() {
-    if(spriteIndex + 1 < spriteCount) {
+    if (spriteIndex + 1 < spriteCount) {
       setState(() {
         spriteIndex += 1;
         intensity = arr.sublist((spriteSize * spriteSize) * spriteIndex,
