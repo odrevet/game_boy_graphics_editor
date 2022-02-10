@@ -38,6 +38,7 @@ class _EditorState extends State<Editor> {
   var spriteSize = 8;
   var spriteCount = 0;
   var spriteIndex = 0;
+  String name = "";
 
 
 
@@ -68,6 +69,7 @@ class _EditorState extends State<Editor> {
 
       if (name != "" && values.isNotEmpty) {
         setState(() {
+          this.name = name;
           arr.clear();
         });
 
@@ -122,6 +124,7 @@ class _EditorState extends State<Editor> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          title: Text("$name $spriteIndex / ${spriteCount - 1}"),
           actions: [
             IconButton(
               icon: const Icon(Icons.arrow_left),
