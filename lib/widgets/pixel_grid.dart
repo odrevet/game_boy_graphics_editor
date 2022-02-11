@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+
 import 'pixel.dart';
 
 class PixelGridWidget extends StatefulWidget {
   final List intensity;
   final Function? onTap;
 
-  const PixelGridWidget({Key? key, required this.intensity, this.onTap}) : super(key: key);
+  const PixelGridWidget({Key? key, required this.intensity, this.onTap})
+      : super(key: key);
 
   @override
   _PixelGridWidgetState createState() => _PixelGridWidgetState();
@@ -18,7 +20,7 @@ class _PixelGridWidgetState extends State<PixelGridWidget> {
     return GestureDetector(
       child: GridTile(
         child: GestureDetector(
-          onTap: () =>  widget.onTap!(index),
+          onTap: () => widget.onTap != null ? widget.onTap!(index) : null,
           child: PixelWidget(intensity: widget.intensity[index]),
         ),
       ),

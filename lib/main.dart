@@ -119,10 +119,19 @@ class _EditorState extends State<Editor> {
                 child: ListView.separated(
                   itemCount: spriteCount,
                   itemBuilder: (context, index) {
-                    return PixelGridWidget(
-                        intensity: intensity.sublist(
-                            (spriteSize * spriteSize) * index,
-                            (spriteSize * spriteSize) * (index + 1)));
+                    return Column(
+                      children: [
+                        InkWell(
+                            onTap: () => setState(() {
+                                  spriteIndex = index;
+                                }),
+                            child: Text("$index")),
+                        PixelGridWidget(
+                            intensity: intensity.sublist(
+                                (spriteSize * spriteSize) * index,
+                                (spriteSize * spriteSize) * (index + 1)))
+                      ],
+                    );
                   },
                   separatorBuilder: (context, index) {
                     return const Divider();
