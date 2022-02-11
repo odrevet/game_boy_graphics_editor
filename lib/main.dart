@@ -114,13 +114,8 @@ class _EditorState extends State<Editor> {
         body: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Expanded(
-              child: PixelGridWidget(
-                  intensity: intensity.sublist(
-                      (spriteSize * spriteSize) * spriteIndex,
-                      (spriteSize * spriteSize) * (spriteIndex + 1))),
-            ),
-            Expanded(
+            SizedBox(
+                width: 200,
                 child: ListView.separated(
                   itemCount: spriteCount,
                   itemBuilder: (context, index) {
@@ -132,7 +127,11 @@ class _EditorState extends State<Editor> {
                   separatorBuilder: (context, index) {
                     return const Divider();
                   },
-                ))
+                )),
+            PixelGridWidget(
+                intensity: intensity.sublist(
+                    (spriteSize * spriteSize) * spriteIndex,
+                    (spriteSize * spriteSize) * (spriteIndex + 1))),
           ],
         ));
   }
