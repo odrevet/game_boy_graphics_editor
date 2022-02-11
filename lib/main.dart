@@ -129,10 +129,22 @@ class _EditorState extends State<Editor> {
                   },
                 )),
             PixelGridWidget(
+                onTap: _setPixel,
                 intensity: intensity.sublist(
                     (spriteSize * spriteSize) * spriteIndex,
                     (spriteSize * spriteSize) * (spriteIndex + 1))),
           ],
         ));
+  }
+
+  _setPixel(int index) {
+    index += (spriteSize * spriteSize) * spriteIndex;
+    setState(() {
+      if (intensity[index] == 3) {
+        intensity[index] = 0;
+      } else {
+        intensity[index] += 1;
+      }
+    });
   }
 }

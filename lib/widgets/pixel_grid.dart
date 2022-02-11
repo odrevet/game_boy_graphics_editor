@@ -3,8 +3,9 @@ import 'pixel.dart';
 
 class PixelGridWidget extends StatefulWidget {
   final List intensity;
+  final Function? onTap;
 
-  const PixelGridWidget({Key? key, required this.intensity}) : super(key: key);
+  const PixelGridWidget({Key? key, required this.intensity, this.onTap}) : super(key: key);
 
   @override
   _PixelGridWidgetState createState() => _PixelGridWidgetState();
@@ -13,18 +14,11 @@ class PixelGridWidget extends StatefulWidget {
 class _PixelGridWidgetState extends State<PixelGridWidget> {
   int spriteSize = 8;
 
-
   Widget _buildEditor(BuildContext context, int index) {
     return GestureDetector(
       child: GridTile(
         child: GestureDetector(
-          onTap: () => setState(() {
-            if (widget.intensity[index] == 3) {
-              widget.intensity[index] = 0;
-            } else {
-              widget.intensity[index] += 1;
-            }
-          }),
+          onTap: () =>  widget.onTap!(index),
           child: PixelWidget(intensity: widget.intensity[index]),
         ),
       ),
