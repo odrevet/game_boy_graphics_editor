@@ -109,15 +109,16 @@ class _EditorState extends State<Editor> {
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
+                        Text("$index"),
                         InkWell(
-                            onTap: () => setState(() {
-                                  spriteIndex = index;
-                                }),
-                            child: Text("$index")),
-                        PixelGridWidget(
-                            intensity: intensity.sublist(
-                                (spriteSize * spriteSize) * index,
-                                (spriteSize * spriteSize) * (index + 1)))
+                          onTap: () => setState(() {
+                            spriteIndex = index;
+                          }),
+                          child: PixelGridWidget(
+                              intensity: intensity.sublist(
+                                  (spriteSize * spriteSize) * index,
+                                  (spriteSize * spriteSize) * (index + 1))),
+                        )
                       ],
                     );
                   },

@@ -17,12 +17,16 @@ class _PixelGridWidgetState extends State<PixelGridWidget> {
   int spriteSize = 8;
 
   Widget _buildEditor(BuildContext context, int index) {
-    return GridTile(
-      child: GestureDetector(
-        onTap: () => widget.onTap != null ? widget.onTap!(index) : null,
-        child: PixelWidget(intensity: widget.intensity[index]),
-      ),
-    );
+    if (widget.onTap != null) {
+      return GridTile(
+        child: GestureDetector(
+          onTap: () => widget.onTap!(index),
+          child: PixelWidget(intensity: widget.intensity[index]),
+        ),
+      );
+    } else {
+      return PixelWidget(intensity: widget.intensity[index]);
+    }
   }
 
   @override
