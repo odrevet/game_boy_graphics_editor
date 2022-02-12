@@ -88,6 +88,10 @@ class _EditorState extends State<Editor> {
         appBar: AppBar(
           title: Text("$name Sprite #$spriteIndex selected. $spriteCount sprite(s) total"),
           actions: [
+            IconButton(
+              icon: const Icon(Icons.bug_report),
+              onPressed: () => getRawFromIntensity(intensity, spriteSize),
+            ),
             intensityButton(0),
             intensityButton(1),
             intensityButton(2),
