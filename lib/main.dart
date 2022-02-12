@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/pixel_grid.dart';
 
 import 'utils.dart';
+import 'colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,6 +35,7 @@ class Editor extends StatefulWidget {
 
 class _EditorState extends State<Editor> {
   var intensity = List.filled(64, 0, growable: true);
+  var selectedIntensity = 0;
   var spriteSize = 8;
   var spriteCount = 0;
   var spriteIndex = 0;
@@ -72,20 +74,12 @@ class _EditorState extends State<Editor> {
     }
   }
 
-  _spriteIndexDown() {
-    if (spriteIndex > 0) {
-      setState(() {
-        spriteIndex -= 1;
-      });
-    }
-  }
-
-  _spriteIndexUp() {
-    if (spriteIndex + 1 < spriteCount) {
-      setState(() {
-        spriteIndex += 1;
-      });
-    }
+  Widget intensityButton(int intensity) {
+    return IconButton(
+        icon: Icon(Icons.stop, color: colors[intensity]),
+        onPressed: () => setState(() {
+              selectedIntensity = intensity;
+            }));
   }
 
   @override
@@ -94,16 +88,10 @@ class _EditorState extends State<Editor> {
         appBar: AppBar(
           title: Text("$name $spriteIndex / ${spriteCount - 1}"),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.arrow_left),
-              tooltip: 'Sprite index down',
-              onPressed: _spriteIndexDown,
-            ),
-            IconButton(
-              icon: const Icon(Icons.arrow_right),
-              tooltip: 'Sprite index up',
-              onPressed: _spriteIndexUp,
-            ),
+            intensityButton(0),
+            intensityButton(1),
+            intensityButton(2),
+            intensityButton(3),
             IconButton(
               icon: const Icon(Icons.folder_open),
               tooltip: 'Open source file',
@@ -149,11 +137,7 @@ class _EditorState extends State<Editor> {
   _setPixel(int index) {
     index += (spriteSize * spriteSize) * spriteIndex;
     setState(() {
-      if (intensity[index] == 3) {
-        intensity[index] = 0;
-      } else {
-        intensity[index] += 1;
-      }
+      intensity[index] = selectedIntensity;
     });
   }
 }
