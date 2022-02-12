@@ -37,7 +37,7 @@ class _EditorState extends State<Editor> {
   var intensity = List.filled(64, 0, growable: true);
   var selectedIntensity = 0;
   var spriteSize = 8;
-  var spriteCount = 0;
+  var spriteCount = 1;
   var spriteIndex = 0;
   String name = "";
 
@@ -86,7 +86,7 @@ class _EditorState extends State<Editor> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("$name $spriteIndex / ${spriteCount - 1}"),
+          title: Text("$name Sprite #$spriteIndex selected. $spriteCount sprite(s) total"),
           actions: [
             intensityButton(0),
             intensityButton(1),
@@ -130,6 +130,13 @@ class _EditorState extends State<Editor> {
                 intensity: intensity.sublist(
                     (spriteSize * spriteSize) * spriteIndex,
                     (spriteSize * spriteSize) * (spriteIndex + 1))),
+            Flexible(
+              child: Column(
+                children: [
+                  Flexible(child: Text(intensity.toString())),
+                ],
+              ),
+            )
           ],
         ));
   }
