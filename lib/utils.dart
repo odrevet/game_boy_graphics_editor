@@ -9,8 +9,6 @@ List<int> getIntensityFromRaw(List<String> values, int spriteSize) {
     var lo = toBinary(values[index], spriteSize);
     var hi = toBinary(values[index + 1], spriteSize);
 
-    print("-> $lo and $hi");
-
     var combined = "";
     for (var index = 0; index < spriteSize; index++) {
       combined += hi[index] + lo[index];
@@ -24,8 +22,8 @@ List<int> getIntensityFromRaw(List<String> values, int spriteSize) {
   return intensity;
 }
 
-String getRawFromIntensity(List<int> intensity, int spriteSize) {
-  var raw = "";
+List<String> getRawFromIntensity(List<int> intensity, int spriteSize) {
+  var raw = <String>[];
 
   var combined = "";
   for (var element in intensity) {
@@ -39,11 +37,12 @@ String getRawFromIntensity(List<int> intensity, int spriteSize) {
     hi += combined[index + 1];
   }
 
+  print("<- ${combined.length}");
   print("<- $lo and $hi");
 
-  raw += "0x${int.parse(lo, radix: 2).toRadixString(16).padLeft(2, "0")}";
+  raw.add("0x${int.parse(lo, radix: 2).toRadixString(16).padLeft(2, "0")}");
 
   print(raw);
-  
+
   return raw;
 }
