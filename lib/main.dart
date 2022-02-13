@@ -4,8 +4,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/pixel_grid.dart';
 
-import 'utils.dart';
 import 'colors.dart';
+import 'utils.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,7 +40,16 @@ class _EditorState extends State<Editor> {
   var spriteSize = 8;
   var spriteCount = 1;
   var spriteIndex = 0;
-  String name = "";
+  String name = "data";
+
+  Future<void> _saveFile() async {
+    String? fileName =
+        await FilePicker.platform.saveFile(allowedExtensions: [".c"]);
+    if (fileName != null) {
+      File file = File(fileName);
+      file.writeAsString("unsigned char $name[] =\r\n{\r\n$raw};");
+    }
+  }
 
   void _selectFolder() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -76,11 +85,11 @@ class _EditorState extends State<Editor> {
     }
   }
 
-  Widget intensityButton(int intensity) {
+  Widget intensityButton(int buttonIntensity) {
     return IconButton(
-        icon: Icon(Icons.stop, color: colors[intensity]),
+        icon: Icon(Icons.stop, color: colors[buttonIntensity]),
         onPressed: () => setState(() {
-              selectedIntensity = intensity;
+              selectedIntensity = buttonIntensity;
             }));
   }
 
@@ -88,7 +97,8 @@ class _EditorState extends State<Editor> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("$name Sprite #$spriteIndex selected. $spriteCount sprite(s) total"),
+          title: Text(
+              "$name Sprite #$spriteIndex selected. $spriteCount sprite(s) total"),
           actions: [
             IconButton(
               icon: const Icon(Icons.bug_report),
@@ -98,6 +108,11 @@ class _EditorState extends State<Editor> {
             intensityButton(1),
             intensityButton(2),
             intensityButton(3),
+            IconButton(
+              icon: const Icon(Icons.save),
+              tooltip: 'Save source file',
+              onPressed: _saveFile,
+            ),
             IconButton(
               icon: const Icon(Icons.folder_open),
               tooltip: 'Open source file',
@@ -143,7 +158,7 @@ class _EditorState extends State<Editor> {
             Flexible(
               child: Column(
                 children: [
-                  Flexible(child: Text(raw)),
+                  Flexible(child: SelectableText(raw)),
                 ],
               ),
             )
@@ -155,6 +170,7 @@ class _EditorState extends State<Editor> {
     index += (spriteSize * spriteSize) * spriteIndex;
     setState(() {
       intensity[index] = selectedIntensity;
+      raw = getRawFromIntensity(intensity, spriteSize).join(",");
     });
   }
 }

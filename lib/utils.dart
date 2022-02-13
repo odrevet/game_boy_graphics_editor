@@ -2,6 +2,10 @@ String toBinary(String value, int spriteSize) {
   return int.parse(value).toRadixString(2).padLeft(spriteSize, "0");
 }
 
+String binaryToHex(value) {
+  return "0x${int.parse(value, radix: 2).toRadixString(16).padLeft(2, "0").toUpperCase()}";
+}
+
 List<int> getIntensityFromRaw(List<String> values, int spriteSize) {
   var intensity = <int>[];
 
@@ -30,18 +34,20 @@ List<String> getRawFromIntensity(List<int> intensity, int spriteSize) {
     combined += element.toRadixString(2).padLeft(2, "0");
   }
 
-  for (var index = 0; index < combined.length ~/ spriteSize * spriteSize; index += spriteSize * 2) {
+  for (var index = 0;
+      index < combined.length ~/ spriteSize * spriteSize;
+      index += spriteSize * 2) {
     var lo = "";
     var hi = "";
     var combinedSub = combined.substring(index, index + spriteSize * 2);
 
-    for (var index2 = 0; index2 < spriteSize * 2; index2 += 2) {
-      lo += combinedSub[index2];
-      hi += combinedSub[index2 + 1];
+    for (var indexSub = 0; indexSub < spriteSize * 2; indexSub += 2) {
+      lo += combinedSub[indexSub];
+      hi += combinedSub[indexSub + 1];
     }
 
-    raw.add("0x${int.parse(hi, radix: 2).toRadixString(16).padLeft(2, "0")}");
-    raw.add("0x${int.parse(lo, radix: 2).toRadixString(16).padLeft(2, "0")}");
+    raw.add(binaryToHex(hi));
+    raw.add(binaryToHex(lo));
   }
 
   return raw;
