@@ -30,19 +30,19 @@ List<String> getRawFromIntensity(List<int> intensity, int spriteSize) {
     combined += element.toRadixString(2).padLeft(2, "0");
   }
 
-  var lo = "";
-  var hi = "";
-  for (var index = 0; index < spriteSize * 2; index += 2) {
-    lo += combined[index];
-    hi += combined[index + 1];
+  for (var index = 0; index < combined.length ~/ spriteSize * spriteSize; index += spriteSize * 2) {
+    var lo = "";
+    var hi = "";
+    var combinedSub = combined.substring(index, index + spriteSize * 2);
+
+    for (var index2 = 0; index2 < spriteSize * 2; index2 += 2) {
+      lo += combinedSub[index2];
+      hi += combinedSub[index2 + 1];
+    }
+
+    raw.add("0x${int.parse(hi, radix: 2).toRadixString(16).padLeft(2, "0")}");
+    raw.add("0x${int.parse(lo, radix: 2).toRadixString(16).padLeft(2, "0")}");
   }
-
-  print("<- ${combined.length}");
-  print("<- $lo and $hi");
-
-  raw.add("0x${int.parse(lo, radix: 2).toRadixString(16).padLeft(2, "0")}");
-
-  print(raw);
 
   return raw;
 }
