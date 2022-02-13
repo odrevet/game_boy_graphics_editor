@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/pixel_grid.dart';
 
@@ -58,8 +60,14 @@ class _EditorState extends State<Editor> {
     );
 
     if (result != null) {
-      File file = File(result.files.single.path!);
-      final source = await file.readAsString();
+      late String source = "";
+      if (kIsWeb) {
+        Uint8List? bytes = result.files.single.bytes;
+        source = String.fromCharCodes(bytes!);
+      } else {
+        File file = File(result.files.single.path!);
+        source = await file.readAsString();
+      }
 
       RegExp regExp = RegExp(r"unsigned char (\w+)\[\] =\r\n\{\r\n([\s\S]*)};");
       var matches = regExp.allMatches(source);
@@ -106,8 +114,8 @@ class _EditorState extends State<Editor> {
             intensityButton(3),
             IconButton(
               icon: const Icon(Icons.save),
-              tooltip: 'Save source file',
-              onPressed: _saveFile,
+              tooltip: kIsWeb ? 'Save is not available for web': 'Save source file',
+              onPressed: kIsWeb ? null : _saveFile,
             ),
             IconButton(
               icon: const Icon(Icons.folder_open),
