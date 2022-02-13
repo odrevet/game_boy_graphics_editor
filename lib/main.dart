@@ -34,6 +34,7 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
+  String raw = "";
   var intensity = List.filled(64, 0, growable: true);
   var selectedIntensity = 0;
   var spriteSize = 8;
@@ -55,18 +56,19 @@ class _EditorState extends State<Editor> {
       var matches = regExp.allMatches(source);
 
       var name = "";
-      var values = <String>[];
+      var values = "";
 
       for (Match match in matches) {
         name = match.group(1)!;
-        values = match.group(2)!.split(',');
+        values = match.group(2)!;
       }
 
       if (name != "" && values.isNotEmpty) {
         setState(() {
+          raw = values;
           this.name = name;
           intensity.clear();
-          intensity = getIntensityFromRaw(values, spriteSize);
+          intensity = getIntensityFromRaw(raw.split(','), spriteSize);
           spriteIndex = 0;
           spriteCount = intensity.length ~/ (spriteSize * spriteSize);
         });
@@ -130,15 +132,18 @@ class _EditorState extends State<Editor> {
                     return const Divider();
                   },
                 )),
-            PixelGridWidget(
-                onTap: _setPixel,
-                intensity: intensity.sublist(
-                    (spriteSize * spriteSize) * spriteIndex,
-                    (spriteSize * spriteSize) * (spriteIndex + 1))),
+            Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: PixelGridWidget(
+                  onTap: _setPixel,
+                  intensity: intensity.sublist(
+                      (spriteSize * spriteSize) * spriteIndex,
+                      (spriteSize * spriteSize) * (spriteIndex + 1))),
+            ),
             Flexible(
               child: Column(
                 children: [
-                  Flexible(child: Text(intensity.toString())),
+                  Flexible(child: Text(raw)),
                 ],
               ),
             )
