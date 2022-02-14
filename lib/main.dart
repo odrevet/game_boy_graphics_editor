@@ -36,13 +36,19 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  String raw = "";
+  late String raw;
   var intensity = List.filled(64, 0, growable: true);
   var selectedIntensity = 0;
   var spriteSize = 8;
   var spriteCount = 1;
   var spriteIndex = 0;
   String name = "data";
+
+  @override
+  void initState(){
+    raw = getRawFromIntensity(intensity, spriteSize).join(',');
+    super.initState();
+  }
 
   Future<void> _saveFile() async {
     String? fileName =
