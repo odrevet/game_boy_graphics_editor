@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:gbdk_graphic_editor/widgets/grid_map.dart';
 import 'package:gbdk_graphic_editor/widgets/pixel_grid.dart';
 
 import 'colors.dart';
@@ -179,29 +180,16 @@ class _EditorState extends State<Editor> {
               child: Column(
                 children: [
                   Flexible(child: SelectableText(raw)),
-                  AspectRatio(
-                    aspectRatio: 1.0,
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                      ),
-                      itemBuilder: _buildEditor,
-                      itemCount: 16,
-                    ),
+                  GridMap(
+                    intensity: intensity,
+                    spriteIndex: spriteIndex,
+                    spriteSize: spriteSize,
                   )
                 ],
               ),
             )
           ],
         ));
-  }
-
-  Widget _buildEditor(BuildContext context, int index) {
-    return PixelGridWidget(
-        intensity: intensity.sublist(
-            (spriteSize * spriteSize) * spriteIndex,
-            (spriteSize * spriteSize) * (spriteIndex + 1)));
   }
 
   _setPixel(int index) {
