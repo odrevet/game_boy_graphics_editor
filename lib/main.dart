@@ -45,7 +45,7 @@ class _EditorState extends State<Editor> {
   String name = "data";
 
   @override
-  void initState(){
+  void initState() {
     raw = getRawFromIntensity(intensity, spriteSize).join(',');
     super.initState();
   }
@@ -119,17 +119,18 @@ class _EditorState extends State<Editor> {
             intensityButton(2),
             intensityButton(3),
             IconButton(
-              icon: const Icon(Icons.add),
-              tooltip: 'Add sprite',
-              onPressed: () => setState(() {
-                spriteCount += 1;
-                intensity += List.filled(64, 0);
-                raw = getRawFromIntensity(intensity, spriteSize).join(',');
-              })
-            ),
+                icon: const Icon(Icons.add),
+                tooltip: 'Add sprite',
+                onPressed: () => setState(() {
+                      spriteCount += 1;
+                      intensity += List.filled(64, 0);
+                      raw =
+                          getRawFromIntensity(intensity, spriteSize).join(',');
+                    })),
             IconButton(
               icon: const Icon(Icons.save),
-              tooltip: kIsWeb ? 'Save is not available for web': 'Save source file',
+              tooltip:
+                  kIsWeb ? 'Save is not available for web' : 'Save source file',
               onPressed: kIsWeb ? null : _saveFile,
             ),
             IconButton(
@@ -178,11 +179,29 @@ class _EditorState extends State<Editor> {
               child: Column(
                 children: [
                   Flexible(child: SelectableText(raw)),
+                  AspectRatio(
+                    aspectRatio: 1.0,
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                      ),
+                      itemBuilder: _buildEditor,
+                      itemCount: 16,
+                    ),
+                  )
                 ],
               ),
             )
           ],
         ));
+  }
+
+  Widget _buildEditor(BuildContext context, int index) {
+    return PixelGridWidget(
+        intensity: intensity.sublist(
+            (spriteSize * spriteSize) * spriteIndex,
+            (spriteSize * spriteSize) * (spriteIndex + 1)));
   }
 
   _setPixel(int index) {
