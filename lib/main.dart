@@ -119,6 +119,15 @@ class _EditorState extends State<Editor> {
             intensityButton(2),
             intensityButton(3),
             IconButton(
+              icon: const Icon(Icons.add),
+              tooltip: 'Add sprite',
+              onPressed: () => setState(() {
+                spriteCount += 1;
+                intensity += List.filled(64, 0);
+                raw = getRawFromIntensity(intensity, spriteSize).join(',');
+              })
+            ),
+            IconButton(
               icon: const Icon(Icons.save),
               tooltip: kIsWeb ? 'Save is not available for web': 'Save source file',
               onPressed: kIsWeb ? null : _saveFile,
