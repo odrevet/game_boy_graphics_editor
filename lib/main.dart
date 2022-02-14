@@ -146,30 +146,52 @@ class _EditorState extends State<Editor> {
           children: [
             SizedBox(
                 width: 200,
-                child: ListView.separated(
+                child: ListView.builder(
                   itemCount: spriteCount,
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
-                        Text("$index"),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Expanded(
+                              child: Divider(
+                                indent: 20.0,
+                                endIndent: 10.0,
+                                thickness: 1,
+                              ),
+                            ),
+                            Text(
+                              "$index",
+                              style: const TextStyle(color: Colors.green),
+                            ),
+                            const Expanded(
+                              child: Divider(
+                                indent: 10.0,
+                                endIndent: 20.0,
+                                thickness: 1,
+                              ),
+                            ),
+                          ],
+                        ),
                         InkWell(
                           onTap: () => setState(() {
                             spriteIndex = index;
                           }),
-                          child: PixelGridWidget(
-                              intensity: intensity.sublist(
-                                  (spriteSize * spriteSize) * index,
-                                  (spriteSize * spriteSize) * (index + 1))),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: PixelGridWidget(
+                                intensity: intensity.sublist(
+                                    (spriteSize * spriteSize) * index,
+                                    (spriteSize * spriteSize) * (index + 1))),
+                          ),
                         )
                       ],
                     );
                   },
-                  separatorBuilder: (context, index) {
-                    return const Divider();
-                  },
                 )),
             Padding(
-              padding: const EdgeInsets.all(40.0),
+              padding: const EdgeInsets.all(16.0),
               child: PixelGridWidget(
                   onTap: _setPixel,
                   intensity: intensity.sublist(
@@ -179,12 +201,18 @@ class _EditorState extends State<Editor> {
             Flexible(
               child: Column(
                 children: [
-                  Flexible(child: SelectableText(raw)),
-                  GridMap(
-                    intensity: intensity,
-                    spriteIndex: spriteIndex,
-                    spriteSize: spriteSize,
-                  )
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: GridMap(
+                      intensity: intensity,
+                      spriteIndex: spriteIndex,
+                      spriteSize: spriteSize,
+                    ),
+                  ),
+                  Flexible(child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SelectableText(raw),
+                  )),
                 ],
               ),
             )
