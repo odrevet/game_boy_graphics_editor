@@ -56,7 +56,7 @@ class _EditorState extends State<Editor> {
         await FilePicker.platform.saveFile(allowedExtensions: [".c"]);
     if (fileName != null) {
       File file = File(fileName);
-      file.writeAsString("unsigned char $name[] =\r\n{\r\n$raw};");
+      file.writeAsString("unsigned char $name[] =\n{\n$raw};");
     }
   }
 
@@ -76,7 +76,7 @@ class _EditorState extends State<Editor> {
         source = await file.readAsString();
       }
 
-      RegExp regExp = RegExp(r"unsigned char (\w+)\[\] =\r\n\{\r\n([\s\S]*)};");
+      RegExp regExp = RegExp(r"unsigned char (\w+)\[\] =\n\{\n([\s\S]*)};");
       var matches = regExp.allMatches(source);
 
       var name = "";
