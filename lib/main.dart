@@ -192,11 +192,14 @@ class _EditorState extends State<Editor> {
                 )),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: PixelGridWidget(
-                  onTap: _setPixel,
-                  intensity: intensity.sublist(
-                      (spriteSize * spriteSize) * spriteIndex,
-                      (spriteSize * spriteSize) * (spriteIndex + 1))),
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: PixelGridWidget(
+                    onTap: _setPixel,
+                    intensity: intensity.sublist(
+                        (spriteSize * spriteSize) * spriteIndex,
+                        (spriteSize * spriteSize) * (spriteIndex + 1))),
+              ),
             ),
             Flexible(
               child: Column(
