@@ -178,6 +178,7 @@ class _EditorState extends State<Editor> {
                             mapData: List.filled(16, spriteIndex, growable: false),
                             spriteData: spriteData,
                             spriteSize: spriteSize,
+                            onTap: null,
                           ),
                         ),
                         Flexible(
@@ -197,6 +198,9 @@ class _EditorState extends State<Editor> {
                       mapData: mapData,
                       spriteData: spriteData,
                       spriteSize: spriteSize,
+                      onTap: (index) => setState(() {
+                        mapData[index] = spriteIndex;
+                      }),
                     ),
                   )
                 ],

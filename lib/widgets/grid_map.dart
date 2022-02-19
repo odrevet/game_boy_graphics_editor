@@ -5,12 +5,14 @@ class GridMap extends StatefulWidget {
   final List<int> mapData;
   final List<int> spriteData;
   final int spriteSize;
+  final Function? onTap;
 
   const GridMap(
       {Key? key,
       required this.mapData,
       required this.spriteData,
-      required this.spriteSize})
+      required this.spriteSize,
+      required this.onTap})
       : super(key: key);
 
   @override
@@ -33,10 +35,22 @@ class _GridMapState extends State<GridMap> {
   }
 
   Widget _build(BuildContext context, int index) {
-    return PixelGridWidget(
-        intensity: widget.spriteData.sublist(
-            (widget.spriteSize * widget.spriteSize) * widget.mapData[index],
-            (widget.spriteSize * widget.spriteSize) *
-                (widget.mapData[index] + 1)));
+    if (widget.onTap != null) {
+      return GestureDetector(
+        onTap: () => widget.onTap!(index),
+        child: PixelGridWidget(
+            intensity: widget.spriteData.sublist(
+                (widget.spriteSize * widget.spriteSize) * widget.mapData[index],
+                (widget.spriteSize * widget.spriteSize) *
+                    (widget.mapData[index] + 1))),
+      );
+    }
+    {
+      return PixelGridWidget(
+          intensity: widget.spriteData.sublist(
+              (widget.spriteSize * widget.spriteSize) * widget.mapData[index],
+              (widget.spriteSize * widget.spriteSize) *
+                  (widget.mapData[index] + 1)));
+    }
   }
 }
