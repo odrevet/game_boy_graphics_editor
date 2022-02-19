@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/map_widget.dart';
+import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
 import 'colors.dart';
@@ -114,8 +115,8 @@ class _EditorState extends State<Editor> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(
-              "$name tile #$tileIndex selected. $tileCount tile(s) total"),
+          title:
+              Text("$name tile #$tileIndex selected. $tileCount tile(s) total"),
           actions: [
             TextButton(
                 style: TextButton.styleFrom(
@@ -137,8 +138,7 @@ class _EditorState extends State<Editor> {
                 onPressed: () => setState(() {
                       tileCount += 1;
                       tileData += List.filled(64, 0);
-                      raw =
-                          getRawFromIntensity(tileData, tileSize).join(',');
+                      raw = getRawFromIntensity(tileData, tileSize).join(',');
                     })),
             IconButton(
               icon: const Icon(Icons.save),
@@ -157,7 +157,14 @@ class _EditorState extends State<Editor> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: tileMode
               ? [
-                  _tileListView(),
+                  TileListView(
+                    onTap: (index) => setState(() {
+                      tileIndex = index;
+                    }),
+                    tileCount: tileCount,
+                    tileData: tileData,
+                    tileSize: tileSize,
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: MouseRegion(
@@ -175,7 +182,8 @@ class _EditorState extends State<Editor> {
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: MapWidget(
-                            mapData: List.filled(16, tileIndex, growable: false),
+                            mapData:
+                                List.filled(16, tileIndex, growable: false),
                             tileData: tileData,
                             tileSize: tileSize,
                             onTap: null,
@@ -191,7 +199,14 @@ class _EditorState extends State<Editor> {
                   )
                 ]
               : [
-                  _tileListView(),
+                  TileListView(
+                    onTap: (index) => setState(() {
+                      tileIndex = index;
+                    }),
+                    tileCount: tileCount,
+                    tileData: tileData,
+                    tileSize: tileSize,
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: MapWidget(
@@ -204,55 +219,6 @@ class _EditorState extends State<Editor> {
                     ),
                   )
                 ],
-        ));
-  }
-
-  Widget _tileListView() {
-    return SizedBox(
-        width: 200,
-        child: ListView.builder(
-          itemCount: tileCount,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Expanded(
-                      child: Divider(
-                        indent: 20.0,
-                        endIndent: 10.0,
-                        thickness: 1,
-                      ),
-                    ),
-                    Text(
-                      "$index",
-                      style: const TextStyle(color: Colors.green),
-                    ),
-                    const Expanded(
-                      child: Divider(
-                        indent: 10.0,
-                        endIndent: 20.0,
-                        thickness: 1,
-                      ),
-                    ),
-                  ],
-                ),
-                InkWell(
-                  onTap: () => setState(() {
-                    tileIndex = index;
-                  }),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: TileWidget(
-                        intensity: tileData.sublist(
-                            (tileSize * tileSize) * index,
-                            (tileSize * tileSize) * (index + 1))),
-                  ),
-                )
-              ],
-            );
-          },
         ));
   }
 
