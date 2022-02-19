@@ -186,7 +186,9 @@ class _EditorState extends State<Editor> {
                         Flexible(
                             child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: SelectableText(getRawFromIntensity(tileData, tileSize).join(",")),
+                          child: SelectableText(
+                              getRawFromIntensity(tileData, tileSize)
+                                  .join(",")),
                         )),
                       ],
                     ),
@@ -204,6 +206,10 @@ class _EditorState extends State<Editor> {
                         mapData[index] = tileIndex;
                       }),
                     ),
+                  ),
+                  Flexible(
+                    child: SelectableText(
+                        mapData.map((e) => decimalToHex(e)).join(",")),
                   )
                 ],
         ));

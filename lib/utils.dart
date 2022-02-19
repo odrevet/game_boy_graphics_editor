@@ -6,6 +6,10 @@ String binaryToHex(value) {
   return "0x${int.parse(value, radix: 2).toRadixString(16).padLeft(2, "0").toUpperCase()}";
 }
 
+String decimalToHex(int value) {
+  return "0x${value.toRadixString(16).padLeft(2, "0").toUpperCase()}";
+}
+
 List<int> getIntensityFromRaw(List<String> values, int tileSize) {
   var intensity = <int>[];
 
