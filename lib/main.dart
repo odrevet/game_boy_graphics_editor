@@ -38,7 +38,6 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  late String raw;
   var mapData = List.filled(16, 0, growable: true);
   var tileData = List.filled(64, 0, growable: true);
   var selectedIntensity = 0;
@@ -48,18 +47,13 @@ class _EditorState extends State<Editor> {
   bool tileMode = true; // edit tile or map
   String name = "data";
 
-  @override
-  void initState() {
-    raw = getRawFromIntensity(tileData, tileSize).join(',');
-    super.initState();
-  }
-
   Future<void> _saveFile() async {
     String? fileName =
         await FilePicker.platform.saveFile(allowedExtensions: [".c"]);
     if (fileName != null) {
       File file = File(fileName);
-      file.writeAsString("unsigned char $name[] =\n{\n$raw};");
+      file.writeAsString(
+          "unsigned char $name[] =\n{\n${getRawFromIntensity(tileData, tileSize).join(",")};");
     }
   }
 
@@ -92,10 +86,9 @@ class _EditorState extends State<Editor> {
 
       if (name != "" && values.isNotEmpty) {
         setState(() {
-          raw = values;
           this.name = name;
           tileData.clear();
-          tileData = getIntensityFromRaw(raw.split(','), tileSize);
+          tileData = getIntensityFromRaw(values.split(','), tileSize);
           tileIndex = 0;
           tileCount = tileData.length ~/ (tileSize * tileSize);
         });
@@ -147,7 +140,6 @@ class _EditorState extends State<Editor> {
                 onPressed: () => setState(() {
                       tileCount += 1;
                       tileData += List.filled(64, 0);
-                      raw = getRawFromIntensity(tileData, tileSize).join(',');
                     })),
             IconButton(
               icon: const Icon(Icons.save),
@@ -194,7 +186,7 @@ class _EditorState extends State<Editor> {
                         Flexible(
                             child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: SelectableText(raw),
+                          child: SelectableText(getRawFromIntensity(tileData, tileSize).join(",")),
                         )),
                       ],
                     ),
@@ -221,7 +213,6 @@ class _EditorState extends State<Editor> {
     index += (tileSize * tileSize) * tileIndex;
     setState(() {
       tileData[index] = selectedIntensity;
-      raw = getRawFromIntensity(tileData, tileSize).join(",");
     });
   }
 }
