@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 const colors = [
-  Color(0xff9bbc0f),
-  Color(0xff8bac0f),
-  Color(0xff306230),
-  Color(0xff0f380f)
+  Color(0xffffffff),
+  Color(0xffaaaaaa),
+  Color(0xff555555),
+  Color(0xff000000),
 ];
