@@ -38,7 +38,8 @@ class Editor extends StatefulWidget {
 
 class _EditorState extends State<Editor> {
   late String raw;
-  var intensity = List.filled(64, 0, growable: true);
+  var mapData = List.filled(16, 0, growable: true);
+  var spriteData = List.filled(64, 0, growable: true);
   var selectedIntensity = 0;
   var spriteSize = 8;
   var spriteCount = 1;
@@ -48,7 +49,7 @@ class _EditorState extends State<Editor> {
 
   @override
   void initState() {
-    raw = getRawFromIntensity(intensity, spriteSize).join(',');
+    raw = getRawFromIntensity(spriteData, spriteSize).join(',');
     super.initState();
   }
 
@@ -92,10 +93,10 @@ class _EditorState extends State<Editor> {
         setState(() {
           raw = values;
           this.name = name;
-          intensity.clear();
-          intensity = getIntensityFromRaw(raw.split(','), spriteSize);
+          spriteData.clear();
+          spriteData = getIntensityFromRaw(raw.split(','), spriteSize);
           spriteIndex = 0;
-          spriteCount = intensity.length ~/ (spriteSize * spriteSize);
+          spriteCount = spriteData.length ~/ (spriteSize * spriteSize);
         });
       }
     }
@@ -135,9 +136,9 @@ class _EditorState extends State<Editor> {
                 tooltip: 'Add sprite',
                 onPressed: () => setState(() {
                       spriteCount += 1;
-                      intensity += List.filled(64, 0);
+                      spriteData += List.filled(64, 0);
                       raw =
-                          getRawFromIntensity(intensity, spriteSize).join(',');
+                          getRawFromIntensity(spriteData, spriteSize).join(',');
                     })),
             IconButton(
               icon: const Icon(Icons.save),
@@ -163,7 +164,7 @@ class _EditorState extends State<Editor> {
                       cursor: SystemMouseCursors.click,
                       child: PixelGridWidget(
                           onTap: _setPixel,
-                          intensity: intensity.sublist(
+                          intensity: spriteData.sublist(
                               (spriteSize * spriteSize) * spriteIndex,
                               (spriteSize * spriteSize) * (spriteIndex + 1))),
                     ),
@@ -174,8 +175,8 @@ class _EditorState extends State<Editor> {
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: GridMap(
-                            intensity: intensity,
-                            spriteIndex: spriteIndex,
+                            mapData: List.filled(16, spriteIndex, growable: false),
+                            spriteData: spriteData,
                             spriteSize: spriteSize,
                           ),
                         ),
@@ -193,8 +194,8 @@ class _EditorState extends State<Editor> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: GridMap(
-                      intensity: intensity,
-                      spriteIndex: spriteIndex,
+                      mapData: mapData,
+                      spriteData: spriteData,
                       spriteSize: spriteSize,
                     ),
                   )
@@ -240,7 +241,7 @@ class _EditorState extends State<Editor> {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: PixelGridWidget(
-                        intensity: intensity.sublist(
+                        intensity: spriteData.sublist(
                             (spriteSize * spriteSize) * index,
                             (spriteSize * spriteSize) * (index + 1))),
                   ),
@@ -254,8 +255,8 @@ class _EditorState extends State<Editor> {
   _setPixel(int index) {
     index += (spriteSize * spriteSize) * spriteIndex;
     setState(() {
-      intensity[index] = selectedIntensity;
-      raw = getRawFromIntensity(intensity, spriteSize).join(",");
+      spriteData[index] = selectedIntensity;
+      raw = getRawFromIntensity(spriteData, spriteSize).join(",");
     });
   }
 }

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/pixel_grid.dart';
 
 class GridMap extends StatefulWidget {
-  final List<int> intensity;
+  final List<int> mapData;
+  final List<int> spriteData;
   final int spriteSize;
-  final int spriteIndex;
 
   const GridMap(
       {Key? key,
-      required this.intensity,
-      required this.spriteSize,
-      required this.spriteIndex})
+      required this.mapData,
+      required this.spriteData,
+      required this.spriteSize})
       : super(key: key);
 
   @override
@@ -26,17 +26,17 @@ class _GridMapState extends State<GridMap> {
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
         ),
-        itemBuilder: _buildEditor,
+        itemBuilder: _build,
         itemCount: 16,
       ),
     );
   }
 
-  Widget _buildEditor(BuildContext context, int index) {
+  Widget _build(BuildContext context, int index) {
     return PixelGridWidget(
-        intensity: widget.intensity.sublist(
-            (widget.spriteSize * widget.spriteSize) * widget.spriteIndex,
+        intensity: widget.spriteData.sublist(
+            (widget.spriteSize * widget.spriteSize) * widget.mapData[index],
             (widget.spriteSize * widget.spriteSize) *
-                (widget.spriteIndex + 1)));
+                (widget.mapData[index] + 1)));
   }
 }
