@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:gbdk_graphic_editor/widgets/pixel_grid.dart';
+import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
-class GridMap extends StatefulWidget {
+class MapWidget extends StatefulWidget {
   final List<int> mapData;
   final List<int> tileData;
   final int tileSize;
   final Function? onTap;
 
-  const GridMap(
+  const MapWidget(
       {Key? key,
       required this.mapData,
       required this.tileData,
@@ -16,10 +16,10 @@ class GridMap extends StatefulWidget {
       : super(key: key);
 
   @override
-  _GridMapState createState() => _GridMapState();
+  _MapWidgetState createState() => _MapWidgetState();
 }
 
-class _GridMapState extends State<GridMap> {
+class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
@@ -38,7 +38,7 @@ class _GridMapState extends State<GridMap> {
     if (widget.onTap != null) {
       return GestureDetector(
         onTap: () => widget.onTap!(index),
-        child: PixelGridWidget(
+        child: TileWidget(
             intensity: widget.tileData.sublist(
                 (widget.tileSize * widget.tileSize) * widget.mapData[index],
                 (widget.tileSize * widget.tileSize) *
@@ -46,7 +46,7 @@ class _GridMapState extends State<GridMap> {
       );
     }
     {
-      return PixelGridWidget(
+      return TileWidget(
           intensity: widget.tileData.sublist(
               (widget.tileSize * widget.tileSize) * widget.mapData[index],
               (widget.tileSize * widget.tileSize) *

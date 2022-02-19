@@ -4,8 +4,8 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:gbdk_graphic_editor/widgets/grid_map.dart';
-import 'package:gbdk_graphic_editor/widgets/pixel_grid.dart';
+import 'package:gbdk_graphic_editor/widgets/map_widget.dart';
+import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
 import 'colors.dart';
 import 'utils.dart';
@@ -162,7 +162,7 @@ class _EditorState extends State<Editor> {
                     padding: const EdgeInsets.all(16.0),
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
-                      child: PixelGridWidget(
+                      child: TileWidget(
                           onTap: _setPixel,
                           intensity: tileData.sublist(
                               (tileSize * tileSize) * tileIndex,
@@ -174,7 +174,7 @@ class _EditorState extends State<Editor> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: GridMap(
+                          child: MapWidget(
                             mapData: List.filled(16, tileIndex, growable: false),
                             tileData: tileData,
                             tileSize: tileSize,
@@ -194,7 +194,7 @@ class _EditorState extends State<Editor> {
                   _tileListView(),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: GridMap(
+                    child: MapWidget(
                       mapData: mapData,
                       tileData: tileData,
                       tileSize: tileSize,
@@ -244,7 +244,7 @@ class _EditorState extends State<Editor> {
                   }),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: PixelGridWidget(
+                    child: TileWidget(
                         intensity: tileData.sublist(
                             (tileSize * tileSize) * index,
                             (tileSize * tileSize) * (index + 1))),

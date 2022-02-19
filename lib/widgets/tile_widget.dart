@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 
 import 'pixel.dart';
 
-class PixelGridWidget extends StatefulWidget {
+class TileWidget extends StatefulWidget {
   final List intensity;
   final Function? onTap;
 
-  const PixelGridWidget({Key? key, required this.intensity, this.onTap})
+  const TileWidget({Key? key, required this.intensity, this.onTap})
       : super(key: key);
 
   @override
-  _PixelGridWidgetState createState() => _PixelGridWidgetState();
+  _TileWidgetState createState() => _TileWidgetState();
 }
 
-class _PixelGridWidgetState extends State<PixelGridWidget> {
+class _TileWidgetState extends State<TileWidget> {
   int tileSize = 8;
 
   Widget _buildEditor(BuildContext context, int index) {
