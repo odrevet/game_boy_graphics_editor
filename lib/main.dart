@@ -39,17 +39,17 @@ class Editor extends StatefulWidget {
 class _EditorState extends State<Editor> {
   late String raw;
   var mapData = List.filled(16, 0, growable: true);
-  var spriteData = List.filled(64, 0, growable: true);
+  var tileData = List.filled(64, 0, growable: true);
   var selectedIntensity = 0;
-  var spriteSize = 8;
-  var spriteCount = 1;
-  var spriteIndex = 0;
-  bool spriteMode = true; // edit sprite or map
+  var tileSize = 8;
+  var tileCount = 1;
+  var tileIndex = 0;
+  bool tileMode = true; // edit tile or map
   String name = "data";
 
   @override
   void initState() {
-    raw = getRawFromIntensity(spriteData, spriteSize).join(',');
+    raw = getRawFromIntensity(tileData, tileSize).join(',');
     super.initState();
   }
 
@@ -93,10 +93,10 @@ class _EditorState extends State<Editor> {
         setState(() {
           raw = values;
           this.name = name;
-          spriteData.clear();
-          spriteData = getIntensityFromRaw(raw.split(','), spriteSize);
-          spriteIndex = 0;
-          spriteCount = spriteData.length ~/ (spriteSize * spriteSize);
+          tileData.clear();
+          tileData = getIntensityFromRaw(raw.split(','), tileSize);
+          tileIndex = 0;
+          tileCount = tileData.length ~/ (tileSize * tileSize);
         });
       }
     }
@@ -115,7 +115,7 @@ class _EditorState extends State<Editor> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-              "$name Sprite #$spriteIndex selected. $spriteCount sprite(s) total"),
+              "$name tile #$tileIndex selected. $tileCount tile(s) total"),
           actions: [
             TextButton(
                 style: TextButton.styleFrom(
@@ -124,21 +124,21 @@ class _EditorState extends State<Editor> {
                   textStyle: const TextStyle(fontSize: 20),
                 ),
                 onPressed: () => setState(() {
-                      spriteMode = !spriteMode;
+                      tileMode = !tileMode;
                     }),
-                child: Text(spriteMode == true ? 'Sprite' : 'Map')),
+                child: Text(tileMode == true ? 'tile' : 'Map')),
             intensityButton(0),
             intensityButton(1),
             intensityButton(2),
             intensityButton(3),
             IconButton(
                 icon: const Icon(Icons.add),
-                tooltip: 'Add sprite',
+                tooltip: 'Add tile',
                 onPressed: () => setState(() {
-                      spriteCount += 1;
-                      spriteData += List.filled(64, 0);
+                      tileCount += 1;
+                      tileData += List.filled(64, 0);
                       raw =
-                          getRawFromIntensity(spriteData, spriteSize).join(',');
+                          getRawFromIntensity(tileData, tileSize).join(',');
                     })),
             IconButton(
               icon: const Icon(Icons.save),
@@ -155,18 +155,18 @@ class _EditorState extends State<Editor> {
         ),
         body: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: spriteMode
+          children: tileMode
               ? [
-                  _spriteListView(),
+                  _tileListView(),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: PixelGridWidget(
                           onTap: _setPixel,
-                          intensity: spriteData.sublist(
-                              (spriteSize * spriteSize) * spriteIndex,
-                              (spriteSize * spriteSize) * (spriteIndex + 1))),
+                          intensity: tileData.sublist(
+                              (tileSize * tileSize) * tileIndex,
+                              (tileSize * tileSize) * (tileIndex + 1))),
                     ),
                   ),
                   Flexible(
@@ -175,9 +175,9 @@ class _EditorState extends State<Editor> {
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: GridMap(
-                            mapData: List.filled(16, spriteIndex, growable: false),
-                            spriteData: spriteData,
-                            spriteSize: spriteSize,
+                            mapData: List.filled(16, tileIndex, growable: false),
+                            tileData: tileData,
+                            tileSize: tileSize,
                             onTap: null,
                           ),
                         ),
@@ -191,15 +191,15 @@ class _EditorState extends State<Editor> {
                   )
                 ]
               : [
-                  _spriteListView(),
+                  _tileListView(),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: GridMap(
                       mapData: mapData,
-                      spriteData: spriteData,
-                      spriteSize: spriteSize,
+                      tileData: tileData,
+                      tileSize: tileSize,
                       onTap: (index) => setState(() {
-                        mapData[index] = spriteIndex;
+                        mapData[index] = tileIndex;
                       }),
                     ),
                   )
@@ -207,11 +207,11 @@ class _EditorState extends State<Editor> {
         ));
   }
 
-  Widget _spriteListView() {
+  Widget _tileListView() {
     return SizedBox(
         width: 200,
         child: ListView.builder(
-          itemCount: spriteCount,
+          itemCount: tileCount,
           itemBuilder: (context, index) {
             return Column(
               children: [
@@ -240,14 +240,14 @@ class _EditorState extends State<Editor> {
                 ),
                 InkWell(
                   onTap: () => setState(() {
-                    spriteIndex = index;
+                    tileIndex = index;
                   }),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: PixelGridWidget(
-                        intensity: spriteData.sublist(
-                            (spriteSize * spriteSize) * index,
-                            (spriteSize * spriteSize) * (index + 1))),
+                        intensity: tileData.sublist(
+                            (tileSize * tileSize) * index,
+                            (tileSize * tileSize) * (index + 1))),
                   ),
                 )
               ],
@@ -257,10 +257,10 @@ class _EditorState extends State<Editor> {
   }
 
   _setPixel(int index) {
-    index += (spriteSize * spriteSize) * spriteIndex;
+    index += (tileSize * tileSize) * tileIndex;
     setState(() {
-      spriteData[index] = selectedIntensity;
-      raw = getRawFromIntensity(spriteData, spriteSize).join(",");
+      tileData[index] = selectedIntensity;
+      raw = getRawFromIntensity(tileData, tileSize).join(",");
     });
   }
 }

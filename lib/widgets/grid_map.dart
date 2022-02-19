@@ -3,15 +3,15 @@ import 'package:gbdk_graphic_editor/widgets/pixel_grid.dart';
 
 class GridMap extends StatefulWidget {
   final List<int> mapData;
-  final List<int> spriteData;
-  final int spriteSize;
+  final List<int> tileData;
+  final int tileSize;
   final Function? onTap;
 
   const GridMap(
       {Key? key,
       required this.mapData,
-      required this.spriteData,
-      required this.spriteSize,
+      required this.tileData,
+      required this.tileSize,
       required this.onTap})
       : super(key: key);
 
@@ -39,17 +39,17 @@ class _GridMapState extends State<GridMap> {
       return GestureDetector(
         onTap: () => widget.onTap!(index),
         child: PixelGridWidget(
-            intensity: widget.spriteData.sublist(
-                (widget.spriteSize * widget.spriteSize) * widget.mapData[index],
-                (widget.spriteSize * widget.spriteSize) *
+            intensity: widget.tileData.sublist(
+                (widget.tileSize * widget.tileSize) * widget.mapData[index],
+                (widget.tileSize * widget.tileSize) *
                     (widget.mapData[index] + 1))),
       );
     }
     {
       return PixelGridWidget(
-          intensity: widget.spriteData.sublist(
-              (widget.spriteSize * widget.spriteSize) * widget.mapData[index],
-              (widget.spriteSize * widget.spriteSize) *
+          intensity: widget.tileData.sublist(
+              (widget.tileSize * widget.tileSize) * widget.mapData[index],
+              (widget.tileSize * widget.tileSize) *
                   (widget.mapData[index] + 1)));
     }
   }

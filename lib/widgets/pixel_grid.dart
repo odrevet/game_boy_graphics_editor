@@ -14,7 +14,7 @@ class PixelGridWidget extends StatefulWidget {
 }
 
 class _PixelGridWidgetState extends State<PixelGridWidget> {
-  int spriteSize = 8;
+  int tileSize = 8;
 
   Widget _buildEditor(BuildContext context, int index) {
     if (widget.onTap != null) {
@@ -38,7 +38,7 @@ class _PixelGridWidgetState extends State<PixelGridWidget> {
           crossAxisCount: 8,
         ),
         itemBuilder: _buildEditor,
-        itemCount: spriteSize * spriteSize,
+        itemCount: tileSize * tileSize,
       ),
     );
   }
