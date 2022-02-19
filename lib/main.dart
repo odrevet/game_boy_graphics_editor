@@ -113,6 +113,15 @@ class _EditorState extends State<Editor> {
 
   @override
   Widget build(BuildContext context) {
+    var tileListView = TileListView(
+      onTap: (index) => setState(() {
+        tileIndex = index;
+      }),
+      tileCount: tileCount,
+      tileData: tileData,
+      tileSize: tileSize,
+    );
+
     return Scaffold(
         appBar: AppBar(
           title:
@@ -157,14 +166,7 @@ class _EditorState extends State<Editor> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: tileMode
               ? [
-                  TileListView(
-                    onTap: (index) => setState(() {
-                      tileIndex = index;
-                    }),
-                    tileCount: tileCount,
-                    tileData: tileData,
-                    tileSize: tileSize,
-                  ),
+                  tileListView,
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: MouseRegion(
@@ -199,14 +201,7 @@ class _EditorState extends State<Editor> {
                   )
                 ]
               : [
-                  TileListView(
-                    onTap: (index) => setState(() {
-                      tileIndex = index;
-                    }),
-                    tileCount: tileCount,
-                    tileData: tileData,
-                    tileSize: tileSize,
-                  ),
+                  tileListView,
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: MapWidget(
