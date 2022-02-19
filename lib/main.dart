@@ -43,6 +43,7 @@ class _EditorState extends State<Editor> {
   var spriteSize = 8;
   var spriteCount = 1;
   var spriteIndex = 0;
+  bool spriteMode = true; // edit sprite or map
   String name = "data";
 
   @override
@@ -115,6 +116,16 @@ class _EditorState extends State<Editor> {
           title: Text(
               "$name Sprite #$spriteIndex selected. $spriteCount sprite(s) total"),
           actions: [
+            TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.all(16.0),
+                  primary: Colors.white,
+                  textStyle: const TextStyle(fontSize: 20),
+                ),
+                onPressed: () => setState(() {
+                      spriteMode = !spriteMode;
+                    }),
+                child: Text(spriteMode == true ? 'Sprite' : 'Map')),
             intensityButton(0),
             intensityButton(1),
             intensityButton(2),
@@ -143,67 +154,42 @@ class _EditorState extends State<Editor> {
         ),
         body: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            SizedBox(
-                width: 200,
-                child: ListView.builder(
-                  itemCount: spriteCount,
-                  itemBuilder: (context, index) {
-                    return Column(
+          children: spriteMode
+              ? [
+                  _spriteListView(),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: PixelGridWidget(
+                          onTap: _setPixel,
+                          intensity: intensity.sublist(
+                              (spriteSize * spriteSize) * spriteIndex,
+                              (spriteSize * spriteSize) * (spriteIndex + 1))),
+                    ),
+                  ),
+                  Flexible(
+                    child: Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Expanded(
-                              child: Divider(
-                                indent: 20.0,
-                                endIndent: 10.0,
-                                thickness: 1,
-                              ),
-                            ),
-                            Text(
-                              "$index",
-                              style: const TextStyle(color: Colors.green),
-                            ),
-                            const Expanded(
-                              child: Divider(
-                                indent: 10.0,
-                                endIndent: 20.0,
-                                thickness: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                        InkWell(
-                          onTap: () => setState(() {
-                            spriteIndex = index;
-                          }),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: PixelGridWidget(
-                                intensity: intensity.sublist(
-                                    (spriteSize * spriteSize) * index,
-                                    (spriteSize * spriteSize) * (index + 1))),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: GridMap(
+                            intensity: intensity,
+                            spriteIndex: spriteIndex,
+                            spriteSize: spriteSize,
                           ),
-                        )
+                        ),
+                        Flexible(
+                            child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: SelectableText(raw),
+                        )),
                       ],
-                    );
-                  },
-                )),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: PixelGridWidget(
-                    onTap: _setPixel,
-                    intensity: intensity.sublist(
-                        (spriteSize * spriteSize) * spriteIndex,
-                        (spriteSize * spriteSize) * (spriteIndex + 1))),
-              ),
-            ),
-            Flexible(
-              child: Column(
-                children: [
+                    ),
+                  )
+                ]
+              : [
+                  _spriteListView(),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: GridMap(
@@ -211,15 +197,57 @@ class _EditorState extends State<Editor> {
                       spriteIndex: spriteIndex,
                       spriteSize: spriteSize,
                     ),
-                  ),
-                  Flexible(child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SelectableText(raw),
-                  )),
+                  )
                 ],
-              ),
-            )
-          ],
+        ));
+  }
+
+  Widget _spriteListView() {
+    return SizedBox(
+        width: 200,
+        child: ListView.builder(
+          itemCount: spriteCount,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Expanded(
+                      child: Divider(
+                        indent: 20.0,
+                        endIndent: 10.0,
+                        thickness: 1,
+                      ),
+                    ),
+                    Text(
+                      "$index",
+                      style: const TextStyle(color: Colors.green),
+                    ),
+                    const Expanded(
+                      child: Divider(
+                        indent: 10.0,
+                        endIndent: 20.0,
+                        thickness: 1,
+                      ),
+                    ),
+                  ],
+                ),
+                InkWell(
+                  onTap: () => setState(() {
+                    spriteIndex = index;
+                  }),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: PixelGridWidget(
+                        intensity: intensity.sublist(
+                            (spriteSize * spriteSize) * index,
+                            (spriteSize * spriteSize) * (index + 1))),
+                  ),
+                )
+              ],
+            );
+          },
         ));
   }
 
