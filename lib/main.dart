@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:gbdk_graphic_editor/tiles.dart';
 import 'package:gbdk_graphic_editor/widgets/map_widget.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
@@ -41,13 +42,9 @@ class _EditorState extends State<Editor> {
   int mapHeight = 1;
   int mapWidth = 1;
   var mapData = List.filled(1, 0, growable: true);
-  var tileData = List.filled(64, 0, growable: true);
   var selectedIntensity = 0;
-  var tileSize = 8;
-  var tileCount = 1;
-  var tileIndex = 0;
+  var tiles = Tiles();
   bool tileMode = true; // edit tile or map
-  String name = "data";
 
   Future<void> _saveFile() async {
     String? fileName =
@@ -55,7 +52,7 @@ class _EditorState extends State<Editor> {
     if (fileName != null) {
       File file = File(fileName);
       file.writeAsString(
-          rawToSource(name, getRawFromIntensity(tileData, tileSize)));
+          rawToSource(tiles.name, getRawFromIntensity(tiles.data, tiles.size)));
     }
   }
 
@@ -88,11 +85,11 @@ class _EditorState extends State<Editor> {
 
       if (name != "" && values.isNotEmpty) {
         setState(() {
-          this.name = name;
-          tileData.clear();
-          tileData = getIntensityFromRaw(values.split(','), tileSize);
-          tileIndex = 0;
-          tileCount = tileData.length ~/ (tileSize * tileSize);
+          tiles.name = name;
+          tiles.data.clear();
+          tiles.data = getIntensityFromRaw(values.split(','), tiles.size);
+          tiles.index = 0;
+          tiles.count = tiles.data.length ~/ (tiles.size * tiles.size);
         });
       }
     }
@@ -118,7 +115,8 @@ class _EditorState extends State<Editor> {
 
   _buildAppBar() {
     return AppBar(
-      title: Text("$name tile #$tileIndex selected. $tileCount tile(s) total"),
+      title: Text(
+          "${tiles.name} tile #${tiles.index} selected. ${tiles.count} tile(s) total"),
       actions: [
         TextButton(
             style: TextButton.styleFrom(
@@ -138,8 +136,8 @@ class _EditorState extends State<Editor> {
             icon: const Icon(Icons.add),
             tooltip: 'Add tile',
             onPressed: () => setState(() {
-                  tileCount += 1;
-                  tileData += List.filled(64, 0);
+                  tiles.count += 1;
+                  tiles.data += List.filled(64, 0);
                 })),
         IconButton(
           icon: const Icon(Icons.save),
@@ -159,11 +157,11 @@ class _EditorState extends State<Editor> {
   _buildTile() {
     var tileListView = TileListView(
       onTap: (index) => setState(() {
-        tileIndex = index;
+        tiles.index = index;
       }),
-      tileCount: tileCount,
-      tileData: tileData,
-      tileSize: tileSize,
+      tileCount: tiles.count,
+      tileData: tiles.data,
+      tileSize: tiles.size,
     );
 
     return [
@@ -174,8 +172,9 @@ class _EditorState extends State<Editor> {
           cursor: SystemMouseCursors.click,
           child: TileWidget(
               onTap: _setPixel,
-              intensity: tileData.sublist((tileSize * tileSize) * tileIndex,
-                  (tileSize * tileSize) * (tileIndex + 1))),
+              intensity: tiles.data.sublist(
+                  (tiles.size * tiles.size) * tiles.index,
+                  (tiles.size * tiles.size) * (tiles.index + 1))),
         ),
       ),
       Flexible(
@@ -186,9 +185,9 @@ class _EditorState extends State<Editor> {
               child: MapWidget(
                 mapHeight: 4,
                 mapWidth: 4,
-                mapData: List.filled(16, tileIndex, growable: false),
-                tileData: tileData,
-                tileSize: tileSize,
+                mapData: List.filled(16, tiles.index, growable: false),
+                tileData: tiles.data,
+                tileSize: tiles.size,
                 onTap: null,
               ),
             ),
@@ -196,8 +195,8 @@ class _EditorState extends State<Editor> {
                 child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: SelectableText(
-                      rawToSource(
-                          name, getRawFromIntensity(tileData, tileSize)),
+                      rawToSource(tiles.name,
+                          getRawFromIntensity(tiles.data, tiles.size)),
                     ))),
           ],
         ),
@@ -208,11 +207,11 @@ class _EditorState extends State<Editor> {
   _buildMap() {
     var tileListView = TileListView(
       onTap: (index) => setState(() {
-        tileIndex = index;
+        tiles.index = index;
       }),
-      tileCount: tileCount,
-      tileData: tileData,
-      tileSize: tileSize,
+      tileCount: tiles.count,
+      tileData: tiles.data,
+      tileSize: tiles.size,
     );
 
     return [
@@ -223,10 +222,10 @@ class _EditorState extends State<Editor> {
           mapHeight: mapHeight,
           mapWidth: mapWidth,
           mapData: mapData,
-          tileData: tileData,
-          tileSize: tileSize,
+          tileData: tiles.data,
+          tileSize: tiles.size,
           onTap: (index) => setState(() {
-            mapData[index] = tileIndex;
+            mapData[index] = tiles.index;
           }),
         ),
       ),
@@ -258,9 +257,9 @@ class _EditorState extends State<Editor> {
   }
 
   _setPixel(int index) {
-    index += (tileSize * tileSize) * tileIndex;
+    index += (tiles.size * tiles.size) * tiles.index;
     setState(() {
-      tileData[index] = selectedIntensity;
+      tiles.data[index] = selectedIntensity;
     });
   }
 }
