@@ -38,7 +38,9 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  var mapData = List.filled(16, 0, growable: true);
+  int mapHeight = 1;
+  int mapWidth = 1;
+  var mapData = List.filled(1, 0, growable: true);
   var tileData = List.filled(64, 0, growable: true);
   var selectedIntensity = 0;
   var tileSize = 8;
@@ -106,6 +108,55 @@ class _EditorState extends State<Editor> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: _buildAppBar(),
+        body: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: tileMode ? _buildTile() : _buildMap(),
+        ));
+  }
+
+  _buildAppBar() {
+    return AppBar(
+      title: Text("$name tile #$tileIndex selected. $tileCount tile(s) total"),
+      actions: [
+        TextButton(
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.all(16.0),
+              primary: Colors.white,
+              textStyle: const TextStyle(fontSize: 20),
+            ),
+            onPressed: () => setState(() {
+                  tileMode = !tileMode;
+                }),
+            child: Text(tileMode == true ? 'tile' : 'Map')),
+        intensityButton(0),
+        intensityButton(1),
+        intensityButton(2),
+        intensityButton(3),
+        IconButton(
+            icon: const Icon(Icons.add),
+            tooltip: 'Add tile',
+            onPressed: () => setState(() {
+                  tileCount += 1;
+                  tileData += List.filled(64, 0);
+                })),
+        IconButton(
+          icon: const Icon(Icons.save),
+          tooltip:
+              kIsWeb ? 'Save is not available for web' : 'Save source file',
+          onPressed: kIsWeb ? null : _saveFile,
+        ),
+        IconButton(
+          icon: const Icon(Icons.folder_open),
+          tooltip: 'Open source file',
+          onPressed: _selectFolder,
+        )
+      ],
+    );
+  }
+
+  _buildTile() {
     var tileListView = TileListView(
       onTap: (index) => setState(() {
         tileIndex = index;
@@ -115,104 +166,94 @@ class _EditorState extends State<Editor> {
       tileSize: tileSize,
     );
 
-    return Scaffold(
-        appBar: AppBar(
-          title:
-              Text("$name tile #$tileIndex selected. $tileCount tile(s) total"),
-          actions: [
-            TextButton(
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.all(16.0),
-                  primary: Colors.white,
-                  textStyle: const TextStyle(fontSize: 20),
-                ),
-                onPressed: () => setState(() {
-                      tileMode = !tileMode;
-                    }),
-                child: Text(tileMode == true ? 'tile' : 'Map')),
-            intensityButton(0),
-            intensityButton(1),
-            intensityButton(2),
-            intensityButton(3),
-            IconButton(
-                icon: const Icon(Icons.add),
-                tooltip: 'Add tile',
-                onPressed: () => setState(() {
-                      tileCount += 1;
-                      tileData += List.filled(64, 0);
-                    })),
-            IconButton(
-              icon: const Icon(Icons.save),
-              tooltip:
-                  kIsWeb ? 'Save is not available for web' : 'Save source file',
-              onPressed: kIsWeb ? null : _saveFile,
+    return [
+      tileListView,
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: TileWidget(
+              onTap: _setPixel,
+              intensity: tileData.sublist((tileSize * tileSize) * tileIndex,
+                  (tileSize * tileSize) * (tileIndex + 1))),
+        ),
+      ),
+      Flexible(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: MapWidget(
+                mapHeight: 4,
+                mapWidth: 4,
+                mapData: List.filled(16, tileIndex, growable: false),
+                tileData: tileData,
+                tileSize: tileSize,
+                onTap: null,
+              ),
             ),
-            IconButton(
-              icon: const Icon(Icons.folder_open),
-              tooltip: 'Open source file',
-              onPressed: _selectFolder,
-            )
+            Flexible(
+                child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SelectableText(
+                  getRawFromIntensity(tileData, tileSize).join(",")),
+            )),
           ],
         ),
-        body: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: tileMode
-              ? [
-                  tileListView,
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: TileWidget(
-                          onTap: _setPixel,
-                          intensity: tileData.sublist(
-                              (tileSize * tileSize) * tileIndex,
-                              (tileSize * tileSize) * (tileIndex + 1))),
-                    ),
-                  ),
-                  Flexible(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: MapWidget(
-                            mapData:
-                                List.filled(16, tileIndex, growable: false),
-                            tileData: tileData,
-                            tileSize: tileSize,
-                            onTap: null,
-                          ),
-                        ),
-                        Flexible(
-                            child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: SelectableText(
-                              getRawFromIntensity(tileData, tileSize)
-                                  .join(",")),
-                        )),
-                      ],
-                    ),
-                  )
-                ]
-              : [
-                  tileListView,
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: MapWidget(
-                      mapData: mapData,
-                      tileData: tileData,
-                      tileSize: tileSize,
-                      onTap: (index) => setState(() {
-                        mapData[index] = tileIndex;
-                      }),
-                    ),
-                  ),
-                  Flexible(
-                    child: SelectableText(
-                        mapData.map((e) => decimalToHex(e)).join(",")),
-                  )
-                ],
-        ));
+      )
+    ];
+  }
+
+  _buildMap() {
+    var tileListView = TileListView(
+      onTap: (index) => setState(() {
+        tileIndex = index;
+      }),
+      tileCount: tileCount,
+      tileData: tileData,
+      tileSize: tileSize,
+    );
+
+    return [
+      tileListView,
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: MapWidget(
+          mapHeight: mapHeight,
+          mapWidth: mapWidth,
+          mapData: mapData,
+          tileData: tileData,
+          tileSize: tileSize,
+          onTap: (index) => setState(() {
+            mapData[index] = tileIndex;
+          }),
+        ),
+      ),
+      Flexible(
+        child: Column(
+          children: [
+            Text('Height $mapHeight'),
+            TextField(
+              onChanged: (text) => setState(() {
+                mapHeight = int.parse(text);
+                mapData = List.filled(mapHeight * mapWidth, 0);
+              }),
+            ),
+            Text('Width $mapWidth'),
+            TextField(
+              onChanged: (text) => setState(() {
+                mapWidth = int.parse(text);
+                mapData = List.filled(mapHeight * mapWidth, 0);
+              }),
+            ),
+            Flexible(
+              child:
+                  SelectableText(mapData.map((e) => decimalToHex(e)).join(",")),
+            ),
+          ],
+        ),
+      )
+    ];
   }
 
   _setPixel(int index) {

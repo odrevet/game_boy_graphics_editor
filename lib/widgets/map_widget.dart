@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
 class MapWidget extends StatefulWidget {
+  final int mapHeight;
+  final int mapWidth;
   final List<int> mapData;
   final List<int> tileData;
   final int tileSize;
@@ -9,6 +11,8 @@ class MapWidget extends StatefulWidget {
 
   const MapWidget(
       {Key? key,
+      required this.mapHeight,
+      required this.mapWidth,
       required this.mapData,
       required this.tileData,
       required this.tileSize,
@@ -25,11 +29,11 @@ class _MapWidgetState extends State<MapWidget> {
     return AspectRatio(
       aspectRatio: 1.0,
       child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: widget.mapWidth,
         ),
         itemBuilder: _build,
-        itemCount: 16,
+        itemCount: widget.mapWidth * widget.mapHeight,
       ),
     );
   }
