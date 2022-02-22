@@ -57,14 +57,5 @@ List<String> getRawFromIntensity(List<int> intensity, int tileSize) {
   return raw;
 }
 
-String formatOutput(input) {
-  return input.asMap().entries.map((entry) {
-    int idx = entry.key;
-    String val = entry.value;
-    return idx % 8 == 0 ? "\n  $val" : val;
-  }).join(", ");
-}
 
-String rawToSource(name, raw) {
-  return "unsigned char $name[] =\n{${formatOutput(raw)}\n};";
-}
+

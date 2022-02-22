@@ -51,8 +51,7 @@ class _EditorState extends State<Editor> {
         await FilePicker.platform.saveFile(allowedExtensions: [".c"]);
     if (fileName != null) {
       File file = File(fileName);
-      file.writeAsString(
-          rawToSource(tiles.name, getRawFromIntensity(tiles.data, tiles.size)));
+      file.writeAsString(tiles.toSource());
     }
   }
 
@@ -194,10 +193,7 @@ class _EditorState extends State<Editor> {
             Flexible(
                 child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: SelectableText(
-                      rawToSource(tiles.name,
-                          getRawFromIntensity(tiles.data, tiles.size)),
-                    ))),
+                    child: SelectableText(tiles.toSource()))),
           ],
         ),
       )
