@@ -29,8 +29,3 @@ List<int> getIntensityFromRaw(List<String> values, int tileSize) {
 
   return intensity;
 }
-
-
-
-
-

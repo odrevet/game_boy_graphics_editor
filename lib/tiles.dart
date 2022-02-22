@@ -1,4 +1,4 @@
-import 'utils.dart';
+import 'convert.dart';
 
 class Tiles {
   var data = List.filled(64, 0, growable: true);
@@ -28,8 +28,8 @@ class Tiles {
     }
 
     for (var index = 0;
-    index < combined.length ~/ size * size;
-    index += size * 2) {
+        index < combined.length ~/ size * size;
+        index += size * 2) {
       var lo = "";
       var hi = "";
       var combinedSub = combined.substring(index, index + size * 2);

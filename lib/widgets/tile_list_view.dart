@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
 class TileListView extends StatefulWidget {
-  final List<int>tileData;
+  final List<int> tileData;
   final int tileCount;
   final int tileSize;
   final Function onTap;

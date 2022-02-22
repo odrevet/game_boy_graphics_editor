@@ -10,7 +10,7 @@ import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
 import 'colors.dart';
-import 'utils.dart';
+import 'convert.dart';
 
 void main() {
   runApp(const MyApp());
