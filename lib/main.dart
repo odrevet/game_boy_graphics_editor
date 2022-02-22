@@ -168,9 +168,7 @@ class _EditorState extends State<Editor> {
           cursor: SystemMouseCursors.click,
           child: TileWidget(
               onTap: _setPixel,
-              intensity: tiles.data.sublist(
-                  (tiles.size * tiles.size) * tiles.index,
-                  (tiles.size * tiles.size) * (tiles.index + 1))),
+              intensity: tiles.getData(tiles.index)),
         ),
       ),
       Flexible(

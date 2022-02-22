@@ -45,4 +45,8 @@ class Tiles {
 
     return raw;
   }
+
+  List<int> getData(int index) {
+    return data.sublist((size * size) * index, (size * size) * (index + 1));
+  }
 }
