@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
+import '../tiles.dart';
+
 class TileListView extends StatefulWidget {
-  final List<int> tileData;
-  final int tileCount;
-  final int tileSize;
+  final Tiles tiles;
   final Function onTap;
 
-  const TileListView(
-      {Key? key,
-      required this.tileCount,
-      required this.tileSize,
-      required this.tileData,
-      required this.onTap})
+  const TileListView({Key? key, required this.tiles, required this.onTap})
       : super(key: key);
 
   @override
@@ -25,7 +20,7 @@ class _TileListViewState extends State<TileListView> {
     return SizedBox(
         width: 200,
         child: ListView.builder(
-          itemCount: widget.tileCount,
+          itemCount: widget.tiles.count,
           itemBuilder: (context, index) {
             return Column(
               children: [
@@ -57,9 +52,10 @@ class _TileListViewState extends State<TileListView> {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: TileWidget(
-                        intensity: widget.tileData.sublist(
-                            (widget.tileSize * widget.tileSize) * index,
-                            (widget.tileSize * widget.tileSize) * (index + 1))),
+                        intensity: widget.tiles.data.sublist(
+                            (widget.tiles.size * widget.tiles.size) * index,
+                            (widget.tiles.size * widget.tiles.size) *
+                                (index + 1))),
                   ),
                 )
               ],

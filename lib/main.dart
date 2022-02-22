@@ -155,13 +155,10 @@ class _EditorState extends State<Editor> {
 
   _buildTile() {
     var tileListView = TileListView(
-      onTap: (index) => setState(() {
-        tiles.index = index;
-      }),
-      tileCount: tiles.count,
-      tileData: tiles.data,
-      tileSize: tiles.size,
-    );
+        onTap: (index) => setState(() {
+              tiles.index = index;
+            }),
+        tiles: tiles);
 
     return [
       tileListView,
@@ -205,9 +202,7 @@ class _EditorState extends State<Editor> {
       onTap: (index) => setState(() {
         tiles.index = index;
       }),
-      tileCount: tiles.count,
-      tileData: tiles.data,
-      tileSize: tiles.size,
+      tiles: tiles,
     );
 
     return [
