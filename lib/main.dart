@@ -55,7 +55,7 @@ class _EditorState extends State<Editor> {
     if (fileName != null) {
       File file = File(fileName);
       file.writeAsString(
-          "unsigned char $name[] =\n{\n${getRawFromIntensity(tileData, tileSize).join(",")};");
+          rawToSource(name, getRawFromIntensity(tileData, tileSize)));
     }
   }
 
@@ -194,10 +194,11 @@ class _EditorState extends State<Editor> {
             ),
             Flexible(
                 child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SelectableText(
-                  getRawFromIntensity(tileData, tileSize).join(",")),
-            )),
+                    padding: const EdgeInsets.all(16.0),
+                    child: SelectableText(
+                      rawToSource(
+                          name, getRawFromIntensity(tileData, tileSize)),
+                    ))),
           ],
         ),
       )
