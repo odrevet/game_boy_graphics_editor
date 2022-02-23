@@ -4,12 +4,12 @@ import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
 import '../tiles.dart';
 
-class MapWidget extends StatefulWidget {
+class BackgroundWidget extends StatefulWidget {
   final Background background;
   final Tiles tiles;
   final Function? onTap;
 
-  const MapWidget(
+  const BackgroundWidget(
       {Key? key,
       required this.background,
       required this.tiles,
@@ -17,10 +17,10 @@ class MapWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  _MapWidgetState createState() => _MapWidgetState();
+  _BackgroundWidgetState createState() => _BackgroundWidgetState();
 }
 
-class _MapWidgetState extends State<MapWidget> {
+class _BackgroundWidgetState extends State<BackgroundWidget> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(

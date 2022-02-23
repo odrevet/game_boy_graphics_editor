@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gbdk_graphic_editor/widgets/map_widget.dart';
+import 'package:gbdk_graphic_editor/widgets/background_widget.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 
 import '../background.dart';
 import '../convert.dart';
 import '../tiles.dart';
 
-class MapEditor extends StatelessWidget {
+class BackgroundEditor extends StatelessWidget {
   final Tiles tiles;
   final Function setTilesIndex;
   final Background background;
@@ -14,7 +14,7 @@ class MapEditor extends StatelessWidget {
   final Function setMapWidth;
   final Function setMapHeight;
 
-  const MapEditor(
+  const BackgroundEditor(
       {Key? key,
       required this.tiles,
       required this.setTilesIndex,
@@ -30,7 +30,7 @@ class MapEditor extends StatelessWidget {
       TileListView(onTap: (index) => setTilesIndex(index), tiles: tiles),
       Padding(
         padding: const EdgeInsets.all(16.0),
-        child: MapWidget(
+        child: BackgroundWidget(
             background: background,
             tiles: tiles,
             onTap: (index) => setMapData(index)),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/tiles.dart';
+import 'package:gbdk_graphic_editor/widgets/background_editor.dart';
 import 'package:gbdk_graphic_editor/widgets/gbdk_app_bar.dart';
-import 'package:gbdk_graphic_editor/widgets/map_editor.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles_editor.dart';
 
 import 'background.dart';
@@ -56,7 +56,7 @@ class _EditorState extends State<Editor> {
                 setPixel: _setPixel,
                 tiles: tiles,
                 preview: Background(4, 4, tiles.index))
-            : MapEditor(
+            : BackgroundEditor(
                 setTilesIndex: _setTileIndex,
                 background: background,
                 tiles: tiles,

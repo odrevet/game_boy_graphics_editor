@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/background.dart';
-import 'package:gbdk_graphic_editor/widgets/map_widget.dart';
+import 'package:gbdk_graphic_editor/widgets/background_widget.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
@@ -37,7 +37,7 @@ class TilesEditor extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: MapWidget(
+              child: BackgroundWidget(
                 background: preview,
                 tiles: tiles,
                 onTap: null,
