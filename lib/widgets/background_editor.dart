@@ -6,49 +6,60 @@ import '../background.dart';
 import '../convert.dart';
 import '../tiles.dart';
 
-class BackgroundEditor extends StatelessWidget {
+class BackgroundEditor extends StatefulWidget {
   final Tiles tiles;
-  final Function setTilesIndex;
   final Background background;
-  final Function setMapData;
-  final Function setMapWidth;
-  final Function setMapHeight;
 
-  const BackgroundEditor(
-      {Key? key,
-      required this.tiles,
-      required this.setTilesIndex,
-      required this.background,
-      required this.setMapData,
-      required this.setMapWidth,
-      required this.setMapHeight})
-      : super(key: key);
+  const BackgroundEditor({
+    Key? key,
+    required this.tiles,
+    required this.background,
+  }) : super(key: key);
 
+  @override
+  State<BackgroundEditor> createState() => _BackgroundEditorState();
+}
+
+class _BackgroundEditorState extends State<BackgroundEditor> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      TileListView(onTap: (index) => setTilesIndex(index), tiles: tiles),
+      TileListView(
+          onTap: (index) => setState(() {
+                widget.tiles.index = index;
+              }),
+          tiles: widget.tiles),
       Padding(
         padding: const EdgeInsets.all(16.0),
         child: BackgroundWidget(
-            background: background,
-            tiles: tiles,
-            onTap: (index) => setMapData(index)),
+            background: widget.background,
+            tiles: widget.tiles,
+            onTap: (index) => setState(() {
+                  widget.background.data[index] = widget.tiles.index;
+                })),
       ),
       Flexible(
         child: Column(
           children: [
-            Text('Height ${background.height}'),
+            Text('Height ${widget.background.height}'),
             TextField(
-              onChanged: (text) => setMapHeight(text),
+              onChanged: (text) => setState(() {
+                widget.background.height = int.parse(text);
+                widget.background.data = List.filled(
+                    widget.background.height * widget.background.width, 0);
+              }),
             ),
-            Text('Width ${background.width}'),
+            Text('Width ${widget.background.width}'),
             TextField(
-              onChanged: (text) => setMapWidth(text),
+              onChanged: (text) => setState(() {
+                widget.background.width = int.parse(text);
+                widget.background.data = List.filled(
+                    widget.background.height * widget.background.width, 0);
+              }),
             ),
             Flexible(
               child: SelectableText(
-                  background.data.map((e) => decimalToHex(e)).join(",")),
+                  widget.background.data.map((e) => decimalToHex(e)).join(",")),
             ),
           ],
         ),

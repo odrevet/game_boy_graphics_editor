@@ -57,28 +57,10 @@ class _EditorState extends State<Editor> {
                 tiles: tiles,
                 preview: Background(4, 4, tiles.index))
             : BackgroundEditor(
-                setTilesIndex: _setTileIndex,
                 background: background,
                 tiles: tiles,
-                setMapData: _setMapData,
-                setMapWidth: _setMapWidth,
-                setMapHeight: _setMapHeight,
               ));
   }
-
-  void _setMapWidth(value) => setState(() {
-        background.width = int.parse(value);
-        background.data = List.filled(background.height * background.width, 0);
-      });
-
-  void _setMapHeight(value) => setState(() {
-        background.height = int.parse(value);
-        background.data = List.filled(background.height * background.width, 0);
-      });
-
-  void _setMapData(index) => setState(() {
-        background.data[index] = tiles.index;
-      });
 
   void _setTileIndex(index) => setState(() {
         tiles.index = index;
