@@ -68,7 +68,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
           onPressed: kIsWeb ? null : () => saveFile(tiles.toSource()),
         ),
         IconButton(
-          icon: Icon(Icons.folder_open),
+          icon: const Icon(Icons.folder_open),
           tooltip: 'Open source file',
           onPressed: () => {
             selectFolder().then((nameValues) => setTileFromSource(nameValues[0], nameValues[1]))
