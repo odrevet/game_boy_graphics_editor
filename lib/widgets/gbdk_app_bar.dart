@@ -16,22 +16,22 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool tileMode;
   final Tiles tiles;
 
-  const GBDKAppBar({Key? key,
-    required this.setIntensity,
-    required this.addTile,
-    required this.setTileMode,
-    required this.setTileFromSource,
-    required this.tileMode,
-    required this.tiles,
-    required this.preferredSize})
+  const GBDKAppBar(
+      {Key? key,
+      required this.setIntensity,
+      required this.addTile,
+      required this.setTileMode,
+      required this.setTileFromSource,
+      required this.tileMode,
+      required this.tiles,
+      required this.preferredSize})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(
-          "${tiles.name} tile #${tiles.index} selected. ${tiles
-              .count} tile(s) total"),
+          "${tiles.name} tile #${tiles.index} selected. ${tiles.count} tile(s) total"),
       actions: [
         TextButton(
             style: TextButton.styleFrom(
@@ -60,18 +60,20 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
         IconButton(
             icon: const Icon(Icons.add),
             tooltip: 'Add tile',
-            onPressed: addTile ),
+            onPressed: addTile),
         IconButton(
           icon: const Icon(Icons.save),
           tooltip:
-          kIsWeb ? 'Save is not available for web' : 'Save source file',
+              kIsWeb ? 'Save is not available for web' : 'Save source file',
           onPressed: kIsWeb ? null : () => saveFile(tiles.toSource()),
         ),
         IconButton(
           icon: const Icon(Icons.folder_open),
           tooltip: 'Open source file',
           onPressed: () => {
-            selectFolder().then((nameValues) => setTileFromSource(nameValues[0], nameValues[1]))
+            selectFolder().then((nameValues) => nameValues != null
+                ? setTileFromSource(nameValues[0], nameValues[1])
+                : null)
           },
         )
       ],
