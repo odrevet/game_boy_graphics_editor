@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/tiles.dart';
 import 'package:gbdk_graphic_editor/widgets/gbdk_app_bar.dart';
-import 'package:gbdk_graphic_editor/widgets/map_widget.dart';
-import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
-import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
+import 'package:gbdk_graphic_editor/widgets/map_editor.dart';
+import 'package:gbdk_graphic_editor/widgets/tiles_editor.dart';
 
 import 'convert.dart';
 
@@ -52,11 +51,38 @@ class _EditorState extends State<Editor> {
             preferredSize: const Size.fromHeight(50.0),
             setTileFromSource: _setTilesFromSource,
             tiles: tiles),
-        body: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: tileMode ? _buildTile() : _buildMap(),
-        ));
+        body: tileMode
+            ? TilesEditor(
+                setTilesIndex: _setTileIndex, setPixel: _setPixel, tiles: tiles)
+            : MapEditor(
+                setTilesIndex: _setTileIndex,
+                mapData: mapData,
+                mapHeight: mapHeight,
+                tiles: tiles,
+                mapWidth: mapWidth,
+                setMapData: _setMapData,
+                setMapWidth: _setMapWidth,
+                setMapHeight: _setMapHeight,
+              ));
   }
+
+  void _setMapWidth(value) => setState(() {
+        mapWidth = int.parse(value);
+        mapData = List.filled(mapHeight * mapWidth, 0);
+      });
+
+  void _setMapHeight(value) => setState(() {
+        mapHeight = int.parse(value);
+        mapData = List.filled(mapHeight * mapWidth, 0);
+      });
+
+  void _setMapData(index) => setState(() {
+        mapData[index] = tiles.index;
+      });
+
+  void _setTileIndex(index) => setState(() {
+        tiles.index = index;
+      });
 
   void _setIntensity(intensity) => setState(() {
         selectedIntensity = intensity;
@@ -78,97 +104,6 @@ class _EditorState extends State<Editor> {
         tiles.index = 0;
         tiles.count = tiles.data.length ~/ (tiles.size * tiles.size);
       });
-
-  _buildTile() {
-    var tileListView = TileListView(
-        onTap: (index) => setState(() {
-              tiles.index = index;
-            }),
-        tiles: tiles);
-
-    return [
-      tileListView,
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: TileWidget(
-              onTap: _setPixel, intensity: tiles.getData(tiles.index)),
-        ),
-      ),
-      Flexible(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: MapWidget(
-                mapHeight: 4,
-                mapWidth: 4,
-                mapData: List.filled(16, tiles.index, growable: false),
-                tileData: tiles.data,
-                tileSize: tiles.size,
-                onTap: null,
-              ),
-            ),
-            Flexible(
-                child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SelectableText(tiles.toSource()))),
-          ],
-        ),
-      )
-    ];
-  }
-
-  _buildMap() {
-    var tileListView = TileListView(
-      onTap: (index) => setState(() {
-        tiles.index = index;
-      }),
-      tiles: tiles,
-    );
-
-    return [
-      tileListView,
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: MapWidget(
-          mapHeight: mapHeight,
-          mapWidth: mapWidth,
-          mapData: mapData,
-          tileData: tiles.data,
-          tileSize: tiles.size,
-          onTap: (index) => setState(() {
-            mapData[index] = tiles.index;
-          }),
-        ),
-      ),
-      Flexible(
-        child: Column(
-          children: [
-            Text('Height $mapHeight'),
-            TextField(
-              onChanged: (text) => setState(() {
-                mapHeight = int.parse(text);
-                mapData = List.filled(mapHeight * mapWidth, 0);
-              }),
-            ),
-            Text('Width $mapWidth'),
-            TextField(
-              onChanged: (text) => setState(() {
-                mapWidth = int.parse(text);
-                mapData = List.filled(mapHeight * mapWidth, 0);
-              }),
-            ),
-            Flexible(
-              child:
-                  SelectableText(mapData.map((e) => decimalToHex(e)).join(",")),
-            ),
-          ],
-        ),
-      )
-    ];
-  }
 
   _setPixel(int index) {
     index += (tiles.size * tiles.size) * tiles.index;

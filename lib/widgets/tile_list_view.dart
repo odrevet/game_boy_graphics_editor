@@ -51,8 +51,7 @@ class _TileListViewState extends State<TileListView> {
                   onTap: () => widget.onTap(index),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: TileWidget(
-                        intensity: widget.tiles.getData(index)),
+                    child: TileWidget(intensity: widget.tiles.getData(index)),
                   ),
                 )
               ],
