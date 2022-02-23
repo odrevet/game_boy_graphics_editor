@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/map_widget.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 
+import '../background.dart';
 import '../convert.dart';
 import '../tiles.dart';
 
 class MapEditor extends StatelessWidget {
   final Tiles tiles;
   final Function setTilesIndex;
-  final List<int> mapData;
-  final int mapHeight;
-  final int mapWidth;
+  final Background background;
   final Function setMapData;
   final Function setMapWidth;
   final Function setMapHeight;
@@ -19,9 +18,7 @@ class MapEditor extends StatelessWidget {
       {Key? key,
       required this.tiles,
       required this.setTilesIndex,
-      required this.mapData,
-      required this.mapHeight,
-      required this.mapWidth,
+      required this.background,
       required this.setMapData,
       required this.setMapWidth,
       required this.setMapHeight})
@@ -34,27 +31,24 @@ class MapEditor extends StatelessWidget {
       Padding(
         padding: const EdgeInsets.all(16.0),
         child: MapWidget(
-            mapHeight: mapHeight,
-            mapWidth: mapWidth,
-            mapData: mapData,
-            tileData: tiles.data,
-            tileSize: tiles.size,
+            background: background,
+            tiles: tiles,
             onTap: (index) => setMapData(index)),
       ),
       Flexible(
         child: Column(
           children: [
-            Text('Height $mapHeight'),
+            Text('Height ${background.height}'),
             TextField(
               onChanged: (text) => setMapHeight(text),
             ),
-            Text('Width $mapWidth'),
+            Text('Width ${background.width}'),
             TextField(
               onChanged: (text) => setMapWidth(text),
             ),
             Flexible(
-              child:
-                  SelectableText(mapData.map((e) => decimalToHex(e)).join(",")),
+              child: SelectableText(
+                  background.data.map((e) => decimalToHex(e)).join(",")),
             ),
           ],
         ),

@@ -4,6 +4,7 @@ import 'package:gbdk_graphic_editor/widgets/gbdk_app_bar.dart';
 import 'package:gbdk_graphic_editor/widgets/map_editor.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles_editor.dart';
 
+import 'background.dart';
 import 'convert.dart';
 
 void main() {
@@ -33,9 +34,7 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  int mapHeight = 1;
-  int mapWidth = 1;
-  var mapData = List.filled(1, 0, growable: true);
+  var background = Background(1, 1, 0);
   var selectedIntensity = 0;
   var tiles = Tiles();
   bool tileMode = true; // edit tile or map
@@ -53,13 +52,14 @@ class _EditorState extends State<Editor> {
             tiles: tiles),
         body: tileMode
             ? TilesEditor(
-                setTilesIndex: _setTileIndex, setPixel: _setPixel, tiles: tiles)
+                setTilesIndex: _setTileIndex,
+                setPixel: _setPixel,
+                tiles: tiles,
+                preview: Background(4, 4, tiles.index))
             : MapEditor(
                 setTilesIndex: _setTileIndex,
-                mapData: mapData,
-                mapHeight: mapHeight,
+                background: background,
                 tiles: tiles,
-                mapWidth: mapWidth,
                 setMapData: _setMapData,
                 setMapWidth: _setMapWidth,
                 setMapHeight: _setMapHeight,
@@ -67,17 +67,17 @@ class _EditorState extends State<Editor> {
   }
 
   void _setMapWidth(value) => setState(() {
-        mapWidth = int.parse(value);
-        mapData = List.filled(mapHeight * mapWidth, 0);
+        background.width = int.parse(value);
+        background.data = List.filled(background.height * background.width, 0);
       });
 
   void _setMapHeight(value) => setState(() {
-        mapHeight = int.parse(value);
-        mapData = List.filled(mapHeight * mapWidth, 0);
+        background.height = int.parse(value);
+        background.data = List.filled(background.height * background.width, 0);
       });
 
   void _setMapData(index) => setState(() {
-        mapData[index] = tiles.index;
+        background.data[index] = tiles.index;
       });
 
   void _setTileIndex(index) => setState(() {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gbdk_graphic_editor/background.dart';
 import 'package:gbdk_graphic_editor/widgets/map_widget.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
@@ -6,12 +7,14 @@ import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 import '../tiles.dart';
 
 class TilesEditor extends StatelessWidget {
+  final Background preview;
   final Tiles tiles;
   final Function setTilesIndex;
   final Function setPixel;
 
   const TilesEditor(
       {Key? key,
+      required this.preview,
       required this.tiles,
       required this.setTilesIndex,
       required this.setPixel})
@@ -35,11 +38,8 @@ class TilesEditor extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: MapWidget(
-                mapHeight: 4,
-                mapWidth: 4,
-                mapData: List.filled(16, tiles.index, growable: false),
-                tileData: tiles.data,
-                tileSize: tiles.size,
+                background: preview,
+                tiles: tiles,
                 onTap: null,
               ),
             ),

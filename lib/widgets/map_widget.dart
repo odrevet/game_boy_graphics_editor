@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:gbdk_graphic_editor/background.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
+import '../tiles.dart';
+
 class MapWidget extends StatefulWidget {
-  final int mapHeight;
-  final int mapWidth;
-  final List<int> mapData;
-  final List<int> tileData;
-  final int tileSize;
+  final Background background;
+  final Tiles tiles;
   final Function? onTap;
 
   const MapWidget(
       {Key? key,
-      required this.mapHeight,
-      required this.mapWidth,
-      required this.mapData,
-      required this.tileData,
-      required this.tileSize,
+      required this.background,
+      required this.tiles,
       required this.onTap})
       : super(key: key);
 
@@ -30,10 +27,10 @@ class _MapWidgetState extends State<MapWidget> {
       aspectRatio: 1.0,
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: widget.mapWidth,
+          crossAxisCount: widget.background.width,
         ),
         itemBuilder: _build,
-        itemCount: widget.mapWidth * widget.mapHeight,
+        itemCount: widget.background.width * widget.background.height,
       ),
     );
   }
@@ -43,18 +40,20 @@ class _MapWidgetState extends State<MapWidget> {
       return GestureDetector(
         onTap: () => widget.onTap!(index),
         child: TileWidget(
-            intensity: widget.tileData.sublist(
-                (widget.tileSize * widget.tileSize) * widget.mapData[index],
-                (widget.tileSize * widget.tileSize) *
-                    (widget.mapData[index] + 1))),
+            intensity: widget.tiles.data.sublist(
+                (widget.tiles.size * widget.tiles.size) *
+                    widget.background.data[index],
+                (widget.tiles.size * widget.tiles.size) *
+                    (widget.background.data[index] + 1))),
       );
     }
     {
       return TileWidget(
-          intensity: widget.tileData.sublist(
-              (widget.tileSize * widget.tileSize) * widget.mapData[index],
-              (widget.tileSize * widget.tileSize) *
-                  (widget.mapData[index] + 1)));
+          intensity: widget.tiles.data.sublist(
+              (widget.tiles.size * widget.tiles.size) *
+                  widget.background.data[index],
+              (widget.tiles.size * widget.tiles.size) *
+                  (widget.background.data[index] + 1)));
     }
   }
 }
