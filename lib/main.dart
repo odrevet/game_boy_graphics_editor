@@ -9,8 +9,8 @@ import 'package:gbdk_graphic_editor/widgets/map_widget.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
-import 'colors.dart';
 import 'convert.dart';
+import 'widgets/intensity_button.dart';
 
 void main() {
   runApp(const MyApp());
@@ -94,14 +94,6 @@ class _EditorState extends State<Editor> {
     }
   }
 
-  Widget intensityButton(int buttonIntensity) {
-    return IconButton(
-        icon: Icon(Icons.stop, color: colors[buttonIntensity]),
-        onPressed: () => setState(() {
-              selectedIntensity = buttonIntensity;
-            }));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,6 +102,12 @@ class _EditorState extends State<Editor> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: tileMode ? _buildTile() : _buildMap(),
         ));
+  }
+
+  void _setIntensity(intensity) {
+    setState(() {
+      selectedIntensity = intensity;
+    });
   }
 
   _buildAppBar() {
@@ -127,10 +125,22 @@ class _EditorState extends State<Editor> {
                   tileMode = !tileMode;
                 }),
             child: Text(tileMode == true ? 'tile' : 'Map')),
-        intensityButton(0),
-        intensityButton(1),
-        intensityButton(2),
-        intensityButton(3),
+        IntensityButton(
+          intensity: 0,
+          onPressed: _setIntensity,
+        ),
+        IntensityButton(
+          intensity: 1,
+          onPressed: _setIntensity,
+        ),
+        IntensityButton(
+          intensity: 2,
+          onPressed: _setIntensity,
+        ),
+        IntensityButton(
+          intensity: 3,
+          onPressed: _setIntensity,
+        ),
         IconButton(
             icon: const Icon(Icons.add),
             tooltip: 'Add tile',
@@ -167,8 +177,7 @@ class _EditorState extends State<Editor> {
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: TileWidget(
-              onTap: _setPixel,
-              intensity: tiles.getData(tiles.index)),
+              onTap: _setPixel, intensity: tiles.getData(tiles.index)),
         ),
       ),
       Flexible(
