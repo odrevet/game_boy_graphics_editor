@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/background.dart';
-import 'package:gbdk_graphic_editor/widgets/background_widget.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
 import '../tiles.dart';
+import 'background_widget.dart';
 
 class TilesEditor extends StatelessWidget {
   final Background preview;
@@ -25,14 +25,14 @@ class TilesEditor extends StatelessWidget {
     return Row(children: [
       TileListView(onTap: (index) => setTilesIndex(index), tiles: tiles),
       Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: TileWidget(
-              onTap: setPixel, intensity: tiles.getData(tiles.index)),
+        padding: const EdgeInsets.all(8.0),
+        child: AspectRatio(
+          aspectRatio: 1.0,
+          child:
+              TileWidget(onTap: setPixel, intensity: tiles.getData(tiles.index)),
         ),
       ),
-      Flexible(
+      Expanded(
         child: Column(
           children: [
             Padding(
