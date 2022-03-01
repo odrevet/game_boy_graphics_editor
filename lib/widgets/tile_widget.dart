@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gbdk_graphic_editor/widgets/tile_grid.dart';
+import 'package:gbdk_graphic_editor/widgets/dot_matrix.dart';
 
 import '../colors.dart';
 
@@ -17,8 +17,9 @@ class TileWidget extends StatefulWidget {
 class _TileWidgetState extends State<TileWidget> {
   @override
   Widget build(BuildContext context) {
-    return TileGrid(
-      pixels: widget.intensity.map((e) => colors[e]).toList()
+    return DotMatrix(
+      pixels: widget.intensity.map((e) => colors[e]).toList(),
+      showGrid: true,
     );
   }
 }
