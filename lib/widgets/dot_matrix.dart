@@ -4,6 +4,7 @@ class DotMatrix extends StatefulWidget {
   final List<Color> pixels;
   final bool showGrid;
   final Function? onTap;
+  final int crossAxisCount = 8;
 
   const DotMatrix(
       {Key? key, required this.pixels, this.showGrid = false, this.onTap})
@@ -31,6 +32,7 @@ class _DotMatrixState extends State<DotMatrix> {
               painter: DotMatrixPainter(
                   pixels: widget.pixels,
                   constraints: constraints,
+                  crossAxisCount: widget.crossAxisCount,
                   showGrid: widget.showGrid),
             ),
           );
@@ -45,25 +47,28 @@ class _DotMatrixState extends State<DotMatrix> {
 
     final dx = clickOffset.dx;
     final dy = clickOffset.dy;
-    final blocSize = constraints.maxWidth / 8;
+    final pixelSize = constraints.maxWidth / widget.crossAxisCount;
 
-    final tapedRow = (dx / blocSize).floor();
-    final tapedColumn = (dy / blocSize).floor();
-    var clickedIndex = tapedColumn * 8 + tapedRow;
+    final tapedRow = (dx / pixelSize).floor();
+    final tapedColumn = (dy / pixelSize).floor();
+    var clickedIndex = tapedColumn * widget.crossAxisCount + tapedRow;
     widget.onTap!(clickedIndex);
   }
 }
 
 class DotMatrixPainter extends CustomPainter {
   final Paint painter = Paint();
-  final int crossAxisCount = 8;
+  final int crossAxisCount;
   late double pixelSize;
   final List<Color> pixels;
   final BoxConstraints constraints;
   final bool showGrid;
 
   DotMatrixPainter(
-      {required this.pixels, required this.constraints, this.showGrid = false});
+      {required this.pixels,
+      required this.constraints,
+      required this.crossAxisCount,
+      this.showGrid = false});
 
   @override
   void paint(Canvas canvas, Size size) {
