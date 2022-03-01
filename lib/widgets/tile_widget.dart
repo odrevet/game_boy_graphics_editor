@@ -8,7 +8,8 @@ class TileWidget extends StatefulWidget {
   final Function? onTap;
   final bool showGrid;
 
-  const TileWidget({Key? key, required this.intensity, this.onTap, this.showGrid = false})
+  const TileWidget(
+      {Key? key, required this.intensity, this.onTap, this.showGrid = false})
       : super(key: key);
 
   @override
@@ -21,7 +22,7 @@ class _TileWidgetState extends State<TileWidget> {
     return DotMatrix(
       pixels: widget.intensity.map((e) => colors[e]).toList(),
       showGrid: widget.showGrid,
-      onTap: (index) => print(index),
+      onTap: (index) => widget.onTap != null ? widget.onTap!(index) : null,
     );
   }
 }
