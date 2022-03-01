@@ -20,6 +20,7 @@ class _TileWidgetState extends State<TileWidget> {
     return DotMatrix(
       pixels: widget.intensity.map((e) => colors[e]).toList(),
       showGrid: true,
+      onTap: (index) => print(index),
     );
   }
 }
