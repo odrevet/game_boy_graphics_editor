@@ -21,21 +21,27 @@ class _DotMatrixState extends State<DotMatrix> {
       aspectRatio: 1.0,
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return GestureDetector(
-            onTapDown: (TapDownDetails details) =>
-                widget.onTap != null ? _onTapDown(details, constraints) : null,
-            child: CustomPaint(
-              size: Size(
-                constraints.maxWidth,
-                constraints.maxHeight,
-              ),
-              painter: DotMatrixPainter(
-                  pixels: widget.pixels,
-                  pixelSize: constraints.maxWidth / widget.crossAxisCount,
-                  crossAxisCount: widget.crossAxisCount,
-                  showGrid: widget.showGrid),
+          Widget customPaint = CustomPaint(
+            size: Size(
+              constraints.maxWidth,
+              constraints.maxHeight,
             ),
+            painter: DotMatrixPainter(
+                pixels: widget.pixels,
+                pixelSize: constraints.maxWidth / widget.crossAxisCount,
+                crossAxisCount: widget.crossAxisCount,
+                showGrid: widget.showGrid),
           );
+
+          if (widget.onTap != null) {
+            return GestureDetector(
+              onTapDown: (TapDownDetails details) =>
+                  _onTapDown(details, constraints),
+              child: customPaint,
+            );
+          } else {
+            return customPaint;
+          }
         },
       ),
     );
