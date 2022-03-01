@@ -10,6 +10,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
   final Size preferredSize;
 
   final Function setIntensity;
+  final int selectedIntensity;
   final VoidCallback addTile;
   final VoidCallback setTileMode;
   final VoidCallback toggleGrid;
@@ -20,6 +21,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
   const GBDKAppBar(
       {Key? key,
       required this.setIntensity,
+      required this.selectedIntensity,
       required this.addTile,
       required this.setTileMode,
       required this.toggleGrid,
@@ -51,18 +53,22 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
         IntensityButton(
           intensity: 0,
           onPressed: setIntensity,
+            selectedIntensity: selectedIntensity,
         ),
         IntensityButton(
           intensity: 1,
           onPressed: setIntensity,
+          selectedIntensity: selectedIntensity,
         ),
         IntensityButton(
           intensity: 2,
           onPressed: setIntensity,
+          selectedIntensity: selectedIntensity,
         ),
         IntensityButton(
           intensity: 3,
           onPressed: setIntensity,
+          selectedIntensity: selectedIntensity,
         ),
         IconButton(
             icon: const Icon(Icons.add),

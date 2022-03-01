@@ -45,6 +45,7 @@ class _EditorState extends State<Editor> {
     return Scaffold(
         appBar: GBDKAppBar(
             setIntensity: _setIntensity,
+            selectedIntensity: selectedIntensity,
             tileMode: tileMode,
             addTile: _addTile,
             setTileMode: _setTileMode,
