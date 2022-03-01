@@ -11,12 +11,14 @@ class TilesEditor extends StatelessWidget {
   final Tiles tiles;
   final Function setTilesIndex;
   final Function setPixel;
+  final bool showGrid;
 
   const TilesEditor(
       {Key? key,
       required this.preview,
       required this.tiles,
       required this.setTilesIndex,
+      required this.showGrid,
       required this.setPixel})
       : super(key: key);
 
@@ -29,7 +31,7 @@ class TilesEditor extends StatelessWidget {
         child: AspectRatio(
           aspectRatio: 1.0,
           child:
-              TileWidget(onTap: setPixel, intensity: tiles.getData(tiles.index)),
+              TileWidget(onTap: setPixel, intensity: tiles.getData(tiles.index), showGrid: showGrid,),
         ),
       ),
       Expanded(

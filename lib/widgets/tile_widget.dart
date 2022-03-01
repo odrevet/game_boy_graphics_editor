@@ -6,8 +6,9 @@ import '../colors.dart';
 class TileWidget extends StatefulWidget {
   final List<int> intensity;
   final Function? onTap;
+  final bool showGrid;
 
-  const TileWidget({Key? key, required this.intensity, this.onTap})
+  const TileWidget({Key? key, required this.intensity, this.onTap, this.showGrid = false})
       : super(key: key);
 
   @override
@@ -19,7 +20,7 @@ class _TileWidgetState extends State<TileWidget> {
   Widget build(BuildContext context) {
     return DotMatrix(
       pixels: widget.intensity.map((e) => colors[e]).toList(),
-      showGrid: true,
+      showGrid: widget.showGrid,
       onTap: (index) => print(index),
     );
   }
