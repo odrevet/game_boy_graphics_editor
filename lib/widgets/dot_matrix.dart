@@ -31,7 +31,7 @@ class _DotMatrixState extends State<DotMatrix> {
               ),
               painter: DotMatrixPainter(
                   pixels: widget.pixels,
-                  constraints: constraints,
+                  pixelSize: constraints.maxWidth / widget.crossAxisCount,
                   crossAxisCount: widget.crossAxisCount,
                   showGrid: widget.showGrid),
             ),
@@ -44,37 +44,30 @@ class _DotMatrixState extends State<DotMatrix> {
   void _onTapDown(TapDownDetails details, BoxConstraints constraints) {
     final RenderBox box = context.findRenderObject() as RenderBox;
     var clickOffset = box.globalToLocal(details.globalPosition);
-
-    final dx = clickOffset.dx;
-    final dy = clickOffset.dy;
     final pixelSize = constraints.maxWidth / widget.crossAxisCount;
-
-    final tapedRow = (dx / pixelSize).floor();
-    final tapedColumn = (dy / pixelSize).floor();
-    var clickedIndex = tapedColumn * widget.crossAxisCount + tapedRow;
-    widget.onTap!(clickedIndex);
+    final tapedRow = (clickOffset.dx / pixelSize).floor();
+    final tapedColumn = (clickOffset.dy / pixelSize).floor();
+    widget.onTap!(tapedColumn * widget.crossAxisCount + tapedRow);
   }
 }
 
 class DotMatrixPainter extends CustomPainter {
-  final Paint painter = Paint();
   final int crossAxisCount;
-  late double pixelSize;
+  final double pixelSize;
   final List<Color> pixels;
-  final BoxConstraints constraints;
   final bool showGrid;
 
   DotMatrixPainter(
       {required this.pixels,
-      required this.constraints,
+      required this.pixelSize,
       required this.crossAxisCount,
       this.showGrid = false});
 
   @override
   void paint(Canvas canvas, Size size) {
-    pixelSize = constraints.maxWidth / crossAxisCount;
+    final Paint paint = Paint();
     pixels.asMap().forEach((index, pixel) {
-      painter.color = pixel;
+      paint.color = pixel;
       canvas.drawRect(
           Rect.fromLTWH(
             (index % crossAxisCount).floor().toDouble() * pixelSize,
@@ -82,23 +75,23 @@ class DotMatrixPainter extends CustomPainter {
             pixelSize,
             pixelSize,
           ),
-          painter);
+          paint);
     });
 
     if (showGrid) {
-      painter.color = Colors.blueGrey;
-      for (int index = 1; index < crossAxisCount; index++) {
+      paint.color = Colors.blueGrey;
+      for (int index = 1; index <= crossAxisCount; index++) {
         canvas.drawLine(
             Offset((index % crossAxisCount).floor().toDouble() * pixelSize, 0),
             Offset((index % crossAxisCount).floor().toDouble() * pixelSize,
                 size.height),
-            painter);
+            paint);
 
         canvas.drawLine(
             Offset(0, (index % crossAxisCount).floor().toDouble() * pixelSize),
             Offset(size.width,
                 (index % crossAxisCount).floor().toDouble() * pixelSize),
-            painter);
+            paint);
       }
     }
   }
