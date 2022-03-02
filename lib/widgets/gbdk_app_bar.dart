@@ -16,6 +16,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
   final VoidCallback setTileMode;
   final VoidCallback toggleGrid;
   final Function setTileFromSource;
+  final Function setBackgroundFromSource;
   final bool tileMode;
   final Tiles tiles;
   final Background background;
@@ -30,6 +31,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
       required this.setTileMode,
       required this.toggleGrid,
       required this.setTileFromSource,
+      required this.setBackgroundFromSource,
       required this.tileMode,
       required this.tiles,
       required this.background,
@@ -40,11 +42,10 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: Text(tileMode
-          ? "${tiles.name} tile #$selectedTileIndexTile selected. ${tiles.count} tile(s) total"
-          : "${background.name} tile #$selectedTileIndexBackground selected"),
-      actions: [
+    var actions = <Widget>[];
+
+    if (tileMode) {
+      actions = [
         IconButton(
           icon: const Icon(Icons.grid_on),
           tooltip: 'Show/Hide grid',
@@ -76,12 +77,10 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
             onPressed: addTile),
         IconButton(
           icon: const Icon(Icons.save),
-          tooltip:
-              kIsWeb ? 'Save is not available for web' : 'Save source file',
-          onPressed: kIsWeb
-              ? null
-              : () =>
-                  saveFile(tileMode ? tiles.toSource() : background.toSource()),
+          tooltip: kIsWeb
+              ? 'Save is not available for web'
+              : 'Save tiles source file',
+          onPressed: kIsWeb ? null : () => saveFile(tiles.toSource()),
         ),
         IconButton(
           icon: const Icon(Icons.folder_open),
@@ -91,9 +90,36 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
                 ? setTileFromSource(nameValues[0], nameValues[1])
                 : null)
           },
+        )
+      ];
+    } else {
+      actions = [
+        IconButton(
+          icon: const Icon(Icons.save),
+          tooltip: kIsWeb
+              ? 'Save is not available for web'
+              : 'Save background source file',
+          onPressed: kIsWeb ? null : () => saveFile(background.toSource()),
         ),
-        _setTileModeButton()
-      ],
+        IconButton(
+          icon: const Icon(Icons.folder_open),
+          tooltip: 'Open source file',
+          onPressed: () => {
+            selectFolder().then((nameValues) => nameValues != null
+                ? setBackgroundFromSource(nameValues[0], nameValues[1])
+                : null)
+          },
+        )
+      ];
+    }
+
+    actions.add(_setTileModeButton());
+
+    return AppBar(
+      title: Text(tileMode
+          ? "${tiles.name} tile #$selectedTileIndexTile selected. ${tiles.count} tile(s) total"
+          : "${background.name} tile #$selectedTileIndexBackground selected"),
+      actions: actions,
     );
   }
 

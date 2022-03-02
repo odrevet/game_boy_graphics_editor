@@ -54,6 +54,7 @@ class _EditorState extends State<Editor> {
             toggleGrid: _toggleGrid,
             preferredSize: const Size.fromHeight(50.0),
             setTileFromSource: _setTilesFromSource,
+            setBackgroundFromSource: _setBackgroundFromSource,
             tiles: tiles,
             background: background,
             selectedTileIndexTile: selectedTileIndexTile,
@@ -102,10 +103,18 @@ class _EditorState extends State<Editor> {
 
   void _setTilesFromSource(name, values) => setState(() {
         tiles.name = name;
-        tiles.data.clear();
         tiles.data = getIntensityFromRaw(values.split(','), tiles.size);
         tiles.count = tiles.data.length ~/ (tiles.size * tiles.size);
         selectedTileIndexTile = 0;
+      });
+
+  void _setBackgroundFromSource(name, values) => setState(() {
+        background.name = name;
+        background.data = List<int>.from(values
+            .split(',')
+            .map((value) => int.parse(value))
+            .toList());
+        selectedTileIndexBackground = 0;
       });
 
   _setPixel(int index) {
