@@ -26,5 +26,19 @@ class Background extends Graphics {
     name = nameValues[0];
     data = List<int>.from(
         nameValues[1].split(',').map((value) => int.parse(value)).toList());
+
+    RegExp regExpWidth = RegExp(r"#define \w+Width (\d+)");
+    var matchesWidth = regExpWidth.allMatches(source);
+    for (Match match in matchesWidth) {
+      width = int.parse(match.group(1)!);
+    }
+
+    RegExp regExpHeight = RegExp(r"#define \w+Height (\d+)");
+    var matchesHeight = regExpHeight.allMatches(source);
+    for (Match match in matchesHeight) {
+      height = int.parse(match.group(1)!);
+    }
   }
+
+
 }
