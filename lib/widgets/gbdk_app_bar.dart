@@ -86,9 +86,8 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
           icon: const Icon(Icons.folder_open),
           tooltip: 'Open source file',
           onPressed: () => {
-            selectFolder().then((source) => source != null
-                ? setTileFromSource(source)
-                : null)
+            selectFolder().then(
+                (source) => source != null ? setTileFromSource(source) : null)
           },
         )
       ];
@@ -105,9 +104,8 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
           icon: const Icon(Icons.folder_open),
           tooltip: 'Open source file',
           onPressed: () => {
-            selectFolder().then((source) => source != null
-                ? setBackgroundFromSource(source)
-                : null)
+            selectFolder().then((source) =>
+                source != null ? setBackgroundFromSource(source) : null)
           },
         )
       ];

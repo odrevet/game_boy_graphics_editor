@@ -2,11 +2,12 @@ import 'package:gbdk_graphic_editor/graphics.dart';
 
 import 'convert.dart';
 
-class Tiles extends Graphics{
+class Tiles extends Graphics {
   var size = 8;
   var count = 1;
 
-  Tiles({required String name, required List<int> data}) : super(name: name, data: data);
+  Tiles({required String name, required List<int> data})
+      : super(name: name, data: data);
 
   String formatOutput(input) {
     return input.asMap().entries.map((entry) {
@@ -54,6 +55,9 @@ class Tiles extends Graphics{
 
   @override
   void fromSource(String source) {
-    // TODO: implement fromSource
+    var nameValues = parseArray(source)!;
+    name = nameValues[0];
+    data = getIntensityFromRaw(nameValues[1].split(','), size);
+    count = data.length ~/ (size * size);
   }
 }

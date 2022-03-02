@@ -5,7 +5,6 @@ import 'package:gbdk_graphic_editor/widgets/gbdk_app_bar.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles_editor.dart';
 
 import 'background.dart';
-import 'convert.dart';
 
 void main() {
   runApp(const MyApp());
@@ -102,18 +101,12 @@ class _EditorState extends State<Editor> {
       });
 
   void _setTilesFromSource(source) => setState(() {
-        var nameValues = parseArray(source)!;
-        tiles.name = nameValues[0];
-        tiles.data = getIntensityFromRaw(nameValues[1].split(','), tiles.size);
-        tiles.count = tiles.data.length ~/ (tiles.size * tiles.size);
+        tiles.fromSource(source);
         selectedTileIndexTile = 0;
       });
 
   void _setBackgroundFromSource(String source) => setState(() {
-        var nameValues = parseArray(source)!;
-        background.name = nameValues[0];
-        background.data = List<int>.from(
-            nameValues[1].split(',').map((value) => int.parse(value)).toList());
+        background.fromSource(source);
         selectedTileIndexBackground = 0;
       });
 
@@ -123,22 +116,4 @@ class _EditorState extends State<Editor> {
       tiles.data[index] = selectedIntensity;
     });
   }
-}
-
-List? parseArray(source) {
-  RegExp regExp = RegExp(r"unsigned char (\w+)\[\] =\n\{\n([\s\S]*)};");
-  var matches = regExp.allMatches(source);
-
-  var name = "";
-  var values = "";
-
-  for (Match match in matches) {
-    name = match.group(1)!;
-    values = match.group(2)!;
-  }
-
-  if (name != "" && values.isNotEmpty) {
-    return [name, values];
-  }
-  return null;
 }

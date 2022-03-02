@@ -22,6 +22,9 @@ class Background extends Graphics {
 
   @override
   void fromSource(String source) {
-    // TODO: implement fromSource
+    var nameValues = parseArray(source)!;
+    name = nameValues[0];
+    data = List<int>.from(
+        nameValues[1].split(',').map((value) => int.parse(value)).toList());
   }
 }
