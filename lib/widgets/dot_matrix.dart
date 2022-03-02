@@ -4,10 +4,14 @@ class DotMatrix extends StatefulWidget {
   final List<Color> pixels;
   final bool showGrid;
   final Function? onTap;
-  final int crossAxisCount = 8;
+  final int crossAxisCount;
 
   const DotMatrix(
-      {Key? key, required this.pixels, this.showGrid = false, this.onTap})
+      {Key? key,
+      required this.pixels,
+      this.showGrid = false,
+      this.onTap,
+      this.crossAxisCount = 8})
       : super(key: key);
 
   @override
