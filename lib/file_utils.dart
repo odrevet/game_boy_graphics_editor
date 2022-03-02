@@ -14,25 +14,7 @@ Future<void> saveFile(String content) async {
   }
 }
 
-List? readFromSource(source) {
-  RegExp regExp = RegExp(r"unsigned char (\w+)\[\] =\n\{\n([\s\S]*)};");
-  var matches = regExp.allMatches(source);
-
-  var name = "";
-  var values = "";
-
-  for (Match match in matches) {
-    name = match.group(1)!;
-    values = match.group(2)!;
-  }
-
-  if (name != "" && values.isNotEmpty) {
-    return [name, values];
-  }
-  return null;
-}
-
-Future<List?> selectFolder() async {
+Future<String?> selectFolder() async {
   FilePickerResult? result = await FilePicker.platform.pickFiles(
     type: FileType.custom,
     allowedExtensions: ['c'],
@@ -48,7 +30,7 @@ Future<List?> selectFolder() async {
       source = await file.readAsString();
     }
 
-    return readFromSource(source);
+    return source;
   }
   return null;
 }

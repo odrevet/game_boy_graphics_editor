@@ -101,17 +101,19 @@ class _EditorState extends State<Editor> {
         tileMode = !tileMode;
       });
 
-  void _setTilesFromSource(name, values) => setState(() {
-        tiles.name = name;
-        tiles.data = getIntensityFromRaw(values.split(','), tiles.size);
+  void _setTilesFromSource(source) => setState(() {
+        var nameValues = parseArray(source)!;
+        tiles.name = nameValues[0];
+        tiles.data = getIntensityFromRaw(nameValues[1].split(','), tiles.size);
         tiles.count = tiles.data.length ~/ (tiles.size * tiles.size);
         selectedTileIndexTile = 0;
       });
 
-  void _setBackgroundFromSource(name, values) => setState(() {
-        background.name = name;
+  void _setBackgroundFromSource(String source) => setState(() {
+        var nameValues = parseArray(source)!;
+        background.name = nameValues[0];
         background.data = List<int>.from(
-            values.split(',').map((value) => int.parse(value)).toList());
+            nameValues[1].split(',').map((value) => int.parse(value)).toList());
         selectedTileIndexBackground = 0;
       });
 
@@ -121,4 +123,22 @@ class _EditorState extends State<Editor> {
       tiles.data[index] = selectedIntensity;
     });
   }
+}
+
+List? parseArray(source) {
+  RegExp regExp = RegExp(r"unsigned char (\w+)\[\] =\n\{\n([\s\S]*)};");
+  var matches = regExp.allMatches(source);
+
+  var name = "";
+  var values = "";
+
+  for (Match match in matches) {
+    name = match.group(1)!;
+    values = match.group(2)!;
+  }
+
+  if (name != "" && values.isNotEmpty) {
+    return [name, values];
+  }
+  return null;
 }
