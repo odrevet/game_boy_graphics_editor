@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/background.dart';
+import 'package:gbdk_graphic_editor/widgets/dot_matrix.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
-import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
+import '../colors.dart';
 import '../tiles.dart';
 import 'background_widget.dart';
 
@@ -32,9 +33,10 @@ class TilesEditor extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: AspectRatio(
           aspectRatio: 1.0,
-          child: TileWidget(
+          child: DotMatrix(
             onTap: setPixel,
-            intensity: tiles.getData(selectedTileIndex),
+            pixels:
+                tiles.getData(selectedTileIndex).map((e) => colors[e]).toList(),
             showGrid: showGrid,
           ),
         ),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/background.dart';
-import 'package:gbdk_graphic_editor/widgets/tile_widget.dart';
 
+import '../colors.dart';
 import '../tiles.dart';
+import 'dot_matrix.dart';
 
 class BackgroundWidget extends StatefulWidget {
   final Background background;
@@ -36,12 +37,15 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
   }
 
   Widget _build(BuildContext context, int index) {
-    Widget tileWidget = TileWidget(
-        intensity: widget.tiles.data.sublist(
-            (widget.tiles.size * widget.tiles.size) *
-                widget.background.data[index],
-            (widget.tiles.size * widget.tiles.size) *
-                (widget.background.data[index] + 1)));
+    Widget tileWidget = DotMatrix(
+        pixels: widget.tiles.data
+            .sublist(
+                (widget.tiles.size * widget.tiles.size) *
+                    widget.background.data[index],
+                (widget.tiles.size * widget.tiles.size) *
+                    (widget.background.data[index] + 1))
+            .map((e) => colors[e])
+            .toList());
 
     if (widget.onTap != null) {
       return GestureDetector(
