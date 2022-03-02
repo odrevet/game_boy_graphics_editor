@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/tiles.dart';
 
+import '../background.dart';
 import '../file_utils.dart';
 import 'intensity_button.dart';
 
@@ -17,6 +18,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
   final Function setTileFromSource;
   final bool tileMode;
   final Tiles tiles;
+  final Background background;
 
   const GBDKAppBar(
       {Key? key,
@@ -28,6 +30,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
       required this.setTileFromSource,
       required this.tileMode,
       required this.tiles,
+      required this.background,
       required this.preferredSize})
       : super(key: key);
 
@@ -37,14 +40,6 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
       title: Text(
           "${tiles.name} tile #${tiles.index} selected. ${tiles.count} tile(s) total"),
       actions: [
-        TextButton(
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.all(16.0),
-              primary: Colors.white,
-              textStyle: const TextStyle(fontSize: 20),
-            ),
-            onPressed: setTileMode,
-            child: Text(tileMode == true ? 'tile' : 'Map')),
         IconButton(
           icon: const Icon(Icons.grid_on),
           tooltip: 'Show/Hide grid',
@@ -53,7 +48,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
         IntensityButton(
           intensity: 0,
           onPressed: setIntensity,
-            selectedIntensity: selectedIntensity,
+          selectedIntensity: selectedIntensity,
         ),
         IntensityButton(
           intensity: 1,
@@ -78,7 +73,10 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
           icon: const Icon(Icons.save),
           tooltip:
               kIsWeb ? 'Save is not available for web' : 'Save source file',
-          onPressed: kIsWeb ? null : () => saveFile(tiles.toSource()),
+          onPressed: kIsWeb
+              ? null
+              : () =>
+                  saveFile(tileMode ? tiles.toSource() : background.toSource()),
         ),
         IconButton(
           icon: const Icon(Icons.folder_open),
@@ -88,8 +86,16 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
                 ? setTileFromSource(nameValues[0], nameValues[1])
                 : null)
           },
-        )
+        ),
+        _setTileModeButton()
       ],
     );
+  }
+
+  Widget _setTileModeButton() {
+    return ElevatedButton.icon(
+        onPressed: setTileMode,
+        icon: Icon(tileMode == true ? Icons.sports_martial_arts : Icons.map),
+        label: Text(tileMode == true ? 'tile' : 'Map'));
   }
 }

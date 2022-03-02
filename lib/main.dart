@@ -34,7 +34,7 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  var background = Background(1, 1, 0);
+  var background = Background(width: 1, height: 1, name: "map");
   var selectedIntensity = 0;
   var tiles = Tiles();
   bool tileMode = true; // edit tile or map
@@ -52,14 +52,15 @@ class _EditorState extends State<Editor> {
             toggleGrid: _toggleGrid,
             preferredSize: const Size.fromHeight(50.0),
             setTileFromSource: _setTilesFromSource,
-            tiles: tiles),
+            tiles: tiles,
+            background: background),
         body: tileMode
             ? TilesEditor(
                 setTilesIndex: _setTileIndex,
                 setPixel: _setPixel,
                 tiles: tiles,
                 showGrid: showGrid,
-                preview: Background(4, 4, tiles.index))
+                preview: Background(width: 4, height: 4, fill: tiles.index))
             : BackgroundEditor(
                 background: background,
                 tiles: tiles,

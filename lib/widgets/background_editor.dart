@@ -3,7 +3,6 @@ import 'package:gbdk_graphic_editor/widgets/background_widget.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 
 import '../background.dart';
-import '../convert.dart';
 import '../tiles.dart';
 
 class BackgroundEditor extends StatefulWidget {
@@ -59,7 +58,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
             ),
             Flexible(
               child: SelectableText(
-                  widget.background.data.map((e) => decimalToHex(e)).join(",")),
+                  widget.background.toSource()),
             ),
           ],
         ),
