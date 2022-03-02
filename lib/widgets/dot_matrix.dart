@@ -48,8 +48,7 @@ class _DotMatrixState extends State<DotMatrix> {
   }
 
   void _onTapDown(TapDownDetails details, BoxConstraints constraints) {
-    final RenderBox box = context.findRenderObject() as RenderBox;
-    var clickOffset = box.globalToLocal(details.globalPosition);
+    var clickOffset = details.localPosition;
     final pixelSize = constraints.maxWidth / widget.crossAxisCount;
     final tapedRow = (clickOffset.dx / pixelSize).floor();
     final tapedColumn = (clickOffset.dy / pixelSize).floor();
