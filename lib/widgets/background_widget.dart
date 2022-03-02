@@ -36,24 +36,21 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
   }
 
   Widget _build(BuildContext context, int index) {
+    Widget tileWidget = TileWidget(
+        intensity: widget.tiles.data.sublist(
+            (widget.tiles.size * widget.tiles.size) *
+                widget.background.data[index],
+            (widget.tiles.size * widget.tiles.size) *
+                (widget.background.data[index] + 1)));
+
     if (widget.onTap != null) {
       return GestureDetector(
         onTap: () => widget.onTap!(index),
-        child: TileWidget(
-            intensity: widget.tiles.data.sublist(
-                (widget.tiles.size * widget.tiles.size) *
-                    widget.background.data[index],
-                (widget.tiles.size * widget.tiles.size) *
-                    (widget.background.data[index] + 1))),
+        child: tileWidget,
       );
     }
     {
-      return TileWidget(
-          intensity: widget.tiles.data.sublist(
-              (widget.tiles.size * widget.tiles.size) *
-                  widget.background.data[index],
-              (widget.tiles.size * widget.tiles.size) *
-                  (widget.background.data[index] + 1)));
+      return tileWidget;
     }
   }
 }
