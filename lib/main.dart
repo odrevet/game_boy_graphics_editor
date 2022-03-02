@@ -36,7 +36,7 @@ class Editor extends StatefulWidget {
 class _EditorState extends State<Editor> {
   var background = Background(width: 1, height: 1, name: "map");
   var selectedIntensity = 0;
-  var tiles = Tiles();
+  var tiles = Tiles(name: "Tiles", data: List.filled(64, 0, growable: true));
   int selectedTileIndexTile = 0;
   int selectedTileIndexBackground = 0;
   bool tileMode = true; // edit tile or map
@@ -110,10 +110,8 @@ class _EditorState extends State<Editor> {
 
   void _setBackgroundFromSource(name, values) => setState(() {
         background.name = name;
-        background.data = List<int>.from(values
-            .split(',')
-            .map((value) => int.parse(value))
-            .toList());
+        background.data = List<int>.from(
+            values.split(',').map((value) => int.parse(value)).toList());
         selectedTileIndexBackground = 0;
       });
 

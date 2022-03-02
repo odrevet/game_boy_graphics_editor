@@ -1,10 +1,12 @@
+import 'package:gbdk_graphic_editor/graphics.dart';
+
 import 'convert.dart';
 
-class Tiles {
-  var data = List.filled(64, 0, growable: true);
+class Tiles extends Graphics{
   var size = 8;
   var count = 1;
-  String name = "data";
+
+  Tiles({required String name, required List<int> data}) : super(name: name, data: data);
 
   String formatOutput(input) {
     return input.asMap().entries.map((entry) {
@@ -12,10 +14,6 @@ class Tiles {
       String val = entry.value;
       return idx % 8 == 0 ? "\n  $val" : val;
     }).join(", ");
-  }
-
-  String toSource() {
-    return "unsigned char $name[] =\n{${formatOutput(getRaw())}\n};";
   }
 
   List<String> getRaw() {
@@ -47,5 +45,15 @@ class Tiles {
 
   List<int> getData(int index) {
     return data.sublist((size * size) * index, (size * size) * (index + 1));
+  }
+
+  @override
+  String toSource() {
+    return "unsigned char $name[] =\n{${formatOutput(getRaw())}\n};";
+  }
+
+  @override
+  void fromSource(String source) {
+    // TODO: implement fromSource
   }
 }
