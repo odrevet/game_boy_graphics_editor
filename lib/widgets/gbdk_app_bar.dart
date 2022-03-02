@@ -19,6 +19,8 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool tileMode;
   final Tiles tiles;
   final Background background;
+  final int selectedTileIndexTile;
+  final int selectedTileIndexBackground;
 
   const GBDKAppBar(
       {Key? key,
@@ -31,14 +33,17 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
       required this.tileMode,
       required this.tiles,
       required this.background,
-      required this.preferredSize})
+      required this.selectedTileIndexTile,
+      required this.selectedTileIndexBackground,
+      this.preferredSize = const Size.fromHeight(50.0)})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(
-          "${tiles.name} tile #${tiles.index} selected. ${tiles.count} tile(s) total"),
+      title: Text(tileMode
+          ? "${tiles.name} tile #$selectedTileIndexTile selected. ${tiles.count} tile(s) total"
+          : "${background.name} tile #$selectedTileIndexBackground selected"),
       actions: [
         IconButton(
           icon: const Icon(Icons.grid_on),

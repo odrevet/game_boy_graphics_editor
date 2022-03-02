@@ -37,6 +37,8 @@ class _EditorState extends State<Editor> {
   var background = Background(width: 1, height: 1, name: "map");
   var selectedIntensity = 0;
   var tiles = Tiles();
+  int selectedTileIndexTile = 0;
+  int selectedTileIndexBackground = 0;
   bool tileMode = true; // edit tile or map
   bool showGrid = true;
 
@@ -53,22 +55,32 @@ class _EditorState extends State<Editor> {
             preferredSize: const Size.fromHeight(50.0),
             setTileFromSource: _setTilesFromSource,
             tiles: tiles,
-            background: background),
+            background: background,
+            selectedTileIndexTile: selectedTileIndexTile,
+            selectedTileIndexBackground: selectedTileIndexBackground),
         body: tileMode
             ? TilesEditor(
-                setTilesIndex: _setTileIndex,
+                setTilesIndex: _setTileIndexTile,
                 setPixel: _setPixel,
                 tiles: tiles,
                 showGrid: showGrid,
-                preview: Background(width: 4, height: 4, fill: tiles.index))
+                selectedTileIndex: selectedTileIndexTile,
+                preview: Background(
+                    width: 4, height: 4, fill: selectedTileIndexTile))
             : BackgroundEditor(
                 background: background,
                 tiles: tiles,
+                selectedTileIndex: selectedTileIndexBackground,
+                onTapTileListView: _setTileIndexBackground,
               ));
   }
 
-  void _setTileIndex(index) => setState(() {
-        tiles.index = index;
+  void _setTileIndexBackground(index) => setState(() {
+        selectedTileIndexBackground = index;
+      });
+
+  void _setTileIndexTile(index) => setState(() {
+        selectedTileIndexTile = index;
       });
 
   void _toggleGrid() => setState(() {
@@ -92,12 +104,12 @@ class _EditorState extends State<Editor> {
         tiles.name = name;
         tiles.data.clear();
         tiles.data = getIntensityFromRaw(values.split(','), tiles.size);
-        tiles.index = 0;
         tiles.count = tiles.data.length ~/ (tiles.size * tiles.size);
+        selectedTileIndexTile = 0;
       });
 
   _setPixel(int index) {
-    index += (tiles.size * tiles.size) * tiles.index;
+    index += (tiles.size * tiles.size) * selectedTileIndexTile;
     setState(() {
       tiles.data[index] = selectedIntensity;
     });

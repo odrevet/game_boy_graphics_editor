@@ -8,11 +8,15 @@ import '../tiles.dart';
 class BackgroundEditor extends StatefulWidget {
   final Tiles tiles;
   final Background background;
+  final int selectedTileIndex;
+  final Function? onTapTileListView;
 
   const BackgroundEditor({
     Key? key,
     required this.tiles,
     required this.background,
+    required this.selectedTileIndex,
+    this.onTapTileListView,
   }) : super(key: key);
 
   @override
@@ -24,9 +28,9 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
   Widget build(BuildContext context) {
     return Row(children: [
       TileListView(
-          onTap: (index) => setState(() {
-                widget.tiles.index = index;
-              }),
+          onTap: (index) => widget.onTapTileListView != null
+              ? widget.onTapTileListView!(index)
+              : null,
           tiles: widget.tiles),
       Padding(
         padding: const EdgeInsets.all(16.0),
@@ -34,7 +38,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
             background: widget.background,
             tiles: widget.tiles,
             onTap: (index) => setState(() {
-                  widget.background.data[index] = widget.tiles.index;
+                  widget.background.data[index] = widget.selectedTileIndex;
                 })),
       ),
       Flexible(
@@ -57,8 +61,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
               }),
             ),
             Flexible(
-              child: SelectableText(
-                  widget.background.toSource()),
+              child: SelectableText(widget.background.toSource()),
             ),
           ],
         ),
