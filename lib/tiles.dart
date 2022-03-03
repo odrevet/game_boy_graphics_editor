@@ -48,6 +48,24 @@ class Tiles extends Graphics {
     return data.sublist((size * size) * index, (size * size) * (index + 1));
   }
 
+  setData(List<String> values) {
+    data = <int>[];
+
+    for (var index = 0; index < values.length; index += 2) {
+      var lo = toBinary(values[index], size);
+      var hi = toBinary(values[index + 1], size);
+
+      var combined = "";
+      for (var index = 0; index < size; index++) {
+        combined += hi[index] + lo[index];
+      }
+
+      for (var index = 0; index < size * 2; index += 2) {
+        data.add(int.parse(combined[index] + combined[index + 1], radix: 2));
+      }
+    }
+  }
+
   @override
   String toSource() {
     return "unsigned char $name[] =\n{${formatOutput(getRaw())}\n};";
@@ -56,7 +74,7 @@ class Tiles extends Graphics {
   @override
   void fromSource(String source) {
     var values = parseArray(source)!;
-    data = getIntensityFromRaw(values.split(','), size);
+    setData(values.split(','));
     count = data.length ~/ (size * size);
   }
 }
