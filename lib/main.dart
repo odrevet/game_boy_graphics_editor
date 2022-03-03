@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/tiles.dart';
 import 'package:gbdk_graphic_editor/widgets/background_editor.dart';
@@ -114,11 +116,13 @@ class _EditorState extends State<Editor> {
       });
 
   void _setTilesFromSource(source) => setState(() {
+        source = formatSource(source);
         tiles.fromSource(source);
         selectedTileIndexTile = 0;
       });
 
   void _setBackgroundFromSource(String source) => setState(() {
+        source = formatSource(source);
         background.fromSource(source);
         selectedTileIndexBackground = 0;
       });
@@ -129,4 +133,10 @@ class _EditorState extends State<Editor> {
       tiles.data[index] = selectedIntensity;
     });
   }
+}
+
+String formatSource(String source) {
+  LineSplitter ls = const LineSplitter();
+  List<String> lines = ls.convert(source);
+  return lines.join();
 }

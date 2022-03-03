@@ -9,7 +9,7 @@ abstract class Graphics {
   String toSource();
 
   String? parseArray(source) {
-    RegExp regExp = RegExp(r"unsigned char (\w+)\[\] =\n\{\n([\s\S]*)};");
+    RegExp regExp = RegExp(r"unsigned char (\w+)\[\] =\{(.*)};");
     var matches = regExp.allMatches(source);
 
     String values = "";
