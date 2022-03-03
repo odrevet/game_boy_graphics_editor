@@ -103,10 +103,9 @@ class _EditorState extends State<Editor> {
             (selectedTileIndexTile + 1) * 64);
 
         selectedTileIndexTile = 0;
-        
+
         if(tiles.count == 0) {
-          tiles.count += 1;
-          tiles.data += List.filled(64, 0);
+          _addTile();
         }
       });
 
