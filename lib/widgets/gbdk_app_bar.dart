@@ -124,7 +124,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget _setTileModeButton() {
     return ElevatedButton.icon(
         onPressed: setTileMode,
-        icon: Icon(tileMode == true ? Icons.sports_martial_arts : Icons.map),
+        icon: Icon(tileMode == true ? Icons.directions_walk : Icons.map),
         label: Text(tileMode == true ? 'tile' : 'Map'));
   }
 }

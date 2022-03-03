@@ -22,10 +22,9 @@ class Background extends Graphics {
 
   @override
   void fromSource(String source) {
-    var nameValues = parseArray(source)!;
-    name = nameValues[0];
+    var values = parseArray(source)!;
     data = List<int>.from(
-        nameValues[1].split(',').map((value) => int.parse(value)).toList());
+        values.split(',').map((value) => int.parse(value)).toList());
 
     RegExp regExpWidth = RegExp(r"#define \w+Width (\d+)");
     var matchesWidth = regExpWidth.allMatches(source);

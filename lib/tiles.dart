@@ -55,9 +55,8 @@ class Tiles extends Graphics {
 
   @override
   void fromSource(String source) {
-    var nameValues = parseArray(source)!;
-    name = nameValues[0];
-    data = getIntensityFromRaw(nameValues[1].split(','), size);
+    var values = parseArray(source)!;
+    data = getIntensityFromRaw(values.split(','), size);
     count = data.length ~/ (size * size);
   }
 }
