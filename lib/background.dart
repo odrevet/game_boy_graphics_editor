@@ -38,6 +38,4 @@ class Background extends Graphics {
       height = int.parse(match.group(1)!);
     }
   }
-
-
 }

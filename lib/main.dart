@@ -49,6 +49,7 @@ class _EditorState extends State<Editor> {
             selectedIntensity: selectedIntensity,
             tileMode: tileMode,
             addTile: _addTile,
+            removeTile: _removeTile,
             setTileMode: _setTileMode,
             toggleGrid: _toggleGrid,
             preferredSize: const Size.fromHeight(50.0),
@@ -94,6 +95,19 @@ class _EditorState extends State<Editor> {
   void _addTile() => setState(() {
         tiles.count += 1;
         tiles.data += List.filled(64, 0);
+      });
+
+  void _removeTile() => setState(() {
+        tiles.count -= 1;
+        tiles.data.removeRange(selectedTileIndexTile * 64,
+            (selectedTileIndexTile + 1) * 64);
+
+        selectedTileIndexTile = 0;
+        
+        if(tiles.count == 0) {
+          tiles.count += 1;
+          tiles.data += List.filled(64, 0);
+        }
       });
 
   void _setTileMode() => setState(() {
