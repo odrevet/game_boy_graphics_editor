@@ -33,7 +33,7 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  var background = Background(width: 1, height: 1, name: "map");
+  var background = Background(width: 1, height: 1, name: "Background");
   var selectedIntensity = 0;
   var tiles = Tiles(name: "Tiles", data: List.filled(64, 0, growable: true));
   int selectedTileIndexTile = 0;
@@ -99,12 +99,12 @@ class _EditorState extends State<Editor> {
 
   void _removeTile() => setState(() {
         tiles.count -= 1;
-        tiles.data.removeRange(selectedTileIndexTile * 64,
-            (selectedTileIndexTile + 1) * 64);
+        tiles.data.removeRange(
+            selectedTileIndexTile * 64, (selectedTileIndexTile + 1) * 64);
 
         selectedTileIndexTile = 0;
 
-        if(tiles.count == 0) {
+        if (tiles.count == 0) {
           _addTile();
         }
       });

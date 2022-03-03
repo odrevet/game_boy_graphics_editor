@@ -28,7 +28,10 @@ class TilesEditor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      TileListView(onTap: (index) => setTilesIndex(index), tiles: tiles),
+      TileListView(
+          onTap: (index) => setTilesIndex(index),
+          tiles: tiles,
+          selectedTile: selectedTileIndex),
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: AspectRatio(

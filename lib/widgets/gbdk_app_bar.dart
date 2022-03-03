@@ -120,9 +120,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
     actions.add(_setTileModeButton());
 
     return AppBar(
-      title: Text(tileMode
-          ? "${tiles.name} tile #$selectedTileIndexTile selected. ${tiles.count} tile(s) total"
-          : "${background.name} tile #$selectedTileIndexBackground selected"),
+      title: Text(tileMode ? tiles.name : background.name),
       actions: actions,
     );
   }
@@ -130,7 +128,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget _setTileModeButton() {
     return ElevatedButton.icon(
         onPressed: setTileMode,
-        icon: Icon(tileMode == true ? Icons.directions_walk : Icons.map),
-        label: Text(tileMode == true ? 'tile' : 'Map'));
+        icon: Icon(tileMode == true ? Icons.directions_walk : Icons.wallpaper),
+        label: Text(tileMode == true ? 'Tile' : 'Back'));
   }
 }

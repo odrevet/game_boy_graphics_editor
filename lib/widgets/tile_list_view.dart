@@ -6,9 +6,14 @@ import '../tiles.dart';
 
 class TileListView extends StatefulWidget {
   final Tiles tiles;
+  final int selectedTile;
   final Function onTap;
 
-  const TileListView({Key? key, required this.tiles, required this.onTap})
+  const TileListView(
+      {Key? key,
+      required this.tiles,
+      required this.selectedTile,
+      required this.onTap})
       : super(key: key);
 
   @override
@@ -23,13 +28,16 @@ class _TileListViewState extends State<TileListView> {
         child: ListView.builder(
           itemCount: widget.tiles.count,
           itemBuilder: (context, index) {
+            bool isSelected = widget.selectedTile == index;
+            Color color = isSelected == true ? Colors.blue : Colors.grey;
             return Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Expanded(
+                    Expanded(
                       child: Divider(
+                        color: color,
                         indent: 20.0,
                         endIndent: 10.0,
                         thickness: 1,
@@ -37,10 +45,11 @@ class _TileListViewState extends State<TileListView> {
                     ),
                     Text(
                       "$index",
-                      style: const TextStyle(color: Colors.green),
+                      style: TextStyle(color: color),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Divider(
+                        color: color,
                         indent: 10.0,
                         endIndent: 20.0,
                         thickness: 1,
