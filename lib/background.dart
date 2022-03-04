@@ -14,10 +14,10 @@ class Background extends Graphics {
   @override
   String toSource() {
     return """
-    #define ${name}Width $width
-    #define ${name}Height $height
-    #define ${name}Bank 0
-    unsigned char $name[] =\n{${data.map((e) => decimalToHex(e)).join(",")}\n};""";
+#define ${name}Width $width
+#define ${name}Height $height
+#define ${name}Bank 0
+unsigned char $name[] = {${data.map((e) => decimalToHex(e)).join(",")}};""";
   }
 
   @override

@@ -45,16 +45,31 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
       Flexible(
         child: Column(
           children: [
-            Text('Height ${widget.background.height}'),
-            TextField(
+            TextFormField(
+              initialValue: widget.background.name,
+              decoration: const InputDecoration(
+                  labelText: 'Name'
+              ),
+              onChanged: (text) => setState(() {
+                widget.background.name = text;
+              }),
+            ),
+            TextFormField(
+              initialValue: widget.background.height.toString(),
+              decoration: const InputDecoration(
+                  labelText: 'Height'
+              ),
               onChanged: (text) => setState(() {
                 widget.background.height = int.parse(text);
                 widget.background.data = List.filled(
                     widget.background.height * widget.background.width, 0);
               }),
             ),
-            Text('Width ${widget.background.width}'),
-            TextField(
+            TextFormField(
+              initialValue: widget.background.width.toString(),
+              decoration: const InputDecoration(
+                  labelText: 'Width'
+              ),
               onChanged: (text) => setState(() {
                 widget.background.width = int.parse(text);
                 widget.background.data = List.filled(
