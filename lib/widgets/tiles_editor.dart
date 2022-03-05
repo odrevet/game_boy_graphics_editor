@@ -34,14 +34,11 @@ class TilesEditor extends StatelessWidget {
           selectedTile: selectedTileIndex),
       Padding(
         padding: const EdgeInsets.all(8.0),
-        child: AspectRatio(
-          aspectRatio: 1.0,
-          child: DotMatrix(
-            onTap: setPixel,
-            pixels:
-                tiles.getData(selectedTileIndex).map((e) => colors[e]).toList(),
-            showGrid: showGrid,
-          ),
+        child: DotMatrix(
+          onTap: setPixel,
+          pixels:
+          tiles.getData(selectedTileIndex).map((e) => colors[e]).toList(),
+          showGrid: showGrid,
         ),
       ),
       Expanded(
