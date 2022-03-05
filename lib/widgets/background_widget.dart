@@ -49,7 +49,7 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
             .map((e) => colors[e])
             .toList());
 
-    if(widget.showGrid) {
+    if (widget.showGrid) {
       tileWidget = Container(
         decoration: BoxDecoration(border: Border.all(color: Colors.blueGrey)),
         child: tileWidget,

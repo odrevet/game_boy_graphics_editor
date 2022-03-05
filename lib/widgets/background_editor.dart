@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gbdk_graphic_editor/widgets/background_widget.dart';
+import 'package:gbdk_graphic_editor/widgets/graphics_data_display.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 
 import '../background.dart';
@@ -90,19 +91,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
             ),
             Expanded(
                 child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Text("${widget.background.name}.h"),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: SelectableText(widget.background.toHeader())),
-                  const Divider(),
-                  Text("${widget.background.name}.c"),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: SelectableText(widget.background.toSource())),
-                ],
-              ),
+              child: GraphicsDataDisplay(graphics: widget.background),
             )),
           ],
         ),
