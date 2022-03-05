@@ -41,7 +41,7 @@ class _EditorState extends State<Editor> {
   int selectedTileIndexTile = 0;
   int selectedTileIndexBackground = 0;
   bool tileMode = true; // edit tile or map
-  bool showGrid = true;
+  bool showGridTile = true;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +54,7 @@ class _EditorState extends State<Editor> {
             removeTile: _removeTile,
             setTileMode: _setTileMode,
             toggleGridTile: _toggleGridTile,
+            showGridTile: showGridTile,
             preferredSize: const Size.fromHeight(50.0),
             setTileFromSource: _setTilesFromSource,
             setBackgroundFromSource: _setBackgroundFromSource,
@@ -66,7 +67,7 @@ class _EditorState extends State<Editor> {
                 setTilesIndex: _setTileIndexTile,
                 setPixel: _setPixel,
                 tiles: tiles,
-                showGrid: showGrid,
+                showGrid: showGridTile,
                 selectedTileIndex: selectedTileIndexTile,
                 preview: Background(
                     width: 4, height: 4, fill: selectedTileIndexTile))
@@ -87,7 +88,7 @@ class _EditorState extends State<Editor> {
       });
 
   void _toggleGridTile() => setState(() {
-        showGrid = !showGrid;
+        showGridTile = !showGridTile;
       });
 
   void _setIntensity(intensity) => setState(() {

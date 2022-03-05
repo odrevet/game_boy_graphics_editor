@@ -16,6 +16,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
   final VoidCallback removeTile;
   final VoidCallback setTileMode;
   final VoidCallback toggleGridTile;
+  final bool showGridTile;
   final Function setTileFromSource;
   final Function setBackgroundFromSource;
   final bool tileMode;
@@ -32,6 +33,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
       required this.removeTile,
       required this.setTileMode,
       required this.toggleGridTile,
+      required this.showGridTile,
       required this.setTileFromSource,
       required this.setBackgroundFromSource,
       required this.tileMode,
@@ -49,7 +51,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
     if (tileMode) {
       actions = [
         IconButton(
-          icon: const Icon(Icons.grid_on),
+          icon: Icon(showGridTile == true ? Icons.grid_on: Icons.grid_off),
           tooltip: 'Show/Hide grid',
           onPressed: toggleGridTile,
         ),
