@@ -53,7 +53,7 @@ class _EditorState extends State<Editor> {
             addTile: _addTile,
             removeTile: _removeTile,
             setTileMode: _setTileMode,
-            toggleGrid: _toggleGrid,
+            toggleGridTile: _toggleGridTile,
             preferredSize: const Size.fromHeight(50.0),
             setTileFromSource: _setTilesFromSource,
             setBackgroundFromSource: _setBackgroundFromSource,
@@ -86,7 +86,7 @@ class _EditorState extends State<Editor> {
         selectedTileIndexTile = index;
       });
 
-  void _toggleGrid() => setState(() {
+  void _toggleGridTile() => setState(() {
         showGrid = !showGrid;
       });
 
