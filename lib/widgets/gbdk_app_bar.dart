@@ -92,7 +92,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
           tooltip: kIsWeb
               ? 'Save is not available for web'
               : 'Save tiles source file',
-          onPressed: kIsWeb ? null : () => saveFile(tiles.toSource()),
+          onPressed: kIsWeb ? null : () => saveToDirectory(tiles),
         ),
         IconButton(
           icon: const Icon(Icons.folder_open),
@@ -116,7 +116,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
           tooltip: kIsWeb
               ? 'Save is not available for web'
               : 'Save background source file',
-          onPressed: kIsWeb ? null : () => saveFile(background.toSource()),
+          onPressed: kIsWeb ? null : () => saveToDirectory(background),
         ),
         IconButton(
           icon: const Icon(Icons.folder_open),
