@@ -35,7 +35,7 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  var background = Background(width: 1, height: 1, name: "Background");
+  var background = Background(width: 20, height: 18, name: "Background");
   var selectedIntensity = 0;
   var tiles = Tiles(name: "Tiles", data: List.filled(64, 0, growable: true));
   int selectedTileIndexTile = 0;

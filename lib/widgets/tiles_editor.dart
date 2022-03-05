@@ -58,10 +58,14 @@ class TilesEditor extends StatelessWidget {
             Column(
               children: [
                 Text("${tiles.name}.h"),
-                Align(alignment: Alignment.topLeft, child: SelectableText(tiles.toHeader())),
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: SelectableText(tiles.toHeader())),
                 const Divider(),
                 Text("${tiles.name}.c"),
-                Align(alignment: Alignment.topLeft, child: SelectableText(tiles.toSource())),
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: SelectableText(tiles.toSource())),
               ],
             )
           ],

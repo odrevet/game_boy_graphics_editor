@@ -7,6 +7,7 @@ abstract class Graphics {
   void fromSource(String source);
 
   String toHeader();
+
   String toSource();
 
   String? parseArray(source) {

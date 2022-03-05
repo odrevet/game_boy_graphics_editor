@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gbdk_graphic_editor/widgets/background_widget.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 
@@ -47,31 +48,39 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
           children: [
             TextFormField(
               initialValue: widget.background.name,
-              decoration: const InputDecoration(
-                  labelText: 'Name'
-              ),
+              decoration: const InputDecoration(labelText: 'Name'),
               onChanged: (text) => setState(() {
                 widget.background.name = text;
               }),
             ),
             TextFormField(
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
+              ],
               initialValue: widget.background.height.toString(),
-              decoration: const InputDecoration(
-                  labelText: 'Height'
-              ),
+              decoration: const InputDecoration(labelText: 'Height'),
               onChanged: (text) => setState(() {
-                widget.background.height = int.parse(text);
+                widget.background.width = int.tryParse(text) ?? 18;
+                if (widget.background.width > 32) {
+                  widget.background.width = 32;
+                }
                 widget.background.data = List.filled(
                     widget.background.height * widget.background.width, 0);
               }),
             ),
             TextFormField(
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
+              ],
               initialValue: widget.background.width.toString(),
-              decoration: const InputDecoration(
-                  labelText: 'Width'
-              ),
+              decoration: const InputDecoration(labelText: 'Width'),
               onChanged: (text) => setState(() {
-                widget.background.width = int.parse(text);
+                widget.background.height = int.tryParse(text) ?? 20;
+                if (widget.background.height > 32) {
+                  widget.background.height = 32;
+                }
+
                 widget.background.data = List.filled(
                     widget.background.height * widget.background.width, 0);
               }),
@@ -79,10 +88,14 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
             Column(
               children: [
                 Text("${widget.background.name}.h"),
-                Align(alignment: Alignment.topLeft, child: SelectableText(widget.background.toHeader())),
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: SelectableText(widget.background.toHeader())),
                 const Divider(),
                 Text("${widget.background.name}.c"),
-                Align(alignment: Alignment.topLeft, child: SelectableText(widget.background.toSource())),
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: SelectableText(widget.background.toSource())),
               ],
             ),
           ],
