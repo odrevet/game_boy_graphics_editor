@@ -37,7 +37,7 @@ class TilesEditor extends StatelessWidget {
         child: DotMatrix(
           onTap: setPixel,
           pixels:
-          tiles.getData(selectedTileIndex).map((e) => colors[e]).toList(),
+              tiles.getData(selectedTileIndex).map((e) => colors[e]).toList(),
           showGrid: showGrid,
         ),
       ),
@@ -45,11 +45,15 @@ class TilesEditor extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: BackgroundWidget(
-                background: preview,
-                tiles: tiles,
-                onTap: null,
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: 200,
+                height: 200,
+                child: BackgroundWidget(
+                  background: preview,
+                  tiles: tiles,
+                  onTap: null,
+                ),
               ),
             ),
             Column(
