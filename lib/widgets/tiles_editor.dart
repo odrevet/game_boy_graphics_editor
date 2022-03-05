@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gbdk_graphic_editor/background.dart';
 import 'package:gbdk_graphic_editor/widgets/dot_matrix.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
@@ -61,16 +62,29 @@ class TilesEditor extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Text("${tiles.name}.h"),
+                    Row(children: [
+                      Text("${tiles.name}.h"),
+                      IconButton(
+                        iconSize: 18,
+                        icon: const Icon(Icons.copy),
+                        onPressed: () => Clipboard.setData(ClipboardData(text: tiles.toHeader())),
+                      ),
+                    ]),
                     Align(
                         alignment: Alignment.topLeft,
                         child: SelectableText(tiles.toHeader())),
                     const Divider(),
-                    Text("${tiles.name}.c"),
+                    Row(children: [
+                      Text("${tiles.name}.c"),
+                      IconButton(
+                        iconSize: 18,
+                        icon: const Icon(Icons.copy),
+                        onPressed: () => Clipboard.setData(ClipboardData(text: tiles.toSource())),
+                      ),
+                    ]),
                     Align(
                         alignment: Alignment.topLeft,
-                        child: SelectableText(tiles.toSource()))
-,
+                        child: SelectableText(tiles.toSource())),
                   ],
                 ),
               ),
