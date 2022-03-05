@@ -9,12 +9,14 @@ class BackgroundWidget extends StatefulWidget {
   final Background background;
   final Tiles tiles;
   final Function? onTap;
+  final bool showGrid;
 
   const BackgroundWidget(
       {Key? key,
       required this.background,
       required this.tiles,
-      required this.onTap})
+      required this.onTap,
+      this.showGrid = false})
       : super(key: key);
 
   @override
@@ -46,6 +48,13 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
                     (widget.background.data[index] + 1))
             .map((e) => colors[e])
             .toList());
+
+    if(widget.showGrid) {
+      tileWidget = Container(
+        decoration: BoxDecoration(border: Border.all(color: Colors.blueGrey)),
+        child: tileWidget,
+      );
+    }
 
     if (widget.onTap != null) {
       return GestureDetector(

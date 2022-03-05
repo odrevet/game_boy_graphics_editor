@@ -11,6 +11,7 @@ class BackgroundEditor extends StatefulWidget {
   final Background background;
   final int selectedTileIndex;
   final Function? onTapTileListView;
+  final bool showGrid;
 
   const BackgroundEditor({
     Key? key,
@@ -18,6 +19,7 @@ class BackgroundEditor extends StatefulWidget {
     required this.background,
     required this.selectedTileIndex,
     this.onTapTileListView,
+    this.showGrid = false
   }) : super(key: key);
 
   @override
@@ -37,6 +39,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
       Padding(
         padding: const EdgeInsets.all(16.0),
         child: BackgroundWidget(
+          showGrid: widget.showGrid,
             background: widget.background,
             tiles: widget.tiles,
             onTap: (index) => setState(() {
