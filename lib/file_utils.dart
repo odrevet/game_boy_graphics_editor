@@ -18,7 +18,6 @@ Future<void> saveToDirectory(Graphics graphics) async {
   String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
   if (selectedDirectory != null) {
-    print(selectedDirectory);
     File("$selectedDirectory/${graphics.name}.h")
         .writeAsString(graphics.toHeader());
     File("$selectedDirectory/${graphics.name}.c")
