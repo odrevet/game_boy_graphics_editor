@@ -67,6 +67,12 @@ class Tiles extends Graphics {
   }
 
   @override
+  String toHeader() {
+    return """#define ${name}Bank 0
+extern unsigned char $name[];""";
+  }
+
+  @override
   String toSource() {
     return "unsigned char $name[] =\n{${formatOutput(getRaw())}\n};";
   }

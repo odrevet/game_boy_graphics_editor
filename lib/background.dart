@@ -12,9 +12,16 @@ class Background extends Graphics {
             data: List<int>.filled(height * width, fill, growable: true));
 
   @override
+  String toHeader() {
+    return """#define ${name}Width $width
+#define ${name}Height $height
+#define ${name}Bank 0
+extern unsigned char $name[];""";
+  }
+
+  @override
   String toSource() {
-    return """
-#define ${name}Width $width
+    return """#define ${name}Width $width
 #define ${name}Height $height
 #define ${name}Bank 0
 unsigned char $name[] = {${data.map((e) => decimalToHex(e)).join(",")}};""";
