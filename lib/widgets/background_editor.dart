@@ -76,8 +76,14 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                     widget.background.height * widget.background.width, 0);
               }),
             ),
-            Flexible(
-              child: SelectableText(widget.background.toSource()),
+            Column(
+              children: [
+                Text("${widget.background.name}.h"),
+                Align(alignment: Alignment.topLeft, child: SelectableText(widget.background.toHeader())),
+                const Divider(),
+                Text("${widget.background.name}.c"),
+                Align(alignment: Alignment.topLeft, child: SelectableText(widget.background.toSource())),
+              ],
             ),
           ],
         ),

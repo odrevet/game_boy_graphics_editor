@@ -55,10 +55,15 @@ class TilesEditor extends StatelessWidget {
                 onTap: null,
               ),
             ),
-            Flexible(
-                child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SelectableText(tiles.toSource()))),
+            Column(
+              children: [
+                Text("${tiles.name}.h"),
+                Align(alignment: Alignment.topLeft, child: SelectableText(tiles.toHeader())),
+                const Divider(),
+                Text("${tiles.name}.c"),
+                Align(alignment: Alignment.topLeft, child: SelectableText(tiles.toSource())),
+              ],
+            )
           ],
         ),
       )
