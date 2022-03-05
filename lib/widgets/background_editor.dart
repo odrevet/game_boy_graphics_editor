@@ -13,14 +13,14 @@ class BackgroundEditor extends StatefulWidget {
   final Function? onTapTileListView;
   final bool showGrid;
 
-  const BackgroundEditor({
-    Key? key,
-    required this.tiles,
-    required this.background,
-    required this.selectedTileIndex,
-    this.onTapTileListView,
-    this.showGrid = false
-  }) : super(key: key);
+  const BackgroundEditor(
+      {Key? key,
+      required this.tiles,
+      required this.background,
+      required this.selectedTileIndex,
+      this.onTapTileListView,
+      this.showGrid = false})
+      : super(key: key);
 
   @override
   State<BackgroundEditor> createState() => _BackgroundEditorState();
@@ -39,7 +39,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
       Padding(
         padding: const EdgeInsets.all(16.0),
         child: BackgroundWidget(
-          showGrid: widget.showGrid,
+            showGrid: widget.showGrid,
             background: widget.background,
             tiles: widget.tiles,
             onTap: (index) => setState(() {
@@ -88,19 +88,22 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                     widget.background.height * widget.background.width, 0);
               }),
             ),
-            Column(
-              children: [
-                Text("${widget.background.name}.h"),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: SelectableText(widget.background.toHeader())),
-                const Divider(),
-                Text("${widget.background.name}.c"),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: SelectableText(widget.background.toSource())),
-              ],
-            ),
+            Expanded(
+                child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text("${widget.background.name}.h"),
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: SelectableText(widget.background.toHeader())),
+                  const Divider(),
+                  Text("${widget.background.name}.c"),
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: SelectableText(widget.background.toSource())),
+                ],
+              ),
+            )),
           ],
         ),
       )

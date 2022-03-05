@@ -42,6 +42,7 @@ class TilesEditor extends StatelessWidget {
         ),
       ),
       Expanded(
+        flex: 2,
         child: Column(
           children: [
             Padding(
@@ -56,18 +57,23 @@ class TilesEditor extends StatelessWidget {
                 ),
               ),
             ),
-            Column(
-              children: [
-                Text("${tiles.name}.h"),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: SelectableText(tiles.toHeader())),
-                const Divider(),
-                Text("${tiles.name}.c"),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: SelectableText(tiles.toSource())),
-              ],
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Text("${tiles.name}.h"),
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: SelectableText(tiles.toHeader())),
+                    const Divider(),
+                    Text("${tiles.name}.c"),
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: SelectableText(tiles.toSource()))
+,
+                  ],
+                ),
+              ),
             )
           ],
         ),
