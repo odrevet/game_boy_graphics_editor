@@ -1,19 +1,25 @@
 import 'package:gbdk_graphic_editor/graphics.dart';
+import 'package:gbdk_graphic_editor/tiles.dart';
 
 import 'convert.dart';
 
 class Background extends Graphics {
   int height;
   int width;
+  Tiles? tiles;
 
-  Background({this.height = 0, this.width = 0, name = "", int fill = 0})
+  Background({this.height = 0, this.width = 0, name = "", int fill = 0, this.tiles})
       : super(
             name: name,
             data: List<int>.filled(height * width, fill, growable: true));
 
   @override
   String toHeader() {
-    return """#define ${name}Width $width
+    return """/*
+Info: 
+  Tile set  : ${tiles?.name ?? ""}    
+*/
+#define ${name}Width $width
 #define ${name}Height $height
 #define ${name}Bank 0
 extern unsigned char $name[];""";

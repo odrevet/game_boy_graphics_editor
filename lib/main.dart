@@ -35,14 +35,21 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  var background = Background(width: 20, height: 18, name: "Background");
   var selectedIntensity = 0;
   var tiles = Tiles(name: "Tiles", data: List.filled(64, 0, growable: true));
+  late Background background;
   int selectedTileIndexTile = 0;
   int selectedTileIndexBackground = 0;
   bool tileMode = true; // edit tile or map
   bool showGridTile = true;
   bool showGridBackground = true;
+
+  @override
+  void initState() {
+    super.initState();
+    background =
+        Background(width: 20, height: 18, name: "Background", tiles: tiles);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,12 +121,12 @@ class _EditorState extends State<Editor> {
             selectedTileIndexTile * 64, (selectedTileIndexTile + 1) * 64);
 
         selectedTileIndexTile--;
-        if(selectedTileIndexTile < 0){
+        if (selectedTileIndexTile < 0) {
           selectedTileIndexTile = 0;
         }
 
         selectedTileIndexBackground--;
-        if(selectedTileIndexBackground < 0){
+        if (selectedTileIndexBackground < 0) {
           selectedTileIndexBackground = 0;
         }
 
