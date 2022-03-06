@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/tiles.dart';
 
 import '../background.dart';
+import '../download_stub.dart'
+if (dart.library.html) '../download.dart';
 import '../file_utils.dart';
 import 'intensity_button.dart';
 
@@ -87,13 +89,19 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
             icon: const Icon(Icons.remove),
             tooltip: 'Remove tile',
             onPressed: removeTile),
-        IconButton(
-          icon: const Icon(Icons.save),
-          tooltip: kIsWeb
-              ? 'Save is not available for web'
-              : 'Save tiles source file',
-          onPressed: kIsWeb ? null : () => saveToDirectory(tiles),
-        ),
+        kIsWeb
+            ? IconButton(
+                icon: const Icon(Icons.download),
+                tooltip: 'Download',
+                onPressed: () {
+                  download(tiles.toHeader(), '${tiles.name}.h');
+                  download(tiles.toSource(), '${tiles.name}.c');
+                })
+            : IconButton(
+                icon: const Icon(Icons.save),
+                tooltip: 'Save',
+                onPressed: () => saveToDirectory(tiles),
+              ),
         IconButton(
           icon: const Icon(Icons.folder_open),
           tooltip: 'Open source file',
@@ -111,13 +119,19 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
           tooltip: 'Show/Hide grid',
           onPressed: toggleGridBackground,
         ),
-        IconButton(
-          icon: const Icon(Icons.save),
-          tooltip: kIsWeb
-              ? 'Save is not available for web'
-              : 'Save background source file',
-          onPressed: kIsWeb ? null : () => saveToDirectory(background),
-        ),
+        kIsWeb
+            ? IconButton(
+                icon: const Icon(Icons.download),
+                tooltip: 'Download',
+                onPressed: () {
+                  download(background.toHeader(), '${background.name}.h');
+                  download(background.toSource(), '${background.name}.c');
+                })
+            : IconButton(
+                icon: const Icon(Icons.save),
+                tooltip: 'Save',
+                onPressed: () => saveToDirectory(background),
+              ),
         IconButton(
           icon: const Icon(Icons.folder_open),
           tooltip: 'Open source file',
