@@ -5,9 +5,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:gbdk_graphic_editor/graphics.dart';
 
-Future<void> saveFile(String content) async {
-  String? fileName =
-      await FilePicker.platform.saveFile(allowedExtensions: [".c"]);
+Future<void> saveFile(String content, allowedExtensions, [filename]) async {
+  String? fileName = await FilePicker.platform
+      .saveFile(allowedExtensions: allowedExtensions, fileName: filename);
   if (fileName != null) {
     File file = File(fileName);
     file.writeAsString(content);

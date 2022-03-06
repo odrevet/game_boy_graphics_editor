@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/tiles.dart';
 
 import '../background.dart';
-import '../download_stub.dart'
-if (dart.library.html) '../download.dart';
+import '../download_stub.dart' if (dart.library.html) '../download.dart';
 import '../file_utils.dart';
 import 'intensity_button.dart';
 
