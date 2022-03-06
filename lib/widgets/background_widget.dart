@@ -39,15 +39,29 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
   }
 
   Widget _build(BuildContext context, int index) {
-    Widget tileWidget = DotMatrix(
-        pixels: widget.tiles.data
-            .sublist(
-                (widget.tiles.size * widget.tiles.size) *
-                    widget.background.data[index],
-                (widget.tiles.size * widget.tiles.size) *
-                    (widget.background.data[index] + 1))
-            .map((e) => colors[e])
-            .toList());
+    Widget tileWidget;
+
+    if (widget.background.data[index] >= widget.tiles.count) {
+      tileWidget = Container(
+        alignment: Alignment.center,
+        child: const Text(
+          'Error',
+          style: TextStyle(color: Colors.red),
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
+        ),
+      );
+    } else {
+      tileWidget = DotMatrix(
+          pixels: widget.tiles.data
+              .sublist(
+                  (widget.tiles.size * widget.tiles.size) *
+                      widget.background.data[index],
+                  (widget.tiles.size * widget.tiles.size) *
+                      (widget.background.data[index] + 1))
+              .map((e) => colors[e])
+              .toList());
+    }
 
     if (widget.showGrid) {
       tileWidget = Container(
