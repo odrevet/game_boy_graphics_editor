@@ -113,10 +113,20 @@ class _EditorState extends State<Editor> {
         tiles.data.removeRange(
             selectedTileIndexTile * 64, (selectedTileIndexTile + 1) * 64);
 
-        selectedTileIndexTile = 0;
+        selectedTileIndexTile--;
+        if(selectedTileIndexTile < 0){
+          selectedTileIndexTile = 0;
+        }
+
+        selectedTileIndexBackground--;
+        if(selectedTileIndexBackground < 0){
+          selectedTileIndexBackground = 0;
+        }
 
         if (tiles.count == 0) {
           _addTile();
+          selectedTileIndexTile = 0;
+          selectedTileIndexBackground = 0;
         }
       });
 
