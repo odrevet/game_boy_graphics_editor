@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gbdk_graphic_editor/graphics.dart';
 
+import '../download_stub.dart' if (dart.library.html) '../download.dart';
 import '../file_utils.dart';
 
 class GraphicsDataDisplay extends StatelessWidget {
@@ -24,12 +26,19 @@ class GraphicsDataDisplay extends StatelessWidget {
             onPressed: () =>
                 Clipboard.setData(ClipboardData(text: graphics.toHeader())),
           ),
-          IconButton(
-            iconSize: 18,
-            icon: const Icon(Icons.save_as),
-            onPressed: () =>
-                saveFile(graphics.toHeader(), ['.h'], headerFilename),
-          ),
+          kIsWeb
+              ? IconButton(
+                  iconSize: 18,
+                  icon: const Icon(Icons.download),
+                  onPressed: () =>
+                      download(graphics.toHeader(), headerFilename),
+                )
+              : IconButton(
+                  iconSize: 18,
+                  icon: const Icon(Icons.save_as),
+                  onPressed: () =>
+                      saveFile(graphics.toHeader(), ['.h'], headerFilename),
+                ),
         ]),
         Align(
             alignment: Alignment.topLeft,
@@ -43,12 +52,19 @@ class GraphicsDataDisplay extends StatelessWidget {
             onPressed: () =>
                 Clipboard.setData(ClipboardData(text: graphics.toSource())),
           ),
-          IconButton(
-            iconSize: 18,
-            icon: const Icon(Icons.save_as),
-            onPressed: () =>
-                saveFile(graphics.toSource(), ['.c'], sourceFilename),
-          ),
+          kIsWeb
+              ? IconButton(
+                  iconSize: 18,
+                  icon: const Icon(Icons.download),
+                  onPressed: () =>
+                      download(graphics.toSource(), sourceFilename),
+                )
+              : IconButton(
+                  iconSize: 18,
+                  icon: const Icon(Icons.save_as),
+                  onPressed: () =>
+                      saveFile(graphics.toSource(), ['.c'], sourceFilename),
+                ),
         ]),
         Align(
             alignment: Alignment.topLeft,
