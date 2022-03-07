@@ -16,6 +16,7 @@ class GraphicsDataDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     String headerFilename = "${graphics.name}.h";
     String sourceFilename = "${graphics.name}.c";
+    const double? fontSize = 12;
     return Column(
       children: [
         Row(children: [
@@ -42,7 +43,10 @@ class GraphicsDataDisplay extends StatelessWidget {
         ]),
         Align(
             alignment: Alignment.topLeft,
-            child: SelectableText(graphics.toHeader())),
+            child: SelectableText(graphics.toHeader(),
+                style: const TextStyle(
+                  fontSize: fontSize,
+                ))),
         const Divider(),
         Row(children: [
           Text("${graphics.name}.c"),
@@ -68,7 +72,12 @@ class GraphicsDataDisplay extends StatelessWidget {
         ]),
         Align(
             alignment: Alignment.topLeft,
-            child: SelectableText(graphics.toSource())),
+            child: SelectableText(
+              graphics.toSource(),
+              style: const TextStyle(
+                fontSize: fontSize,
+              ),
+            )),
       ],
     );
   }

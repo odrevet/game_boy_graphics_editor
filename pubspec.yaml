@@ -23,3 +23,6 @@ flutter:
     - family: PressStart2P
       fonts:
         - asset: fonts/PressStart2P-Regular.ttf
+    - family: RobotoMono
+      fonts:
+        - asset: fonts/RobotoMono-Variable.ttf
