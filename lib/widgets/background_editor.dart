@@ -63,7 +63,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                 FilteringTextInputFormatter.digitsOnly
               ],
               initialValue: widget.background.height.toString(),
-              decoration: const InputDecoration(labelText: 'Height'),
+              decoration: const InputDecoration(labelText: 'Width'),
               onChanged: (text) => setState(() {
                 widget.background.width = int.tryParse(text) ?? 18;
                 if (widget.background.width > 32) {
@@ -78,7 +78,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                 FilteringTextInputFormatter.digitsOnly
               ],
               initialValue: widget.background.width.toString(),
-              decoration: const InputDecoration(labelText: 'Width'),
+              decoration: const InputDecoration(labelText: 'Height'),
               onChanged: (text) => setState(() {
                 widget.background.height = int.tryParse(text) ?? 20;
                 if (widget.background.height > 32) {
