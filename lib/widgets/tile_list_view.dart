@@ -62,6 +62,7 @@ class _TileListViewState extends State<TileListView> {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: DotMatrix(
+                        crossAxisCount: widget.tiles.width,
                         pixels: widget.tiles
                             .getData(index)
                             .map((e) => colors[e])

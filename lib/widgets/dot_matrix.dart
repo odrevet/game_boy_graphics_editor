@@ -11,7 +11,7 @@ class DotMatrix extends StatefulWidget {
       required this.pixels,
       this.showGrid = false,
       this.onTap,
-      this.crossAxisCount = 8})
+      required this.crossAxisCount})
       : super(key: key);
 
   @override
