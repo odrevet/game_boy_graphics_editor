@@ -3,11 +3,10 @@ import 'package:gbdk_graphic_editor/graphics.dart';
 import 'convert.dart';
 
 class Tiles extends Graphics {
-  var size = 8;
   var count = 1;
 
-  Tiles({required String name, required List<int> data})
-      : super(name: name, data: data);
+  Tiles({required String name, required List<int> data, required width, required height})
+      : super(name: name, data: data, height: height, width: width);
 
   String formatOutput(input) {
     return input.asMap().entries.map((entry) {
@@ -26,13 +25,13 @@ class Tiles extends Graphics {
     }
 
     for (var index = 0;
-        index < combined.length ~/ size * size;
-        index += size * 2) {
+        index < combined.length ~/ width * height;
+        index += width * 2) {
       var lo = "";
       var hi = "";
-      var combinedSub = combined.substring(index, index + size * 2);
+      var combinedSub = combined.substring(index, index + width * 2);
 
-      for (var indexSub = 0; indexSub < size * 2; indexSub += 2) {
+      for (var indexSub = 0; indexSub < width * 2; indexSub += 2) {
         lo += combinedSub[indexSub];
         hi += combinedSub[indexSub + 1];
       }
@@ -45,22 +44,22 @@ class Tiles extends Graphics {
   }
 
   List<int> getData(int index) {
-    return data.sublist((size * size) * index, (size * size) * (index + 1));
+    return data.sublist((width * height) * index, (width * height) * (index + 1));
   }
 
   setData(List<String> values) {
     data = <int>[];
 
     for (var index = 0; index < values.length; index += 2) {
-      var lo = toBinary(values[index], size);
-      var hi = toBinary(values[index + 1], size);
+      var lo = toBinary(values[index], width);
+      var hi = toBinary(values[index + 1], width);
 
       var combined = "";
-      for (var index = 0; index < size; index++) {
+      for (var index = 0; index < width; index++) {
         combined += hi[index] + lo[index];
       }
 
-      for (var index = 0; index < size * 2; index += 2) {
+      for (var index = 0; index < width * 2; index += 2) {
         data.add(int.parse(combined[index] + combined[index + 1], radix: 2));
       }
     }
@@ -81,6 +80,6 @@ extern unsigned char $name[];""";
   void fromSource(String source) {
     var values = parseArray(source)!;
     setData(values.split(','));
-    count = data.length ~/ (size * size);
+    count = data.length ~/ (width * height);
   }
 }

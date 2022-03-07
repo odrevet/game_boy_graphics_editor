@@ -49,17 +49,36 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
       this.preferredSize = const Size.fromHeight(50.0)})
       : super(key: key);
 
+  final String dropdownValue = '8 x 8';
+
+  Widget _tileDimensionsDropDown(){
+    return DropdownButton<String>(
+      value: dropdownValue,
+      onChanged: (String? newValue) {
+
+      },
+      items: <String>['8 x 8', '8 x 16', '16 x 16', '32 x 32']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     var actions = <Widget>[];
 
     if (tileMode) {
       actions = [
+        //_tileDimensionsDropDown(),
         IconButton(
           icon: Icon(showGridTile == true ? Icons.grid_on : Icons.grid_off),
           tooltip: 'Show/Hide grid',
           onPressed: toggleGridTile,
         ),
+        const VerticalDivider(),
         IntensityButton(
           intensity: 0,
           onPressed: setIntensity,
@@ -80,6 +99,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
           onPressed: setIntensity,
           selectedIntensity: selectedIntensity,
         ),
+        const VerticalDivider(),
         IconButton(
             icon: const Icon(Icons.add),
             tooltip: 'Add tile',
@@ -88,6 +108,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
             icon: const Icon(Icons.remove),
             tooltip: 'Remove tile',
             onPressed: removeTile),
+        const VerticalDivider(),
         kIsWeb
             ? IconButton(
                 icon: const Icon(Icons.download),
@@ -118,6 +139,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
           tooltip: 'Show/Hide grid',
           onPressed: toggleGridBackground,
         ),
+        const VerticalDivider(),
         kIsWeb
             ? IconButton(
                 icon: const Icon(Icons.download),

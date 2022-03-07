@@ -37,7 +37,7 @@ class Editor extends StatefulWidget {
 
 class _EditorState extends State<Editor> {
   var selectedIntensity = 0;
-  var tiles = Tiles(name: "Tiles", data: List.filled(64, 0, growable: true));
+  var tiles = Tiles(name: "Tiles", data: List.filled(64, 0, growable: true), width: 8, height: 8);
   late Background background;
   int selectedTileIndexTile = 0;
   int selectedTileIndexBackground = 0;
@@ -155,7 +155,7 @@ class _EditorState extends State<Editor> {
       });
 
   _setPixel(int index) {
-    index += (tiles.size * tiles.size) * selectedTileIndexTile;
+    index += (tiles.width * tiles.height) * selectedTileIndexTile;
     setState(() {
       tiles.data[index] = selectedIntensity;
     });

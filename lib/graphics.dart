@@ -1,8 +1,10 @@
 abstract class Graphics {
+  int height;
+  int width;
   List<int> data;
   String name;
 
-  Graphics({required this.name, required this.data});
+  Graphics({required this.name, required this.data, required this.width, required this.height});
 
   void fromSource(String source);
 

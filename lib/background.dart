@@ -4,13 +4,13 @@ import 'package:gbdk_graphic_editor/tiles.dart';
 import 'convert.dart';
 
 class Background extends Graphics {
-  int height;
-  int width;
   Tiles? tiles;
 
-  Background({this.height = 0, this.width = 0, name = "", int fill = 0, this.tiles})
+  Background({height = 0, width = 0, name = "", int fill = 0, this.tiles})
       : super(
             name: name,
+            width: width,
+            height: height,
             data: List<int>.filled(height * width, fill, growable: true));
 
   @override
