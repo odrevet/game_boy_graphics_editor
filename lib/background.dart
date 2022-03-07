@@ -27,10 +27,11 @@ extern unsigned char $name[];""";
 
   @override
   String toSource() {
+    var arrayData = data.map((e) => decimalToHex(e)).toList();
     return """#define ${name}Width $width
 #define ${name}Height $height
 #define ${name}Bank 0
-unsigned char $name[] = {${data.map((e) => decimalToHex(e)).join(",")}};""";
+unsigned char $name[] = {${formatOutput(arrayData)}};""";
   }
 
   @override

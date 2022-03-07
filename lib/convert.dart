@@ -1,5 +1,5 @@
-String toBinary(String value, int tileSize) {
-  return int.parse(value).toRadixString(2).padLeft(tileSize, "0");
+String toBinary(String value) {
+  return int.parse(value).toRadixString(2).padLeft(8, "0");
 }
 
 String binaryToHex(value) {

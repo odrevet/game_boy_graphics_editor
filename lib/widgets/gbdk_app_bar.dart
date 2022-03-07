@@ -22,6 +22,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool showGridBackground;
   final Function setTileFromSource;
   final Function setBackgroundFromSource;
+  final Function setTilesDimensions;
   final bool tileMode;
   final Tiles tiles;
   final Background background;
@@ -41,6 +42,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
       required this.showGridBackground,
       required this.setTileFromSource,
       required this.setBackgroundFromSource,
+      required this.setTilesDimensions,
       required this.tileMode,
       required this.tiles,
       required this.background,
@@ -49,15 +51,36 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
       this.preferredSize = const Size.fromHeight(50.0)})
       : super(key: key);
 
-  final String dropdownValue = '8 x 8';
-
-  Widget _tileDimensionsDropDown(){
+  Widget _tileDimensionsDropDown() {
     return DropdownButton<String>(
-      value: dropdownValue,
-      onChanged: (String? newValue) {
+      value: "${tiles.width} x ${tiles.height}",
+      onChanged: (String? value) {
+        int width = 8;
+        int height = 8;
+        switch (value) {
+          case '8 x 8':
+            width = 8;
+            height = 8;
+            break;
+          case '8 x 16':
+            width = 8;
+            height = 16;
+            break;
+          case '16 x 16':
+            width = 16;
+            height = 16;
+            break;
+          case '32 x 32':
+            width = 32;
+            height = 32;
+            break;
+        }
 
+        setTilesDimensions(width, height);
       },
-      items: <String>['8 x 8', '8 x 16', '16 x 16', '32 x 32']
+      items: <String>[
+        '8 x 8' /*, '8 x 16', '16 x 16', '32 x 32'*/
+      ] // WIP
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -66,13 +89,14 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
       }).toList(),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     var actions = <Widget>[];
 
     if (tileMode) {
       actions = [
-        //_tileDimensionsDropDown(),
+        _tileDimensionsDropDown(),
         IconButton(
           icon: Icon(showGridTile == true ? Icons.grid_on : Icons.grid_off),
           tooltip: 'Show/Hide grid',

@@ -37,7 +37,11 @@ class Editor extends StatefulWidget {
 
 class _EditorState extends State<Editor> {
   var selectedIntensity = 0;
-  var tiles = Tiles(name: "Tiles", data: List.filled(64, 0, growable: true), width: 8, height: 8);
+  var tiles = Tiles(
+      name: "Tiles",
+      data: List.filled(64, 0, growable: true),
+      width: 8,
+      height: 8);
   late Background background;
   int selectedTileIndexTile = 0;
   int selectedTileIndexBackground = 0;
@@ -68,6 +72,7 @@ class _EditorState extends State<Editor> {
             showGridBackground: showGridBackground,
             preferredSize: const Size.fromHeight(50.0),
             setTileFromSource: _setTilesFromSource,
+            setTilesDimensions: _setTilesDimensions,
             setBackgroundFromSource: _setBackgroundFromSource,
             tiles: tiles,
             background: background,
@@ -91,6 +96,11 @@ class _EditorState extends State<Editor> {
               ));
   }
 
+  void _setTilesDimensions(width, height) => setState(() {
+        tiles.width = width;
+        tiles.height = height;
+      });
+
   void _setTileIndexBackground(index) => setState(() {
         selectedTileIndexBackground = index;
       });
@@ -112,14 +122,13 @@ class _EditorState extends State<Editor> {
       });
 
   void _addTile() => setState(() {
-        tiles.count += 1;
-        tiles.data += List.filled(64, 0);
+        tiles.data += List.filled(tiles.width * tiles.height, 0);
       });
 
   void _removeTile() => setState(() {
-        tiles.count -= 1;
         tiles.data.removeRange(
-            selectedTileIndexTile * 64, (selectedTileIndexTile + 1) * 64);
+            selectedTileIndexTile * tiles.width * tiles.height,
+            (selectedTileIndexTile + 1) * tiles.width * tiles.height);
 
         selectedTileIndexTile--;
         if (selectedTileIndexTile < 0) {
@@ -131,7 +140,7 @@ class _EditorState extends State<Editor> {
           selectedTileIndexBackground = 0;
         }
 
-        if (tiles.count == 0) {
+        if (tiles.count() == 0) {
           _addTile();
           selectedTileIndexTile = 0;
           selectedTileIndexBackground = 0;

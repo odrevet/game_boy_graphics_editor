@@ -26,7 +26,7 @@ class _TileListViewState extends State<TileListView> {
     return SizedBox(
         width: 200,
         child: ListView.builder(
-          itemCount: widget.tiles.count,
+          itemCount: widget.tiles.count(),
           itemBuilder: (context, index) {
             bool isSelected = widget.selectedTile == index;
             Color color = isSelected == true ? Colors.blue : Colors.grey;

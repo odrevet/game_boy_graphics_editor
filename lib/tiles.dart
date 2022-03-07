@@ -3,18 +3,12 @@ import 'package:gbdk_graphic_editor/graphics.dart';
 import 'convert.dart';
 
 class Tiles extends Graphics {
-  var count = 1;
-
-  Tiles({required String name, required List<int> data, required width, required height})
+  Tiles(
+      {required String name,
+      required List<int> data,
+      required width,
+      required height})
       : super(name: name, data: data, height: height, width: width);
-
-  String formatOutput(input) {
-    return input.asMap().entries.map((entry) {
-      int idx = entry.key;
-      String val = entry.value;
-      return idx % 8 == 0 ? "\n  $val" : val;
-    }).join(", ");
-  }
 
   List<String> getRaw() {
     var raw = <String>[];
@@ -24,14 +18,12 @@ class Tiles extends Graphics {
       combined += element.toRadixString(2).padLeft(2, "0");
     }
 
-    for (var index = 0;
-        index < combined.length ~/ width * height;
-        index += width * 2) {
+    for (var index = 0; index < combined.length ~/ 8 * 8; index += 8 * 2) {
       var lo = "";
       var hi = "";
-      var combinedSub = combined.substring(index, index + width * 2);
+      var combinedSub = combined.substring(index, index + 8 * 2);
 
-      for (var indexSub = 0; indexSub < width * 2; indexSub += 2) {
+      for (var indexSub = 0; indexSub < 8 * 2; indexSub += 2) {
         lo += combinedSub[indexSub];
         hi += combinedSub[indexSub + 1];
       }
@@ -44,15 +36,16 @@ class Tiles extends Graphics {
   }
 
   List<int> getData(int index) {
-    return data.sublist((width * height) * index, (width * height) * (index + 1));
+    return data.sublist(
+        (width * height) * index, (width * height) * (index + 1));
   }
 
   setData(List<String> values) {
     data = <int>[];
 
     for (var index = 0; index < values.length; index += 2) {
-      var lo = toBinary(values[index], width);
-      var hi = toBinary(values[index + 1], width);
+      var lo = toBinary(values[index]);
+      var hi = toBinary(values[index + 1]);
 
       var combined = "";
       for (var index = 0; index < width; index++) {
@@ -64,6 +57,8 @@ class Tiles extends Graphics {
       }
     }
   }
+
+  int count() => data.length ~/ (width * height);
 
   @override
   String toHeader() {
@@ -80,6 +75,5 @@ extern unsigned char $name[];""";
   void fromSource(String source) {
     var values = parseArray(source)!;
     setData(values.split(','));
-    count = data.length ~/ (width * height);
   }
 }

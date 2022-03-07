@@ -40,6 +40,7 @@ class TilesEditor extends StatelessWidget {
           pixels:
               tiles.getData(selectedTileIndex).map((e) => colors[e]).toList(),
           showGrid: showGrid,
+          crossAxisCount: tiles.width,
         ),
       ),
       Expanded(

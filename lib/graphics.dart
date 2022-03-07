@@ -4,13 +4,25 @@ abstract class Graphics {
   List<int> data;
   String name;
 
-  Graphics({required this.name, required this.data, required this.width, required this.height});
+  Graphics(
+      {required this.name,
+      required this.data,
+      required this.width,
+      required this.height});
 
   void fromSource(String source);
 
   String toHeader();
 
   String toSource();
+
+  String formatOutput(input) {
+    return input.asMap().entries.map((entry) {
+      int idx = entry.key;
+      String val = entry.value;
+      return idx % width == 0 ? "\n  $val" : val;
+    }).join(", ");
+  }
 
   String? parseArray(source) {
     RegExp regExp = RegExp(r"unsigned char (\w+)\[\] =\{(.*)};");

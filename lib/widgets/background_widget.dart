@@ -41,7 +41,7 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
   Widget _build(BuildContext context, int index) {
     Widget tileWidget;
 
-    if (widget.background.data[index] >= widget.tiles.count) {
+    if (widget.background.data[index] >= widget.tiles.count()) {
       tileWidget = Container(
         alignment: Alignment.center,
         child: const Text(
