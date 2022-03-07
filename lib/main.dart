@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'GBDK Graphic Editor',
       theme: ThemeData(
+        fontFamily: 'PressStart2P',
         primarySwatch: Colors.grey,
       ),
       home: const Editor(),
