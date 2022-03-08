@@ -4,14 +4,15 @@ class DotMatrix extends StatefulWidget {
   final List<Color> pixels;
   final bool showGrid;
   final Function? onTap;
-  final int crossAxisCount;
+  final int width;
+  final int height;
 
-  const DotMatrix(
-      {Key? key,
-      required this.pixels,
-      this.showGrid = false,
-      this.onTap,
-      required this.crossAxisCount})
+  const DotMatrix({Key? key,
+    required this.pixels,
+    this.showGrid = false,
+    this.onTap,
+    required this.width,
+    required this.height})
       : super(key: key);
 
   @override
@@ -22,7 +23,7 @@ class _DotMatrixState extends State<DotMatrix> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1.0,
+      aspectRatio: widget.width / widget.height,
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           Widget customPaint = CustomPaint(
@@ -32,8 +33,9 @@ class _DotMatrixState extends State<DotMatrix> {
             ),
             painter: DotMatrixPainter(
                 pixels: widget.pixels,
-                pixelSize: constraints.maxWidth / widget.crossAxisCount,
-                crossAxisCount: widget.crossAxisCount,
+                pixelSize: constraints.maxWidth / widget.width,
+                width: widget.width,
+                height: widget.height,
                 showGrid: widget.showGrid),
           );
 
@@ -53,24 +55,25 @@ class _DotMatrixState extends State<DotMatrix> {
 
   void _onTapDown(TapDownDetails details, BoxConstraints constraints) {
     var clickOffset = details.localPosition;
-    final pixelSize = constraints.maxWidth / widget.crossAxisCount;
+    final pixelSize = constraints.maxWidth / widget.width;
     final tapedRow = (clickOffset.dx / pixelSize).floor();
     final tapedColumn = (clickOffset.dy / pixelSize).floor();
-    widget.onTap!(tapedColumn * widget.crossAxisCount + tapedRow);
+    widget.onTap!(tapedColumn * widget.width + tapedRow);
   }
 }
 
 class DotMatrixPainter extends CustomPainter {
-  final int crossAxisCount;
+  final int width;
+  final int height;
   final double pixelSize;
   final List<Color> pixels;
   final bool showGrid;
 
-  DotMatrixPainter(
-      {required this.pixels,
-      required this.pixelSize,
-      required this.crossAxisCount,
-      this.showGrid = false});
+  DotMatrixPainter({required this.pixels,
+    required this.pixelSize,
+    required this.width,
+    required this.height,
+    this.showGrid = false});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -79,8 +82,8 @@ class DotMatrixPainter extends CustomPainter {
       paint.color = pixel;
       canvas.drawRect(
           Rect.fromLTWH(
-            (index % crossAxisCount).floor().toDouble() * pixelSize,
-            (index / crossAxisCount).floor().toDouble() * pixelSize,
+            (index % width).floor().toDouble() * pixelSize,
+            (index / width).floor().toDouble() * pixelSize,
             pixelSize,
             pixelSize,
           ),
@@ -89,17 +92,19 @@ class DotMatrixPainter extends CustomPainter {
 
     if (showGrid) {
       paint.color = Colors.blueGrey;
-      for (int index = 1; index <= crossAxisCount; index++) {
+      for (int index = 1; index <= width; index++) {
         canvas.drawLine(
-            Offset((index % crossAxisCount).floor().toDouble() * pixelSize, 0),
-            Offset((index % crossAxisCount).floor().toDouble() * pixelSize,
+            Offset((index % width).floor().toDouble() * pixelSize, 0),
+            Offset((index % width).floor().toDouble() * pixelSize,
                 size.height),
             paint);
+      }
 
+      for (int index = 1; index <= height ; index++) {
         canvas.drawLine(
-            Offset(0, (index % crossAxisCount).floor().toDouble() * pixelSize),
+            Offset(0, (index % height).floor().toDouble() * pixelSize),
             Offset(size.width,
-                (index % crossAxisCount).floor().toDouble() * pixelSize),
+                (index % height).floor().toDouble() * pixelSize),
             paint);
       }
     }

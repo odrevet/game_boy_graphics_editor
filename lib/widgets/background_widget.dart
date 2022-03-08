@@ -53,7 +53,8 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
       );
     } else {
       tileWidget = DotMatrix(
-          crossAxisCount: widget.tiles.width,
+          width: widget.tiles.width,
+          height: widget.tiles.height,
           pixels: widget.tiles.data
               .sublist(
                   (widget.tiles.width * widget.tiles.height) *
