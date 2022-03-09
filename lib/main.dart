@@ -101,11 +101,11 @@ class _EditorState extends State<Editor> {
         tiles.height = height;
 
         // resize tile data if necessary
-        if(tiles.data.length < tiles.width * tiles.height){
+        if (tiles.data.length < tiles.width * tiles.height) {
           setState(() {
-            tiles.data += List.filled(tiles.width * tiles.height - tiles.data.length, 0);
+            tiles.data +=
+                List.filled(tiles.width * tiles.height - tiles.data.length, 0);
           });
-
         }
       });
 

@@ -7,12 +7,13 @@ class DotMatrix extends StatefulWidget {
   final int width;
   final int height;
 
-  const DotMatrix({Key? key,
-    required this.pixels,
-    this.showGrid = false,
-    this.onTap,
-    required this.width,
-    required this.height})
+  const DotMatrix(
+      {Key? key,
+      required this.pixels,
+      this.showGrid = false,
+      this.onTap,
+      required this.width,
+      required this.height})
       : super(key: key);
 
   @override
@@ -69,11 +70,12 @@ class DotMatrixPainter extends CustomPainter {
   final List<Color> pixels;
   final bool showGrid;
 
-  DotMatrixPainter({required this.pixels,
-    required this.pixelSize,
-    required this.width,
-    required this.height,
-    this.showGrid = false});
+  DotMatrixPainter(
+      {required this.pixels,
+      required this.pixelSize,
+      required this.width,
+      required this.height,
+      this.showGrid = false});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -95,16 +97,14 @@ class DotMatrixPainter extends CustomPainter {
       for (int index = 1; index <= width; index++) {
         canvas.drawLine(
             Offset((index % width).floor().toDouble() * pixelSize, 0),
-            Offset((index % width).floor().toDouble() * pixelSize,
-                size.height),
+            Offset((index % width).floor().toDouble() * pixelSize, size.height),
             paint);
       }
 
-      for (int index = 1; index <= height ; index++) {
+      for (int index = 1; index <= height; index++) {
         canvas.drawLine(
             Offset(0, (index % height).floor().toDouble() * pixelSize),
-            Offset(size.width,
-                (index % height).floor().toDouble() * pixelSize),
+            Offset(size.width, (index % height).floor().toDouble() * pixelSize),
             paint);
       }
     }

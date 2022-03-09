@@ -55,12 +55,8 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
       tileWidget = DotMatrix(
           width: widget.tiles.width,
           height: widget.tiles.height,
-          pixels: widget.tiles.data
-              .sublist(
-                  (widget.tiles.width * widget.tiles.height) *
-                      widget.background.data[index],
-                  (widget.tiles.width * widget.tiles.height) *
-                      (widget.background.data[index] + 1))
+          pixels: widget.tiles
+              .getData(widget.background.data[index])
               .map((e) => colors[e])
               .toList());
     }
