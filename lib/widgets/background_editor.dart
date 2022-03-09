@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_spinbox/material.dart';
 import 'package:gbdk_graphic_editor/widgets/background_widget.dart';
 import 'package:gbdk_graphic_editor/widgets/graphics_data_display.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
@@ -51,44 +51,34 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
         child: Column(
           children: [
             TextFormField(
-              initialValue: widget.background.name,
               decoration: const InputDecoration(labelText: 'Name'),
+              initialValue: widget.background.name,
               onChanged: (text) => setState(() {
                 widget.background.name = text;
               }),
             ),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
-              ],
-              initialValue: widget.background.height.toString(),
-              decoration: const InputDecoration(labelText: 'Width'),
-              onChanged: (text) => setState(() {
-                widget.background.width = int.tryParse(text) ?? 18;
-                if (widget.background.width > 32) {
-                  widget.background.width = 32;
-                }
-                widget.background.data = List.filled(
-                    widget.background.height * widget.background.width, 0);
-              }),
-            ),
-            TextFormField(
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
-              ],
-              initialValue: widget.background.width.toString(),
+            SpinBox(
               decoration: const InputDecoration(labelText: 'Height'),
-              onChanged: (text) => setState(() {
-                widget.background.height = int.tryParse(text) ?? 20;
-                if (widget.background.height > 32) {
-                  widget.background.height = 32;
-                }
-
+              min: 1,
+              max: 32,
+              value: widget.background.height.toDouble(),
+              onChanged: (value) => setState(() {
+                widget.background.height = value.toInt();
                 widget.background.data = List.filled(
                     widget.background.height * widget.background.width, 0);
               }),
             ),
+            SpinBox(
+                decoration: const InputDecoration(labelText: 'Width'),
+                min: 1,
+                max: 32,
+                value: widget.background.width.toDouble(),
+                onChanged: (value) => setState(() {
+                      widget.background.width = value.toInt();
+                      widget.background.data = List.filled(
+                          widget.background.height * widget.background.width,
+                          0);
+                    })),
             Expanded(
                 child: SingleChildScrollView(
               child: GraphicsDataDisplay(graphics: widget.background),
