@@ -80,9 +80,10 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
       },
       items: <String>[
         '8 x 8',
-        '8 x 16' /*, '16 x 16', '32 x 32'*/
-      ] // WIP
-          .map<DropdownMenuItem<String>>((String value) {
+        '8 x 16',
+        //'16 x 16',
+        // '32 x 32'
+      ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),
