@@ -99,6 +99,14 @@ class _EditorState extends State<Editor> {
   void _setTilesDimensions(width, height) => setState(() {
         tiles.width = width;
         tiles.height = height;
+
+        // resize tile data if necessary
+        if(tiles.data.length < tiles.width * tiles.height){
+          setState(() {
+            tiles.data += List.filled(8 * 8, 0);
+          });
+
+        }
       });
 
   void _setTileIndexBackground(index) => setState(() {
