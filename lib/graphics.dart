@@ -20,7 +20,7 @@ abstract class Graphics {
     return input.asMap().entries.map((entry) {
       int idx = entry.key;
       String val = entry.value;
-      return idx % width == 0 ? "\n  $val" : val;
+      return idx % 8 == 0 ? "\n  $val" : val;
     }).join(", ");
   }
 
