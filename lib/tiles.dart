@@ -3,12 +3,8 @@ import 'package:gbdk_graphic_editor/graphics.dart';
 import 'convert.dart';
 
 class Tiles extends Graphics {
-  Tiles(
-      {required String name,
-      required List<int> data,
-      required width,
-      required height})
-      : super(name: name, data: data, height: height, width: width);
+  Tiles({required String name, required List<int> data})
+      : super(name: name, data: data, height: 8, width: 8);
 
   List<String> getRaw() {
     var raw = <String>[];
@@ -36,8 +32,7 @@ class Tiles extends Graphics {
   }
 
   List<int> getData(int index) {
-    return data.sublist(
-        (width * height) * index, (width * height) * (index + 1));
+    return data.sublist((8 * 8) * index, (8 * 8) * (index + 1));
   }
 
   setData(List<String> values) {
@@ -48,17 +43,17 @@ class Tiles extends Graphics {
       var hi = toBinary(values[index + 1]);
 
       var combined = "";
-      for (var index = 0; index < width; index++) {
+      for (var index = 0; index < 8; index++) {
         combined += hi[index] + lo[index];
       }
 
-      for (var index = 0; index < width * 2; index += 2) {
+      for (var index = 0; index < 8 * 2; index += 2) {
         data.add(int.parse(combined[index] + combined[index + 1], radix: 2));
       }
     }
   }
 
-  int count() => data.length ~/ (width * height);
+  int count() => data.length ~/ (8 * 8);
 
   @override
   String toHeader() {

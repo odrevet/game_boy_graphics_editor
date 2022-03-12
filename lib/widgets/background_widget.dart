@@ -30,7 +30,7 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
       aspectRatio: 1.0,
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio:  widget.tiles.width / widget.tiles.height,
+          childAspectRatio: widget.tiles.width / widget.tiles.height,
           crossAxisCount: widget.background.width,
         ),
         itemBuilder: _build,
