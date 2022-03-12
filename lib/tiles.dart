@@ -53,7 +53,7 @@ class Tiles extends Graphics {
     }
   }
 
-  int count() => data.length ~/ (8 * 8);
+  int count() => data.length ~/ (width * height);
 
   @override
   String toHeader() {
