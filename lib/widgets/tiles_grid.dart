@@ -39,9 +39,13 @@ class TilesGrid extends StatelessWidget {
 
     for (var indexTile in indexTiles) {
       children.add(DotMatrix(
-        onTap: (indexPixel) => {onTap != null ? onTap!(indexPixel, indexTile) : null},
+        onTap: (indexPixel) =>
+            {onTap != null ? onTap!(indexPixel, indexTile) : null},
         pixels: tiles
-            .getData(selectedTileIndex * (tiles.height ~/ Tiles.size) + indexTile)
+            .getData(selectedTileIndex *
+                    (tiles.height ~/ Tiles.size) *
+                    (tiles.width ~/ Tiles.size) +
+                indexTile)
             .map((e) => colors[e])
             .toList(),
         showGrid: showGrid,

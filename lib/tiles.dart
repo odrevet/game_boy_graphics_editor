@@ -7,7 +7,11 @@ import 'convert.dart';
 class Tiles extends Graphics {
   static const int size = 8;
 
-  Tiles({required String name, required List<int> data, width = Tiles.size, height = Tiles.size})
+  Tiles(
+      {required String name,
+      required List<int> data,
+      width = Tiles.size,
+      height = Tiles.size})
       : super(name: name, data: data, height: height, width: width);
 
   List<String> getRaw() {
