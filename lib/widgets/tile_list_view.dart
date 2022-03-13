@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/dot_matrix.dart';
+import 'package:gbdk_graphic_editor/widgets/tiles_grid.dart';
 
 import '../colors.dart';
 import '../tiles.dart';
@@ -61,13 +62,11 @@ class _TileListViewState extends State<TileListView> {
                   onTap: () => widget.onTap(index),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: DotMatrix(
-                        width: widget.tiles.width,
-                        height: widget.tiles.height,
-                        pixels: widget.tiles
-                            .getData(index)
-                            .map((e) => colors[e])
-                            .toList()),
+                    child: TilesGrid(
+                        tiles: widget.tiles,
+                        showGrid: false,
+                        selectedTileIndex: index,
+                        setPixel: () => print("click")),
                   ),
                 )
               ],

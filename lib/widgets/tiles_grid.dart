@@ -32,7 +32,7 @@ class TilesGrid extends StatelessWidget {
     } else if (tiles.width == 32 && tiles.height == 32) {
       indexTiles = <int>[0, 2, 8, 10, 1, 3, 9, 11, 4, 6, 12, 14, 5, 7, 13, 15];
     } else {
-      indexTiles = [];
+      indexTiles = <int>[0];
     }
 
     var children = <Widget>[];
@@ -51,6 +51,7 @@ class TilesGrid extends StatelessWidget {
     }
 
     return GridView.count(
+      shrinkWrap: true,
       primary: false,
       padding: const EdgeInsets.all(8),
       crossAxisCount: tiles.width ~/ 8,
