@@ -38,7 +38,7 @@ class TilesEditor extends StatelessWidget {
             tiles: tiles,
             showGrid: showGrid,
             selectedTileIndex: selectedTileIndex,
-            setPixel: setPixel),
+            onTap: setPixel),
       ),
       Expanded(
         flex: 2,

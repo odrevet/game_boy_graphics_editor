@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gbdk_graphic_editor/widgets/dot_matrix.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles_grid.dart';
 
-import '../colors.dart';
 import '../tiles.dart';
 
 class TileListView extends StatefulWidget {
@@ -25,51 +23,24 @@ class _TileListViewState extends State<TileListView> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: 200,
+        width: 180,
         child: ListView.builder(
           itemCount: widget.tiles.count(),
           itemBuilder: (context, index) {
             bool isSelected = widget.selectedTile == index;
             Color color = isSelected == true ? Colors.blue : Colors.grey;
-            return Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        color: color,
-                        indent: 20.0,
-                        endIndent: 10.0,
-                        thickness: 1,
-                      ),
-                    ),
-                    Text(
-                      "$index",
-                      style: TextStyle(color: color),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        color: color,
-                        indent: 10.0,
-                        endIndent: 20.0,
-                        thickness: 1,
-                      ),
-                    ),
-                  ],
+            return Card(
+              child: ListTile(
+                onTap: () => widget.onTap(index),
+                leading: Text(
+                  "$index",
+                  style: TextStyle(color: color),
                 ),
-                InkWell(
-                  onTap: () => widget.onTap(index),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: TilesGrid(
-                        tiles: widget.tiles,
-                        showGrid: false,
-                        selectedTileIndex: index,
-                        setPixel: () => print("click")),
-                  ),
-                )
-              ],
+                title: TilesGrid(
+                    tiles: widget.tiles,
+                    showGrid: false,
+                    selectedTileIndex: index),
+              ),
             );
           },
         ));

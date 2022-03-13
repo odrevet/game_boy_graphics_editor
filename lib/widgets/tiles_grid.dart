@@ -6,15 +6,15 @@ import '../tiles.dart';
 
 class TilesGrid extends StatelessWidget {
   final Tiles tiles;
-  final Function setPixel;
+  final Function? onTap;
   final bool showGrid;
   final int selectedTileIndex;
 
   const TilesGrid(
       {required this.tiles,
-      required this.setPixel,
       required this.showGrid,
       required this.selectedTileIndex,
+      this.onTap,
       Key? key})
       : super(key: key);
 
@@ -39,22 +39,21 @@ class TilesGrid extends StatelessWidget {
 
     for (var indexTile in indexTiles) {
       children.add(DotMatrix(
-        onTap: (indexPixel) => {setPixel(indexPixel, indexTile)},
+        onTap: (indexPixel) => {onTap != null ? onTap!(indexPixel, indexTile) : null},
         pixels: tiles
             .getData(selectedTileIndex + indexTile)
             .map((e) => colors[e])
             .toList(),
         showGrid: showGrid,
-        width: 8,
-        height: 8,
+        width: Tiles.size,
+        height: Tiles.size,
       ));
     }
 
     return GridView.count(
       shrinkWrap: true,
-      primary: false,
       padding: const EdgeInsets.all(8),
-      crossAxisCount: tiles.width ~/ 8,
+      crossAxisCount: tiles.width ~/ Tiles.size,
       children: children,
     );
   }
