@@ -36,7 +36,7 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  var selectedIntensity = 0;
+  var selectedIntensity = 3;
   var tiles = Tiles(name: "Tiles", data: List.filled(64, 0, growable: true));
   late Background background;
   int selectedTileIndexTile = 0;
