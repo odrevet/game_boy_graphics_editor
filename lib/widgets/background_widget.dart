@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/background.dart';
+import 'package:gbdk_graphic_editor/widgets/tiles_grid.dart';
 
 import '../colors.dart';
 import '../tiles.dart';
@@ -53,13 +54,10 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
         ),
       );
     } else {
-      tileWidget = DotMatrix(
-          width: widget.tiles.width,
-          height: widget.tiles.height,
-          pixels: widget.tiles
-              .getAtIndex(widget.background.data[index])
-              .map((e) => colors[e])
-              .toList());
+      tileWidget = TilesGrid(
+          tiles: widget.tiles,
+          showGrid: false,
+          selectedTileIndex: widget.background.data[index]);
     }
 
     if (widget.showGrid) {

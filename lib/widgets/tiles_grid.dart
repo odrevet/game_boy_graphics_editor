@@ -56,7 +56,6 @@ class TilesGrid extends StatelessWidget {
 
     return GridView.count(
       shrinkWrap: true,
-      padding: const EdgeInsets.all(8),
       crossAxisCount: tiles.width ~/ Tiles.size,
       children: children,
     );
