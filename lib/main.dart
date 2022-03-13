@@ -103,6 +103,9 @@ class _EditorState extends State<Editor> {
                 List.filled(tiles.width * tiles.height - tiles.data.length, 0);
           });
         }
+
+        // reset selected index to prevent being out of bound (TODO reset on current new index)
+        selectedTileIndexTile = 0;
       });
 
   void _setTileIndexBackground(index) => setState(() {
