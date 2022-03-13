@@ -4,6 +4,7 @@ class DotMatrix extends StatefulWidget {
   final List<Color> pixels;
   final bool showGrid;
   final Function? onTap;
+  final int? onTapParam;
   final int width;
   final int height;
 
@@ -12,6 +13,7 @@ class DotMatrix extends StatefulWidget {
       required this.pixels,
       this.showGrid = false,
       this.onTap,
+      this.onTapParam,
       required this.width,
       required this.height})
       : super(key: key);
@@ -60,7 +62,7 @@ class _DotMatrixState extends State<DotMatrix> {
     final pixelSize = constraints.maxWidth / widget.width;
     final tapedRow = (clickOffset.dx / pixelSize).floor();
     final tapedColumn = (clickOffset.dy / pixelSize).floor();
-    widget.onTap!(tapedColumn * widget.width + tapedRow);
+    widget.onTap!(tapedColumn * widget.width + tapedRow, widget.onTapParam);
   }
 }
 
