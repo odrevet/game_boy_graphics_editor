@@ -15,7 +15,7 @@ class BackgroundWidget extends StatefulWidget {
       {Key? key,
       required this.background,
       required this.tiles,
-      required this.onTap,
+      this.onTap,
       this.showGrid = false})
       : super(key: key);
 

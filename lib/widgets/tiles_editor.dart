@@ -51,8 +51,7 @@ class TilesEditor extends StatelessWidget {
                 height: 200,
                 child: BackgroundWidget(
                   background: preview,
-                  tiles: tiles,
-                  onTap: null,
+                  tiles: tiles
                 ),
               ),
             ),
