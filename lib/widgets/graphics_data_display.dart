@@ -17,6 +17,7 @@ class GraphicsDataDisplay extends StatelessWidget {
     String headerFilename = "${graphics.name}.h";
     String sourceFilename = "${graphics.name}.c";
     const double? fontSize = 12;
+
     return Column(
       children: [
         Row(children: [
@@ -24,8 +25,14 @@ class GraphicsDataDisplay extends StatelessWidget {
           IconButton(
             iconSize: 18,
             icon: const Icon(Icons.copy),
-            onPressed: () =>
-                Clipboard.setData(ClipboardData(text: graphics.toHeader())),
+            onPressed: () {
+              final snackBar = SnackBar(
+                content:
+                    Text("Contents of $headerFilename copied into clipboard"),
+              );
+              Clipboard.setData(ClipboardData(text: graphics.toHeader()));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
           ),
           kIsWeb
               ? IconButton(
@@ -53,8 +60,14 @@ class GraphicsDataDisplay extends StatelessWidget {
           IconButton(
             iconSize: 18,
             icon: const Icon(Icons.copy),
-            onPressed: () =>
-                Clipboard.setData(ClipboardData(text: graphics.toSource())),
+            onPressed: () {
+              final snackBar = SnackBar(
+                content:
+                    Text("Contents of ${graphics.name}.c copied into clipboard"),
+              );
+              Clipboard.setData(ClipboardData(text: graphics.toSource()));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
           ),
           kIsWeb
               ? IconButton(
