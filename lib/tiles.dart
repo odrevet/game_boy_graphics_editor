@@ -2,9 +2,11 @@ import 'package:gbdk_graphic_editor/graphics.dart';
 
 import 'convert.dart';
 
+// The size of a tile is always 8x8 pixel
+// width and height refer how many 8x8 tiles are displayed
 class Tiles extends Graphics {
-  Tiles({required String name, required List<int> data})
-      : super(name: name, data: data, height: 8, width: 8);
+  Tiles({required String name, required List<int> data, width = 8, height = 8})
+      : super(name: name, data: data, height: height, width: width);
 
   List<String> getRaw() {
     var raw = <String>[];
@@ -31,8 +33,9 @@ class Tiles extends Graphics {
     return raw;
   }
 
-  List<int> getData(int index) {
-    return data.sublist((8 * 8) * index, (8 * 8) * (index + 1));
+  List<int> getData(int indexFrom, [int? indexTo]) {
+    indexTo ??= 1;
+    return data.sublist((8 * 8) * indexFrom, (8 * 8) * (indexFrom + indexTo));
   }
 
   setData(List<String> values) {
