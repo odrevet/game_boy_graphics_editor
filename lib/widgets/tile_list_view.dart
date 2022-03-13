@@ -27,14 +27,15 @@ class _TileListViewState extends State<TileListView> {
         child: ListView.builder(
           itemCount: widget.tiles.count(),
           itemBuilder: (context, index) {
-            bool isSelected = widget.selectedTile == index;
-            Color color = isSelected == true ? Colors.blue : Colors.grey;
             return Card(
               child: ListTile(
                 onTap: () => widget.onTap(index),
                 leading: Text(
                   "$index",
-                  style: TextStyle(color: color),
+                  style: TextStyle(
+                      color: widget.selectedTile == index
+                          ? Colors.blue
+                          : Colors.grey),
                 ),
                 title: TilesGrid(
                     tiles: widget.tiles,

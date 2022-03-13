@@ -173,7 +173,7 @@ class _EditorState extends State<Editor> {
   _setPixel(int indexPixel, int indexTile) {
     setState(() {
       tiles.data[indexPixel +
-          (Tiles.size * Tiles.size * selectedTileIndexTile) +
+          (Tiles.size * Tiles.size * (tiles.height ~/ Tiles.size)* selectedTileIndexTile) +
           (Tiles.size * Tiles.size * indexTile)] = selectedIntensity;
     });
   }
