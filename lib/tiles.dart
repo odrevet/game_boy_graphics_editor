@@ -5,6 +5,8 @@ import 'convert.dart';
 // The size of a tile is always 8x8 pixel
 // width and height refer how many 8x8 tiles are displayed (in pixel)
 class Tiles extends Graphics {
+  static const int size = 8;
+
   Tiles({required String name, required List<int> data, width = 8, height = 8})
       : super(name: name, data: data, height: height, width: width);
 
@@ -16,10 +18,12 @@ class Tiles extends Graphics {
       combined += element.toRadixString(2).padLeft(2, "0");
     }
 
-    for (var index = 0; index < combined.length ~/ 8 * 8; index += 8 * 2) {
+    for (var index = 0;
+        index < combined.length ~/ size * size;
+        index += size * 2) {
       var lo = "";
       var hi = "";
-      var combinedSub = combined.substring(index, index + 8 * 2);
+      var combinedSub = combined.substring(index, index + size * 2);
 
       for (var indexSub = 0; indexSub < 8 * 2; indexSub += 2) {
         lo += combinedSub[indexSub];
@@ -35,8 +39,8 @@ class Tiles extends Graphics {
 
   List<int> getData(int indexFrom, [int? indexTo]) {
     indexTo ??= 1;
-    int from = (8 * 8) * indexFrom;
-    int to = from + (8 * 8);
+    int from = (size * size) * indexFrom;
+    int to = from + (size * size);
     return data.sublist(from, to);
   }
 
@@ -48,11 +52,11 @@ class Tiles extends Graphics {
       var hi = toBinary(values[index + 1]);
 
       var combined = "";
-      for (var index = 0; index < 8; index++) {
+      for (var index = 0; index < size; index++) {
         combined += hi[index] + lo[index];
       }
 
-      for (var index = 0; index < 8 * 2; index += 2) {
+      for (var index = 0; index < size * 2; index += 2) {
         data.add(int.parse(combined[index] + combined[index + 1], radix: 2));
       }
     }
