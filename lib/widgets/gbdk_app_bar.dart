@@ -11,6 +11,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   final Size preferredSize;
 
+  final VoidCallback leftShift;
   final Function setIntensity;
   final int selectedIntensity;
   final VoidCallback addTile;
@@ -31,6 +32,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
 
   const GBDKAppBar(
       {Key? key,
+      required this.leftShift,
       required this.setIntensity,
       required this.selectedIntensity,
       required this.addTile,
@@ -94,6 +96,8 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
 
     if (tileMode) {
       actions = [
+        IconButton(onPressed: leftShift, icon: const Icon(Icons.keyboard_arrow_left_rounded)),
+        const VerticalDivider(),
         _tileDimensionsDropDown(),
         IconButton(
           icon: Icon(showGridTile == true ? Icons.grid_on : Icons.grid_off),

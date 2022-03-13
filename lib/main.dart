@@ -56,6 +56,7 @@ class _EditorState extends State<Editor> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: GBDKAppBar(
+            leftShift: _leftShift,
             setIntensity: _setIntensity,
             selectedIntensity: selectedIntensity,
             tileMode: tileMode,
@@ -126,6 +127,16 @@ class _EditorState extends State<Editor> {
 
   void _setIntensity(intensity) => setState(() {
         selectedIntensity = intensity;
+      });
+
+  void _leftShift() => setState(() {
+        for (int index = (Tiles.size * Tiles.size) * selectedTileIndexTile;
+            index <
+                (Tiles.size * Tiles.size) * selectedTileIndexTile +
+                    (Tiles.size * Tiles.size);
+            index++) {
+          tiles.data[index] = tiles.data[index + 1];
+        }
       });
 
   void _addTile() => setState(() {
