@@ -57,7 +57,7 @@ class _BackgroundWidgetState extends State<BackgroundWidget> {
           width: widget.tiles.width,
           height: widget.tiles.height,
           pixels: widget.tiles
-              .getData(widget.background.data[index])
+              .getAtIndex(widget.background.data[index])
               .map((e) => colors[e])
               .toList());
     }
