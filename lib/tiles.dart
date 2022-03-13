@@ -41,8 +41,7 @@ class Tiles extends Graphics {
     return raw;
   }
 
-  List<int> getData(int indexFrom, [int? indexTo]) {
-    indexTo ??= 1;
+  List<int> getData(int indexFrom) {
     int from = (size * size) * indexFrom;
     int to = from + (size * size);
     return data.sublist(from, to);
