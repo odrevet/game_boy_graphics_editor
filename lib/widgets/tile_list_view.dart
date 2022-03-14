@@ -32,10 +32,10 @@ class _TileListViewState extends State<TileListView> {
                 onTap: () => widget.onTap(index),
                 leading: Text(
                   "$index",
-                  style: TextStyle(
-                      color: widget.selectedTile == index
-                          ? Colors.blue
-                          : Colors.grey),
+                  style: widget.selectedTile == index
+                      ? const TextStyle(
+                          color: Colors.blue, fontWeight: FontWeight.bold)
+                      : null,
                 ),
                 title: TilesGrid(
                     tiles: widget.tiles,
