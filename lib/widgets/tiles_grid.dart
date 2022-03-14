@@ -10,19 +10,15 @@ class TilesGrid extends StatelessWidget {
   final bool showGrid;
   final int selectedTileIndex;
 
-  const TilesGrid(
+  late final List<int> indexTiles;
+
+  TilesGrid(
       {required this.tiles,
       required this.showGrid,
       required this.selectedTileIndex,
       this.onTap,
       Key? key})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    List<int> indexTiles;
-
-    // There probably is a more dynamic way to do this
+      : super(key: key) {
     if (tiles.width == 8 && tiles.height == 8) {
       indexTiles = <int>[0];
     } else if (tiles.width == 8 && tiles.height == 16) {
@@ -34,7 +30,10 @@ class TilesGrid extends StatelessWidget {
     } else {
       indexTiles = <int>[0];
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
       crossAxisCount: tiles.width ~/ Tiles.size,
