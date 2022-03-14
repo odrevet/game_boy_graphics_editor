@@ -41,10 +41,10 @@ class Tiles extends Graphics {
     return raw;
   }
 
-  List<int> getAtIndex(int index) {
+  Iterable<int> getAtIndex(int index) {
     int from = (size * size) * index;
     int to = from + (size * size);
-    return data.sublist(from, to);
+    return data.getRange(from, to);
   }
 
   setData(List<String> values) {
