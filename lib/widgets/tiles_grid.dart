@@ -35,29 +35,26 @@ class TilesGrid extends StatelessWidget {
       indexTiles = <int>[0];
     }
 
-    var children = <Widget>[];
-
-    for (var indexTile in indexTiles) {
-      children.add(DotMatrix(
-        onTap: onTap,
-        onTapParam: indexTile,
-        pixels: tiles
-            .getAtIndex(selectedTileIndex *
-                    (tiles.height ~/ Tiles.size) *
-                    (tiles.width ~/ Tiles.size) +
-                indexTile)
-            .map((e) => colors[e])
-            .toList(),
-        showGrid: showGrid,
-        width: Tiles.size,
-        height: Tiles.size,
-      ));
-    }
-
     return GridView.count(
       shrinkWrap: true,
       crossAxisCount: tiles.width ~/ Tiles.size,
-      children: children,
+      children: <Widget>[
+        for (var indexTile in indexTiles)
+          DotMatrix(
+            onTap: onTap,
+            onTapParam: indexTile,
+            pixels: tiles
+                .getAtIndex(selectedTileIndex *
+                        (tiles.height ~/ Tiles.size) *
+                        (tiles.width ~/ Tiles.size) +
+                    indexTile)
+                .map((e) => colors[e])
+                .toList(),
+            showGrid: showGrid,
+            width: Tiles.size,
+            height: Tiles.size,
+          )
+      ],
     );
   }
 }
