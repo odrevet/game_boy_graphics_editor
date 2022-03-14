@@ -62,8 +62,8 @@ class GraphicsDataDisplay extends StatelessWidget {
             icon: const Icon(Icons.copy),
             onPressed: () {
               final snackBar = SnackBar(
-                content:
-                    Text("Contents of ${graphics.name}.c copied into clipboard"),
+                content: Text(
+                    "Contents of ${graphics.name}.c copied into clipboard"),
               );
               Clipboard.setData(ClipboardData(text: graphics.toSource()));
               ScaffoldMessenger.of(context).showSnackBar(snackBar);

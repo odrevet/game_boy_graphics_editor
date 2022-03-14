@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/background.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles_grid.dart';
 
-import '../colors.dart';
 import '../tiles.dart';
-import 'dot_matrix.dart';
 
 class BackgroundGrid extends StatefulWidget {
   final Background background;

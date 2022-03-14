@@ -24,10 +24,12 @@ class BackgroundPropertiesEditor extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<BackgroundPropertiesEditor> createState() => _BackgroundPropertiesEditorState();
+  State<BackgroundPropertiesEditor> createState() =>
+      _BackgroundPropertiesEditorState();
 }
 
-class _BackgroundPropertiesEditorState extends State<BackgroundPropertiesEditor> {
+class _BackgroundPropertiesEditorState
+    extends State<BackgroundPropertiesEditor> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [

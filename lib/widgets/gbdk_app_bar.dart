@@ -96,7 +96,9 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
 
     if (tileMode) {
       actions = [
-        IconButton(onPressed: leftShift, icon: const Icon(Icons.keyboard_arrow_left_rounded)),
+        IconButton(
+            onPressed: leftShift,
+            icon: const Icon(Icons.keyboard_arrow_left_rounded)),
         const VerticalDivider(),
         _tileDimensionsDropDown(),
         IconButton(

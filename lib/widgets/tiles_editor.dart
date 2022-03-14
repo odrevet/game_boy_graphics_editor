@@ -49,10 +49,7 @@ class TilesEditor extends StatelessWidget {
               child: SizedBox(
                 width: 200,
                 height: 200,
-                child: BackgroundGrid(
-                  background: preview,
-                  tiles: tiles
-                ),
+                child: BackgroundGrid(background: preview, tiles: tiles),
               ),
             ),
             Expanded(
