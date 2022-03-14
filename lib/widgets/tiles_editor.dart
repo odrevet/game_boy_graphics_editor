@@ -4,7 +4,7 @@ import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles_grid.dart';
 
 import '../tiles.dart';
-import 'background_widget.dart';
+import 'background_grid.dart';
 import 'graphics_data_display.dart';
 
 class TilesEditor extends StatelessWidget {
@@ -49,7 +49,7 @@ class TilesEditor extends StatelessWidget {
               child: SizedBox(
                 width: 200,
                 height: 200,
-                child: BackgroundWidget(
+                child: BackgroundGrid(
                   background: preview,
                   tiles: tiles
                 ),

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/material.dart';
-import 'package:gbdk_graphic_editor/widgets/background_widget.dart';
+import 'package:gbdk_graphic_editor/widgets/background_grid.dart';
 import 'package:gbdk_graphic_editor/widgets/graphics_data_display.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 
 import '../background.dart';
 import '../tiles.dart';
 
-class BackgroundEditor extends StatefulWidget {
+class BackgroundPropertiesEditor extends StatefulWidget {
   final Tiles tiles;
   final Background background;
   final int selectedTileIndex;
   final Function? onTapTileListView;
   final bool showGrid;
 
-  const BackgroundEditor(
+  const BackgroundPropertiesEditor(
       {Key? key,
       required this.tiles,
       required this.background,
@@ -24,10 +24,10 @@ class BackgroundEditor extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<BackgroundEditor> createState() => _BackgroundEditorState();
+  State<BackgroundPropertiesEditor> createState() => _BackgroundPropertiesEditorState();
 }
 
-class _BackgroundEditorState extends State<BackgroundEditor> {
+class _BackgroundPropertiesEditorState extends State<BackgroundPropertiesEditor> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
@@ -39,7 +39,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
           selectedTile: widget.selectedTileIndex),
       Padding(
         padding: const EdgeInsets.all(16.0),
-        child: BackgroundWidget(
+        child: BackgroundGrid(
             showGrid: widget.showGrid,
             background: widget.background,
             tiles: widget.tiles,
@@ -82,7 +82,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
             Expanded(
                 child: SingleChildScrollView(
               child: GraphicsDataDisplay(graphics: widget.background),
-            ))
+            )),
           ],
         ),
       )

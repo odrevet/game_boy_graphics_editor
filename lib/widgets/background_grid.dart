@@ -6,13 +6,13 @@ import '../colors.dart';
 import '../tiles.dart';
 import 'dot_matrix.dart';
 
-class BackgroundWidget extends StatefulWidget {
+class BackgroundGrid extends StatefulWidget {
   final Background background;
   final Tiles tiles;
   final Function? onTap;
   final bool showGrid;
 
-  const BackgroundWidget(
+  const BackgroundGrid(
       {Key? key,
       required this.background,
       required this.tiles,
@@ -21,10 +21,10 @@ class BackgroundWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  _BackgroundWidgetState createState() => _BackgroundWidgetState();
+  _BackgroundGridState createState() => _BackgroundGridState();
 }
 
-class _BackgroundWidgetState extends State<BackgroundWidget> {
+class _BackgroundGridState extends State<BackgroundGrid> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
