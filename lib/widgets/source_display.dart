@@ -6,10 +6,10 @@ import 'package:gbdk_graphic_editor/graphics.dart';
 import '../download_stub.dart' if (dart.library.html) '../download.dart';
 import '../file_utils.dart';
 
-class GraphicsDataDisplay extends StatelessWidget {
+class SourceDisplay extends StatelessWidget {
   final Graphics graphics;
 
-  const GraphicsDataDisplay({Key? key, required this.graphics})
+  const SourceDisplay({Key? key, required this.graphics})
       : super(key: key);
 
   @override

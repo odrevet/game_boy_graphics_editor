@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/material.dart';
 import 'package:gbdk_graphic_editor/widgets/background_grid.dart';
-import 'package:gbdk_graphic_editor/widgets/graphics_data_display.dart';
+import 'package:gbdk_graphic_editor/widgets/source_display.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 
 import '../background.dart';
@@ -83,7 +83,7 @@ class _BackgroundPropertiesEditorState
                     })),
             Expanded(
                 child: SingleChildScrollView(
-              child: GraphicsDataDisplay(graphics: widget.background),
+              child: SourceDisplay(graphics: widget.background),
             )),
           ],
         ),

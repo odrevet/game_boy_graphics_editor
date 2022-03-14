@@ -5,7 +5,7 @@ import 'package:gbdk_graphic_editor/widgets/tiles_grid.dart';
 
 import '../tiles.dart';
 import 'background_grid.dart';
-import 'graphics_data_display.dart';
+import 'source_display.dart';
 
 class TilesEditor extends StatelessWidget {
   final Background preview;
@@ -54,7 +54,7 @@ class TilesEditor extends StatelessWidget {
             ),
             Expanded(
               child: SingleChildScrollView(
-                child: GraphicsDataDisplay(
+                child: SourceDisplay(
                   graphics: tiles,
                 ),
               ),
