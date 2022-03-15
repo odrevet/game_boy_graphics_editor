@@ -14,7 +14,7 @@ Future<void> saveFile(String content, allowedExtensions, [filename]) async {
   }
 }
 
-Future<void> saveToDirectory(Graphics graphics) async {
+Future<bool> saveToDirectory(Graphics graphics) async {
   String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
   if (selectedDirectory != null) {
@@ -22,7 +22,11 @@ Future<void> saveToDirectory(Graphics graphics) async {
         .writeAsString(graphics.toHeader());
     File("$selectedDirectory/${graphics.name}.c")
         .writeAsString(graphics.toSource());
+
+    return true;
   }
+
+  return false;
 }
 
 Future<String?> selectFolder() async {

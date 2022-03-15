@@ -30,27 +30,26 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
   final int selectedTileIndexTile;
   final int selectedTileIndexBackground;
 
-  const GBDKAppBar(
-      {Key? key,
-      required this.leftShift,
-      required this.setIntensity,
-      required this.selectedIntensity,
-      required this.addTile,
-      required this.removeTile,
-      required this.setTileMode,
-      required this.toggleGridTile,
-      required this.showGridTile,
-      required this.toggleGridBackground,
-      required this.showGridBackground,
-      required this.setTileFromSource,
-      required this.setBackgroundFromSource,
-      required this.setTilesDimensions,
-      required this.tileMode,
-      required this.tiles,
-      required this.background,
-      required this.selectedTileIndexTile,
-      required this.selectedTileIndexBackground,
-      this.preferredSize = const Size.fromHeight(50.0)})
+  const GBDKAppBar({Key? key,
+    required this.leftShift,
+    required this.setIntensity,
+    required this.selectedIntensity,
+    required this.addTile,
+    required this.removeTile,
+    required this.setTileMode,
+    required this.toggleGridTile,
+    required this.showGridTile,
+    required this.toggleGridBackground,
+    required this.showGridBackground,
+    required this.setTileFromSource,
+    required this.setBackgroundFromSource,
+    required this.setTilesDimensions,
+    required this.tileMode,
+    required this.tiles,
+    required this.background,
+    required this.selectedTileIndexTile,
+    required this.selectedTileIndexBackground,
+    this.preferredSize = const Size.fromHeight(50.0)})
       : super(key: key);
 
   Widget _tileDimensionsDropDown() {
@@ -139,23 +138,36 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
         const VerticalDivider(),
         kIsWeb
             ? IconButton(
-                icon: const Icon(Icons.download),
-                tooltip: 'Download',
-                onPressed: () {
-                  download(tiles.toHeader(), '${tiles.name}.h');
-                  download(tiles.toSource(), '${tiles.name}.c');
-                })
+            icon: const Icon(Icons.download),
+            tooltip: 'Download',
+            onPressed: () {
+              download(tiles.toHeader(), '${tiles.name}.h');
+              download(tiles.toSource(), '${tiles.name}.c');
+            })
             : IconButton(
-                icon: const Icon(Icons.save),
-                tooltip: 'Save',
-                onPressed: () => saveToDirectory(tiles),
-              ),
+          icon: const Icon(Icons.save),
+          tooltip: 'Save',
+          onPressed: () {
+            saveToDirectory(tiles).then((hasSave) {
+              if (hasSave == true) {
+                var snackBar = SnackBar(
+                  content: Text("Saved ${tiles.name}.h and ${tiles.name}.c"),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            });
+          },
+        ),
         IconButton(
           icon: const Icon(Icons.folder_open),
           tooltip: 'Open source file',
-          onPressed: () => {
+          onPressed: () =>
+          {
             selectFolder().then(
-                (source) => source != null ? setTileFromSource(source) : null)
+                    (source) =>
+                source != null
+                    ? setTileFromSource(source)
+                    : null)
           },
         )
       ];
@@ -163,30 +175,31 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
       actions = [
         IconButton(
           icon:
-              Icon(showGridBackground == true ? Icons.grid_on : Icons.grid_off),
+          Icon(showGridBackground == true ? Icons.grid_on : Icons.grid_off),
           tooltip: 'Show/Hide grid',
           onPressed: toggleGridBackground,
         ),
         const VerticalDivider(),
         kIsWeb
             ? IconButton(
-                icon: const Icon(Icons.download),
-                tooltip: 'Download',
-                onPressed: () {
-                  download(background.toHeader(), '${background.name}.h');
-                  download(background.toSource(), '${background.name}.c');
-                })
+            icon: const Icon(Icons.download),
+            tooltip: 'Download',
+            onPressed: () {
+              download(background.toHeader(), '${background.name}.h');
+              download(background.toSource(), '${background.name}.c');
+            })
             : IconButton(
-                icon: const Icon(Icons.save),
-                tooltip: 'Save',
-                onPressed: () => saveToDirectory(background),
-              ),
+          icon: const Icon(Icons.save),
+          tooltip: 'Save',
+          onPressed: () => saveToDirectory(background),
+        ),
         IconButton(
           icon: const Icon(Icons.folder_open),
           tooltip: 'Open source file',
-          onPressed: () => {
+          onPressed: () =>
+          {
             selectFolder().then((source) =>
-                source != null ? setBackgroundFromSource(source) : null)
+            source != null ? setBackgroundFromSource(source) : null)
           },
         )
       ];
