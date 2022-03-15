@@ -34,7 +34,7 @@ class TilesEditor extends StatelessWidget {
           selectedTile: selectedTileIndex),
       Expanded(
         child: Container(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(32.0),
           alignment: Alignment.topLeft,
           child: TilesGrid(
               tiles: tiles,
@@ -44,7 +44,6 @@ class TilesEditor extends StatelessWidget {
         ),
       ),
       Expanded(
-        flex: 2,
         child: Column(
           children: [
             Padding(
