@@ -43,11 +43,14 @@ class _DotMatrixState extends State<DotMatrix> {
           );
 
           if (widget.onTap != null) {
-            return GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTapDown: (TapDownDetails details) =>
-                  _onTapDown(details, constraints),
-              child: customPaint,
+            return MouseRegion(
+              cursor: SystemMouseCursors.precise,
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTapDown: (TapDownDetails details) =>
+                    _onTapDown(details, constraints),
+                child: customPaint,
+              ),
             );
           } else {
             return customPaint;
