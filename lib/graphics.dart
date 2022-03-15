@@ -25,7 +25,7 @@ abstract class Graphics {
   }
 
   String? parseArray(source) {
-    RegExp regExp = RegExp(r"unsigned char (\w+)\[\] =\{(.*)};");
+    RegExp regExp = RegExp(r"unsigned\s+char\s+(\w+)\[\]\s*=\s*\{(.*)};");
     var matches = regExp.allMatches(source);
 
     String values = "";
