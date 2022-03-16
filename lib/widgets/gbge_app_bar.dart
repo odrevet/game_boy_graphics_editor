@@ -102,8 +102,8 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
         const VerticalDivider(),
         _tileDimensionsDropDown(),
         IconButton(
-          icon: Icon(showGridTile == true ? Icons.grid_on : Icons.grid_off),
-          tooltip: 'Show/Hide grid',
+          icon: Icon(showGridTile ? Icons.grid_on : Icons.grid_off),
+          tooltip: '${showGridTile ? 'Hide' : 'Show'} grid',
           onPressed: toggleGridTile,
         ),
         const VerticalDivider(),
@@ -187,7 +187,7 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
         IconButton(
           icon:
               Icon(showGridBackground == true ? Icons.grid_on : Icons.grid_off),
-          tooltip: 'Show/Hide grid',
+          tooltip: '${showGridBackground ? 'Hide' : 'Show'} grid',
           onPressed: toggleGridBackground,
         ),
         const VerticalDivider(),
