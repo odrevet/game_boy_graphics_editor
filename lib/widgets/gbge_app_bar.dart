@@ -201,8 +201,18 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
                 })
             : IconButton(
                 icon: const Icon(Icons.save),
-                tooltip: 'Save',
-                onPressed: () => saveToDirectory(background),
+                tooltip: 'Save background as',
+                onPressed: () {
+                  saveToDirectory(background).then((selectedDirectory) {
+                    if (selectedDirectory != null) {
+                      var snackBar = SnackBar(
+                        content: Text(
+                            "${background.name}.h and ${background.name}.c saved under $selectedDirectory"),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  });
+                },
               ),
         IconButton(
           icon: const Icon(Icons.folder_open),
