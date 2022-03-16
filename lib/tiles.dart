@@ -85,7 +85,9 @@ extern unsigned char $name[];""";
       try {
         setData(values.split(','));
       } catch (e) {
-        data = List.filled(64, 0, growable: true); // TODO do not reset data (change setData to write in a buffer)
+        data = List.filled(64, 0,
+            growable:
+                true); // TODO do not reset data (change setData to write in a buffer)
         return false;
       }
 

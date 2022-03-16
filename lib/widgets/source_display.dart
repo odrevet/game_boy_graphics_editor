@@ -9,8 +9,7 @@ import '../file_utils.dart';
 class SourceDisplay extends StatelessWidget {
   final Graphics graphics;
 
-  const SourceDisplay({Key? key, required this.graphics})
-      : super(key: key);
+  const SourceDisplay({Key? key, required this.graphics}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
