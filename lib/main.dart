@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/tiles.dart';
 import 'package:gbdk_graphic_editor/widgets/background_properties.dart';
-import 'package:gbdk_graphic_editor/widgets/gbdk_app_bar.dart';
+import 'package:gbdk_graphic_editor/widgets/gbge_app_bar.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles_editor.dart';
 
 import 'background.dart';
@@ -55,7 +55,7 @@ class _EditorState extends State<Editor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: GBDKAppBar(
+        appBar: GBGEAppBar(
             leftShift: _leftShift,
             setIntensity: _setIntensity,
             selectedIntensity: selectedIntensity,

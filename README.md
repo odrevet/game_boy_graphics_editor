@@ -1,10 +1,10 @@
-# gbdk_graphic_editor
+# Game Boy Graphics Editor (GBGE)
 
 This is an editor for [GBDK](https://github.com/gbdk-2020/gbdk-2020) graphics .c source files
 
 # Online version 
 
-https://odrevet.github.io/GBDK_graphic_editor
+https://odrevet.github.io/GameBoyGraphicsEditor
 
 # References
 

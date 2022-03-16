@@ -7,7 +7,7 @@ import '../download_stub.dart' if (dart.library.html) '../download.dart';
 import '../file_utils.dart';
 import 'intensity_button.dart';
 
-class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
+class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   final Size preferredSize;
 
@@ -30,7 +30,7 @@ class GBDKAppBar extends StatelessWidget with PreferredSizeWidget {
   final int selectedTileIndexTile;
   final int selectedTileIndexBackground;
 
-  const GBDKAppBar({Key? key,
+  const GBGEAppBar({Key? key,
     required this.leftShift,
     required this.setIntensity,
     required this.selectedIntensity,
