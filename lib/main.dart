@@ -141,13 +141,11 @@ class _EditorState extends State<Editor> {
   }
 
   void _rightShift() => setState(() {
-        for (int index = 0;
-            index < Tiles.size * Tiles.size;
-            index += Tiles.size) {
-          int from = index;
-          int to = index + Tiles.size;
-          var tile = tiles.data.sublist(from, to);
-          tiles.data.replaceRange(from, to, _shift(tile, -1));
+        int from = tiles.width * tiles.height * selectedTileIndexTile;
+        int to = from + tiles.width * tiles.height;
+        for (int index = from; index < to; index += Tiles.size) {
+          var tile = tiles.data.sublist(index, index + Tiles.size);
+          tiles.data.replaceRange(index, index + Tiles.size, _shift(tile, -1));
         }
       });
 
