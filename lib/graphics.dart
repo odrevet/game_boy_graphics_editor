@@ -10,7 +10,7 @@ abstract class Graphics {
       required this.width,
       required this.height});
 
-  void fromSource(String source);
+  bool fromSource(String source);
 
   String toHeader();
 

@@ -35,7 +35,7 @@ unsigned char $name[] = {${formatOutput(arrayData)}};""";
   }
 
   @override
-  void fromSource(String source) {
+  bool fromSource(String source) {
     var values = parseArray(source)!;
     data = List<int>.from(
         values.split(',').map((value) => int.parse(value)).toList());
@@ -51,5 +51,7 @@ unsigned char $name[] = {${formatOutput(arrayData)}};""";
     for (Match match in matchesHeight) {
       height = int.parse(match.group(1)!);
     }
+
+    return true; //TODO
   }
 }

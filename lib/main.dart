@@ -173,11 +173,16 @@ class _EditorState extends State<Editor> {
         tileMode = !tileMode;
       });
 
-  void _setTilesFromSource(source) => setState(() {
-        source = formatSource(source);
-        tiles.fromSource(source);
-        selectedTileIndexTile = 0;
-      });
+  bool _setTilesFromSource(source) {
+    late bool hasLoaded;
+    setState(() {
+      source = formatSource(source);
+      hasLoaded = tiles.fromSource(source);
+
+      if (hasLoaded) selectedTileIndexTile = 0;
+    });
+    return hasLoaded;
+  }
 
   void _setBackgroundFromSource(String source) => setState(() {
         source = formatSource(source);

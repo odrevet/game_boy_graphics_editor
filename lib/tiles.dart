@@ -79,8 +79,19 @@ extern unsigned char $name[];""";
   }
 
   @override
-  void fromSource(String source) {
-    var values = parseArray(source)!;
-    setData(values.split(','));
+  bool fromSource(String source) {
+    String? values = parseArray(source);
+    if (values != null) {
+      try {
+        setData(values.split(','));
+      } catch (e) {
+        data = List.filled(64, 0, growable: true); // TODO do not reset data (change setData to write in a buffer)
+        return false;
+      }
+
+      return true;
+    }
+
+    return false;
   }
 }

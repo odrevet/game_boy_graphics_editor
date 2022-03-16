@@ -171,10 +171,11 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
                   content: Text("Not loaded"),
                 );
               } else {
-                snackBar = const SnackBar(
-                  content: Text("Loading"),
+
+                bool hasLoaded = setTileFromSource(source);
+                snackBar = SnackBar(
+                  content: Text(hasLoaded ? "Data loaded" : "Data not loaded"),
                 );
-                setTileFromSource(source);
               }
 
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
