@@ -56,6 +56,7 @@ class _EditorState extends State<Editor> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: GBGEAppBar(
+            rightShift: _rightShift,
             leftShift: _leftShift,
             setIntensity: _setIntensity,
             selectedIntensity: selectedIntensity,
@@ -133,13 +134,29 @@ class _EditorState extends State<Editor> {
         selectedIntensity = intensity;
       });
 
+  List<int> _shift(List<int> list, int v) {
+    if (list.isEmpty) return list;
+    var i = v % list.length;
+    return list.sublist(i)..addAll(list.sublist(0, i));
+  }
+
+  void _rightShift() => setState(() {
+        for (int index = 0;
+            index < Tiles.size * Tiles.size;
+            index += Tiles.size) {
+          int from = index;
+          int to = index + Tiles.size;
+          var tile = tiles.data.sublist(from, to);
+          tiles.data.replaceRange(from, to, _shift(tile, -1));
+        }
+      });
+
   void _leftShift() => setState(() {
-        for (int index = (Tiles.size * Tiles.size) * selectedTileIndexTile;
-            index <
-                (Tiles.size * Tiles.size) * selectedTileIndexTile +
-                    (Tiles.size * Tiles.size);
-            index++) {
-          tiles.data[index] = tiles.data[index + 1];
+        for (int index = 0;
+            index < Tiles.size * Tiles.size;
+            index += Tiles.size) {
+          var tile = tiles.data.sublist(index, index + Tiles.size);
+          tiles.data.replaceRange(index, index + Tiles.size, _shift(tile, 1));
         }
       });
 

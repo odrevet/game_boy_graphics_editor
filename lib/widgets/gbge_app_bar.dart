@@ -12,6 +12,7 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   final Size preferredSize;
 
+  final VoidCallback rightShift;
   final VoidCallback leftShift;
   final Function setIntensity;
   final int selectedIntensity;
@@ -33,6 +34,7 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
 
   const GBGEAppBar(
       {Key? key,
+      required this.rightShift,
       required this.leftShift,
       required this.setIntensity,
       required this.selectedIntensity,
@@ -97,9 +99,12 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
 
     if (tileMode) {
       actions = [
-        /*IconButton(
+        IconButton(
             onPressed: leftShift,
-            icon: const Icon(Icons.keyboard_arrow_left_rounded)),*/
+            icon: const Icon(Icons.keyboard_arrow_left_rounded)),
+        IconButton(
+            onPressed: rightShift,
+            icon: const Icon(Icons.keyboard_arrow_right_rounded)),
         const VerticalDivider(),
         _tileDimensionsDropDown(),
         IconButton(
