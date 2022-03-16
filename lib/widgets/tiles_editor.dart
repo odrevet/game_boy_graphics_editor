@@ -34,13 +34,16 @@ class TilesEditor extends StatelessWidget {
           selectedTile: selectedTileIndex),
       Expanded(
         child: Container(
-          padding: const EdgeInsets.all(32.0),
+          padding: const EdgeInsets.all(8.0),
           alignment: Alignment.topLeft,
-          child: TilesGrid(
-              tiles: tiles,
-              showGrid: showGrid,
-              selectedTileIndex: selectedTileIndex,
-              onTap: setPixel),
+          child: AspectRatio(
+            aspectRatio: tiles.width / tiles.height,
+            child: TilesGrid(
+                tiles: tiles,
+                showGrid: showGrid,
+                selectedTileIndex: selectedTileIndex,
+                onTap: setPixel),
+          ),
         ),
       ),
       Expanded(
