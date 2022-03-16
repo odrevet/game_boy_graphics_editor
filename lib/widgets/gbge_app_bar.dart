@@ -162,7 +162,7 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
               ),
         IconButton(
           icon: const Icon(Icons.folder_open),
-          tooltip: 'Open source file',
+          tooltip: 'Load tiles from C source file',
           onPressed: () => {
             selectFolder().then((source) {
               late SnackBar snackBar;
@@ -172,8 +172,9 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
                 );
               } else {
                 snackBar = const SnackBar(
-                  content: Text("Loaded"),
+                  content: Text("Loading"),
                 );
+                setTileFromSource(source);
               }
 
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -207,8 +208,20 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
           icon: const Icon(Icons.folder_open),
           tooltip: 'Open source file',
           onPressed: () => {
-            selectFolder().then((source) =>
-                source != null ? setBackgroundFromSource(source) : null)
+            selectFolder().then((source) {
+              if (source == null) {
+                var snackBar = const SnackBar(
+                  content: Text("Not loaded"),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              } else {
+                var snackBar = const SnackBar(
+                  content: Text("Loading"),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                setBackgroundFromSource(source);
+              }
+            })
           },
         )
       ];
