@@ -35,7 +35,7 @@ class TilesEditor extends StatelessWidget {
       Expanded(
         child: Container(
           padding: const EdgeInsets.all(8.0),
-          alignment: Alignment.topLeft,
+          alignment: Alignment.topCenter,
           child: AspectRatio(
             aspectRatio: tiles.width / tiles.height,
             child: TilesGrid(
