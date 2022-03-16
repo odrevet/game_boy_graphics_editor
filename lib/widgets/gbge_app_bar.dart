@@ -148,10 +148,10 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
           icon: const Icon(Icons.save),
           tooltip: 'Save',
           onPressed: () {
-            saveToDirectory(tiles).then((hasSave) {
-              if (hasSave == true) {
+            saveToDirectory(tiles).then((selectedDirectory) {
+              if (selectedDirectory != null) {
                 var snackBar = SnackBar(
-                  content: Text("Saved ${tiles.name}.h and ${tiles.name}.c"),
+                  content: Text("${tiles.name}.h and ${tiles.name}.c saved under $selectedDirectory"),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
