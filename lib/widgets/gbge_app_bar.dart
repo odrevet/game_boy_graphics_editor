@@ -32,28 +32,27 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
   final int selectedTileIndexTile;
   final int selectedTileIndexBackground;
 
-  const GBGEAppBar(
-      {Key? key,
-      required this.rightShift,
-      required this.leftShift,
-      required this.setIntensity,
-      required this.selectedIntensity,
-      required this.addTile,
-      required this.removeTile,
-      required this.setTileMode,
-      required this.toggleGridTile,
-      required this.showGridTile,
-      required this.toggleGridBackground,
-      required this.showGridBackground,
-      required this.setTileFromSource,
-      required this.setBackgroundFromSource,
-      required this.setTilesDimensions,
-      required this.tileMode,
-      required this.tiles,
-      required this.background,
-      required this.selectedTileIndexTile,
-      required this.selectedTileIndexBackground,
-      this.preferredSize = const Size.fromHeight(50.0)})
+  const GBGEAppBar({Key? key,
+    required this.rightShift,
+    required this.leftShift,
+    required this.setIntensity,
+    required this.selectedIntensity,
+    required this.addTile,
+    required this.removeTile,
+    required this.setTileMode,
+    required this.toggleGridTile,
+    required this.showGridTile,
+    required this.toggleGridBackground,
+    required this.showGridBackground,
+    required this.setTileFromSource,
+    required this.setBackgroundFromSource,
+    required this.setTilesDimensions,
+    required this.tileMode,
+    required this.tiles,
+    required this.background,
+    required this.selectedTileIndexTile,
+    required this.selectedTileIndexBackground,
+    this.preferredSize = const Size.fromHeight(50.0)})
       : super(key: key);
 
   Widget _tileDimensionsDropDown() {
@@ -98,13 +97,16 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
     var actions = <Widget>[];
 
     if (tileMode) {
-      actions = [
-        IconButton(
+      if (tiles.width == 8) {
+        actions.add(IconButton(
             onPressed: leftShift,
-            icon: const Icon(Icons.keyboard_arrow_left_rounded)),
-        IconButton(
+            icon: const Icon(Icons.keyboard_arrow_left_rounded)));
+        actions.add(IconButton(
             onPressed: rightShift,
-            icon: const Icon(Icons.keyboard_arrow_right_rounded)),
+            icon: const Icon(Icons.keyboard_arrow_right_rounded)));
+      }
+
+      actions = [...actions,
         const VerticalDivider(),
         _tileDimensionsDropDown(),
         IconButton(
@@ -145,21 +147,22 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
         const VerticalDivider(),
         kIsWeb
             ? IconButton(
-                icon: const Icon(Icons.download),
-                tooltip: 'Download',
-                onPressed: () {
-                  download(tiles.toHeader(), '${tiles.name}.h');
-                  download(tiles.toSource(), '${tiles.name}.c');
-                })
+            icon: const Icon(Icons.download),
+            tooltip: 'Download',
+            onPressed: () {
+              download(tiles.toHeader(), '${tiles.name}.h');
+              download(tiles.toSource(), '${tiles.name}.c');
+            })
             : IconButton(
-                icon: const Icon(Icons.save),
-                tooltip: 'Save tiles as',
-                onPressed: () => _saveGraphics(tiles, context),
-              ),
+          icon: const Icon(Icons.save),
+          tooltip: 'Save tiles as',
+          onPressed: () => _saveGraphics(tiles, context),
+        ),
         IconButton(
           icon: const Icon(Icons.folder_open),
           tooltip: 'Load tiles from C source file',
-          onPressed: () => {
+          onPressed: () =>
+          {
             selectFolder().then((source) {
               late SnackBar snackBar;
               if (source == null) {
@@ -182,28 +185,29 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
       actions = [
         IconButton(
           icon:
-              Icon(showGridBackground == true ? Icons.grid_on : Icons.grid_off),
+          Icon(showGridBackground == true ? Icons.grid_on : Icons.grid_off),
           tooltip: '${showGridBackground ? 'Hide' : 'Show'} grid',
           onPressed: toggleGridBackground,
         ),
         const VerticalDivider(),
         kIsWeb
             ? IconButton(
-                icon: const Icon(Icons.download),
-                tooltip: 'Download',
-                onPressed: () {
-                  download(background.toHeader(), '${background.name}.h');
-                  download(background.toSource(), '${background.name}.c');
-                })
+            icon: const Icon(Icons.download),
+            tooltip: 'Download',
+            onPressed: () {
+              download(background.toHeader(), '${background.name}.h');
+              download(background.toSource(), '${background.name}.c');
+            })
             : IconButton(
-                icon: const Icon(Icons.save),
-                tooltip: 'Save background as',
-                onPressed: () => _saveGraphics(background, context),
-              ),
+          icon: const Icon(Icons.save),
+          tooltip: 'Save background as',
+          onPressed: () => _saveGraphics(background, context),
+        ),
         IconButton(
           icon: const Icon(Icons.folder_open),
           tooltip: 'Open source file',
-          onPressed: () => {
+          onPressed: () =>
+          {
             selectFolder().then((source) {
               if (source == null) {
                 var snackBar = const SnackBar(
@@ -243,7 +247,8 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
       if (selectedDirectory != null) {
         var snackBar = SnackBar(
           content: Text(
-              "${graphics.name}.h and ${graphics.name}.c saved under $selectedDirectory"),
+              "${graphics.name}.h and ${graphics
+                  .name}.c saved under $selectedDirectory"),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
