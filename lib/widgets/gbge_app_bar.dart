@@ -5,6 +5,7 @@ import 'package:gbdk_graphic_editor/tiles.dart';
 import '../background.dart';
 import '../download_stub.dart' if (dart.library.html) '../download.dart';
 import '../file_utils.dart';
+import '../graphics.dart';
 import 'intensity_button.dart';
 
 class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
@@ -147,18 +148,8 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
                 })
             : IconButton(
                 icon: const Icon(Icons.save),
-                tooltip: 'Save',
-                onPressed: () {
-                  saveToDirectory(tiles).then((selectedDirectory) {
-                    if (selectedDirectory != null) {
-                      var snackBar = SnackBar(
-                        content: Text(
-                            "${tiles.name}.h and ${tiles.name}.c saved under $selectedDirectory"),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                  });
-                },
+                tooltip: 'Save tiles as',
+                onPressed: () => _saveGraphics(tiles, context),
               ),
         IconButton(
           icon: const Icon(Icons.folder_open),
@@ -202,17 +193,7 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
             : IconButton(
                 icon: const Icon(Icons.save),
                 tooltip: 'Save background as',
-                onPressed: () {
-                  saveToDirectory(background).then((selectedDirectory) {
-                    if (selectedDirectory != null) {
-                      var snackBar = SnackBar(
-                        content: Text(
-                            "${background.name}.h and ${background.name}.c saved under $selectedDirectory"),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                  });
-                },
+                onPressed: () => _saveGraphics(background, context),
               ),
         IconButton(
           icon: const Icon(Icons.folder_open),
@@ -250,5 +231,17 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
         onPressed: setTileMode,
         icon: Icon(tileMode == true ? Icons.directions_walk : Icons.wallpaper),
         label: Text(tileMode == true ? 'Tile' : 'Back'));
+  }
+
+  _saveGraphics(Graphics graphics, BuildContext context) {
+    saveToDirectory(graphics).then((selectedDirectory) {
+      if (selectedDirectory != null) {
+        var snackBar = SnackBar(
+          content: Text(
+              "${graphics.name}.h and ${graphics.name}.c saved under $selectedDirectory"),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    });
   }
 }
