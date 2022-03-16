@@ -23,6 +23,8 @@ class BackgroundGrid extends StatefulWidget {
 }
 
 class _BackgroundGridState extends State<BackgroundGrid> {
+  Offset? mousePosition;
+
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
@@ -66,9 +68,12 @@ class _BackgroundGridState extends State<BackgroundGrid> {
     }
 
     if (widget.onTap != null) {
-      return GestureDetector(
-        onTap: () => widget.onTap!(index),
-        child: tileWidget,
+      return MouseRegion(
+        cursor: SystemMouseCursors.precise,
+        child: GestureDetector(
+          onTap: () => widget.onTap!(index),
+          child: tileWidget,
+        ),
       );
     }
     {
