@@ -180,6 +180,7 @@ class _EditorState extends State<Editor> {
       hasLoaded = tiles.fromSource(source);
 
       if (hasLoaded) selectedTileIndexTile = 0;
+      _setTilesDimensions(8, 8);  //TODO read tiles dimensions in source comment
     });
     return hasLoaded;
   }
