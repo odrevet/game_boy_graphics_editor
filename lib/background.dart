@@ -8,10 +8,10 @@ class Background extends Graphics {
 
   Background({height = 0, width = 0, name = "", int fill = 0, this.tiles})
       : super(
-            name: name,
-            width: width,
-            height: height,
-            data: List<int>.filled(height * width, fill, growable: true));
+      name: name,
+      width: width,
+      height: height,
+      data: List<int>.filled(height * width, fill, growable: true));
 
   @override
   String toHeader() {
@@ -53,5 +53,33 @@ unsigned char $name[] = {${formatOutput(arrayData)}};""";
     }
 
     return true; //TODO
+  }
+
+  void insertCol(at, fill) {
+    width += 1;
+    for (int index = at; index < data.length; index += width) {
+      data.insert(index, fill);
+    }
+  }
+
+  void deleteCol(at) {
+    width -= 1;
+    for (int index = at; index < data.length; index += width) {
+      data.removeAt(index);
+    }
+  }
+
+  void insertRow(at, fill) {
+    height += 1;
+    for (int index = 0; index < width; index += 1) {
+      data.insert(at * width, fill);
+    }
+  }
+
+  void deleteRow(at) {
+    height -= 1;
+    for (int index = 0; index < width; index += 1) {
+      data.removeAt(at * width);
+    }
   }
 }

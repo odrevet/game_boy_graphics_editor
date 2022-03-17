@@ -90,13 +90,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
-  flutter_spinbox:
-    dependency: "direct main"
-    description:
-      name: flutter_spinbox
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.8.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter

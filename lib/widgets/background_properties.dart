@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinbox/material.dart';
 import 'package:gbdk_graphic_editor/widgets/background_grid.dart';
 import 'package:gbdk_graphic_editor/widgets/source_display.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
@@ -57,28 +56,44 @@ class _BackgroundPropertiesState extends State<BackgroundProperties> {
                 widget.background.name = text;
               }),
             ),
-            SpinBox(
-              decoration: const InputDecoration(labelText: 'Height'),
-              min: 1,
-              max: 32,
-              value: widget.background.height.toDouble(),
-              onChanged: (value) => setState(() {
-                widget.background.height = value.toInt();
-                widget.background.data = List.filled(
-                    widget.background.height * widget.background.width, 0);
-              }),
+            Row(
+              children: [
+                Text("Width ${widget.background.width}"),
+                IconButton(
+                    icon: const Icon(Icons.add),
+                    tooltip: 'Add Column',
+                    onPressed: () => setState(() {
+                          widget.background.insertCol(0, 0);
+                        })),
+                IconButton(
+                    icon: const Icon(Icons.remove),
+                    tooltip: 'Remove Column',
+                    onPressed: () => widget.background.width > 1
+                        ? setState(() {
+                            widget.background.deleteCol(0);
+                          })
+                        : null),
+              ],
             ),
-            SpinBox(
-                decoration: const InputDecoration(labelText: 'Width'),
-                min: 1,
-                max: 32,
-                value: widget.background.width.toDouble(),
-                onChanged: (value) => setState(() {
-                      widget.background.width = value.toInt();
-                      widget.background.data = List.filled(
-                          widget.background.height * widget.background.width,
-                          0);
-                    })),
+            Row(
+              children: [
+                Text("Height ${widget.background.height}"),
+                IconButton(
+                    icon: const Icon(Icons.add),
+                    tooltip: 'Add Row',
+                    onPressed: () => setState(() {
+                          widget.background.insertRow(0, 0);
+                        })),
+                IconButton(
+                    icon: const Icon(Icons.remove),
+                    tooltip: 'Remove Row',
+                    onPressed: () => widget.background.height > 1
+                        ? setState(() {
+                            widget.background.deleteRow(0);
+                          })
+                        : null),
+              ],
+            ),
             Expanded(
                 child: SingleChildScrollView(
               child: SourceDisplay(graphics: widget.background),
