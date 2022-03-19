@@ -16,7 +16,7 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
   final VoidCallback leftShift;
   final Function setIntensity;
   final int selectedIntensity;
-  final VoidCallback addTile;
+  final Function addTile;
   final Function removeTile;
   final VoidCallback setTileMode;
   final VoidCallback toggleGridTile;
@@ -141,7 +141,7 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
         IconButton(
             icon: const Icon(Icons.add),
             tooltip: 'Add tile',
-            onPressed: addTile),
+            onPressed: () => addTile(tiles.count())),
         IconButton(
             icon: const Icon(Icons.remove),
             tooltip: 'Remove tile',

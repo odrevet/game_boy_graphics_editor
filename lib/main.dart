@@ -81,6 +81,7 @@ class _EditorState extends State<Editor> {
             child: tileMode
                 ? TilesEditor(
                     onRemoveTile: _removeTile,
+                    onInsertTile: _addTile,
                     setTilesIndex: _setTileIndexTile,
                     setPixel: _setPixel,
                     tiles: tiles,
@@ -161,8 +162,8 @@ class _EditorState extends State<Editor> {
         }
       });
 
-  void _addTile() => setState(() {
-        tiles.data += List.filled(tiles.width * tiles.height, 0);
+  void _addTile(int index) => setState(() {
+        tiles.data.insertAll(index * tiles.width * tiles.height, List.filled(tiles.width * tiles.height, 0));
       });
 
   void _removeTile(int index) => setState(() {
@@ -180,7 +181,7 @@ class _EditorState extends State<Editor> {
         }
 
         if (tiles.count() == 0) {
-          _addTile();
+          _addTile(0);
           selectedTileIndexTile = 0;
           selectedTileIndexBackground = 0;
         }

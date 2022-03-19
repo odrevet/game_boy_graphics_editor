@@ -16,6 +16,7 @@ class TilesEditor extends StatefulWidget {
   final bool showGrid;
   final int selectedTileIndex;
   final Function onRemoveTile;
+  final Function onInsertTile;
 
   const TilesEditor(
       {Key? key,
@@ -25,7 +26,9 @@ class TilesEditor extends StatefulWidget {
       required this.showGrid,
       required this.setPixel,
       required this.selectedTileIndex,
-      required this.onRemoveTile})
+      required this.onRemoveTile,
+      required this.onInsertTile
+      })
       : super(key: key);
 
   @override
@@ -49,10 +52,15 @@ class _TilesEditorState extends State<TilesEditor> {
         contextMenu: GenericContextMenu(
           buttonConfigs: [
             ContextMenuButtonConfig(
+              "Insert before",
+              icon: const Icon(Icons.double_arrow),
+              onPressed: () => widget.onInsertTile(hoverTileIndex),
+            ),
+            ContextMenuButtonConfig(
               "Delete",
               icon: const Icon(Icons.remove),
               onPressed: () => widget.onRemoveTile(hoverTileIndex),
-            )
+            ),
           ],
         ),
       ),
