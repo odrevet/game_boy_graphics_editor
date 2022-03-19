@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/tiles.dart';
-import 'package:gbdk_graphic_editor/widgets/background_properties.dart';
+import 'package:gbdk_graphic_editor/widgets/background_editor.dart';
 import 'package:gbdk_graphic_editor/widgets/gbge_app_bar.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles_editor.dart';
 
@@ -88,7 +88,7 @@ class _EditorState extends State<Editor> {
                     selectedTileIndex: selectedTileIndexTile,
                     preview: Background(
                         width: 4, height: 4, fill: selectedTileIndexTile))
-                : BackgroundProperties(
+                : BackgroundEditor(
                     background: background,
                     tiles: tiles,
                     selectedTileIndex: selectedTileIndexBackground,

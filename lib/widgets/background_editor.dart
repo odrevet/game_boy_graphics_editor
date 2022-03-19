@@ -6,14 +6,14 @@ import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
 import '../background.dart';
 import '../tiles.dart';
 
-class BackgroundProperties extends StatefulWidget {
+class BackgroundEditor extends StatefulWidget {
   final Tiles tiles;
   final Background background;
   final int selectedTileIndex;
   final Function? onTapTileListView;
   final bool showGrid;
 
-  const BackgroundProperties(
+  const BackgroundEditor(
       {Key? key,
       required this.tiles,
       required this.background,
@@ -23,10 +23,10 @@ class BackgroundProperties extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<BackgroundProperties> createState() => _BackgroundPropertiesState();
+  State<BackgroundEditor> createState() => _BackgroundEditorState();
 }
 
-class _BackgroundPropertiesState extends State<BackgroundProperties> {
+class _BackgroundEditorState extends State<BackgroundEditor> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
