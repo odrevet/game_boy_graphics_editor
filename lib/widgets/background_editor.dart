@@ -51,12 +51,24 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                             hoverTileIndex % widget.background.width,
                             widget.selectedTileIndex);
                       })),
+              ContextMenuButtonConfig("Delete column",
+                  icon: const Icon(Icons.remove),
+                  onPressed: () => setState(() {
+                    widget.background.deleteCol(
+                        hoverTileIndex % widget.background.width);
+                  })),
               ContextMenuButtonConfig("Insert row before",
                   icon: const Icon(Icons.add),
                   onPressed: () => setState(() {
                     widget.background.insertRow(
                         hoverTileIndex ~/ widget.background.width,
                         widget.selectedTileIndex);
+                  })),
+              ContextMenuButtonConfig("Remove row",
+                  icon: const Icon(Icons.remove),
+                  onPressed: () => setState(() {
+                    widget.background.deleteRow(
+                        hoverTileIndex ~/ widget.background.width);
                   }))
 
             ],
