@@ -166,8 +166,7 @@ class _EditorState extends State<Editor> {
       });
 
   void _removeTile(int index) => setState(() {
-        tiles.data.removeRange(
-            index * tiles.width * tiles.height,
+        tiles.data.removeRange(index * tiles.width * tiles.height,
             (index + 1) * tiles.width * tiles.height);
 
         selectedTileIndexTile--;
