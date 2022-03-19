@@ -1,3 +1,4 @@
+import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/background.dart';
 import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
@@ -7,7 +8,7 @@ import '../tiles.dart';
 import 'background_grid.dart';
 import 'source_display.dart';
 
-class TilesEditor extends StatelessWidget {
+class TilesEditor extends StatefulWidget {
   final Background preview;
   final Tiles tiles;
   final Function setTilesIndex;
@@ -26,23 +27,59 @@ class TilesEditor extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<TilesEditor> createState() => _TilesEditorState();
+}
+
+class _TilesEditorState extends State<TilesEditor> {
+  int hoverTileIndex = 0;
+
+  @override
   Widget build(BuildContext context) {
     return Row(children: [
-      TileListView(
-          onTap: (index) => setTilesIndex(index),
-          tiles: tiles,
-          selectedTile: selectedTileIndex),
+      ContextMenuRegion(
+        child: TileListView(
+            onHover: (index) => setState(() {
+                  hoverTileIndex = index;
+                }),
+            onTap: (index) => widget.setTilesIndex(index),
+            tiles: widget.tiles,
+            selectedTile: widget.selectedTileIndex),
+        contextMenu: GenericContextMenu(
+          buttonConfigs: [
+            ContextMenuButtonConfig(
+              "Copy",
+              icon: const Icon(Icons.copy),
+              onPressed: () => print('Copy at index $hoverTileIndex'),
+            ),
+            ContextMenuButtonConfig(
+              "Paste",
+              icon: const Icon(Icons.paste),
+              onPressed: () => print('Past at index'),
+            ),
+            ContextMenuButtonConfig(
+              "Insert",
+              icon: const Icon(Icons.double_arrow),
+              onPressed: () => print('Insert at index'),
+            ),
+            ContextMenuButtonConfig(
+              "Delete",
+              icon: const Icon(Icons.remove),
+              onPressed: () => print('remove at index'),
+            )
+          ],
+        ),
+      ),
       Expanded(
         child: Container(
           padding: const EdgeInsets.all(8.0),
           alignment: Alignment.topCenter,
           child: AspectRatio(
-            aspectRatio: tiles.width / tiles.height,
+            aspectRatio: widget.tiles.width / widget.tiles.height,
             child: TilesGrid(
-                tiles: tiles,
-                showGrid: showGrid,
-                selectedTileIndex: selectedTileIndex,
-                onTap: setPixel),
+                tiles: widget.tiles,
+                showGrid: widget.showGrid,
+                selectedTileIndex: widget.selectedTileIndex,
+                onTap: widget.setPixel),
           ),
         ),
       ),
@@ -54,13 +91,14 @@ class TilesEditor extends StatelessWidget {
               child: SizedBox(
                 width: 200,
                 height: 200,
-                child: BackgroundGrid(background: preview, tiles: tiles),
+                child: BackgroundGrid(
+                    background: widget.preview, tiles: widget.tiles),
               ),
             ),
             Expanded(
               child: SingleChildScrollView(
                 child: SourceDisplay(
-                  graphics: tiles,
+                  graphics: widget.tiles,
                 ),
               ),
             )

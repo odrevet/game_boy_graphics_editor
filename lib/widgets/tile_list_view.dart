@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'package:context_menus/context_menus.dart';
-
 import 'package:gbdk_graphic_editor/widgets/tiles_grid.dart';
 
 import '../tiles.dart';
@@ -10,13 +7,15 @@ class TileListView extends StatefulWidget {
   final Tiles tiles;
   final int selectedTile;
   final Function onTap;
+  final Function? onHover;
 
-  const TileListView(
-      {Key? key,
-      required this.tiles,
-      required this.selectedTile,
-      required this.onTap})
-      : super(key: key);
+  const TileListView({
+    Key? key,
+    required this.tiles,
+    required this.selectedTile,
+    required this.onTap,
+    this.onHover,
+  }) : super(key: key);
 
   @override
   _TileListViewState createState() => _TileListViewState();
@@ -30,46 +29,21 @@ class _TileListViewState extends State<TileListView> {
         child: ListView.builder(
           itemCount: widget.tiles.count(),
           itemBuilder: (context, index) {
-            return ContextMenuRegion(
-              contextMenu: GenericContextMenu(
-                buttonConfigs: [
-                  ContextMenuButtonConfig(
-                    "Copy",
-                    icon: const Icon(Icons.copy),
-                    onPressed: () => print('Copy at index $index'),
-                  ),
-                  ContextMenuButtonConfig(
-                    "Paste",
-                    icon: const Icon(Icons.paste),
-                    onPressed: () => print('Past at index $index'),
-                  ),
-                  ContextMenuButtonConfig(
-                    "Insert",
-                    icon: const Icon(Icons.double_arrow),
-                    onPressed: () => print('Insert at index $index'),
-                  ),
-                  ContextMenuButtonConfig(
-                    "Delete",
-                    icon: const Icon(Icons.remove),
-                    onPressed: () => print('remove at index $index'),
-                  )
-                ],
-              ),
-              child: Card(
-                child: ListTile(
-                  onTap: () => widget.onTap(index),
-                  leading: Text(
-                    "$index",
-                    style: widget.selectedTile == index
-                        ? const TextStyle(
-                            color: Colors.blue, fontWeight: FontWeight.bold)
-                        : null,
-                  ),
-                  title: TilesGrid(
-                      tiles: widget.tiles,
-                      showGrid: false,
-                      selectedTileIndex: index),
+            return MouseRegion(
+              onHover: (details) => widget.onHover != null ? widget.onHover!(index) : null,
+              child: ListTile(
+                onTap: () => widget.onTap(index),
+                leading: Text(
+                  "$index",
+                  style: widget.selectedTile == index
+                      ? const TextStyle(
+                      color: Colors.blue, fontWeight: FontWeight.bold)
+                      : null,
                 ),
+                title: TilesGrid(
+                    tiles: widget.tiles,
+                    showGrid: false,
+                    selectedTileIndex: index),
               ),
             );
           },
