@@ -17,7 +17,7 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
   final Function setIntensity;
   final int selectedIntensity;
   final VoidCallback addTile;
-  final VoidCallback removeTile;
+  final Function removeTile;
   final VoidCallback setTileMode;
   final VoidCallback toggleGridTile;
   final bool showGridTile;
@@ -143,7 +143,7 @@ class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
         IconButton(
             icon: const Icon(Icons.remove),
             tooltip: 'Remove tile',
-            onPressed: removeTile),
+            onPressed: () => removeTile(selectedTileIndexTile)),
         const VerticalDivider(),
         kIsWeb
             ? IconButton(

@@ -77,27 +77,24 @@ class _EditorState extends State<Editor> {
             background: background,
             selectedTileIndexTile: selectedTileIndexTile,
             selectedTileIndexBackground: selectedTileIndexBackground),
-        body:
-        ContextMenuOverlay(
-          child: tileMode
-              ? TilesEditor(
-              setTilesIndex: _setTileIndexTile,
-              setPixel: _setPixel,
-              tiles: tiles,
-              showGrid: showGridTile,
-              selectedTileIndex: selectedTileIndexTile,
-              preview: Background(
-                  width: 4, height: 4, fill: selectedTileIndexTile))
-              : BackgroundProperties(
-            background: background,
-            tiles: tiles,
-            selectedTileIndex: selectedTileIndexBackground,
-            onTapTileListView: _setTileIndexBackground,
-            showGrid: showGridBackground,
-          )
-        )
-
-        );
+        body: ContextMenuOverlay(
+            child: tileMode
+                ? TilesEditor(
+                    onRemoveTile: _removeTile,
+                    setTilesIndex: _setTileIndexTile,
+                    setPixel: _setPixel,
+                    tiles: tiles,
+                    showGrid: showGridTile,
+                    selectedTileIndex: selectedTileIndexTile,
+                    preview: Background(
+                        width: 4, height: 4, fill: selectedTileIndexTile))
+                : BackgroundProperties(
+                    background: background,
+                    tiles: tiles,
+                    selectedTileIndex: selectedTileIndexBackground,
+                    onTapTileListView: _setTileIndexBackground,
+                    showGrid: showGridBackground,
+                  )));
   }
 
   void _setTilesDimensions(width, height) => setState(() {
@@ -156,22 +153,22 @@ class _EditorState extends State<Editor> {
       });
 
   void _leftShift() => setState(() {
-    int from = tiles.width * tiles.height * selectedTileIndexTile;
-    int to = from + tiles.width * tiles.height;
-    for (int index = from; index < to; index += Tiles.size) {
-      var tile = tiles.data.sublist(index, index + Tiles.size);
-      tiles.data.replaceRange(index, index + Tiles.size, _shift(tile, 1));
-    }
-  });
+        int from = tiles.width * tiles.height * selectedTileIndexTile;
+        int to = from + tiles.width * tiles.height;
+        for (int index = from; index < to; index += Tiles.size) {
+          var tile = tiles.data.sublist(index, index + Tiles.size);
+          tiles.data.replaceRange(index, index + Tiles.size, _shift(tile, 1));
+        }
+      });
 
   void _addTile() => setState(() {
         tiles.data += List.filled(tiles.width * tiles.height, 0);
       });
 
-  void _removeTile() => setState(() {
+  void _removeTile(int index) => setState(() {
         tiles.data.removeRange(
-            selectedTileIndexTile * tiles.width * tiles.height,
-            (selectedTileIndexTile + 1) * tiles.width * tiles.height);
+            index * tiles.width * tiles.height,
+            (index + 1) * tiles.width * tiles.height);
 
         selectedTileIndexTile--;
         if (selectedTileIndexTile < 0) {
