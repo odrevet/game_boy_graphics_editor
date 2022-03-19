@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   file_picker: ^4.3.3
+  context_menus: ^1.0.1
+
 
 dev_dependencies:
   flutter_test:

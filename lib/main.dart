@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/tiles.dart';
 import 'package:gbdk_graphic_editor/widgets/background_properties.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'GBDK Graphic Editor',
+      title: 'Game Boy Graphic Editor',
       theme: ThemeData(
         fontFamily: 'RobotoMono',
         primarySwatch: Colors.grey,
@@ -76,22 +77,27 @@ class _EditorState extends State<Editor> {
             background: background,
             selectedTileIndexTile: selectedTileIndexTile,
             selectedTileIndexBackground: selectedTileIndexBackground),
-        body: tileMode
-            ? TilesEditor(
-                setTilesIndex: _setTileIndexTile,
-                setPixel: _setPixel,
-                tiles: tiles,
-                showGrid: showGridTile,
-                selectedTileIndex: selectedTileIndexTile,
-                preview: Background(
-                    width: 4, height: 4, fill: selectedTileIndexTile))
-            : BackgroundProperties(
-                background: background,
-                tiles: tiles,
-                selectedTileIndex: selectedTileIndexBackground,
-                onTapTileListView: _setTileIndexBackground,
-                showGrid: showGridBackground,
-              ));
+        body:
+        ContextMenuOverlay(
+          child: tileMode
+              ? TilesEditor(
+              setTilesIndex: _setTileIndexTile,
+              setPixel: _setPixel,
+              tiles: tiles,
+              showGrid: showGridTile,
+              selectedTileIndex: selectedTileIndexTile,
+              preview: Background(
+                  width: 4, height: 4, fill: selectedTileIndexTile))
+              : BackgroundProperties(
+            background: background,
+            tiles: tiles,
+            selectedTileIndex: selectedTileIndexBackground,
+            onTapTileListView: _setTileIndexBackground,
+            showGrid: showGridBackground,
+          )
+        )
+
+        );
   }
 
   void _setTilesDimensions(width, height) => setState(() {

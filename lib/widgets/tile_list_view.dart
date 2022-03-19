@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'package:context_menus/context_menus.dart';
+
 import 'package:gbdk_graphic_editor/widgets/tiles_grid.dart';
 
 import '../tiles.dart';
@@ -27,20 +30,46 @@ class _TileListViewState extends State<TileListView> {
         child: ListView.builder(
           itemCount: widget.tiles.count(),
           itemBuilder: (context, index) {
-            return Card(
-              child: ListTile(
-                onTap: () => widget.onTap(index),
-                leading: Text(
-                  "$index",
-                  style: widget.selectedTile == index
-                      ? const TextStyle(
-                          color: Colors.blue, fontWeight: FontWeight.bold)
-                      : null,
+            return ContextMenuRegion(
+              contextMenu: GenericContextMenu(
+                buttonConfigs: [
+                  ContextMenuButtonConfig(
+                    "Copy",
+                    icon: const Icon(Icons.copy),
+                    onPressed: () => print('Copy at index $index'),
+                  ),
+                  ContextMenuButtonConfig(
+                    "Paste",
+                    icon: const Icon(Icons.paste),
+                    onPressed: () => print('Past at index $index'),
+                  ),
+                  ContextMenuButtonConfig(
+                    "Insert",
+                    icon: const Icon(Icons.double_arrow),
+                    onPressed: () => print('Insert at index $index'),
+                  ),
+                  ContextMenuButtonConfig(
+                    "Delete",
+                    icon: const Icon(Icons.remove),
+                    onPressed: () => print('remove at index $index'),
+                  )
+                ],
+              ),
+              child: Card(
+                child: ListTile(
+                  onTap: () => widget.onTap(index),
+                  leading: Text(
+                    "$index",
+                    style: widget.selectedTile == index
+                        ? const TextStyle(
+                            color: Colors.blue, fontWeight: FontWeight.bold)
+                        : null,
+                  ),
+                  title: TilesGrid(
+                      tiles: widget.tiles,
+                      showGrid: false,
+                      selectedTileIndex: index),
                 ),
-                title: TilesGrid(
-                    tiles: widget.tiles,
-                    showGrid: false,
-                    selectedTileIndex: index),
               ),
             );
           },
