@@ -50,7 +50,15 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                         widget.background.insertCol(
                             hoverTileIndex % widget.background.width,
                             widget.selectedTileIndex);
-                      }))
+                      })),
+              ContextMenuButtonConfig("Insert row before",
+                  icon: const Icon(Icons.add),
+                  onPressed: () => setState(() {
+                    widget.background.insertRow(
+                        hoverTileIndex ~/ widget.background.width,
+                        widget.selectedTileIndex);
+                  }))
+
             ],
           ),
           child: BackgroundGrid(
