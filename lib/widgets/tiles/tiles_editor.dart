@@ -53,7 +53,7 @@ class _TilesEditorState extends State<TilesEditor> {
           buttonConfigs: [
             ContextMenuButtonConfig(
               "Insert before",
-              icon: const Icon(Icons.double_arrow),
+              icon: const Icon(Icons.add),
               onPressed: () => widget.onInsertTile(hoverTileIndex),
             ),
             ContextMenuButtonConfig(
