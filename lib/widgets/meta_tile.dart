@@ -4,7 +4,7 @@ import 'package:gbdk_graphic_editor/widgets/dot_matrix.dart';
 import '../colors.dart';
 import '../tiles.dart';
 
-class TilesGrid extends StatelessWidget {
+class MetaTile extends StatelessWidget {
   final Tiles tiles;
   final Function? onTap;
   final bool showGrid;
@@ -12,7 +12,7 @@ class TilesGrid extends StatelessWidget {
 
   late final List<int> indexTiles;
 
-  TilesGrid(
+  MetaTile(
       {required this.tiles,
       required this.showGrid,
       required this.selectedTileIndex,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/background.dart';
-import 'package:gbdk_graphic_editor/widgets/tiles_grid.dart';
+import 'package:gbdk_graphic_editor/widgets/meta_tile.dart';
 
 import '../tiles.dart';
 
@@ -54,7 +54,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         ),
       );
     } else {
-      tileWidget = TilesGrid(
+      tileWidget = MetaTile(
           tiles: widget.tiles,
           showGrid: false,
           selectedTileIndex: widget.background.data[index]);

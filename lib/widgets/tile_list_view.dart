@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gbdk_graphic_editor/widgets/tiles_grid.dart';
+import 'package:gbdk_graphic_editor/widgets/meta_tile.dart';
 
 import '../tiles.dart';
 
@@ -40,7 +40,7 @@ class _TileListViewState extends State<TileListView> {
                       color: Colors.blue, fontWeight: FontWeight.bold)
                       : null,
                 ),
-                title: TilesGrid(
+                title: MetaTile(
                     tiles: widget.tiles,
                     showGrid: false,
                     selectedTileIndex: index),
