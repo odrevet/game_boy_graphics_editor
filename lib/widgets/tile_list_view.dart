@@ -30,7 +30,7 @@ class _TileListViewState extends State<TileListView> {
           itemCount: widget.tiles.count(),
           itemBuilder: (context, index) {
             return MouseRegion(
-              onHover: (details) => widget.onHover != null ? widget.onHover!(index) : null,
+              onHover: (_) => widget.onHover != null ? widget.onHover!(index) : null,
               child: ListTile(
                 onTap: () => widget.onTap(index),
                 leading: Text(

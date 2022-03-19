@@ -8,6 +8,7 @@ class BackgroundGrid extends StatefulWidget {
   final Background background;
   final Tiles tiles;
   final Function? onTap;
+  final Function? onHover;
   final bool showGrid;
 
   const BackgroundGrid(
@@ -15,6 +16,7 @@ class BackgroundGrid extends StatefulWidget {
       required this.background,
       required this.tiles,
       this.onTap,
+      this.onHover,
       this.showGrid = false})
       : super(key: key);
 
@@ -23,8 +25,6 @@ class BackgroundGrid extends StatefulWidget {
 }
 
 class _BackgroundGridState extends State<BackgroundGrid> {
-  Offset? mousePosition;
-
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
@@ -69,6 +69,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
 
     if (widget.onTap != null) {
       return MouseRegion(
+        onHover: (_) => widget.onHover != null ? widget.onHover!(index) : null,
         cursor: SystemMouseCursors.precise,
         child: GestureDetector(
           onTap: () => widget.onTap!(index),

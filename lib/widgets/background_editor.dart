@@ -1,3 +1,4 @@
+import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/background_grid.dart';
 import 'package:gbdk_graphic_editor/widgets/source_display.dart';
@@ -27,6 +28,8 @@ class BackgroundEditor extends StatefulWidget {
 }
 
 class _BackgroundEditorState extends State<BackgroundEditor> {
+  int hoverTileIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Row(children: [
@@ -38,13 +41,30 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
           selectedTile: widget.selectedTileIndex),
       Padding(
         padding: const EdgeInsets.all(16.0),
-        child: BackgroundGrid(
+        child: ContextMenuRegion(
+          contextMenu: GenericContextMenu(
+            buttonConfigs: [
+              ContextMenuButtonConfig("Insert column before",
+                  icon: const Icon(Icons.add),
+                  onPressed: () => setState(() {
+                        widget.background.insertCol(
+                            hoverTileIndex % widget.background.width,
+                            widget.selectedTileIndex);
+                      }))
+            ],
+          ),
+          child: BackgroundGrid(
             showGrid: widget.showGrid,
             background: widget.background,
             tiles: widget.tiles,
             onTap: (index) => setState(() {
-                  widget.background.data[index] = widget.selectedTileIndex;
-                })),
+              widget.background.data[index] = widget.selectedTileIndex;
+            }),
+            onHover: (index) => setState(() {
+              hoverTileIndex = index;
+            }),
+          ),
+        ),
       ),
       Flexible(
         child: Column(
