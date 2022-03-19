@@ -6,7 +6,7 @@ import '../background.dart';
 import '../download_stub.dart' if (dart.library.html) '../download.dart';
 import '../file_utils.dart';
 import '../graphics.dart';
-import 'intensity_button.dart';
+import 'tiles/intensity_button.dart';
 
 class GBGEAppBar extends StatelessWidget with PreferredSizeWidget {
   @override

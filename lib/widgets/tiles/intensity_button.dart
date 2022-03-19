@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../colors.dart';
+import '../../colors.dart';
 
 class IntensityButton extends StatelessWidget {
   final int intensity;

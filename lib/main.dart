@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/tiles.dart';
-import 'package:gbdk_graphic_editor/widgets/background_editor.dart';
+import 'package:gbdk_graphic_editor/widgets/background/background_editor.dart';
 import 'package:gbdk_graphic_editor/widgets/gbge_app_bar.dart';
-import 'package:gbdk_graphic_editor/widgets/tiles_editor.dart';
+import 'package:gbdk_graphic_editor/widgets/tiles/tiles_editor.dart';
 
 import 'background.dart';
 

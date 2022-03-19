@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gbdk_graphic_editor/widgets/dot_matrix.dart';
+import 'package:gbdk_graphic_editor/widgets/tiles/dot_matrix.dart';
 
-import '../colors.dart';
-import '../tiles.dart';
+import '../../colors.dart';
+import '../../tiles.dart';
 
 class MetaTile extends StatelessWidget {
   final Tiles tiles;

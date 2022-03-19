@@ -1,11 +1,11 @@
 import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
-import 'package:gbdk_graphic_editor/widgets/background_grid.dart';
+import 'package:gbdk_graphic_editor/widgets/background/background_grid.dart';
 import 'package:gbdk_graphic_editor/widgets/source_display.dart';
-import 'package:gbdk_graphic_editor/widgets/tile_list_view.dart';
+import 'package:gbdk_graphic_editor/widgets/tiles/tile_list_view.dart';
 
-import '../background.dart';
-import '../tiles.dart';
+import '../../background.dart';
+import '../../tiles.dart';
 
 class BackgroundEditor extends StatefulWidget {
   final Tiles tiles;
