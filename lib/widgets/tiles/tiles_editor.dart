@@ -17,6 +17,8 @@ class TilesEditor extends StatefulWidget {
   final int selectedTileIndex;
   final Function onRemoveTile;
   final Function onInsertTile;
+  final Function copy;
+  final Function past;
 
   const TilesEditor(
       {Key? key,
@@ -27,7 +29,9 @@ class TilesEditor extends StatefulWidget {
       required this.setPixel,
       required this.selectedTileIndex,
       required this.onRemoveTile,
-      required this.onInsertTile
+      required this.onInsertTile,
+      required this.copy,
+      required this.past,
       })
       : super(key: key);
 
@@ -61,6 +65,16 @@ class _TilesEditorState extends State<TilesEditor> {
               icon: const Icon(Icons.remove),
               onPressed: () => widget.onRemoveTile(hoverTileIndex),
             ),
+            ContextMenuButtonConfig(
+              "Copy",
+              icon: const Icon(Icons.copy),
+              onPressed: () => widget.copy(hoverTileIndex),
+            ),
+            ContextMenuButtonConfig(
+              "Paste",
+              icon: const Icon(Icons.paste),
+              onPressed: () => widget.past(hoverTileIndex),
+            )
           ],
         ),
       ),

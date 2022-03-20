@@ -45,6 +45,7 @@ class _EditorState extends State<Editor> {
   bool tileMode = true; // edit tile or map
   bool showGridTile = true;
   bool showGridBackground = true;
+  var tileBuffer = <int>[]; // copy / past tiles buffer
 
   @override
   void initState() {
@@ -82,6 +83,8 @@ class _EditorState extends State<Editor> {
                 ? TilesEditor(
                     onRemoveTile: _removeTile,
                     onInsertTile: _addTile,
+                    copy: _copy,
+                    past: _past,
                     setTilesIndex: _setTileIndexTile,
                     setPixel: _setPixel,
                     tiles: tiles,
@@ -162,8 +165,21 @@ class _EditorState extends State<Editor> {
         }
       });
 
+  void _copy(int index) => setState(() {
+        tileBuffer = tiles.data.sublist(index * tiles.width * tiles.height,
+            index * tiles.width * tiles.height + tiles.width * tiles.height);
+      });
+
+  void _past(int index) => setState(() {
+        tiles.data.replaceRange(
+            index * tiles.width * tiles.height,
+            index * tiles.width * tiles.height + tiles.width * tiles.height,
+            tileBuffer);
+      });
+
   void _addTile(int index) => setState(() {
-        tiles.data.insertAll(index * tiles.width * tiles.height, List.filled(tiles.width * tiles.height, 0));
+        tiles.data.insertAll(index * tiles.width * tiles.height,
+            List.filled(tiles.width * tiles.height, 0));
       });
 
   void _removeTile(int index) => setState(() {
