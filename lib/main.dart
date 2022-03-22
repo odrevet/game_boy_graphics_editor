@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/tiles.dart';
+import 'package:gbdk_graphic_editor/widgets/background/background_app_bar.dart';
 import 'package:gbdk_graphic_editor/widgets/background/background_editor.dart';
-import 'package:gbdk_graphic_editor/widgets/gbge_app_bar.dart';
+import 'package:gbdk_graphic_editor/widgets/tiles/tiles_app_bar.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/tiles_editor.dart';
 
 import 'background.dart';
+import 'file_utils.dart';
+import 'graphics.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,40 +59,56 @@ class _EditorState extends State<Editor> {
 
   @override
   Widget build(BuildContext context) {
+    TilesAppBar tileappbar = TilesAppBar(
+      preferredSize: const Size.fromHeight(50.0),
+      tiles: tiles,
+      rightShift: _rightShift,
+      leftShift: _leftShift,
+      setIntensity: _setIntensity,
+      selectedIntensity: selectedIntensity,
+      addTile: _addTile,
+      removeTile: _removeTile,
+      setTileMode: _setTileMode,
+      toggleGridTile: _toggleGridTile,
+      showGridTile: showGridTile,
+      setTileFromSource: _setTilesFromSource,
+      setTilesDimensions: _setTilesDimensions,
+      selectedTileIndexTile: selectedTileIndexTile,
+      saveGraphics: _saveGraphics,
+    );
+
+    BackgroundAppBar backgroundappbar = BackgroundAppBar(
+      preferredSize: const Size.fromHeight(50.0),
+      setTileMode: _setTileMode,
+      toggleGridBackground: _toggleGridBackground,
+      showGrid: showGridBackground,
+      setBackgroundFromSource: _setBackgroundFromSource,
+      background: background,
+      selectedTileIndex: selectedTileIndexBackground,
+      saveGraphics: _saveGraphics,
+    );
+
+    dynamic appbar;
+    if (tileMode) {
+      appbar = tileappbar;
+    } else {
+      appbar = backgroundappbar;
+    }
+
     return Scaffold(
-        appBar: GBGEAppBar(
-            rightShift: _rightShift,
-            leftShift: _leftShift,
-            setIntensity: _setIntensity,
-            selectedIntensity: selectedIntensity,
-            tileMode: tileMode,
-            addTile: _addTile,
-            removeTile: _removeTile,
-            setTileMode: _setTileMode,
-            toggleGridTile: _toggleGridTile,
-            showGridTile: showGridTile,
-            toggleGridBackground: _toggleGridBackground,
-            showGridBackground: showGridBackground,
-            preferredSize: const Size.fromHeight(50.0),
-            setTileFromSource: _setTilesFromSource,
-            setTilesDimensions: _setTilesDimensions,
-            setBackgroundFromSource: _setBackgroundFromSource,
-            tiles: tiles,
-            background: background,
-            selectedTileIndexTile: selectedTileIndexTile,
-            selectedTileIndexBackground: selectedTileIndexBackground),
+        appBar: appbar,
         body: ContextMenuOverlay(
             child: tileMode
                 ? TilesEditor(
-                    onRemoveTile: _removeTile,
-                    onInsertTile: _addTile,
+                    tiles: tiles,
+                    onRemove: _removeTile,
+                    onInsert: _addTile,
                     copy: _copy,
                     past: _past,
-                    setTilesIndex: _setTileIndexTile,
+                    setIndex: _setTileIndexTile,
                     setPixel: _setPixel,
-                    tiles: tiles,
                     showGrid: showGridTile,
-                    selectedTileIndex: selectedTileIndexTile,
+                    selectedIndex: selectedTileIndexTile,
                     preview: Background(
                         width: 4, height: 4, fill: selectedTileIndexTile))
                 : BackgroundEditor(
@@ -99,6 +118,18 @@ class _EditorState extends State<Editor> {
                     onTapTileListView: _setTileIndexBackground,
                     showGrid: showGridBackground,
                   )));
+  }
+
+  _saveGraphics(Graphics graphics, BuildContext context) {
+    saveToDirectory(graphics).then((selectedDirectory) {
+      if (selectedDirectory != null) {
+        var snackBar = SnackBar(
+          content: Text(
+              "${graphics.name}.h and ${graphics.name}.c saved under $selectedDirectory"),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    });
   }
 
   void _setTilesDimensions(width, height) => setState(() {

@@ -11,29 +11,28 @@ import '../source_display.dart';
 class TilesEditor extends StatefulWidget {
   final Background preview;
   final Tiles tiles;
-  final Function setTilesIndex;
+  final Function setIndex;
   final Function setPixel;
   final bool showGrid;
-  final int selectedTileIndex;
-  final Function onRemoveTile;
-  final Function onInsertTile;
+  final int selectedIndex;
+  final Function onRemove;
+  final Function onInsert;
   final Function copy;
   final Function past;
 
-  const TilesEditor(
-      {Key? key,
-      required this.preview,
-      required this.tiles,
-      required this.setTilesIndex,
-      required this.showGrid,
-      required this.setPixel,
-      required this.selectedTileIndex,
-      required this.onRemoveTile,
-      required this.onInsertTile,
-      required this.copy,
-      required this.past,
-      })
-      : super(key: key);
+  const TilesEditor({
+    Key? key,
+    required this.preview,
+    required this.tiles,
+    required this.setIndex,
+    required this.showGrid,
+    required this.setPixel,
+    required this.selectedIndex,
+    required this.onRemove,
+    required this.onInsert,
+    required this.copy,
+    required this.past,
+  }) : super(key: key);
 
   @override
   State<TilesEditor> createState() => _TilesEditorState();
@@ -50,20 +49,20 @@ class _TilesEditorState extends State<TilesEditor> {
             onHover: (index) => setState(() {
                   hoverTileIndex = index;
                 }),
-            onTap: (index) => widget.setTilesIndex(index),
+            onTap: (index) => widget.setIndex(index),
             tiles: widget.tiles,
-            selectedTile: widget.selectedTileIndex),
+            selectedTile: widget.selectedIndex),
         contextMenu: GenericContextMenu(
           buttonConfigs: [
             ContextMenuButtonConfig(
               "Insert before",
               icon: const Icon(Icons.add),
-              onPressed: () => widget.onInsertTile(hoverTileIndex),
+              onPressed: () => widget.onInsert(hoverTileIndex),
             ),
             ContextMenuButtonConfig(
               "Delete",
               icon: const Icon(Icons.remove),
-              onPressed: () => widget.onRemoveTile(hoverTileIndex),
+              onPressed: () => widget.onRemove(hoverTileIndex),
             ),
             ContextMenuButtonConfig(
               "Copy",
@@ -87,7 +86,7 @@ class _TilesEditorState extends State<TilesEditor> {
             child: MetaTile(
                 tiles: widget.tiles,
                 showGrid: widget.showGrid,
-                selectedTileIndex: widget.selectedTileIndex,
+                selectedTileIndex: widget.selectedIndex,
                 onTap: widget.setPixel),
           ),
         ),
