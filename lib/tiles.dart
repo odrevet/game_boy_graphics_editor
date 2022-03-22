@@ -51,7 +51,7 @@ class Tiles extends Graphics {
 
   List<int> getRow(int indexTile, int indexRow){
     int from = pixelPerTile() * indexTile;
-    return data.sublist(from, from + size * indexRow);
+    return data.sublist(from + size * indexRow, from + size * (indexRow + 1));
   }
 
   setData(List<String> values) {
