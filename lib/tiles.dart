@@ -23,7 +23,7 @@ class Tiles extends Graphics {
     }
 
     for (var index = 0;
-        index < combined.length ~/ pixelPerTile();
+        index < (combined.length ~/ size) * size;
         index += size * 2) {
       var lo = "";
       var hi = "";
@@ -47,6 +47,11 @@ class Tiles extends Graphics {
     int from = pixelPerTile() * index;
     int to = from + pixelPerTile();
     return data.getRange(from, to);
+  }
+
+  List<int> getRow(int indexTile, int indexRow){
+    int from = pixelPerTile() * indexTile;
+    return data.sublist(from, from + size * indexRow);
   }
 
   setData(List<String> values) {
