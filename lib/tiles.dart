@@ -23,7 +23,7 @@ class Tiles extends Graphics {
     }
 
     for (var index = 0;
-        index < combined.length ~/ size * size;
+        index < combined.length ~/ pixelPerTile();
         index += size * 2) {
       var lo = "";
       var hi = "";
@@ -41,9 +41,11 @@ class Tiles extends Graphics {
     return raw;
   }
 
+  int pixelPerTile() => size * size;
+
   Iterable<int> getAtIndex(int index) {
-    int from = (size * size) * index;
-    int to = from + (size * size);
+    int from = (pixelPerTile()) * index;
+    int to = from + (pixelPerTile());
     return data.getRange(from, to);
   }
 
