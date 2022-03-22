@@ -43,9 +43,9 @@ class Tiles extends Graphics {
 
   int pixelPerTile() => size * size;
 
-  Iterable<int> getAtIndex(int index) {
-    int from = (pixelPerTile()) * index;
-    int to = from + (pixelPerTile());
+  Iterable<int> getTileAtIndex(int index) {
+    int from = pixelPerTile() * index;
+    int to = from + pixelPerTile();
     return data.getRange(from, to);
   }
 

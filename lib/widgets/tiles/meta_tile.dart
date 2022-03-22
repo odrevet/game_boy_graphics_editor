@@ -43,7 +43,7 @@ class MetaTile extends StatelessWidget {
             onTap: onTap,
             onTapParam: indexTile,
             pixels: tiles
-                .getAtIndex(selectedTileIndex *
+                .getTileAtIndex(selectedTileIndex *
                         (tiles.height ~/ Tiles.size) *
                         (tiles.width ~/ Tiles.size) +
                     indexTile)
