@@ -70,7 +70,7 @@ class _EditorState extends State<Editor> {
       removeTile: _removeTile,
       setTileMode: _setTileMode,
       toggleGridTile: _toggleGridTile,
-      showGridTile: showGridTile,
+      showGrid: showGridTile,
       setTileFromSource: _setTilesFromSource,
       setTilesDimensions: _setTilesDimensions,
       selectedTileIndexTile: selectedTileIndexTile,

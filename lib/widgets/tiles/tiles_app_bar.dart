@@ -13,7 +13,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final VoidCallback setTileMode;
   final Tiles tiles;
   final Function setTilesDimensions;
-  final bool showGridTile;
+  final bool showGrid;
   final VoidCallback rightShift;
   final VoidCallback leftShift;
   final Function setIntensity;
@@ -31,7 +31,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.tiles,
     required this.setTileMode,
     required this.setTilesDimensions,
-    required this.showGridTile,
+    required this.showGrid,
     required this.rightShift,
     required this.leftShift,
     required this.setIntensity,
@@ -106,8 +106,8 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
       const VerticalDivider(),
       _tileDimensionsDropDown(),
       IconButton(
-        icon: Icon(showGridTile ? Icons.grid_on : Icons.grid_off),
-        tooltip: '${showGridTile ? 'Hide' : 'Show'} grid',
+        icon: Icon(showGrid ? Icons.grid_on : Icons.grid_off),
+        tooltip: '${showGrid ? 'Hide' : 'Show'} grid',
         onPressed: toggleGridTile,
       ),
       const VerticalDivider(),
