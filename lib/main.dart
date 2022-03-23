@@ -217,7 +217,8 @@ class _EditorState extends State<Editor> {
         int from = tiles.pixelPerTile() * tileIndex + halfRow * Tiles.size;
         data.replaceRange(from, from + Tiles.size, tiles.getRow(0, rowIndex));
         from = tiles.pixelPerTile() * (tileIndex + 2) + halfRow * Tiles.size;
-        data.replaceRange(from, from + Tiles.size, tiles.getRow(0, rowIndex + 1));
+        data.replaceRange(
+            from, from + Tiles.size, tiles.getRow(0, rowIndex + 1));
       }
     } else if (tiles.width == 32 && tiles.height == 32) {
       //TODO
@@ -226,27 +227,25 @@ class _EditorState extends State<Editor> {
   }
 
   void _rightShift() => setState(() {
-        var meta = toMeta();
+        tiles.data = toMeta();
         int from = tiles.width * tiles.height * selectedTileIndexTile;
         int to = from + tiles.width * tiles.height;
         for (int index = from; index < to; index += tiles.width) {
-          var row = meta.sublist(index, index + tiles.width);
-          meta.replaceRange(index, index + tiles.width, _shift(row, -1));
+          var row = tiles.data.sublist(index, index + tiles.width);
+          tiles.data.replaceRange(index, index + tiles.width, _shift(row, -1));
         }
-        tiles.data = meta;
-        tiles.data = fromMeta(meta);
+        tiles.data = fromMeta(tiles.data);
       });
 
   void _leftShift() => setState(() {
-        var meta = toMeta();
+        tiles.data = toMeta();
         int from = tiles.width * tiles.height * selectedTileIndexTile;
         int to = from + tiles.width * tiles.height;
         for (int index = from; index < to; index += tiles.width) {
-          var row = meta.sublist(index, index + tiles.width);
-          meta.replaceRange(index, index + tiles.width, _shift(row, 1));
+          var row = tiles.data.sublist(index, index + tiles.width);
+          tiles.data.replaceRange(index, index + tiles.width, _shift(row, 1));
         }
-        tiles.data = meta;
-        tiles.data = fromMeta(meta);
+        tiles.data = fromMeta(tiles.data);
       });
 
   void _copy(int index) => setState(() {
