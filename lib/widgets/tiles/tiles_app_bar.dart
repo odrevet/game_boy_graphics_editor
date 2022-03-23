@@ -92,14 +92,12 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     var actions = <Widget>[];
 
-    if (tiles.width == 8) {
-      actions.add(IconButton(
-          onPressed: leftShift,
-          icon: const Icon(Icons.keyboard_arrow_left_rounded)));
-      actions.add(IconButton(
-          onPressed: rightShift,
-          icon: const Icon(Icons.keyboard_arrow_right_rounded)));
-    }
+    actions.add(IconButton(
+        onPressed: leftShift,
+        icon: const Icon(Icons.keyboard_arrow_left_rounded)));
+    actions.add(IconButton(
+        onPressed: rightShift,
+        icon: const Icon(Icons.keyboard_arrow_right_rounded)));
 
     actions = [
       ...actions,
