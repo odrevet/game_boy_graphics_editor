@@ -211,18 +211,13 @@ class _EditorState extends State<Editor> {
     } else if (tiles.width == 16 && tiles.height == 8) {
       // TODO
     } else if (tiles.width == 16 && tiles.height == 16) {
-      int tileIndex;
-      int rowIndex = 0;
-      int from;
-
-      for (int i = 0; i < Tiles.size * 4; i += 2) {
-        rowIndex = i ~/ 2;
-        tileIndex = 0;
-        from = tiles.pixelPerTile() * tileIndex + rowIndex * Tiles.size;
-        data.replaceRange(from, from + Tiles.size, tiles.getRow(0, i));
-        tileIndex = 2;
-        from = tiles.pixelPerTile() * tileIndex + rowIndex * Tiles.size;
-        data.replaceRange(from, from + Tiles.size, tiles.getRow(0, i + 1));
+      for (int rowIndex = 0; rowIndex < Tiles.size * 4; rowIndex += 2) {
+        int halfRow = rowIndex ~/ 2;
+        int tileIndex = 0;
+        int from = tiles.pixelPerTile() * tileIndex + halfRow * Tiles.size;
+        data.replaceRange(from, from + Tiles.size, tiles.getRow(0, rowIndex));
+        from = tiles.pixelPerTile() * (tileIndex + 2) + halfRow * Tiles.size;
+        data.replaceRange(from, from + Tiles.size, tiles.getRow(0, rowIndex + 1));
       }
     } else if (tiles.width == 32 && tiles.height == 32) {
       //TODO
