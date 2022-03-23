@@ -203,7 +203,7 @@ class _EditorState extends State<Editor> {
     return metaTile;
   }
 
-  List<int> fromMeta(List<int> meta) {
+  List<int> fromMeta() {
     var data = List<int>.filled(tiles.width * tiles.height, 0, growable: true);
 
     if (tiles.width == 8 && tiles.height == 8) {
@@ -234,7 +234,7 @@ class _EditorState extends State<Editor> {
           var row = tiles.data.sublist(index, index + tiles.width);
           tiles.data.replaceRange(index, index + tiles.width, _shift(row, -1));
         }
-        tiles.data = fromMeta(tiles.data);
+        tiles.data = fromMeta();
       });
 
   void _leftShift() => setState(() {
@@ -245,7 +245,7 @@ class _EditorState extends State<Editor> {
           var row = tiles.data.sublist(index, index + tiles.width);
           tiles.data.replaceRange(index, index + tiles.width, _shift(row, 1));
         }
-        tiles.data = fromMeta(tiles.data);
+        tiles.data = fromMeta();
       });
 
   void _copy(int index) => setState(() {
