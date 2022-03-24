@@ -181,7 +181,7 @@ class _EditorState extends State<Editor> {
     var metaTile = <int>[];
 
     if (tiles.width == 8 && tiles.height == 8) {
-      return tiles.data.sublist(0, 64);
+      return tiles.data.sublist(selectedTileIndexTile * 64, selectedTileIndexTile * 64 + 64);
     }
     if (tiles.width == 16 && tiles.height == 8) {
       // TODO
@@ -206,7 +206,7 @@ class _EditorState extends State<Editor> {
     var data = List<int>.filled(tiles.width * tiles.height, 0, growable: true);
 
     if (tiles.width == 8 && tiles.height == 8) {
-      return tiles.data.sublist(0, 64);
+      return tiles.data.sublist(selectedTileIndexTile * 64, selectedTileIndexTile * 64 + 64);
     } else if (tiles.width == 16 && tiles.height == 8) {
       // TODO
     } else if (tiles.width == 16 && tiles.height == 16) {
