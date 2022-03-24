@@ -213,7 +213,6 @@ class _EditorState extends State<Editor> {
     } else if (tiles.width == 16 && tiles.height == 16) {
       for (int rowIndex = 0; rowIndex < Tiles.size * 4; rowIndex += 2) {
         int halfRow = rowIndex ~/ 2;
-        int tileIndex = 0;
         int from = halfRow * Tiles.size;
         data.replaceRange(from, from + Tiles.size, tiles.getRow(0, rowIndex));
         from = tiles.pixelPerTile() * 2 + halfRow * Tiles.size;
