@@ -214,9 +214,9 @@ class _EditorState extends State<Editor> {
       for (int rowIndex = 0; rowIndex < Tiles.size * 4; rowIndex += 2) {
         int halfRow = rowIndex ~/ 2;
         int tileIndex = 0;
-        int from = tiles.pixelPerTile() * tileIndex + halfRow * Tiles.size;
+        int from = halfRow * Tiles.size;
         data.replaceRange(from, from + Tiles.size, tiles.getRow(0, rowIndex));
-        from = tiles.pixelPerTile() * (tileIndex + 2) + halfRow * Tiles.size;
+        from = tiles.pixelPerTile() * 2 + halfRow * Tiles.size;
         data.replaceRange(
             from, from + Tiles.size, tiles.getRow(0, rowIndex + 1));
       }
