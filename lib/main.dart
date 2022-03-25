@@ -181,10 +181,10 @@ class _EditorState extends State<Editor> {
     var metaTile = <int>[];
 
     if (tiles.width == 8 && tiles.height == 8) {
-      return tiles.data.sublist(selectedTileIndexTile * 64, selectedTileIndexTile * 64 + 64);
+      return tiles.getMetaTileAtIndex(selectedTileIndexTile);
     }
-    if (tiles.width == 16 && tiles.height == 8) {
-      // TODO
+    if (tiles.width == 8 && tiles.height == 16) {
+      return tiles.getMetaTileAtIndex(selectedTileIndexTile);
     } else if (tiles.width == 16 && tiles.height == 16) {
       for (int indexRow = 0; indexRow < Tiles.size; indexRow++) {
         metaTile += tiles.getRow(0 + 4 * selectedTileIndexTile, indexRow);
@@ -206,17 +206,18 @@ class _EditorState extends State<Editor> {
     var data = List<int>.filled(tiles.width * tiles.height, 0, growable: true);
 
     if (tiles.width == 8 && tiles.height == 8) {
-      return tiles.data.sublist(selectedTileIndexTile * 64, selectedTileIndexTile * 64 + 64);
-    } else if (tiles.width == 16 && tiles.height == 8) {
-      // TODO
+      return tiles.getMetaTileAtIndex(selectedTileIndexTile);
+    } else if (tiles.width == 8 && tiles.height == 16) {
+      return tiles.getMetaTileAtIndex(selectedTileIndexTile);
     } else if (tiles.width == 16 && tiles.height == 16) {
       for (int rowIndex = 0; rowIndex < Tiles.size * 4; rowIndex += 2) {
         int halfRow = rowIndex ~/ 2;
         int from = halfRow * Tiles.size;
-        data.replaceRange(from, from + Tiles.size, tiles.getRow(4 * selectedTileIndexTile, rowIndex));
+        data.replaceRange(from, from + Tiles.size,
+            tiles.getRow(4 * selectedTileIndexTile, rowIndex));
         from = tiles.pixelPerTile() * 2 + halfRow * Tiles.size;
-        data.replaceRange(
-            from, from + Tiles.size, tiles.getRow(4 * selectedTileIndexTile, rowIndex + 1));
+        data.replaceRange(from, from + Tiles.size,
+            tiles.getRow(4 * selectedTileIndexTile, rowIndex + 1));
       }
     } else if (tiles.width == 32 && tiles.height == 32) {
       //TODO
@@ -236,15 +237,15 @@ class _EditorState extends State<Editor> {
       });
 
   void _leftShift() => setState(() {
-    int from = tiles.width * tiles.height * selectedTileIndexTile;
-    int to = from + tiles.width * tiles.height;
-    tiles.data.replaceRange(from, to, toMeta());
-    for (int index = from; index < to; index += tiles.width) {
-      var row = tiles.data.sublist(index, index + tiles.width);
-      tiles.data.replaceRange(index, index + tiles.width, _shift(row, 1));
-    }
-    tiles.data.replaceRange(from, to, fromMeta());
-  });
+        int from = tiles.width * tiles.height * selectedTileIndexTile;
+        int to = from + tiles.width * tiles.height;
+        tiles.data.replaceRange(from, to, toMeta());
+        for (int index = from; index < to; index += tiles.width) {
+          var row = tiles.data.sublist(index, index + tiles.width);
+          tiles.data.replaceRange(index, index + tiles.width, _shift(row, 1));
+        }
+        tiles.data.replaceRange(from, to, fromMeta());
+      });
 
   void _copy(int index) => setState(() {
         tileBuffer = tiles.data.sublist(index * tiles.width * tiles.height,

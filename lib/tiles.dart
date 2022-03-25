@@ -49,6 +49,12 @@ class Tiles extends Graphics {
     return data.getRange(from, to);
   }
 
+  List<int> getMetaTileAtIndex(int index) {
+    int from = width * height * index;
+    int to = from + width * height;
+    return data.sublist(from, to);
+  }
+
   List<int> getRow(int indexTile, int indexRow){
     int from = pixelPerTile() * indexTile;
     return data.sublist(from + size * indexRow, from + size * (indexRow + 1));
