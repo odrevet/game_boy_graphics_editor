@@ -41,7 +41,6 @@ class MetaTile extends Graphics {
   }
 
   setData(List<String> values) {
-    tileList.clear();
     int pixelAt = 0;
 
     for (var index = 0; index < values.length; index += 2) {
