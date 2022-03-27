@@ -64,13 +64,13 @@ class _EditorState extends State<Editor> {
   Widget build(BuildContext context) {
     TilesAppBar tileappbar = TilesAppBar(
       preferredSize: const Size.fromHeight(50.0),
-      tiles: metaTile,
+      metaTile: metaTile,
       rightShift: _rightShift,
       leftShift: _leftShift,
       setIntensity: _setIntensity,
       selectedIntensity: selectedIntensity,
-      addTile: _addMetaTile,
-      removeTile: _removeMetaTile,
+      addMetaTile: _addMetaTile,
+      removeMetaTile: _removeMetaTile,
       setTileMode: _setTileMode,
       toggleGridTile: _toggleGridTile,
       showGrid: showGridTile,

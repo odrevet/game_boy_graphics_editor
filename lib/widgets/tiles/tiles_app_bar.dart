@@ -11,15 +11,15 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final Size preferredSize;
 
   final VoidCallback setTileMode;
-  final MetaTile tiles;
+  final MetaTile metaTile;
   final Function setTilesDimensions;
   final bool showGrid;
   final VoidCallback rightShift;
   final VoidCallback leftShift;
   final Function setIntensity;
   final int selectedIntensity;
-  final Function addTile;
-  final Function removeTile;
+  final Function addMetaTile;
+  final Function removeMetaTile;
   final VoidCallback toggleGridTile;
   final Function setTileFromSource;
   final Function saveGraphics;
@@ -28,7 +28,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   const TilesAppBar({
     this.preferredSize = const Size.fromHeight(50.0),
     Key? key,
-    required this.tiles,
+    required this.metaTile,
     required this.setTileMode,
     required this.setTilesDimensions,
     required this.showGrid,
@@ -36,8 +36,8 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.leftShift,
     required this.setIntensity,
     required this.selectedIntensity,
-    required this.addTile,
-    required this.removeTile,
+    required this.addMetaTile,
+    required this.removeMetaTile,
     required this.toggleGridTile,
     required this.setTileFromSource,
     required this.metaTileIndex,
@@ -53,7 +53,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
 
   Widget _tileDimensionsDropDown() {
     return DropdownButton<String>(
-      value: "${tiles.width} x ${tiles.height}",
+      value: "${metaTile.width} x ${metaTile.height}",
       onChanged: (String? value) {
         int width = 8;
         int height = 8;
@@ -133,24 +133,24 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
       IconButton(
           icon: const Icon(Icons.add),
           tooltip: 'Add tile',
-          onPressed: () => addTile(tiles.tileList.length)),
+          onPressed: () => addMetaTile(metaTile.tileList.length ~/ metaTile.nbTilesPerMetaTile())),
       IconButton(
           icon: const Icon(Icons.remove),
           tooltip: 'Remove tile',
-          onPressed: () => removeTile(metaTileIndex)),
+          onPressed: () => removeMetaTile(metaTileIndex)),
       const VerticalDivider(),
       kIsWeb
           ? IconButton(
               icon: const Icon(Icons.download),
               tooltip: 'Download',
               onPressed: () {
-                download(tiles.toHeader(), '${tiles.name}.h');
-                download(tiles.toSource(), '${tiles.name}.c');
+                download(metaTile.toHeader(), '${metaTile.name}.h');
+                download(metaTile.toSource(), '${metaTile.name}.c');
               })
           : IconButton(
               icon: const Icon(Icons.save),
               tooltip: 'Save tiles as',
-              onPressed: () => saveGraphics(tiles, context),
+              onPressed: () => saveGraphics(metaTile, context),
             ),
       IconButton(
         icon: const Icon(Icons.folder_open),
@@ -177,7 +177,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     ];
 
     return AppBar(
-      title: Text(tiles.name),
+      title: Text(metaTile.name),
       actions: actions,
     );
   }
