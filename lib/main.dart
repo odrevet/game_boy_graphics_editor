@@ -135,7 +135,7 @@ class _EditorState extends State<Editor> {
   }
 
   void _setTilesDimensions(width, height) => setState(() {
-        tiles.width = width;
+        /*tiles.width = width;
         tiles.height = height;
         int numberOfTilesNecessary =
             (tiles.data.length / (tiles.width * tiles.height)).ceil();
@@ -151,7 +151,7 @@ class _EditorState extends State<Editor> {
         }
 
         // reset selected index to prevent being out of bound (TODO reset on current new index)
-        selectedTileIndexTile = 0;
+        selectedTileIndexTile = 0;*/
       });
 
   void _setTileIndexBackground(index) => setState(() {
@@ -181,94 +181,94 @@ class _EditorState extends State<Editor> {
 
   List<int> toMeta() {
     var metaTile = <int>[];
-
+/*
     if (tiles.width == 8 && tiles.height == 8) {
       return tiles.getMetaTileAtIndex(selectedTileIndexTile);
     }
     if (tiles.width == 8 && tiles.height == 16) {
       return tiles.getMetaTileAtIndex(selectedTileIndexTile);
     } else if (tiles.width == 16 && tiles.height == 16) {
-      for (int indexRow = 0; indexRow < MetaTile.size; indexRow++) {
+      for (int indexRow = 0; indexRow < Tile.size; indexRow++) {
         metaTile += tiles.getRow(0 + 4 * selectedTileIndexTile, indexRow);
         metaTile += tiles.getRow(2 + 4 * selectedTileIndexTile, indexRow);
       }
 
-      for (int indexRow = 0; indexRow < MetaTile.size; indexRow++) {
+      for (int indexRow = 0; indexRow < Tile.size; indexRow++) {
         metaTile += tiles.getRow(1 + 4 * selectedTileIndexTile, indexRow);
         metaTile += tiles.getRow(3 + 4 * selectedTileIndexTile, indexRow);
       }
     } else if (tiles.width == 32 && tiles.height == 32) {
       //TODO
     }
-
+*/
     return metaTile;
   }
 
   List<int> fromMeta() {
     var data = List<int>.filled(tiles.width * tiles.height, 0, growable: true);
-
+/*
     if (tiles.width == 8 && tiles.height == 8) {
       return tiles.getMetaTileAtIndex(selectedTileIndexTile);
     } else if (tiles.width == 8 && tiles.height == 16) {
       return tiles.getMetaTileAtIndex(selectedTileIndexTile);
     } else if (tiles.width == 16 && tiles.height == 16) {
-      for (int rowIndex = 0; rowIndex < MetaTile.size * 4; rowIndex += 2) {
+      for (int rowIndex = 0; rowIndex < Tile.size * 4; rowIndex += 2) {
         int halfRow = rowIndex ~/ 2;
-        int from = halfRow * MetaTile.size;
-        data.replaceRange(from, from + MetaTile.size,
+        int from = halfRow * Tile.size;
+        data.replaceRange(from, from + Tile.size,
             tiles.getRow(4 * selectedTileIndexTile, rowIndex));
-        from = tiles.pixelPerTile() * 2 + halfRow * MetaTile.size;
-        data.replaceRange(from, from + MetaTile.size,
+        from = tiles.pixelPerTile() * 2 + halfRow * Tile.size;
+        data.replaceRange(from, from + Tile.size,
             tiles.getRow(4 * selectedTileIndexTile, rowIndex + 1));
       }
     } else if (tiles.width == 32 && tiles.height == 32) {
       //TODO
-    }
+    }*/
     return data;
   }
 
   void _rightShift() => setState(() {
-        int from = tiles.width * tiles.height * selectedTileIndexTile;
+        /*int from = tiles.width * tiles.height * selectedTileIndexTile;
         int to = from + tiles.width * tiles.height;
         tiles.data.replaceRange(from, to, toMeta());
         for (int index = from; index < to; index += tiles.width) {
           var row = tiles.data.sublist(index, index + tiles.width);
           tiles.data.replaceRange(index, index + tiles.width, _shift(row, -1));
         }
-        tiles.data.replaceRange(from, to, fromMeta());
+        tiles.data.replaceRange(from, to, fromMeta());*/
       });
 
   void _leftShift() => setState(() {
-        int from = tiles.width * tiles.height * selectedTileIndexTile;
+        /*int from = tiles.width * tiles.height * selectedTileIndexTile;
         int to = from + tiles.width * tiles.height;
         tiles.data.replaceRange(from, to, toMeta());
         for (int index = from; index < to; index += tiles.width) {
           var row = tiles.data.sublist(index, index + tiles.width);
           tiles.data.replaceRange(index, index + tiles.width, _shift(row, 1));
         }
-        tiles.data.replaceRange(from, to, fromMeta());
+        tiles.data.replaceRange(from, to, fromMeta());*/
       });
 
   void _copy(int index) => setState(() {
-        tileBuffer = tiles.data.sublist(index * tiles.width * tiles.height,
-            index * tiles.width * tiles.height + tiles.width * tiles.height);
+        //tileBuffer = tiles.data.sublist(index * tiles.width * tiles.height,
+        //    index * tiles.width * tiles.height + tiles.width * tiles.height);
       });
 
   void _past(int index) => setState(() {
-        tiles.data.replaceRange(
+        /*tiles.data.replaceRange(
             index * tiles.width * tiles.height,
             index * tiles.width * tiles.height + tiles.width * tiles.height,
-            tileBuffer);
+            tileBuffer);*/
       });
 
   void _addTile(int index) => setState(() {
-        tiles.tileList.add(Tile());
+        /*tiles.tileList.add(Tile());
         tiles.data.insertAll(index * tiles.width * tiles.height,
-            List.filled(tiles.width * tiles.height, 0));
+            List.filled(tiles.width * tiles.height, 0));*/
       });
 
   void _removeTile(int index) => setState(() {
-        tiles.data.removeRange(index * tiles.width * tiles.height,
+        /*tiles.data.removeRange(index * tiles.width * tiles.height,
             (index + 1) * tiles.width * tiles.height);
 
         selectedTileIndexTile--;
@@ -285,7 +285,7 @@ class _EditorState extends State<Editor> {
           _addTile(0);
           selectedTileIndexTile = 0;
           selectedTileIndexBackground = 0;
-        }
+        }*/
       });
 
   void _setTileMode() => setState(() {

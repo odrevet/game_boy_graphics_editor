@@ -5,13 +5,16 @@ import 'convert.dart';
 
 class Background extends Graphics {
   MetaTile? tiles;
+  List<int> data = [];
 
   Background({height = 0, width = 0, name = "", int fill = 0, this.tiles})
       : super(
             name: name,
             width: width,
-            height: height,
-            data: List<int>.filled(height * width, fill, growable: true));
+            height: height)
+  {
+    data = List<int>.filled(height * width, fill, growable: true);
+  }
 
   @override
   String toHeader() {

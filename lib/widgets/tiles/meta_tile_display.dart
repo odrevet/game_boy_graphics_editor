@@ -3,6 +3,7 @@ import 'package:gbdk_graphic_editor/widgets/tiles/dot_matrix.dart';
 
 import '../../colors.dart';
 import '../../meta_tile.dart';
+import '../../tile.dart';
 
 class MetaTileDisplay extends StatelessWidget {
   final MetaTile tiles;
@@ -36,7 +37,7 @@ class MetaTileDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
-      crossAxisCount: tiles.width ~/ MetaTile.size,
+      crossAxisCount: tiles.width ~/ Tile.size,
       children: <Widget>[
         for (var indexTile in indexTiles)
           DotMatrix(
@@ -46,8 +47,8 @@ class MetaTileDisplay extends StatelessWidget {
                 .map((e) => colors[e])
                 .toList(),
             showGrid: showGrid,
-            width: MetaTile.size,
-            height: MetaTile.size,
+            width: Tile.size,
+            height: Tile.size,
           )
       ],
     );
