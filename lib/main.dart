@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/tile.dart';
-import 'package:gbdk_graphic_editor/tiles.dart';
+import 'package:gbdk_graphic_editor/meta_tile.dart';
 import 'package:gbdk_graphic_editor/widgets/background/background_app_bar.dart';
 import 'package:gbdk_graphic_editor/widgets/background/background_editor.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/tiles_app_bar.dart';
@@ -42,7 +42,7 @@ class Editor extends StatefulWidget {
 
 class _EditorState extends State<Editor> {
   var selectedIntensity = 3;
-  var tiles = Tiles(name: "Tiles", data: List.filled(64, 0, growable: true));
+  var tiles = MetaTile(name: "Tiles", data: List.filled(64, 0, growable: true));
   late Background background;
   int selectedTileIndexTile = 0;
   int selectedTileIndexBackground = 0;
@@ -188,12 +188,12 @@ class _EditorState extends State<Editor> {
     if (tiles.width == 8 && tiles.height == 16) {
       return tiles.getMetaTileAtIndex(selectedTileIndexTile);
     } else if (tiles.width == 16 && tiles.height == 16) {
-      for (int indexRow = 0; indexRow < Tiles.size; indexRow++) {
+      for (int indexRow = 0; indexRow < MetaTile.size; indexRow++) {
         metaTile += tiles.getRow(0 + 4 * selectedTileIndexTile, indexRow);
         metaTile += tiles.getRow(2 + 4 * selectedTileIndexTile, indexRow);
       }
 
-      for (int indexRow = 0; indexRow < Tiles.size; indexRow++) {
+      for (int indexRow = 0; indexRow < MetaTile.size; indexRow++) {
         metaTile += tiles.getRow(1 + 4 * selectedTileIndexTile, indexRow);
         metaTile += tiles.getRow(3 + 4 * selectedTileIndexTile, indexRow);
       }
@@ -212,13 +212,13 @@ class _EditorState extends State<Editor> {
     } else if (tiles.width == 8 && tiles.height == 16) {
       return tiles.getMetaTileAtIndex(selectedTileIndexTile);
     } else if (tiles.width == 16 && tiles.height == 16) {
-      for (int rowIndex = 0; rowIndex < Tiles.size * 4; rowIndex += 2) {
+      for (int rowIndex = 0; rowIndex < MetaTile.size * 4; rowIndex += 2) {
         int halfRow = rowIndex ~/ 2;
-        int from = halfRow * Tiles.size;
-        data.replaceRange(from, from + Tiles.size,
+        int from = halfRow * MetaTile.size;
+        data.replaceRange(from, from + MetaTile.size,
             tiles.getRow(4 * selectedTileIndexTile, rowIndex));
-        from = tiles.pixelPerTile() * 2 + halfRow * Tiles.size;
-        data.replaceRange(from, from + Tiles.size,
+        from = tiles.pixelPerTile() * 2 + halfRow * MetaTile.size;
+        data.replaceRange(from, from + MetaTile.size,
             tiles.getRow(4 * selectedTileIndexTile, rowIndex + 1));
       }
     } else if (tiles.width == 32 && tiles.height == 32) {

@@ -1,10 +1,10 @@
 import 'package:gbdk_graphic_editor/graphics.dart';
-import 'package:gbdk_graphic_editor/tiles.dart';
+import 'package:gbdk_graphic_editor/meta_tile.dart';
 
 import 'convert.dart';
 
 class Background extends Graphics {
-  Tiles? tiles;
+  MetaTile? tiles;
 
   Background({height = 0, width = 0, name = "", int fill = 0, this.tiles})
       : super(

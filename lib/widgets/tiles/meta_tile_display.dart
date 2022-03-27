@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/dot_matrix.dart';
 
 import '../../colors.dart';
-import '../../tiles.dart';
+import '../../meta_tile.dart';
 
-class MetaTile extends StatelessWidget {
-  final Tiles tiles;
+class MetaTileDisplay extends StatelessWidget {
+  final MetaTile tiles;
   final Function? onTap;
   final bool showGrid;
   final int selectedTileIndex;
 
   late final List<int> indexTiles;
 
-  MetaTile(
+  MetaTileDisplay(
       {required this.tiles,
       required this.showGrid,
       required this.selectedTileIndex,
@@ -36,7 +36,7 @@ class MetaTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
-      crossAxisCount: tiles.width ~/ Tiles.size,
+      crossAxisCount: tiles.width ~/ MetaTile.size,
       children: <Widget>[
         for (var indexTile in indexTiles)
           DotMatrix(
@@ -46,8 +46,8 @@ class MetaTile extends StatelessWidget {
                 .map((e) => colors[e])
                 .toList(),
             showGrid: showGrid,
-            width: Tiles.size,
-            height: Tiles.size,
+            width: MetaTile.size,
+            height: MetaTile.size,
           )
       ],
     );

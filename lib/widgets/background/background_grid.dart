@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/background.dart';
-import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile.dart';
+import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_display.dart';
 
-import '../../tiles.dart';
+import '../../meta_tile.dart';
 
 class BackgroundGrid extends StatefulWidget {
   final Background background;
-  final Tiles tiles;
+  final MetaTile tiles;
   final Function? onTap;
   final Function? onHover;
   final bool showGrid;
@@ -54,7 +54,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         ),
       );
     } else {
-      tileWidget = MetaTile(
+      tileWidget = MetaTileDisplay(
           tiles: widget.tiles,
           showGrid: false,
           selectedTileIndex: widget.background.data[index]);

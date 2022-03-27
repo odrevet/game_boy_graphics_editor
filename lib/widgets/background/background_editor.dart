@@ -5,10 +5,10 @@ import 'package:gbdk_graphic_editor/widgets/source_display.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/tile_list_view.dart';
 
 import '../../background.dart';
-import '../../tiles.dart';
+import '../../meta_tile.dart';
 
 class BackgroundEditor extends StatefulWidget {
-  final Tiles tiles;
+  final MetaTile tiles;
   final Background background;
   final int selectedTileIndex;
   final Function? onTapTileListView;

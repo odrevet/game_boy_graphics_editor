@@ -5,16 +5,16 @@ import 'convert.dart';
 
 // The size of a tile is always 8x8 pixel
 // width and height refer how many 8x8 tiles are displayed (in pixel)
-class Tiles extends Graphics {
+class MetaTile extends Graphics {
   static const int size = 8;
 
   List<Tile> tileList = [];
 
-  Tiles(
+  MetaTile(
       {required String name,
       required List<int> data,
-      width = Tiles.size,
-      height = Tiles.size})
+      width = MetaTile.size,
+      height = MetaTile.size})
       : super(name: name, data: data, height: height, width: width);
 
   List<String> getRaw() {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile.dart';
+import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_display.dart';
 
-import '../../tiles.dart';
+import '../../meta_tile.dart';
 
 class TileListView extends StatefulWidget {
-  final Tiles tiles;
+  final MetaTile tiles;
   final int selectedTile;
   final Function onTap;
   final Function? onHover;
@@ -41,7 +41,7 @@ class _TileListViewState extends State<TileListView> {
                           color: Colors.blue, fontWeight: FontWeight.bold)
                       : null,
                 ),
-                title: MetaTile(
+                title: MetaTileDisplay(
                     tiles: widget.tiles,
                     showGrid: false,
                     selectedTileIndex: index),

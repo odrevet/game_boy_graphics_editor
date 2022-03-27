@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../download_stub.dart' if (dart.library.html) '../../download.dart';
 import '../../file_utils.dart';
-import '../../tiles.dart';
+import '../../meta_tile.dart';
 import '../tiles/intensity_button.dart';
 
 class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
@@ -11,7 +11,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final Size preferredSize;
 
   final VoidCallback setTileMode;
-  final Tiles tiles;
+  final MetaTile tiles;
   final Function setTilesDimensions;
   final bool showGrid;
   final VoidCallback rightShift;

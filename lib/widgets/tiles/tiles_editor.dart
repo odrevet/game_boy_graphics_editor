@@ -1,16 +1,16 @@
 import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/background.dart';
-import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile.dart';
+import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_display.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/tile_list_view.dart';
 
-import '../../tiles.dart';
+import '../../meta_tile.dart';
 import '../background/background_grid.dart';
 import '../source_display.dart';
 
 class TilesEditor extends StatefulWidget {
   final Background preview;
-  final Tiles tiles;
+  final MetaTile tiles;
   final Function setIndex;
   final Function setPixel;
   final bool showGrid;
@@ -83,7 +83,7 @@ class _TilesEditorState extends State<TilesEditor> {
           alignment: Alignment.topCenter,
           child: AspectRatio(
             aspectRatio: widget.tiles.width / widget.tiles.height,
-            child: MetaTile(
+            child: MetaTileDisplay(
                 tiles: widget.tiles,
                 showGrid: widget.showGrid,
                 selectedTileIndex: widget.selectedIndex,
