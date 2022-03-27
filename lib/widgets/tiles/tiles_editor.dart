@@ -10,7 +10,7 @@ import '../source_display.dart';
 
 class TilesEditor extends StatefulWidget {
   final Background preview;
-  final MetaTile tiles;
+  final MetaTile metaTile;
   final Function setIndex;
   final Function setPixel;
   final bool showGrid;
@@ -23,7 +23,7 @@ class TilesEditor extends StatefulWidget {
   const TilesEditor({
     Key? key,
     required this.preview,
-    required this.tiles,
+    required this.metaTile,
     required this.setIndex,
     required this.showGrid,
     required this.setPixel,
@@ -50,7 +50,7 @@ class _TilesEditorState extends State<TilesEditor> {
                   hoverTileIndex = index;
                 }),
             onTap: (index) => widget.setIndex(index),
-            metaTiles: widget.tiles,
+            metaTiles: widget.metaTile,
             selectedTile: widget.selectedIndex),
         contextMenu: GenericContextMenu(
           buttonConfigs: [
@@ -82,9 +82,9 @@ class _TilesEditorState extends State<TilesEditor> {
           padding: const EdgeInsets.all(8.0),
           alignment: Alignment.topCenter,
           child: AspectRatio(
-            aspectRatio: widget.tiles.width / widget.tiles.height,
+            aspectRatio: widget.metaTile.width / widget.metaTile.height,
             child: MetaTileDisplay(
-                metaTile: widget.tiles,
+                metaTile: widget.metaTile,
                 showGrid: widget.showGrid,
                 metaTileIndex: widget.selectedIndex,
                 onTap: widget.setPixel),
@@ -100,13 +100,13 @@ class _TilesEditorState extends State<TilesEditor> {
                 width: 200,
                 height: 200,
                 child: BackgroundGrid(
-                    background: widget.preview, tiles: widget.tiles),
+                    background: widget.preview, tiles: widget.metaTile),
               ),
             ),
             Expanded(
               child: SingleChildScrollView(
                 child: SourceDisplay(
-                  graphics: widget.tiles,
+                  graphics: widget.metaTile,
                 ),
               ),
             )

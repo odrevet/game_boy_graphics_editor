@@ -42,7 +42,8 @@ class Editor extends StatefulWidget {
 
 class _EditorState extends State<Editor> {
   var selectedIntensity = 3;
-  var metaTile = MetaTile(name: "Tiles", data: List.filled(64, 0, growable: true));
+  var metaTile =
+      MetaTile(name: "Tiles", data: List.filled(64, 0, growable: true));
   late Background background;
   int selectedMetaTileIndexTile = 0;
   int selectedTileIndexBackground = 0;
@@ -102,7 +103,7 @@ class _EditorState extends State<Editor> {
         body: ContextMenuOverlay(
             child: tileMode
                 ? TilesEditor(
-                    tiles: metaTile,
+                    metaTile: metaTile,
                     onRemove: _removeTile,
                     onInsert: _addTile,
                     copy: _copy,
@@ -137,21 +138,13 @@ class _EditorState extends State<Editor> {
   void _setTilesDimensions(width, height) => setState(() {
         metaTile.width = width;
         metaTile.height = height;
-        /*int numberOfTilesNecessary =
-            (tiles.data.length / (tiles.width * tiles.height)).ceil();
+        int numberOfTilesNecessary =
+        metaTile.nbTile() - metaTile.tileList.length;
 
-        // resize tile data if necessary
-        if (numberOfTilesNecessary > tiles.tileList.length) {
-          setState(() {
-            tiles.data += List.filled(
-                (numberOfTilesNecessary - tiles.tileList.length) *
-                    (tiles.width * tiles.height),
-                0);
-          });
+        for (int i = 0; i < numberOfTilesNecessary; i++) {
+          metaTile.tileList.add(Tile());
         }
-
-        // reset selected index to prevent being out of bound (TODO reset on current new index)
-        selectedTileIndexTile = 0;*/
+        selectedMetaTileIndexTile = 0;
       });
 
   void _setTileIndexBackground(index) => setState(() {
@@ -205,7 +198,8 @@ class _EditorState extends State<Editor> {
   }
 
   List<int> fromMeta() {
-    var data = List<int>.filled(metaTile.width * metaTile.height, 0, growable: true);
+    var data =
+        List<int>.filled(metaTile.width * metaTile.height, 0, growable: true);
 /*
     if (tiles.width == 8 && tiles.height == 8) {
       return tiles.getMetaTileAtIndex(selectedTileIndexTile);
@@ -267,10 +261,9 @@ class _EditorState extends State<Editor> {
       });
 
   void _removeTile(int index) => setState(() {
-    if(metaTile.tileList.length == 1){
-      metaTile.tileList[0].data.fillRange(0, 64, 0);
-    }
-    else {
+        if (metaTile.tileList.length == 1) {
+          metaTile.tileList[0].data.fillRange(0, 64, 0);
+        } else {
           metaTile.tileList.removeAt(index);
           selectedMetaTileIndexTile = index - 1;
         }
