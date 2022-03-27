@@ -50,7 +50,7 @@ class _TilesEditorState extends State<TilesEditor> {
                   hoverTileIndex = index;
                 }),
             onTap: (index) => widget.setIndex(index),
-            metaTiles: widget.metaTile,
+            metaTile: widget.metaTile,
             selectedTile: widget.selectedIndex),
         contextMenu: GenericContextMenu(
           buttonConfigs: [

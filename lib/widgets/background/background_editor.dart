@@ -37,7 +37,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
           onTap: (index) => widget.onTapTileListView != null
               ? widget.onTapTileListView!(index)
               : null,
-          metaTiles: widget.tiles,
+          metaTile: widget.tiles,
           selectedTile: widget.selectedTileIndex),
       Padding(
         padding: const EdgeInsets.all(16.0),
