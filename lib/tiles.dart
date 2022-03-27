@@ -1,4 +1,5 @@
 import 'package:gbdk_graphic_editor/graphics.dart';
+import 'package:gbdk_graphic_editor/tile.dart';
 
 import 'convert.dart';
 
@@ -6,6 +7,8 @@ import 'convert.dart';
 // width and height refer how many 8x8 tiles are displayed (in pixel)
 class Tiles extends Graphics {
   static const int size = 8;
+
+  List<Tile> tileList = [];
 
   Tiles(
       {required String name,
@@ -17,25 +20,8 @@ class Tiles extends Graphics {
   List<String> getRaw() {
     var raw = <String>[];
 
-    var combined = "";
-    for (var element in data) {
-      combined += element.toRadixString(2).padLeft(2, "0");
-    }
-
-    for (var index = 0;
-        index < (combined.length ~/ size) * size;
-        index += size * 2) {
-      var lo = "";
-      var hi = "";
-      var combinedSub = combined.substring(index, index + size * 2);
-
-      for (var indexSub = 0; indexSub < 8 * 2; indexSub += 2) {
-        lo += combinedSub[indexSub];
-        hi += combinedSub[indexSub + 1];
-      }
-
-      raw.add(binaryToHex(hi));
-      raw.add(binaryToHex(lo));
+    for (Tile tile in tileList) {
+      raw += tile.getRaw();
     }
 
     return raw;

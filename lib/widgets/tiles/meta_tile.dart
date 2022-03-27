@@ -42,11 +42,7 @@ class MetaTile extends StatelessWidget {
           DotMatrix(
             onTap: onTap,
             onTapParam: indexTile,
-            pixels: tiles
-                .getTileAtIndex(selectedTileIndex *
-                        (tiles.height ~/ Tiles.size) *
-                        (tiles.width ~/ Tiles.size) +
-                    indexTile)
+            pixels: tiles.tileList[selectedTileIndex].data
                 .map((e) => colors[e])
                 .toList(),
             showGrid: showGrid,

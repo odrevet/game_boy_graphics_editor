@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
+import 'package:gbdk_graphic_editor/tile.dart';
 import 'package:gbdk_graphic_editor/tiles.dart';
 import 'package:gbdk_graphic_editor/widgets/background/background_app_bar.dart';
 import 'package:gbdk_graphic_editor/widgets/background/background_editor.dart';
@@ -53,6 +54,7 @@ class _EditorState extends State<Editor> {
   @override
   void initState() {
     super.initState();
+    tiles.tileList.add(Tile());
     background =
         Background(width: 20, height: 18, name: "Background", tiles: tiles);
   }
@@ -260,6 +262,7 @@ class _EditorState extends State<Editor> {
       });
 
   void _addTile(int index) => setState(() {
+        tiles.tileList.add(Tile());
         tiles.data.insertAll(index * tiles.width * tiles.height,
             List.filled(tiles.width * tiles.height, 0));
       });
@@ -309,13 +312,7 @@ class _EditorState extends State<Editor> {
 
   _setPixel(int indexPixel, int indexTile) {
     setState(() {
-      tiles.data[indexPixel +
-          (Tiles.size *
-              Tiles.size *
-              (tiles.height ~/ Tiles.size) *
-              (tiles.width ~/ Tiles.size) *
-              selectedTileIndexTile) +
-          (Tiles.size * Tiles.size * indexTile)] = selectedIntensity;
+      tiles.tileList[selectedTileIndexTile].data[indexPixel] = selectedIntensity;
     });
   }
 }
