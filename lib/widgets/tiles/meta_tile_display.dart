@@ -39,11 +39,13 @@ class MetaTileDisplay extends StatelessWidget {
       shrinkWrap: true,
       crossAxisCount: metaTile.width ~/ Tile.size,
       children: <Widget>[
-        for (var indexTile in indexTiles)
+        //for (var indexTile in indexTiles)
+        for (int i = 0; i < metaTile.nbTile(); i++)
           DotMatrix(
             onTap: onTap,
-            onTapParam: indexTile,
-            pixels: metaTile.tileList[selectedTileIndex].data
+            onTapParam: i,
+            pixels: metaTile
+                .tileList[selectedTileIndex * metaTile.nbTile() + indexTiles[i]].data
                 .map((e) => colors[e])
                 .toList(),
             showGrid: showGrid,

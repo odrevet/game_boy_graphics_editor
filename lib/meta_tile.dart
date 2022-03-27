@@ -24,6 +24,10 @@ class MetaTile extends Graphics {
     return raw;
   }
 
+  int nbTile(){
+    return (width * height) ~/ Tile.pixelPerTile;
+  }
+
   setData(List<String> values) {
     int pixelAt = 0;
     tileList.clear();
