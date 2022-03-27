@@ -84,7 +84,7 @@ class _TilesEditorState extends State<TilesEditor> {
           child: AspectRatio(
             aspectRatio: widget.tiles.width / widget.tiles.height,
             child: MetaTileDisplay(
-                tiles: widget.tiles,
+                metaTile: widget.tiles,
                 showGrid: widget.showGrid,
                 selectedTileIndex: widget.selectedIndex,
                 onTap: widget.setPixel),

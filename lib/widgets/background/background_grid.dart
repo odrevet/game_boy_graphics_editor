@@ -55,7 +55,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
       );
     } else {
       tileWidget = MetaTileDisplay(
-          tiles: widget.tiles,
+          metaTile: widget.tiles,
           showGrid: false,
           selectedTileIndex: widget.background.data[index]);
     }

@@ -42,7 +42,7 @@ class _TileListViewState extends State<TileListView> {
                       : null,
                 ),
                 title: MetaTileDisplay(
-                    tiles: widget.tiles,
+                    metaTile: widget.tiles,
                     showGrid: false,
                     selectedTileIndex: index),
               ),
