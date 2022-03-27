@@ -43,7 +43,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
   Widget _build(BuildContext context, int index) {
     Widget tileWidget;
 
-    if (widget.background.data[index] >= widget.tiles.count()) {
+    if (widget.background.data[index] >= widget.tiles.tileList.length) {
       tileWidget = Container(
         alignment: Alignment.center,
         child: const Text(

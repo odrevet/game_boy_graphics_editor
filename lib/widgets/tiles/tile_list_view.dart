@@ -27,7 +27,7 @@ class _TileListViewState extends State<TileListView> {
     return SizedBox(
         width: 180,
         child: ListView.builder(
-          itemCount: widget.tiles.count(),
+          itemCount: widget.tiles.tileList.length,
           itemBuilder: (context, index) {
             return MouseRegion(
               onHover: (_) =>

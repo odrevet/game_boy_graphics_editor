@@ -133,7 +133,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
       IconButton(
           icon: const Icon(Icons.add),
           tooltip: 'Add tile',
-          onPressed: () => addTile(tiles.count())),
+          onPressed: () => addTile(tiles.tileList.length)),
       IconButton(
           icon: const Icon(Icons.remove),
           tooltip: 'Remove tile',

@@ -42,6 +42,7 @@ class MetaTile extends Graphics {
 
   setData(List<String> values) {
     int pixelAt = 0;
+    tileList.clear();
 
     for (var index = 0; index < values.length; index += 2) {
       var lo = toBinary(values[index]);
@@ -65,8 +66,6 @@ class MetaTile extends Graphics {
       }
     }
   }
-
-  int count() => data.length ~/ (width * height);
 
   @override
   String toHeader() {

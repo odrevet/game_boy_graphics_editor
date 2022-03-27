@@ -141,10 +141,10 @@ class _EditorState extends State<Editor> {
             (tiles.data.length / (tiles.width * tiles.height)).ceil();
 
         // resize tile data if necessary
-        if (numberOfTilesNecessary > tiles.count()) {
+        if (numberOfTilesNecessary > tiles.tileList.length) {
           setState(() {
             tiles.data += List.filled(
-                (numberOfTilesNecessary - tiles.count()) *
+                (numberOfTilesNecessary - tiles.tileList.length) *
                     (tiles.width * tiles.height),
                 0);
           });
@@ -281,7 +281,7 @@ class _EditorState extends State<Editor> {
           selectedTileIndexBackground = 0;
         }
 
-        if (tiles.count() == 0) {
+        if (tiles.tileList.isEmpty) {
           _addTile(0);
           selectedTileIndexTile = 0;
           selectedTileIndexBackground = 0;
