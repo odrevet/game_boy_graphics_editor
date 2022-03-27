@@ -69,7 +69,7 @@ class _EditorState extends State<Editor> {
       leftShift: _leftShift,
       setIntensity: _setIntensity,
       selectedIntensity: selectedIntensity,
-      addTile: _addTile,
+      addTile: _addMetaTile,
       removeTile: _removeMetaTile,
       setTileMode: _setTileMode,
       toggleGridTile: _toggleGridTile,
@@ -105,7 +105,7 @@ class _EditorState extends State<Editor> {
                 ? TilesEditor(
                     metaTile: metaTile,
                     onRemove: _removeMetaTile,
-                    onInsert: _addTile,
+                    onInsert: _addMetaTile,
                     copy: _copy,
                     past: _past,
                     setIndex: _setTileIndexTile,
@@ -255,18 +255,23 @@ class _EditorState extends State<Editor> {
             tileBuffer);*/
       });
 
-  void _addTile(int index) => setState(() {
-        metaTile.tileList.add(Tile());
+  void _addMetaTile(int index) => setState(() {
+        var newMetaTile =
+            List<Tile>.generate(metaTile.nbTilesPerMetaTile(), (_) => Tile());
+        metaTile.tileList
+            .insertAll(index * metaTile.nbTilesPerMetaTile(), newMetaTile);
         selectedMetaTileIndexTile = index;
       });
 
   void _removeMetaTile(int index) => setState(() {
-        if (metaTile.tileList.length == 1) {
-          metaTile.tileList[0].data.fillRange(0, 64, 0);
-        } else {
-          metaTile.tileList.removeRange(index * metaTile.nbTilesPerMetaTile(),
-              index * metaTile.nbTilesPerMetaTile() + metaTile.nbTilesPerMetaTile());
-          selectedMetaTileIndexTile = index - 1;
+        metaTile.tileList.removeRange(
+            index * metaTile.nbTilesPerMetaTile(),
+            index * metaTile.nbTilesPerMetaTile() +
+                metaTile.nbTilesPerMetaTile());
+        selectedMetaTileIndexTile = index - 1;
+
+        if (metaTile.tileList.isEmpty) {
+          _addMetaTile(0);
         }
       });
 
