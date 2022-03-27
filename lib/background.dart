@@ -8,11 +8,7 @@ class Background extends Graphics {
   List<int> data = [];
 
   Background({height = 0, width = 0, name = "", int fill = 0, this.tiles})
-      : super(
-            name: name,
-            width: width,
-            height: height)
-  {
+      : super(name: name, width: width, height: height) {
     data = List<int>.filled(height * width, fill, growable: true);
   }
 

@@ -27,7 +27,7 @@ class _MetaTileListViewState extends State<MetaTileListView> {
     return SizedBox(
         width: 180,
         child: ListView.builder(
-          itemCount: widget.metaTile.tileList.length ~/ widget.metaTile.nbTile(),
+          itemCount: widget.metaTile.tileList.length ~/ widget.metaTile.count(),
           itemBuilder: (context, index) {
             return MouseRegion(
               onHover: (_) =>

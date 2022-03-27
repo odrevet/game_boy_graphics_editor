@@ -3,10 +3,7 @@ abstract class Graphics {
   int width;
   String name;
 
-  Graphics(
-      {required this.name,
-      required this.width,
-      required this.height});
+  Graphics({required this.name, required this.width, required this.height});
 
   bool fromSource(String source);
 

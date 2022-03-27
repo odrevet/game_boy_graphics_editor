@@ -139,7 +139,7 @@ class _EditorState extends State<Editor> {
         metaTile.width = width;
         metaTile.height = height;
         int numberOfTilesNecessary =
-        metaTile.nbTile() - metaTile.tileList.length;
+            metaTile.count() - metaTile.tileList.length;
 
         for (int i = 0; i < numberOfTilesNecessary; i++) {
           metaTile.tileList.add(Tile());
