@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
-import 'package:gbdk_graphic_editor/tile.dart';
 import 'package:gbdk_graphic_editor/meta_tile.dart';
+import 'package:gbdk_graphic_editor/tile.dart';
 import 'package:gbdk_graphic_editor/widgets/background/background_app_bar.dart';
 import 'package:gbdk_graphic_editor/widgets/background/background_editor.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/tiles_app_bar.dart';
@@ -262,30 +262,18 @@ class _EditorState extends State<Editor> {
       });
 
   void _addTile(int index) => setState(() {
-        /*tiles.tileList.add(Tile());
-        tiles.data.insertAll(index * tiles.width * tiles.height,
-            List.filled(tiles.width * tiles.height, 0));*/
+        tiles.tileList.add(Tile());
+        selectedTileIndexTile = index;
       });
 
   void _removeTile(int index) => setState(() {
-        /*tiles.data.removeRange(index * tiles.width * tiles.height,
-            (index + 1) * tiles.width * tiles.height);
-
-        selectedTileIndexTile--;
-        if (selectedTileIndexTile < 0) {
-          selectedTileIndexTile = 0;
+    if(tiles.tileList.length == 1){
+      tiles.tileList[0].data.fillRange(0, 64, 0);
+    }
+    else {
+          tiles.tileList.removeAt(index);
+          selectedTileIndexTile = index - 1;
         }
-
-        selectedTileIndexBackground--;
-        if (selectedTileIndexBackground < 0) {
-          selectedTileIndexBackground = 0;
-        }
-
-        if (tiles.tileList.isEmpty) {
-          _addTile(0);
-          selectedTileIndexTile = 0;
-          selectedTileIndexBackground = 0;
-        }*/
       });
 
   void _setTileMode() => setState(() {
