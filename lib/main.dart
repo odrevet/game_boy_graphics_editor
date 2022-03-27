@@ -42,9 +42,9 @@ class Editor extends StatefulWidget {
 
 class _EditorState extends State<Editor> {
   var selectedIntensity = 3;
-  var tiles = MetaTile(name: "Tiles", data: List.filled(64, 0, growable: true));
+  var metaTile = MetaTile(name: "Tiles", data: List.filled(64, 0, growable: true));
   late Background background;
-  int selectedTileIndexTile = 0;
+  int selectedMetaTileIndexTile = 0;
   int selectedTileIndexBackground = 0;
   bool tileMode = true; // edit tile or map
   bool showGridTile = true;
@@ -54,16 +54,16 @@ class _EditorState extends State<Editor> {
   @override
   void initState() {
     super.initState();
-    tiles.tileList.add(Tile());
+    metaTile.tileList.add(Tile());
     background =
-        Background(width: 20, height: 18, name: "Background", tiles: tiles);
+        Background(width: 20, height: 18, name: "Background", tiles: metaTile);
   }
 
   @override
   Widget build(BuildContext context) {
     TilesAppBar tileappbar = TilesAppBar(
       preferredSize: const Size.fromHeight(50.0),
-      tiles: tiles,
+      tiles: metaTile,
       rightShift: _rightShift,
       leftShift: _leftShift,
       setIntensity: _setIntensity,
@@ -75,7 +75,7 @@ class _EditorState extends State<Editor> {
       showGrid: showGridTile,
       setTileFromSource: _setTilesFromSource,
       setTilesDimensions: _setTilesDimensions,
-      selectedTileIndexTile: selectedTileIndexTile,
+      metaTileIndex: selectedMetaTileIndexTile,
       saveGraphics: _saveGraphics,
     );
 
@@ -102,7 +102,7 @@ class _EditorState extends State<Editor> {
         body: ContextMenuOverlay(
             child: tileMode
                 ? TilesEditor(
-                    tiles: tiles,
+                    tiles: metaTile,
                     onRemove: _removeTile,
                     onInsert: _addTile,
                     copy: _copy,
@@ -110,12 +110,12 @@ class _EditorState extends State<Editor> {
                     setIndex: _setTileIndexTile,
                     setPixel: _setPixel,
                     showGrid: showGridTile,
-                    selectedIndex: selectedTileIndexTile,
+                    selectedIndex: selectedMetaTileIndexTile,
                     preview: Background(
-                        width: 4, height: 4, fill: selectedTileIndexTile))
+                        width: 4, height: 4, fill: selectedMetaTileIndexTile))
                 : BackgroundEditor(
                     background: background,
-                    tiles: tiles,
+                    tiles: metaTile,
                     selectedTileIndex: selectedTileIndexBackground,
                     onTapTileListView: _setTileIndexBackground,
                     showGrid: showGridBackground,
@@ -135,8 +135,8 @@ class _EditorState extends State<Editor> {
   }
 
   void _setTilesDimensions(width, height) => setState(() {
-        tiles.width = width;
-        tiles.height = height;
+        metaTile.width = width;
+        metaTile.height = height;
         /*int numberOfTilesNecessary =
             (tiles.data.length / (tiles.width * tiles.height)).ceil();
 
@@ -159,7 +159,7 @@ class _EditorState extends State<Editor> {
       });
 
   void _setTileIndexTile(index) => setState(() {
-        selectedTileIndexTile = index;
+        selectedMetaTileIndexTile = index;
       });
 
   void _toggleGridTile() => setState(() {
@@ -205,7 +205,7 @@ class _EditorState extends State<Editor> {
   }
 
   List<int> fromMeta() {
-    var data = List<int>.filled(tiles.width * tiles.height, 0, growable: true);
+    var data = List<int>.filled(metaTile.width * metaTile.height, 0, growable: true);
 /*
     if (tiles.width == 8 && tiles.height == 8) {
       return tiles.getMetaTileAtIndex(selectedTileIndexTile);
@@ -262,17 +262,17 @@ class _EditorState extends State<Editor> {
       });
 
   void _addTile(int index) => setState(() {
-        tiles.tileList.add(Tile());
-        selectedTileIndexTile = index;
+        metaTile.tileList.add(Tile());
+        selectedMetaTileIndexTile = index;
       });
 
   void _removeTile(int index) => setState(() {
-    if(tiles.tileList.length == 1){
-      tiles.tileList[0].data.fillRange(0, 64, 0);
+    if(metaTile.tileList.length == 1){
+      metaTile.tileList[0].data.fillRange(0, 64, 0);
     }
     else {
-          tiles.tileList.removeAt(index);
-          selectedTileIndexTile = index - 1;
+          metaTile.tileList.removeAt(index);
+          selectedMetaTileIndexTile = index - 1;
         }
       });
 
@@ -284,9 +284,9 @@ class _EditorState extends State<Editor> {
     late bool hasLoaded;
     setState(() {
       source = formatSource(source);
-      hasLoaded = tiles.fromSource(source);
+      hasLoaded = metaTile.fromSource(source);
 
-      if (hasLoaded) selectedTileIndexTile = 0;
+      if (hasLoaded) selectedMetaTileIndexTile = 0;
       _setTilesDimensions(8, 8); //TODO read tiles dimensions in source comment
     });
     return hasLoaded;
@@ -300,7 +300,7 @@ class _EditorState extends State<Editor> {
 
   _setPixel(int indexPixel, int indexTile) {
     setState(() {
-      tiles.tileList[indexTile].data[indexPixel] = selectedIntensity;
+      metaTile.tileList[indexTile].data[indexPixel] = selectedIntensity;
     });
   }
 }

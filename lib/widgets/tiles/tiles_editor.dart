@@ -2,7 +2,7 @@ import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/background.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_display.dart';
-import 'package:gbdk_graphic_editor/widgets/tiles/tile_list_view.dart';
+import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../meta_tile.dart';
 import '../background/background_grid.dart';
@@ -45,12 +45,12 @@ class _TilesEditorState extends State<TilesEditor> {
   Widget build(BuildContext context) {
     return Row(children: [
       ContextMenuRegion(
-        child: TileListView(
+        child: MetaTileListView(
             onHover: (index) => setState(() {
                   hoverTileIndex = index;
                 }),
             onTap: (index) => widget.setIndex(index),
-            tiles: widget.tiles,
+            metaTiles: widget.tiles,
             selectedTile: widget.selectedIndex),
         contextMenu: GenericContextMenu(
           buttonConfigs: [
@@ -86,7 +86,7 @@ class _TilesEditorState extends State<TilesEditor> {
             child: MetaTileDisplay(
                 metaTile: widget.tiles,
                 showGrid: widget.showGrid,
-                selectedTileIndex: widget.selectedIndex,
+                metaTileIndex: widget.selectedIndex,
                 onTap: widget.setPixel),
           ),
         ),

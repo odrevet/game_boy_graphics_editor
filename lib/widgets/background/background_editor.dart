@@ -2,7 +2,7 @@ import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/background/background_grid.dart';
 import 'package:gbdk_graphic_editor/widgets/source_display.dart';
-import 'package:gbdk_graphic_editor/widgets/tiles/tile_list_view.dart';
+import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../background.dart';
 import '../../meta_tile.dart';
@@ -33,11 +33,11 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      TileListView(
+      MetaTileListView(
           onTap: (index) => widget.onTapTileListView != null
               ? widget.onTapTileListView!(index)
               : null,
-          tiles: widget.tiles,
+          metaTiles: widget.tiles,
           selectedTile: widget.selectedTileIndex),
       Padding(
         padding: const EdgeInsets.all(16.0),

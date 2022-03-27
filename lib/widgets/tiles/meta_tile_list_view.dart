@@ -3,31 +3,31 @@ import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_display.dart';
 
 import '../../meta_tile.dart';
 
-class TileListView extends StatefulWidget {
-  final MetaTile tiles;
+class MetaTileListView extends StatefulWidget {
+  final MetaTile metaTiles;
   final int selectedTile;
   final Function onTap;
   final Function? onHover;
 
-  const TileListView({
+  const MetaTileListView({
     Key? key,
-    required this.tiles,
+    required this.metaTiles,
     required this.selectedTile,
     required this.onTap,
     this.onHover,
   }) : super(key: key);
 
   @override
-  _TileListViewState createState() => _TileListViewState();
+  _MetaTileListViewState createState() => _MetaTileListViewState();
 }
 
-class _TileListViewState extends State<TileListView> {
+class _MetaTileListViewState extends State<MetaTileListView> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
         width: 180,
         child: ListView.builder(
-          itemCount: widget.tiles.tileList.length,
+          itemCount: widget.metaTiles.tileList.length,
           itemBuilder: (context, index) {
             return MouseRegion(
               onHover: (_) =>
@@ -42,9 +42,9 @@ class _TileListViewState extends State<TileListView> {
                       : null,
                 ),
                 title: MetaTileDisplay(
-                    metaTile: widget.tiles,
+                    metaTile: widget.metaTiles,
                     showGrid: false,
-                    selectedTileIndex: index),
+                    metaTileIndex: index),
               ),
             );
           },

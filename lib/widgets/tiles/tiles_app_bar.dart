@@ -23,7 +23,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final VoidCallback toggleGridTile;
   final Function setTileFromSource;
   final Function saveGraphics;
-  final int selectedTileIndexTile;
+  final int metaTileIndex;
 
   const TilesAppBar({
     this.preferredSize = const Size.fromHeight(50.0),
@@ -40,7 +40,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.removeTile,
     required this.toggleGridTile,
     required this.setTileFromSource,
-    required this.selectedTileIndexTile,
+    required this.metaTileIndex,
     required this.saveGraphics,
   }) : super(key: key);
 
@@ -137,7 +137,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
       IconButton(
           icon: const Icon(Icons.remove),
           tooltip: 'Remove tile',
-          onPressed: () => removeTile(selectedTileIndexTile)),
+          onPressed: () => removeTile(metaTileIndex)),
       const VerticalDivider(),
       kIsWeb
           ? IconButton(
