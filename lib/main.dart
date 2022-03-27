@@ -70,7 +70,7 @@ class _EditorState extends State<Editor> {
       setIntensity: _setIntensity,
       selectedIntensity: selectedIntensity,
       addTile: _addTile,
-      removeTile: _removeTile,
+      removeTile: _removeMetaTile,
       setTileMode: _setTileMode,
       toggleGridTile: _toggleGridTile,
       showGrid: showGridTile,
@@ -104,7 +104,7 @@ class _EditorState extends State<Editor> {
             child: tileMode
                 ? TilesEditor(
                     metaTile: metaTile,
-                    onRemove: _removeTile,
+                    onRemove: _removeMetaTile,
                     onInsert: _addTile,
                     copy: _copy,
                     past: _past,
@@ -139,7 +139,7 @@ class _EditorState extends State<Editor> {
         metaTile.width = width;
         metaTile.height = height;
         int numberOfTilesNecessary =
-            metaTile.count() - metaTile.tileList.length;
+            metaTile.nbTilesPerMetaTile() - metaTile.tileList.length;
 
         for (int i = 0; i < numberOfTilesNecessary; i++) {
           metaTile.tileList.add(Tile());
@@ -260,11 +260,12 @@ class _EditorState extends State<Editor> {
         selectedMetaTileIndexTile = index;
       });
 
-  void _removeTile(int index) => setState(() {
+  void _removeMetaTile(int index) => setState(() {
         if (metaTile.tileList.length == 1) {
           metaTile.tileList[0].data.fillRange(0, 64, 0);
         } else {
-          metaTile.tileList.removeAt(index);
+          metaTile.tileList.removeRange(index * metaTile.nbTilesPerMetaTile(),
+              index * metaTile.nbTilesPerMetaTile() + metaTile.nbTilesPerMetaTile());
           selectedMetaTileIndexTile = index - 1;
         }
       });

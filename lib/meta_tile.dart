@@ -24,7 +24,7 @@ class MetaTile extends Graphics {
     return raw;
   }
 
-  int count() {
+  int nbTilesPerMetaTile() {
     return (width * height) ~/ Tile.pixelPerTile;
   }
 
