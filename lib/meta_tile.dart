@@ -29,12 +29,6 @@ class MetaTile extends Graphics {
 
   int pixelPerTile() => size * size;
 
-  Iterable<int> getTileAtIndex(int index) {
-    int from = pixelPerTile() * index;
-    int to = from + pixelPerTile();
-    return data.getRange(from, to);
-  }
-
   List<int> getMetaTileAtIndex(int index) {
     int from = width * height * index;
     int to = from + width * height;
