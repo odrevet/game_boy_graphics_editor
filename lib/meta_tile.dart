@@ -35,13 +35,14 @@ class MetaTile extends Graphics {
     return data.sublist(from, to);
   }
 
-  List<int> getRow(int indexTile, int indexRow){
+  List<int> getRow(int indexTile, int indexRow) {
     int from = pixelPerTile() * indexTile;
     return data.sublist(from + size * indexRow, from + size * (indexRow + 1));
   }
 
   setData(List<String> values) {
-    data = <int>[];
+    tileList.clear();
+    int pixelAt = 0;
 
     for (var index = 0; index < values.length; index += 2) {
       var lo = toBinary(values[index]);
@@ -52,8 +53,16 @@ class MetaTile extends Graphics {
         combined += hi[index] + lo[index];
       }
 
-      for (var index = 0; index < size * 2; index += 2) {
-        data.add(int.parse(combined[index] + combined[index + 1], radix: 2));
+      for (var indexBis = 0; indexBis < size * 2; indexBis += 2) {
+        String source = combined[indexBis] + combined[indexBis + 1];
+        int intensity = int.parse(source, radix: 2);
+        int tileIndex = pixelAt ~/ Tile.pixelPerTile;
+        int pixelIndex = pixelAt - tileIndex * Tile.pixelPerTile;
+        if(pixelIndex == 0){
+          tileList.add(Tile());
+        }
+        tileList[tileIndex].data[pixelIndex] = intensity;
+        pixelAt++;
       }
     }
   }
@@ -78,6 +87,7 @@ extern unsigned char $name[];""";
       try {
         setData(values.split(','));
       } catch (e) {
+        print(e);
         data = List.filled(64, 0,
             growable:
                 true); // TODO do not reset data (change setData to write in a buffer)
