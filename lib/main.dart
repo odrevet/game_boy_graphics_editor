@@ -244,15 +244,18 @@ class _EditorState extends State<Editor> {
       });
 
   void _copy(int index) => setState(() {
-        //tileBuffer = tiles.data.sublist(index * tiles.width * tiles.height,
-        //    index * tiles.width * tiles.height + tiles.width * tiles.height);
+        tileBuffer.clear();
+        for (var i = index; i < index + metaTile.nbTilesPerMetaTile(); i++) {
+          tileBuffer.addAll(metaTile.tileList[i].data);
+        }
       });
 
   void _past(int index) => setState(() {
-        /*tiles.data.replaceRange(
-            index * tiles.width * tiles.height,
-            index * tiles.width * tiles.height + tiles.width * tiles.height,
-            tileBuffer);*/
+        for (var i = 0; i < tileBuffer.length; i++) {
+          int tileIndex =
+              i ~/ Tile.pixelPerTile + index * metaTile.nbTilesPerMetaTile();
+          metaTile.tileList[tileIndex].data[i % 64] = tileBuffer[i];
+        }
       });
 
   void _addMetaTile(int index) => setState(() {
