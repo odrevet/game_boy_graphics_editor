@@ -222,6 +222,9 @@ class _EditorState extends State<Editor> {
   }
 
   void _rightShift() => setState(() {
+    var row = metaTile.getRow(0, 0);
+    row.replaceRange(0, row.length, _shift(row, -1));
+
         /*int from = tiles.width * tiles.height * selectedTileIndexTile;
         int to = from + tiles.width * tiles.height;
         tiles.data.replaceRange(from, to, toMeta());

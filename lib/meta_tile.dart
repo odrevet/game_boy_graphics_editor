@@ -24,7 +24,7 @@ class MetaTile extends Graphics {
     return raw;
   }
 
-  List<int> getPattern(){
+  List<int> getPattern() {
     var pattern = <int>[];
 
     if (width == 8 && height == 8) {
@@ -36,10 +36,18 @@ class MetaTile extends Graphics {
     } else if (width == 32 && height == 32) {
       pattern = <int>[0, 2, 8, 10, 1, 3, 9, 11, 4, 6, 12, 14, 5, 7, 13, 15];
     } else {
-      throw('Unknown pattern');
+      throw ('Unknown meta tile size');
     }
 
     return pattern;
+  }
+
+  List<int> getRow(int metaTileIndex, int rowIndex) {
+    var row = <int>[];
+    for (int i = 0; i < width ~/ Tile.size; i++) {
+      row += tileList[metaTileIndex + getPattern()[i]].getRow(rowIndex);
+    }
+    return row;
   }
 
   int nbTilesPerMetaTile() {
