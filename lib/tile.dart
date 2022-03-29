@@ -32,4 +32,8 @@ class Tile {
 
     return raw;
   }
+
+  List<int> getRow(int index){
+    return data.sublist(index * size, index * size + size);
+  }
 }

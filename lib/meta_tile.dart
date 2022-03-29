@@ -24,6 +24,24 @@ class MetaTile extends Graphics {
     return raw;
   }
 
+  List<int> getPattern(){
+    var pattern = <int>[];
+
+    if (width == 8 && height == 8) {
+      pattern = <int>[0];
+    } else if (width == 8 && height == 16) {
+      pattern = <int>[0, 1];
+    } else if (width == 16 && height == 16) {
+      pattern = <int>[0, 2, 1, 3];
+    } else if (width == 32 && height == 32) {
+      pattern = <int>[0, 2, 8, 10, 1, 3, 9, 11, 4, 6, 12, 14, 5, 7, 13, 15];
+    } else {
+      throw('Unknown pattern');
+    }
+
+    return pattern;
+  }
+
   int nbTilesPerMetaTile() {
     return (width * height) ~/ Tile.pixelPerTile;
   }
