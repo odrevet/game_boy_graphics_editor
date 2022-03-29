@@ -53,12 +53,15 @@ class MetaTile extends Graphics {
     return row;
   }
 
-  void setRow(int metaTileIndex, int rowIndex, List<int> value) {
+  void setRow(int metaTileIndex, int rowIndex, List<int> row) {
     for (int i = 0; i < width ~/ Tile.size; i++) {
       int tileIndex = metaTileIndex * nbTilesPerMetaTile() +
           getPattern()[i] +
           rowIndex ~/ Tile.size;
-      tileList[tileIndex].data[0] = 3; //WIP
+      for (int dotIndex = 0; dotIndex < Tile.size; dotIndex++) {
+        int index = (rowIndex * Tile.size + dotIndex) % Tile.pixelPerTile;
+        tileList[tileIndex].data[index] = row[dotIndex + i * Tile.size];
+      }
     }
   }
 

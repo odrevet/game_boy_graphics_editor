@@ -176,21 +176,17 @@ class _EditorState extends State<Editor> {
         for (int indexRow = 0; indexRow < metaTile.height; indexRow++) {
           var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow);
           row.replaceRange(0, row.length, _shift(row, -1));
-          print(row);
           metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
         }
       });
 
   void _leftShift() => setState(() {
-        /*int from = tiles.width * tiles.height * selectedTileIndexTile;
-        int to = from + tiles.width * tiles.height;
-        tiles.data.replaceRange(from, to, toMeta());
-        for (int index = from; index < to; index += tiles.width) {
-          var row = tiles.data.sublist(index, index + tiles.width);
-          tiles.data.replaceRange(index, index + tiles.width, _shift(row, 1));
-        }
-        tiles.data.replaceRange(from, to, fromMeta());*/
-      });
+    for (int indexRow = 0; indexRow < metaTile.height; indexRow++) {
+      var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow);
+      row.replaceRange(0, row.length, _shift(row, 1));
+      metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
+    }
+  });
 
   void _copy(int index) => setState(() {
         tileBuffer.clear();
