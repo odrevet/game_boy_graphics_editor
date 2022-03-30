@@ -16,6 +16,8 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool showGrid;
   final VoidCallback rightShift;
   final VoidCallback leftShift;
+  final VoidCallback upShift;
+  final VoidCallback downShift;
   final Function setIntensity;
   final int selectedIntensity;
   final Function addMetaTile;
@@ -34,6 +36,8 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.showGrid,
     required this.rightShift,
     required this.leftShift,
+    required this.upShift,
+    required this.downShift,
     required this.setIntensity,
     required this.selectedIntensity,
     required this.addMetaTile,
@@ -93,6 +97,12 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     var actions = <Widget>[];
 
     actions.add(IconButton(
+        onPressed: upShift,
+        icon: const Icon(Icons.keyboard_arrow_up_rounded)));
+    actions.add(IconButton(
+        onPressed: downShift,
+        icon: const Icon(Icons.keyboard_arrow_down_rounded)));
+    actions.add(IconButton(
         onPressed: leftShift,
         icon: const Icon(Icons.keyboard_arrow_left_rounded)));
     actions.add(IconButton(
@@ -134,7 +144,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
           icon: const Icon(Icons.add),
           tooltip: 'Add tile',
           onPressed: () => addMetaTile(
-              metaTile.tileList.length ~/ metaTile.nbTilesPerMetaTile())),
+              metaTile.tileList.length ~/ metaTile.nbTilePerMetaTile())),
       IconButton(
           icon: const Icon(Icons.remove),
           tooltip: 'Remove tile',

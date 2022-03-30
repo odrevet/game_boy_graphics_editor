@@ -42,14 +42,16 @@ class MetaTile extends Graphics {
     return pattern;
   }
 
-  int nbTilesPerMetaTile() => (width * height) ~/ Tile.pixelPerTile;
+  int nbTilePerMetaTile() => (width * height) ~/ Tile.pixelPerTile;
 
   int nbTilePerRow() => width ~/ Tile.size;
+  
+  int nbTilePerCol() => height ~/ Tile.size;
 
   List<int> getRow(int metaTileIndex, int rowIndex) {
     var row = <int>[];
     for (int i = 0; i < width ~/ Tile.size; i++) {
-      int tileIndex = metaTileIndex * nbTilesPerMetaTile() +
+      int tileIndex = metaTileIndex * nbTilePerMetaTile() +
           getPattern()[i + (rowIndex ~/ Tile.size) * nbTilePerRow()];
       row += tileList[tileIndex].getRow(rowIndex % Tile.size);
     }
@@ -59,7 +61,7 @@ class MetaTile extends Graphics {
   void setRow(int metaTileIndex, int rowIndex, List<int> row) {
     int dotOffset = 0;
     for (int i = 0; i < width ~/ Tile.size; i++) {
-      int tileIndex = metaTileIndex * nbTilesPerMetaTile() +
+      int tileIndex = metaTileIndex * nbTilePerMetaTile() +
           getPattern()[i + (rowIndex ~/ Tile.size) * nbTilePerRow()];
       tileList[tileIndex].setRow(
           rowIndex % Tile.size, row.sublist(dotOffset, dotOffset + Tile.size));

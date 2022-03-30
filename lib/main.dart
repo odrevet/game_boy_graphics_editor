@@ -67,6 +67,8 @@ class _EditorState extends State<Editor> {
       metaTile: metaTile,
       rightShift: _rightShift,
       leftShift: _leftShift,
+      upShift: _upShift,
+      downShift: _downShift,
       setIntensity: _setIntensity,
       selectedIntensity: selectedIntensity,
       addMetaTile: _addMetaTile,
@@ -139,7 +141,7 @@ class _EditorState extends State<Editor> {
         metaTile.width = width;
         metaTile.height = height;
         int numberOfTilesNecessary =
-            metaTile.nbTilesPerMetaTile() - metaTile.tileList.length;
+            metaTile.nbTilePerMetaTile() - metaTile.tileList.length;
 
         for (int i = 0; i < numberOfTilesNecessary; i++) {
           metaTile.tileList.add(Tile());
@@ -188,9 +190,23 @@ class _EditorState extends State<Editor> {
         }
       });
 
+  void _upShift() => setState(() {
+  });
+
+  void _downShift() => setState(() {
+    var rowTemp = metaTile.getRow(selectedMetaTileIndexTile, metaTile.height - 1);
+
+    for (int indexRow = metaTile.height - 1; indexRow > 0; indexRow--) {
+      var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow - 1);
+      metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
+    }
+
+    metaTile.setRow(selectedMetaTileIndexTile, 0, rowTemp);
+  });
+
   void _copy(int index) => setState(() {
         tileBuffer.clear();
-        for (var i = index; i < index + metaTile.nbTilesPerMetaTile(); i++) {
+        for (var i = index; i < index + metaTile.nbTilePerMetaTile(); i++) {
           tileBuffer.addAll(metaTile.tileList[i].data);
         }
       });
@@ -198,24 +214,24 @@ class _EditorState extends State<Editor> {
   void _past(int index) => setState(() {
         for (var i = 0; i < tileBuffer.length; i++) {
           int tileIndex =
-              i ~/ Tile.pixelPerTile + index * metaTile.nbTilesPerMetaTile();
+              i ~/ Tile.pixelPerTile + index * metaTile.nbTilePerMetaTile();
           metaTile.tileList[tileIndex].data[i % 64] = tileBuffer[i];
         }
       });
 
   void _addMetaTile(int index) => setState(() {
         var newMetaTile =
-            List<Tile>.generate(metaTile.nbTilesPerMetaTile(), (_) => Tile());
+            List<Tile>.generate(metaTile.nbTilePerMetaTile(), (_) => Tile());
         metaTile.tileList
-            .insertAll(index * metaTile.nbTilesPerMetaTile(), newMetaTile);
+            .insertAll(index * metaTile.nbTilePerMetaTile(), newMetaTile);
         selectedMetaTileIndexTile = index;
       });
 
   void _removeMetaTile(int index) => setState(() {
         metaTile.tileList.removeRange(
-            index * metaTile.nbTilesPerMetaTile(),
-            index * metaTile.nbTilesPerMetaTile() +
-                metaTile.nbTilesPerMetaTile());
+            index * metaTile.nbTilePerMetaTile(),
+            index * metaTile.nbTilePerMetaTile() +
+                metaTile.nbTilePerMetaTile());
         selectedMetaTileIndexTile = index - 1;
 
         if (metaTile.tileList.isEmpty) {
