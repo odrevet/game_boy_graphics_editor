@@ -181,12 +181,12 @@ class _EditorState extends State<Editor> {
       });
 
   void _leftShift() => setState(() {
-    for (int indexRow = 0; indexRow < metaTile.height; indexRow++) {
-      var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow);
-      row.replaceRange(0, row.length, _shift(row, 1));
-      metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
-    }
-  });
+        for (int indexRow = 0; indexRow < metaTile.height; indexRow++) {
+          var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow);
+          row.replaceRange(0, row.length, _shift(row, 1));
+          metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
+        }
+      });
 
   void _copy(int index) => setState(() {
         tileBuffer.clear();

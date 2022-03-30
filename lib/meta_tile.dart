@@ -42,6 +42,8 @@ class MetaTile extends Graphics {
     return pattern;
   }
 
+  int nbTilesPerMetaTile() => (width * height) ~/ Tile.pixelPerTile;
+
   int nbTilePerRow() => width ~/ Tile.size;
 
   List<int> getRow(int metaTileIndex, int rowIndex) {
@@ -63,10 +65,6 @@ class MetaTile extends Graphics {
           rowIndex % Tile.size, row.sublist(dotOffset, dotOffset + Tile.size));
       dotOffset += Tile.size;
     }
-  }
-
-  int nbTilesPerMetaTile() {
-    return (width * height) ~/ Tile.pixelPerTile;
   }
 
   setData(List<String> values) {

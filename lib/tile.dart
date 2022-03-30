@@ -33,11 +33,11 @@ class Tile {
     return raw;
   }
 
-  List<int> getRow(int index){
+  List<int> getRow(int index) {
     return data.sublist(index * size, index * size + size);
   }
 
-  void setRow(int index, List<int> row){
+  void setRow(int index, List<int> row) {
     for (int dotIndex = 0; dotIndex < size; dotIndex++) {
       data[dotIndex + index * size] = row[dotIndex];
     }
