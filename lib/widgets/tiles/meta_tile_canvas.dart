@@ -42,18 +42,12 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
         child: GestureDetector(
           onPanUpdate: (DragUpdateDetails details) {
             if (isHover) {
-              var localPosition = details.localPosition;
-              final pixelSize = constraints.maxWidth / widget.metaTile.width;
-              final rowIndex = (localPosition.dx / pixelSize).floor();
-              final colIndex = (localPosition.dy / pixelSize).floor();
-
-              int tileIndex = (rowIndex ~/ Tile.size) +
-                  (colIndex ~/ Tile.size) * widget.metaTile.nbTilePerRow();
-              int metaTileIndex = widget.pattern[tileIndex] +
-                  widget.metaTileIndex * widget.metaTile.nbTilePerMetaTile();
-              int pixelIndex =
-                  ((colIndex % Tile.size) * Tile.size) + (rowIndex % Tile.size);
-              widget.onTap!(metaTileIndex, pixelIndex);
+              draw(details, constraints);
+            }
+          },
+          onTapDown: (TapDownDetails details) {
+            if (isHover) {
+              draw(details, constraints);
             }
           },
           child: MetaTileDisplay(
@@ -64,5 +58,20 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
         ),
       ),
     );
+  }
+
+  draw(dynamic details, BoxConstraints constraints) {
+    var localPosition = details.localPosition;
+    final pixelSize = constraints.maxWidth / widget.metaTile.width;
+    final rowIndex = (localPosition.dx / pixelSize).floor();
+    final colIndex = (localPosition.dy / pixelSize).floor();
+
+    int tileIndex = (rowIndex ~/ Tile.size) +
+        (colIndex ~/ Tile.size) * widget.metaTile.nbTilePerRow();
+    int metaTileIndex = widget.pattern[tileIndex] +
+        widget.metaTileIndex * widget.metaTile.nbTilePerMetaTile();
+    int pixelIndex =
+        ((colIndex % Tile.size) * Tile.size) + (rowIndex % Tile.size);
+    widget.onTap!(metaTileIndex, pixelIndex);
   }
 }
