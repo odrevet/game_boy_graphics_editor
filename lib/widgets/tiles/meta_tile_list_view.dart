@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_canvas.dart';
 
 import '../../meta_tile.dart';
 import 'meta_tile_display.dart';
