@@ -1,7 +1,7 @@
 import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/background.dart';
-import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_display.dart';
+import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_canvas.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../meta_tile.dart';
@@ -83,7 +83,7 @@ class _TilesEditorState extends State<TilesEditor> {
           alignment: Alignment.topCenter,
           child: AspectRatio(
             aspectRatio: widget.metaTile.width / widget.metaTile.height,
-            child: MetaTileDisplay(
+            child: MetaTileCanvas(
                 metaTile: widget.metaTile,
                 showGrid: widget.showGrid,
                 metaTileIndex: widget.selectedIndex,
@@ -100,7 +100,7 @@ class _TilesEditorState extends State<TilesEditor> {
                 width: 200,
                 height: 200,
                 child: BackgroundGrid(
-                    background: widget.preview, tiles: widget.metaTile),
+                    background: widget.preview, metaTile: widget.metaTile),
               ),
             ),
             Expanded(

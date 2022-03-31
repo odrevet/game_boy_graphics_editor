@@ -75,7 +75,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
           child: BackgroundGrid(
             showGrid: widget.showGrid,
             background: widget.background,
-            tiles: widget.tiles,
+            metaTile: widget.tiles,
             onTap: (index) => setState(() {
               widget.background.data[index] = widget.selectedTileIndex;
             }),

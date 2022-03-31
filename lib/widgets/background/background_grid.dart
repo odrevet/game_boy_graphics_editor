@@ -6,7 +6,7 @@ import '../../meta_tile.dart';
 
 class BackgroundGrid extends StatefulWidget {
   final Background background;
-  final MetaTile tiles;
+  final MetaTile metaTile;
   final Function? onTap;
   final Function? onHover;
   final bool showGrid;
@@ -14,7 +14,7 @@ class BackgroundGrid extends StatefulWidget {
   const BackgroundGrid(
       {Key? key,
       required this.background,
-      required this.tiles,
+      required this.metaTile,
       this.onTap,
       this.onHover,
       this.showGrid = false})
@@ -31,7 +31,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
       aspectRatio: 1.0,
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: widget.tiles.width / widget.tiles.height,
+          childAspectRatio: widget.metaTile.width / widget.metaTile.height,
           crossAxisCount: widget.background.width,
         ),
         itemBuilder: _build,
@@ -43,7 +43,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
   Widget _build(BuildContext context, int index) {
     Widget tileWidget;
 
-    if (widget.background.data[index] >= widget.tiles.tileList.length) {
+    if (widget.background.data[index] >= widget.metaTile.tileList.length) {
       tileWidget = Container(
         alignment: Alignment.center,
         child: const Text(
@@ -55,7 +55,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
       );
     } else {
       tileWidget = MetaTileDisplay(
-          metaTile: widget.tiles,
+          metaTile: widget.metaTile,
           showGrid: false,
           metaTileIndex: widget.background.data[index]);
     }
