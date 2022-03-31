@@ -45,7 +45,7 @@ class MetaTile extends Graphics {
   int nbTilePerMetaTile() => (width * height) ~/ Tile.pixelPerTile;
 
   int nbTilePerRow() => width ~/ Tile.size;
-  
+
   int nbTilePerCol() => height ~/ Tile.size;
 
   List<int> getRow(int metaTileIndex, int rowIndex) {

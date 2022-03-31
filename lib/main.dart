@@ -191,26 +191,28 @@ class _EditorState extends State<Editor> {
       });
 
   void _upShift() => setState(() {
-    var rowTemp = metaTile.getRow(selectedMetaTileIndexTile, 0);
+        var rowTemp = metaTile.getRow(selectedMetaTileIndexTile, 0);
 
-    for (int indexRow = 0; indexRow < metaTile.height - 1; indexRow++) {
-      var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow + 1);
-      metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
-    }
+        for (int indexRow = 0; indexRow < metaTile.height - 1; indexRow++) {
+          var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow + 1);
+          metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
+        }
 
-    metaTile.setRow(selectedMetaTileIndexTile, metaTile.height - 1, rowTemp);
-  });
+        metaTile.setRow(
+            selectedMetaTileIndexTile, metaTile.height - 1, rowTemp);
+      });
 
   void _downShift() => setState(() {
-    var rowTemp = metaTile.getRow(selectedMetaTileIndexTile, metaTile.height - 1);
+        var rowTemp =
+            metaTile.getRow(selectedMetaTileIndexTile, metaTile.height - 1);
 
-    for (int indexRow = metaTile.height - 1; indexRow > 0; indexRow--) {
-      var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow - 1);
-      metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
-    }
+        for (int indexRow = metaTile.height - 1; indexRow > 0; indexRow--) {
+          var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow - 1);
+          metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
+        }
 
-    metaTile.setRow(selectedMetaTileIndexTile, 0, rowTemp);
-  });
+        metaTile.setRow(selectedMetaTileIndexTile, 0, rowTemp);
+      });
 
   void _copy(int index) => setState(() {
         tileBuffer.clear();
@@ -269,11 +271,8 @@ class _EditorState extends State<Editor> {
         selectedTileIndexBackground = 0;
       });
 
-  _setPixel(int indexPixel, int indexTile) {
-    setState(() {
-      metaTile.tileList[indexTile].data[indexPixel] = selectedIntensity;
-    });
-  }
+  _setPixel(int indexTile, int indexPixel) => setState(
+      () => metaTile.tileList[indexTile].data[indexPixel] = selectedIntensity);
 }
 
 String formatSource(String source) {

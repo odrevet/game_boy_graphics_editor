@@ -97,8 +97,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     var actions = <Widget>[];
 
     actions.add(IconButton(
-        onPressed: upShift,
-        icon: const Icon(Icons.keyboard_arrow_up_rounded)));
+        onPressed: upShift, icon: const Icon(Icons.keyboard_arrow_up_rounded)));
     actions.add(IconButton(
         onPressed: downShift,
         icon: const Icon(Icons.keyboard_arrow_down_rounded)));
