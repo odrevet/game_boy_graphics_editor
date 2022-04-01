@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_display.dart';
 
 import '../../meta_tile.dart';
-import '../../tile.dart';
 
 class MetaTileCanvas extends StatefulWidget {
   final MetaTile metaTile;
@@ -66,12 +65,9 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
     final rowIndex = (localPosition.dx / pixelSize).floor();
     final colIndex = (localPosition.dy / pixelSize).floor();
 
-    int tileIndex = (rowIndex ~/ Tile.size) +
-        (colIndex ~/ Tile.size) * widget.metaTile.nbTilePerRow();
-    int metaTileIndex = widget.pattern[tileIndex] +
-        widget.metaTileIndex * widget.metaTile.nbTilePerMetaTile();
-    int pixelIndex =
-        ((colIndex % Tile.size) * Tile.size) + (rowIndex % Tile.size);
-    widget.onTap!(metaTileIndex, pixelIndex);
+    var index =
+        widget.metaTile.getTileIndex(rowIndex, colIndex, widget.metaTileIndex);
+
+    widget.onTap!(index[0], index[1]);
   }
 }

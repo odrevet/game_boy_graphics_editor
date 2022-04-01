@@ -96,6 +96,17 @@ class MetaTile extends Graphics {
     }
   }
 
+  List getTileIndex(int rowIndex, int colIndex, int selectedMetaTileIndex) {
+    int tileIndex =
+        (rowIndex ~/ Tile.size) + (colIndex ~/ Tile.size) * nbTilePerRow();
+    int metaTileIndex =
+        getPattern()[tileIndex] + selectedMetaTileIndex * nbTilePerMetaTile();
+    int pixelIndex =
+        ((colIndex % Tile.size) * Tile.size) + (rowIndex % Tile.size);
+
+    return [metaTileIndex, pixelIndex];
+  }
+
   @override
   String toHeader() {
     return """#define ${name}Bank 0
