@@ -284,8 +284,8 @@ class _EditorState extends State<Editor> {
         selectedTileIndexBackground = 0;
       });
 
-  _setPixel(int rowIndex, int colIndex) => setState(
-      () => metaTile.setPixel(rowIndex, colIndex, selectedMetaTileIndexTile, selectedIntensity));
+  _setPixel(int rowIndex, int colIndex) => setState(() => metaTile.setPixel(
+      rowIndex, colIndex, selectedMetaTileIndexTile, selectedIntensity));
 }
 
 String formatSource(String source) {
