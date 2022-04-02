@@ -27,6 +27,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final Function removeMetaTile;
   final VoidCallback toggleGridTile;
   final VoidCallback toggleFloodMode;
+  final VoidCallback toggleColorSet;
   final Function setMetaTile;
   final Function saveGraphics;
   final int metaTileIndex;
@@ -50,6 +51,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.removeMetaTile,
     required this.toggleGridTile,
     required this.toggleFloodMode,
+    required this.toggleColorSet,
     required this.setMetaTile,
     required this.metaTileIndex,
     required this.saveGraphics,
@@ -105,6 +107,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     var actions = <Widget>[];
 
     actions = [
+      const VerticalDivider(),
       IconButton(
           onPressed: upShift,
           icon: const Icon(Icons.keyboard_arrow_up_rounded)),
@@ -232,7 +235,29 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
           })
         },
       ),
-      _setTileModeButton()
+      IconButton(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Settings'),
+                  content: SizedBox(
+                    height: 200.0, // Change as per your requirement
+                    width: 150.0, // Change as per your requirement
+                    child: Row(
+                      children: [
+                        const Text("ColorSet"),
+                        TextButton(
+                            onPressed: toggleColorSet,
+                            child: const Text("DMG / Pocket"))
+                      ],
+                    ),
+                  ),
+                ));
+          },
+          icon: const Icon(Icons.settings)),
+      _setTileModeButton(),
+
     ];
 
     return AppBar(

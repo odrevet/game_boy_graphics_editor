@@ -81,6 +81,7 @@ class _EditorState extends State<Editor> {
       showGrid: showGridTile,
       floodMode: floodMode,
       toggleFloodMode: _toggleFloodMode,
+      toggleColorSet: _toggleColorSet,
       setMetaTile: _setMetaTile,
       setTilesDimensions: _setTilesDimensions,
       metaTileIndex: selectedMetaTileIndexTile,
@@ -168,6 +169,10 @@ class _EditorState extends State<Editor> {
 
   void _toggleFloodMode() => setState(() {
         floodMode = !floodMode;
+      });
+
+  void _toggleColorSet() => setState(() {
+        colorSet == colorsDMG ? colorSet = colorsPocket : colorSet = colorsDMG;
       });
 
   void _toggleGridTile() => setState(() {
