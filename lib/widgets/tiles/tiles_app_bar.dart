@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
@@ -25,7 +27,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final Function removeMetaTile;
   final VoidCallback toggleGridTile;
   final VoidCallback toggleFloodMode;
-  final Function setTileFromSource;
+  final Function setMetaTile;
   final Function saveGraphics;
   final int metaTileIndex;
   final List<Color> colorSet;
@@ -48,7 +50,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.removeMetaTile,
     required this.toggleGridTile,
     required this.toggleFloodMode,
-    required this.setTileFromSource,
+    required this.setMetaTile,
     required this.metaTileIndex,
     required this.saveGraphics,
     required this.colorSet,
@@ -188,7 +190,40 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
                 content: Text("Not loaded"),
               );
             } else {
-              bool hasLoaded = setTileFromSource(source);
+              source = formatSource(source);
+              late bool hasLoaded;
+              var graphicsElements = metaTile.fromGBDKSource(source);
+              if (graphicsElements.length > 1) {
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Tile data selection'),
+                          content: SizedBox(
+                            height: 200.0, // Change as per your requirement
+                            width: 150.0, // Change as per your requirement
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: graphicsElements.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                  onTap: () {
+                                    hasLoaded =
+                                        setMetaTile(graphicsElements[index]);
+                                    Navigator.pop(context);
+                                  },
+                                  title: Text(graphicsElements[index].name),
+                                );
+                              },
+                            ),
+                          ),
+                        ));
+              } else if (graphicsElements.length == 1) {
+                hasLoaded = setMetaTile(graphicsElements.first);
+              } else {
+                hasLoaded = false;
+              }
+
               snackBar = SnackBar(
                 content: Text(hasLoaded ? "Data loaded" : "Data not loaded"),
               );
@@ -206,4 +241,10 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
       actions: actions,
     );
   }
+}
+
+String formatSource(String source) {
+  LineSplitter ls = const LineSplitter();
+  List<String> lines = ls.convert(source);
+  return lines.join();
 }

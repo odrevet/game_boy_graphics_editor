@@ -81,7 +81,7 @@ class _EditorState extends State<Editor> {
       showGrid: showGridTile,
       floodMode: floodMode,
       toggleFloodMode: _toggleFloodMode,
-      setTileFromSource: _setTilesFromSource,
+      setMetaTile: _setMetaTile,
       setTilesDimensions: _setTilesDimensions,
       metaTileIndex: selectedMetaTileIndexTile,
       saveGraphics: _saveGraphics,
@@ -266,14 +266,18 @@ class _EditorState extends State<Editor> {
         tileMode = !tileMode;
       });
 
-  bool _setTilesFromSource(source) {
-    late bool hasLoaded;
+  bool _setMetaTile(GraphicElement graphicElement) {
+    bool hasLoaded = true;
     setState(() {
-      source = formatSource(source);
-      hasLoaded = metaTile.fromSource(source);
+      try {
+        metaTile.setData(graphicElement.values.split(','));
+        metaTile.name = graphicElement.name;
+      } catch (e) {
+        hasLoaded = false;
+      }
 
       if (hasLoaded) selectedMetaTileIndexTile = 0;
-      _setTilesDimensions(8, 8); //TODO read tiles dimensions in source comment
+      _setTilesDimensions(8, 8);
     });
     return hasLoaded;
   }

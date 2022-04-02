@@ -135,15 +135,6 @@ extern unsigned char $name[];""";
 
   @override
   bool fromSource(String source) {
-    String? values = fromGBDKSource(source)[0].values;
-    try {
-      setData(values.split(','));
-    } catch (e) {
-      return false;
-    }
-
     return true;
-
-    return false;
   }
 }
