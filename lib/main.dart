@@ -10,6 +10,7 @@ import 'package:gbdk_graphic_editor/widgets/tiles/tiles_app_bar.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/tiles_editor.dart';
 
 import 'background.dart';
+import 'colors.dart';
 import 'file_utils.dart';
 import 'graphics.dart';
 
@@ -52,6 +53,7 @@ class _EditorState extends State<Editor> {
   bool floodMode = false;
   bool showGridBackground = true;
   var tileBuffer = <int>[]; // copy / past tiles buffer
+  List<Color> colorSet = colorsPocket;
 
   @override
   void initState() {
@@ -83,6 +85,7 @@ class _EditorState extends State<Editor> {
       setTilesDimensions: _setTilesDimensions,
       metaTileIndex: selectedMetaTileIndexTile,
       saveGraphics: _saveGraphics,
+      colorSet: colorSet,
     );
 
     BackgroundAppBar backgroundappbar = BackgroundAppBar(
@@ -118,10 +121,12 @@ class _EditorState extends State<Editor> {
                     showGrid: showGridTile,
                     floodMode: floodMode,
                     selectedIndex: selectedMetaTileIndexTile,
+                    colorSet: colorSet,
                     preview: Background(
                         width: 4, height: 4, fill: selectedMetaTileIndexTile))
                 : BackgroundEditor(
                     background: background,
+                    colorSet: colorSet,
                     tiles: metaTile,
                     selectedTileIndex: selectedTileIndexBackground,
                     onTapTileListView: _setTileIndexBackground,
@@ -162,8 +167,8 @@ class _EditorState extends State<Editor> {
       });
 
   void _toggleFloodMode() => setState(() {
-    floodMode = !floodMode;
-  });
+        floodMode = !floodMode;
+      });
 
   void _toggleGridTile() => setState(() {
         showGridTile = !showGridTile;

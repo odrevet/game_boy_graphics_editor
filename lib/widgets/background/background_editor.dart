@@ -13,12 +13,14 @@ class BackgroundEditor extends StatefulWidget {
   final int selectedTileIndex;
   final Function? onTapTileListView;
   final bool showGrid;
+  final List<Color> colorSet;
 
   const BackgroundEditor(
       {Key? key,
       required this.tiles,
       required this.background,
       required this.selectedTileIndex,
+      required this.colorSet,
       this.onTapTileListView,
       this.showGrid = false})
       : super(key: key);
@@ -34,6 +36,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
   Widget build(BuildContext context) {
     return Row(children: [
       MetaTileListView(
+          colorSet: widget.colorSet,
           onTap: (index) => widget.onTapTileListView != null
               ? widget.onTapTileListView!(index)
               : null,
@@ -73,6 +76,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
             ],
           ),
           child: BackgroundGrid(
+            colorSet: widget.colorSet,
             showGrid: widget.showGrid,
             background: widget.background,
             metaTile: widget.tiles,

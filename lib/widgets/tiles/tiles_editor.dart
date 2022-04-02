@@ -20,6 +20,7 @@ class TilesEditor extends StatefulWidget {
   final Function onInsert;
   final Function copy;
   final Function past;
+  final List<Color> colorSet;
 
   const TilesEditor({
     Key? key,
@@ -34,6 +35,7 @@ class TilesEditor extends StatefulWidget {
     required this.onInsert,
     required this.copy,
     required this.past,
+    required this.colorSet,
   }) : super(key: key);
 
   @override
@@ -53,7 +55,8 @@ class _TilesEditorState extends State<TilesEditor> {
                 }),
             onTap: (index) => widget.setIndex(index),
             metaTile: widget.metaTile,
-            selectedTile: widget.selectedIndex),
+            selectedTile: widget.selectedIndex,
+            colorSet: widget.colorSet),
         contextMenu: GenericContextMenu(
           buttonConfigs: [
             ContextMenuButtonConfig(
@@ -90,7 +93,8 @@ class _TilesEditorState extends State<TilesEditor> {
                 showGrid: widget.showGrid,
                 floodMode: widget.floodMode,
                 metaTileIndex: widget.selectedIndex,
-                onTap: widget.setPixel),
+                onTap: widget.setPixel,
+                colorSet: widget.colorSet),
           ),
         ),
       ),
@@ -103,7 +107,10 @@ class _TilesEditorState extends State<TilesEditor> {
                 width: 200,
                 height: 200,
                 child: BackgroundGrid(
-                    background: widget.preview, metaTile: widget.metaTile),
+                  background: widget.preview,
+                  metaTile: widget.metaTile,
+                  colorSet: widget.colorSet,
+                ),
               ),
             ),
             Expanded(

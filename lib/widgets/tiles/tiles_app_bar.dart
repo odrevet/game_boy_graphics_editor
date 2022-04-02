@@ -28,6 +28,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final Function setTileFromSource;
   final Function saveGraphics;
   final int metaTileIndex;
+  final List<Color> colorSet;
 
   const TilesAppBar({
     this.preferredSize = const Size.fromHeight(50.0),
@@ -50,6 +51,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.setTileFromSource,
     required this.metaTileIndex,
     required this.saveGraphics,
+    required this.colorSet,
   }) : super(key: key);
 
   Widget _setTileModeButton() {
@@ -131,21 +133,25 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
         intensity: 0,
         onPressed: setIntensity,
         selectedIntensity: selectedIntensity,
+        colorSet: colorSet,
       ),
       IntensityButton(
         intensity: 1,
         onPressed: setIntensity,
         selectedIntensity: selectedIntensity,
+        colorSet: colorSet,
       ),
       IntensityButton(
         intensity: 2,
         onPressed: setIntensity,
         selectedIntensity: selectedIntensity,
+        colorSet: colorSet,
       ),
       IntensityButton(
         intensity: 3,
         onPressed: setIntensity,
         selectedIntensity: selectedIntensity,
+        colorSet: colorSet,
       ),
       const VerticalDivider(),
       IconButton(

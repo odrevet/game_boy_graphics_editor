@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/dot_matrix.dart';
 
-import '../../colors.dart';
 import '../../meta_tile.dart';
 
 class MetaTileDisplay extends StatelessWidget {
   final MetaTile metaTile;
   final bool showGrid;
   final int metaTileIndex;
+  final List<Color> colorSet;
 
   const MetaTileDisplay(
       {required this.metaTile,
       required this.showGrid,
       required this.metaTileIndex,
+      required this.colorSet,
       Key? key})
       : super(key: key);
 
@@ -28,7 +29,7 @@ class MetaTileDisplay extends StatelessWidget {
                   .tileList[metaTileIndex * metaTile.nbTilePerMetaTile() +
                       metaTile.getPattern()[i]]
                   .data
-                  .map((e) => colors[e])
+                  .map((e) => colorSet[e])
                   .toList(),
               showGrid: showGrid)
       ],

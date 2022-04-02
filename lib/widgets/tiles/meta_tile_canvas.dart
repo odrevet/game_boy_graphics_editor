@@ -9,6 +9,7 @@ class MetaTileCanvas extends StatefulWidget {
   final bool showGrid;
   final bool floodMode;
   final int metaTileIndex;
+  final List<Color> colorSet;
 
   late final List<int> pattern;
 
@@ -17,6 +18,7 @@ class MetaTileCanvas extends StatefulWidget {
       required this.showGrid,
       required this.floodMode,
       required this.metaTileIndex,
+      required this.colorSet,
       this.onTap,
       Key? key})
       : super(key: key) {
@@ -55,6 +57,7 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
             metaTileIndex: widget.metaTileIndex,
             metaTile: widget.metaTile,
             showGrid: widget.showGrid,
+            colorSet: widget.colorSet,
           ),
         ),
       ),

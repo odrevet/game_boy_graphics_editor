@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
-import '../../colors.dart';
-
 class IntensityButton extends StatelessWidget {
   final int intensity;
   final int selectedIntensity;
   final Function onPressed;
+  final List<Color> colorSet;
 
   const IntensityButton(
       {Key? key,
       required this.intensity,
       required this.onPressed,
-      required this.selectedIntensity})
+      required this.selectedIntensity,
+      required this.colorSet})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Widget iconButton = IconButton(
-        icon: Icon(Icons.stop, color: colors[intensity]),
+        icon: Icon(Icons.square, color: colorSet[intensity]),
         onPressed: () => onPressed(intensity));
 
     if (intensity == selectedIntensity) {

@@ -10,15 +10,17 @@ class BackgroundGrid extends StatefulWidget {
   final Function? onTap;
   final Function? onHover;
   final bool showGrid;
+  final List<Color> colorSet;
 
-  const BackgroundGrid(
-      {Key? key,
-      required this.background,
-      required this.metaTile,
-      this.onTap,
-      this.onHover,
-      this.showGrid = false})
-      : super(key: key);
+  const BackgroundGrid({
+    Key? key,
+    required this.background,
+    required this.metaTile,
+    required this.colorSet,
+    this.onTap,
+    this.onHover,
+    this.showGrid = false,
+  }) : super(key: key);
 
   @override
   _BackgroundGridState createState() => _BackgroundGridState();
@@ -55,6 +57,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
       );
     } else {
       tileWidget = MetaTileDisplay(
+          colorSet: widget.colorSet,
           metaTile: widget.metaTile,
           showGrid: false,
           metaTileIndex: widget.background.data[index]);

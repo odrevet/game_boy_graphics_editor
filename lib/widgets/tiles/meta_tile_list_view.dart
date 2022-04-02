@@ -8,12 +8,14 @@ class MetaTileListView extends StatefulWidget {
   final int selectedTile;
   final Function onTap;
   final Function? onHover;
+  final List<Color> colorSet;
 
   const MetaTileListView({
     Key? key,
     required this.metaTile,
     required this.selectedTile,
     required this.onTap,
+    required this.colorSet,
     this.onHover,
   }) : super(key: key);
 
@@ -45,7 +47,8 @@ class _MetaTileListViewState extends State<MetaTileListView> {
                 title: MetaTileDisplay(
                     metaTile: widget.metaTile,
                     showGrid: false,
-                    metaTileIndex: index),
+                    metaTileIndex: index,
+                    colorSet: widget.colorSet),
               ),
             );
           },
