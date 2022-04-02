@@ -14,6 +14,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final MetaTile metaTile;
   final Function setTilesDimensions;
   final bool showGrid;
+  final bool floodMode;
   final VoidCallback rightShift;
   final VoidCallback leftShift;
   final VoidCallback upShift;
@@ -23,6 +24,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final Function addMetaTile;
   final Function removeMetaTile;
   final VoidCallback toggleGridTile;
+  final VoidCallback toggleFloodMode;
   final Function setTileFromSource;
   final Function saveGraphics;
   final int metaTileIndex;
@@ -34,6 +36,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.setTileMode,
     required this.setTilesDimensions,
     required this.showGrid,
+    required this.floodMode,
     required this.rightShift,
     required this.leftShift,
     required this.upShift,
@@ -43,6 +46,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.addMetaTile,
     required this.removeMetaTile,
     required this.toggleGridTile,
+    required this.toggleFloodMode,
     required this.setTileFromSource,
     required this.metaTileIndex,
     required this.saveGraphics,
@@ -110,6 +114,11 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
 
     actions = [
       ...actions,
+      IconButton(
+        icon: Icon(floodMode ? Icons.waves : Icons.edit),
+        tooltip: 'Flood fill ${floodMode ? 'on' : 'off'}',
+        onPressed: toggleFloodMode,
+      ),
       const VerticalDivider(),
       _tileDimensionsDropDown(),
       IconButton(

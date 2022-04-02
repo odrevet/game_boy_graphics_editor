@@ -7,6 +7,7 @@ class MetaTileCanvas extends StatefulWidget {
   final MetaTile metaTile;
   final Function? onTap;
   final bool showGrid;
+  final bool floodMode;
   final int metaTileIndex;
 
   late final List<int> pattern;
@@ -14,6 +15,7 @@ class MetaTileCanvas extends StatefulWidget {
   MetaTileCanvas(
       {required this.metaTile,
       required this.showGrid,
+      required this.floodMode,
       required this.metaTileIndex,
       this.onTap,
       Key? key})
@@ -40,7 +42,7 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
         }),
         child: GestureDetector(
           onPanUpdate: (DragUpdateDetails details) {
-            if (isHover) {
+            if (isHover && widget.floodMode == false) {
               draw(details, constraints);
             }
           },
@@ -67,7 +69,44 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
 
     var index =
         widget.metaTile.getTileIndex(rowIndex, colIndex, widget.metaTileIndex);
+    int indexTile = index[0];
+    int indexPixel = index[1];
 
-    widget.onTap!(index[0], index[1]);
+    if (widget.floodMode) {
+      int targetColor = widget.metaTile.tileList[indexTile].data[indexPixel];
+      flood(rowIndex, colIndex, targetColor);
+    } else {
+      widget.onTap!(indexTile, indexPixel);
+    }
   }
+
+  flood(int rowIndex, int colIndex, int targetColor) {
+    var index =
+        widget.metaTile.getTileIndex(rowIndex, colIndex, widget.metaTileIndex);
+
+    int indexTile = index[0];
+    int indexPixel = index[1];
+
+    if (widget.metaTile.tileList[indexTile].data[indexPixel] == targetColor) {
+      widget.onTap!(indexTile, indexPixel);
+      if (inbound(rowIndex, colIndex - 1)) {
+        flood(rowIndex, colIndex - 1, targetColor);
+      }
+      if (inbound(rowIndex, colIndex + 1)) {
+        flood(rowIndex, colIndex + 1, targetColor);
+      }
+      if (inbound(rowIndex - 1, colIndex)) {
+        flood(rowIndex - 1, colIndex, targetColor);
+      }
+      if (inbound(rowIndex + 1, colIndex)) {
+        flood(rowIndex + 1, colIndex, targetColor);
+      }
+    }
+  }
+
+  inbound(int rowIndex, int colIndex) =>
+      rowIndex >= 0 &&
+      rowIndex < widget.metaTile.height &&
+      colIndex >= 0 &&
+      colIndex < widget.metaTile.width;
 }

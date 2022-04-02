@@ -14,6 +14,7 @@ class TilesEditor extends StatefulWidget {
   final Function setIndex;
   final Function setPixel;
   final bool showGrid;
+  final bool floodMode;
   final int selectedIndex;
   final Function onRemove;
   final Function onInsert;
@@ -26,6 +27,7 @@ class TilesEditor extends StatefulWidget {
     required this.metaTile,
     required this.setIndex,
     required this.showGrid,
+    required this.floodMode,
     required this.setPixel,
     required this.selectedIndex,
     required this.onRemove,
@@ -86,6 +88,7 @@ class _TilesEditorState extends State<TilesEditor> {
             child: MetaTileCanvas(
                 metaTile: widget.metaTile,
                 showGrid: widget.showGrid,
+                floodMode: widget.floodMode,
                 metaTileIndex: widget.selectedIndex,
                 onTap: widget.setPixel),
           ),

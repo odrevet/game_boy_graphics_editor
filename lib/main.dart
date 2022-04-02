@@ -49,6 +49,7 @@ class _EditorState extends State<Editor> {
   int selectedTileIndexBackground = 0;
   bool tileMode = true; // edit tile or map
   bool showGridTile = true;
+  bool floodMode = false;
   bool showGridBackground = true;
   var tileBuffer = <int>[]; // copy / past tiles buffer
 
@@ -76,6 +77,8 @@ class _EditorState extends State<Editor> {
       setTileMode: _setTileMode,
       toggleGridTile: _toggleGridTile,
       showGrid: showGridTile,
+      floodMode: floodMode,
+      toggleFloodMode: _toggleFloodMode,
       setTileFromSource: _setTilesFromSource,
       setTilesDimensions: _setTilesDimensions,
       metaTileIndex: selectedMetaTileIndexTile,
@@ -113,6 +116,7 @@ class _EditorState extends State<Editor> {
                     setIndex: _setTileIndexTile,
                     setPixel: _setPixel,
                     showGrid: showGridTile,
+                    floodMode: floodMode,
                     selectedIndex: selectedMetaTileIndexTile,
                     preview: Background(
                         width: 4, height: 4, fill: selectedMetaTileIndexTile))
@@ -156,6 +160,10 @@ class _EditorState extends State<Editor> {
   void _setTileIndexTile(index) => setState(() {
         selectedMetaTileIndexTile = index;
       });
+
+  void _toggleFloodMode() => setState(() {
+    floodMode = !floodMode;
+  });
 
   void _toggleGridTile() => setState(() {
         showGridTile = !showGridTile;
