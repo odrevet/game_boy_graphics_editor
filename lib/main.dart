@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/meta_tile.dart';
@@ -288,17 +286,11 @@ class _EditorState extends State<Editor> {
   }
 
   void _setBackgroundFromSource(String source) => setState(() {
-        source = formatSource(source);
+        source = background.formatSource(source);
         background.fromSource(source);
         selectedTileIndexBackground = 0;
       });
 
   _setPixel(int rowIndex, int colIndex) => setState(() => metaTile.setPixel(
       rowIndex, colIndex, selectedMetaTileIndexTile, selectedIntensity));
-}
-
-String formatSource(String source) {
-  LineSplitter ls = const LineSplitter();
-  List<String> lines = ls.convert(source);
-  return lines.join();
 }

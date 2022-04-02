@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class GraphicElement {
   String name;
   String values;
@@ -36,5 +38,11 @@ abstract class Graphics {
     }
 
     return arrayElements;
+  }
+
+  String formatSource(String source) {
+    LineSplitter ls = const LineSplitter();
+    List<String> lines = ls.convert(source);
+    return lines.join();
   }
 }

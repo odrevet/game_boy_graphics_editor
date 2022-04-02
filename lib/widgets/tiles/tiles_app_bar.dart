@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
@@ -192,7 +190,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
                 content: Text("Not loaded"),
               );
             } else {
-              source = formatSource(source);
+              source = metaTile.formatSource(source);
               late bool hasLoaded;
               var graphicsElements = metaTile.fromGBDKSource(source);
               if (graphicsElements.length > 1) {
@@ -240,24 +238,23 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
             showDialog(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Settings'),
-                  content: SizedBox(
-                    height: 200.0, // Change as per your requirement
-                    width: 150.0, // Change as per your requirement
-                    child: Row(
-                      children: [
-                        const Text("ColorSet"),
-                        TextButton(
-                            onPressed: toggleColorSet,
-                            child: const Text("DMG / Pocket"))
-                      ],
-                    ),
-                  ),
-                ));
+                      title: const Text('Settings'),
+                      content: SizedBox(
+                        height: 200.0, // Change as per your requirement
+                        width: 150.0, // Change as per your requirement
+                        child: Row(
+                          children: [
+                            const Text("ColorSet"),
+                            TextButton(
+                                onPressed: toggleColorSet,
+                                child: const Text("DMG / Pocket"))
+                          ],
+                        ),
+                      ),
+                    ));
           },
           icon: const Icon(Icons.settings)),
       _setTileModeButton(),
-
     ];
 
     return AppBar(
@@ -265,10 +262,4 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
       actions: actions,
     );
   }
-}
-
-String formatSource(String source) {
-  LineSplitter ls = const LineSplitter();
-  List<String> lines = ls.convert(source);
-  return lines.join();
 }
