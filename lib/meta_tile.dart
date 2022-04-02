@@ -107,6 +107,21 @@ class MetaTile extends Graphics {
     return [metaTileIndex, pixelIndex];
   }
 
+  int getPixel(int rowIndex, int colIndex, int selectedMetaTileIndex) {
+    var index = getTileIndex(rowIndex, colIndex, selectedMetaTileIndex);
+    int indexTile = index[0];
+    int indexPixel = index[1];
+    return tileList[indexTile].data[indexPixel];
+  }
+
+  setPixel(
+      int rowIndex, int colIndex, int selectedMetaTileIndex, int intensity) {
+    var index = getTileIndex(rowIndex, colIndex, selectedMetaTileIndex);
+    int indexTile = index[0];
+    int indexPixel = index[1];
+    tileList[indexTile].data[indexPixel] = intensity;
+  }
+
   @override
   String toHeader() {
     return """#define ${name}Bank 0

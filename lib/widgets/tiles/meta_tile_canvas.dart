@@ -5,7 +5,7 @@ import '../../meta_tile.dart';
 
 class MetaTileCanvas extends StatefulWidget {
   final MetaTile metaTile;
-  final Function? onTap;
+  final Function onTap;
   final bool showGrid;
   final bool floodMode;
   final int metaTileIndex;
@@ -19,7 +19,7 @@ class MetaTileCanvas extends StatefulWidget {
       required this.floodMode,
       required this.metaTileIndex,
       required this.colorSet,
-      this.onTap,
+      required this.onTap,
       Key? key})
       : super(key: key) {
     pattern = metaTile.getPattern();
@@ -70,28 +70,19 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
     final rowIndex = (localPosition.dx / pixelSize).floor();
     final colIndex = (localPosition.dy / pixelSize).floor();
 
-    var index =
-        widget.metaTile.getTileIndex(rowIndex, colIndex, widget.metaTileIndex);
-    int indexTile = index[0];
-    int indexPixel = index[1];
-
     if (widget.floodMode) {
-      int targetColor = widget.metaTile.tileList[indexTile].data[indexPixel];
+      int targetColor =
+          widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex);
       flood(rowIndex, colIndex, targetColor);
     } else {
-      widget.onTap!(indexTile, indexPixel);
+      widget.onTap(rowIndex, colIndex);
     }
   }
 
   flood(int rowIndex, int colIndex, int targetColor) {
-    var index =
-        widget.metaTile.getTileIndex(rowIndex, colIndex, widget.metaTileIndex);
-
-    int indexTile = index[0];
-    int indexPixel = index[1];
-
-    if (widget.metaTile.tileList[indexTile].data[indexPixel] == targetColor) {
-      widget.onTap!(indexTile, indexPixel);
+    if (widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex) ==
+        targetColor) {
+      widget.onTap(rowIndex, colIndex);
       if (inbound(rowIndex, colIndex - 1)) {
         flood(rowIndex, colIndex - 1, targetColor);
       }
