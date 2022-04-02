@@ -1,3 +1,10 @@
+class GraphicElement {
+  String name;
+  String values;
+
+  GraphicElement({required this.name, required this.values});
+}
+
 abstract class Graphics {
   int height;
   int width;
@@ -19,17 +26,15 @@ abstract class Graphics {
     }).join(", ");
   }
 
-  String? parseArray(source) {
-    RegExp regExp = RegExp(r"unsigned\s+char\s+(\w+)\[\]\s*=\s*\{(.*)};");
-    var matches = regExp.allMatches(source);
+  List<GraphicElement> fromGBDKSource(source) {
+    var arrayElements = <GraphicElement>[];
 
-    String values = "";
-
-    for (Match match in matches) {
-      name = match.group(1)!;
-      values = match.group(2)!;
+    RegExp regExp = RegExp(r"unsigned\s+char\s+(\w+)\[\]\s*=\s*\{(.*?)};");
+    for (Match match in regExp.allMatches(source)) {
+      arrayElements
+          .add(GraphicElement(name: match.group(1)!, values: match.group(2)!));
     }
 
-    return values;
+    return arrayElements;
   }
 }

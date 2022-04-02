@@ -35,7 +35,7 @@ unsigned char $name[] = {${formatOutput(arrayData)}};""";
 
   @override
   bool fromSource(String source) {
-    var values = parseArray(source)!;
+    var values = fromGBDKSource(source)[0].values;
     data = List<int>.from(
         values.split(',').map((value) => int.parse(value)).toList());
 
