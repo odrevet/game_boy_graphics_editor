@@ -104,20 +104,19 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     var actions = <Widget>[];
 
-    actions.add(IconButton(
-        onPressed: upShift, icon: const Icon(Icons.keyboard_arrow_up_rounded)));
-    actions.add(IconButton(
-        onPressed: downShift,
-        icon: const Icon(Icons.keyboard_arrow_down_rounded)));
-    actions.add(IconButton(
-        onPressed: leftShift,
-        icon: const Icon(Icons.keyboard_arrow_left_rounded)));
-    actions.add(IconButton(
-        onPressed: rightShift,
-        icon: const Icon(Icons.keyboard_arrow_right_rounded)));
-
     actions = [
-      ...actions,
+      IconButton(
+          onPressed: upShift,
+          icon: const Icon(Icons.keyboard_arrow_up_rounded)),
+      IconButton(
+          onPressed: downShift,
+          icon: const Icon(Icons.keyboard_arrow_down_rounded)),
+      IconButton(
+          onPressed: leftShift,
+          icon: const Icon(Icons.keyboard_arrow_left_rounded)),
+      IconButton(
+          onPressed: rightShift,
+          icon: const Icon(Icons.keyboard_arrow_right_rounded)),
       IconButton(
         icon: Icon(floodMode ? Icons.waves : Icons.edit),
         tooltip: 'Flood fill ${floodMode ? 'on' : 'off'}',
