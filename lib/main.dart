@@ -314,7 +314,8 @@ class _EditorState extends State<Editor> {
     _setMetaTileData(metaTileTemp);
   }
 
-  flipVertical() {}
+  flipVertical() {
+  }
 
   rotateLeft() {
     var metaTileTemp = MetaTile(width: metaTile.width, height: metaTile.height);
@@ -333,7 +334,22 @@ class _EditorState extends State<Editor> {
     _setMetaTileData(metaTileTemp);
   }
 
-  rotateRight() {}
+  rotateRight() {
+    var metaTileTemp = MetaTile(width: metaTile.width, height: metaTile.height);
+    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
+      metaTileTemp.tileList.add(Tile());
+    }
+
+    for (int rowIndex = metaTile.width - 1; rowIndex >= 0; rowIndex--) {
+      for (int colIndex = metaTile.height - 1; colIndex >= 0; colIndex--) {
+        int intensity = metaTile.getPixel(
+            rowIndex, metaTile.width - 1 - colIndex, selectedMetaTileIndexTile);
+        metaTileTemp.setPixel(colIndex,rowIndex, 0, intensity);
+      }
+    }
+
+    _setMetaTileData(metaTileTemp);
+  }
 
   _setMetaTileData(MetaTile metaTileTemp) {
     setState(() {
