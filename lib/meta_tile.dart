@@ -7,11 +7,7 @@ import 'convert.dart';
 class MetaTile extends Graphics {
   List<Tile> tileList = [];
 
-  MetaTile(
-      {required String name,
-      required List<int> data,
-      width = Tile.size,
-      height = Tile.size})
+  MetaTile({String name = '', width = Tile.size, height = Tile.size})
       : super(name: name, height: height, width: width);
 
   List<String> getRaw() {

@@ -41,8 +41,7 @@ class Editor extends StatefulWidget {
 
 class _EditorState extends State<Editor> {
   var selectedIntensity = 3;
-  var metaTile =
-      MetaTile(name: "Tiles", data: List.filled(64, 0, growable: true));
+  var metaTile = MetaTile(name: "Tiles");
   late Background background;
   int selectedMetaTileIndexTile = 0;
   int selectedTileIndexBackground = 0;
@@ -85,6 +84,10 @@ class _EditorState extends State<Editor> {
       metaTileIndex: selectedMetaTileIndexTile,
       saveGraphics: _saveGraphics,
       colorSet: colorSet,
+      flipHorizontal: flipHorizontal,
+      flipVertical: flipVertical,
+      rotateLeft: rotateLeft,
+      rotateRight: rotateRight,
     );
 
     BackgroundAppBar backgroundappbar = BackgroundAppBar(
@@ -293,4 +296,37 @@ class _EditorState extends State<Editor> {
 
   _setPixel(int rowIndex, int colIndex) => setState(() => metaTile.setPixel(
       rowIndex, colIndex, selectedMetaTileIndexTile, selectedIntensity));
+
+  flipHorizontal() {
+    var metaTileTemp = MetaTile(width: metaTile.width, height: metaTile.height);
+    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
+      metaTileTemp.tileList.add(Tile());
+    }
+
+    for (int rowIndex = 0; rowIndex < metaTile.height; rowIndex++) {
+      for (int colIndex = 0; colIndex < metaTile.width; colIndex++) {
+        int intensity = metaTile.getPixel(
+            rowIndex, metaTile.width - 1 - colIndex, selectedMetaTileIndexTile);
+        metaTileTemp.setPixel(
+            rowIndex, colIndex, selectedMetaTileIndexTile, intensity);
+      }
+    }
+
+    setState(() {
+      for (int rowIndex = 0; rowIndex < metaTile.width; rowIndex++) {
+        for (int colIndex = 0; colIndex < metaTile.height; colIndex++) {
+          int intensity = metaTileTemp.getPixel(
+              rowIndex, colIndex, selectedMetaTileIndexTile);
+          metaTile.setPixel(
+              rowIndex, colIndex, selectedMetaTileIndexTile, intensity);
+        }
+      }
+    });
+  }
+
+  flipVertical() {}
+
+  rotateLeft() {}
+
+  rotateRight() {}
 }

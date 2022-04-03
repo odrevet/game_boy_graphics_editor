@@ -30,6 +30,10 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final Function saveGraphics;
   final int metaTileIndex;
   final List<Color> colorSet;
+  final VoidCallback flipHorizontal;
+  final VoidCallback flipVertical;
+  final VoidCallback rotateLeft;
+  final VoidCallback rotateRight;
 
   const TilesAppBar({
     this.preferredSize = const Size.fromHeight(50.0),
@@ -54,6 +58,10 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.metaTileIndex,
     required this.saveGraphics,
     required this.colorSet,
+    required this.flipHorizontal,
+    required this.flipVertical,
+    required this.rotateLeft,
+    required this.rotateRight,
   }) : super(key: key);
 
   Widget _setTileModeButton() {
@@ -105,6 +113,15 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     var actions = <Widget>[];
 
     actions = [
+      IconButton(onPressed: flipVertical, icon: const Icon(Icons.flip)),
+      IconButton(
+          onPressed: flipHorizontal,
+          icon: const RotatedBox(
+            quarterTurns: 1,
+            child: Icon(Icons.flip),
+          )),
+      IconButton(onPressed: rotateLeft, icon: const Icon(Icons.rotate_left)),
+      IconButton(onPressed: rotateRight, icon: const Icon(Icons.rotate_right)),
       const VerticalDivider(),
       IconButton(
           onPressed: upShift,
