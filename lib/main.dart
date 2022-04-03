@@ -315,6 +315,20 @@ class _EditorState extends State<Editor> {
   }
 
   flipVertical() {
+    var metaTileTemp = MetaTile(width: metaTile.width, height: metaTile.height);
+    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
+      metaTileTemp.tileList.add(Tile());
+    }
+
+    for (int rowIndex = 0; rowIndex < metaTile.height; rowIndex++) {
+      for (int colIndex = 0; colIndex < metaTile.width; colIndex++) {
+        int intensity = metaTile.getPixel(
+            metaTile.width - 1 - colIndex, rowIndex, selectedMetaTileIndexTile);
+        metaTileTemp.setPixel(colIndex, rowIndex, 0, intensity);
+      }
+    }
+
+    _setMetaTileData(metaTileTemp);
   }
 
   rotateLeft() {
