@@ -307,21 +307,11 @@ class _EditorState extends State<Editor> {
       for (int colIndex = 0; colIndex < metaTile.width; colIndex++) {
         int intensity = metaTile.getPixel(
             rowIndex, metaTile.width - 1 - colIndex, selectedMetaTileIndexTile);
-        metaTileTemp.setPixel(
-            rowIndex, colIndex, selectedMetaTileIndexTile, intensity);
+        metaTileTemp.setPixel(rowIndex, colIndex, 0, intensity);
       }
     }
 
-    setState(() {
-      for (int rowIndex = 0; rowIndex < metaTile.width; rowIndex++) {
-        for (int colIndex = 0; colIndex < metaTile.height; colIndex++) {
-          int intensity = metaTileTemp.getPixel(
-              rowIndex, colIndex, selectedMetaTileIndexTile);
-          metaTile.setPixel(
-              rowIndex, colIndex, selectedMetaTileIndexTile, intensity);
-        }
-      }
-    });
+    _setMetaTileData(metaTileTemp);
   }
 
   flipVertical() {}
@@ -336,22 +326,24 @@ class _EditorState extends State<Editor> {
       for (int colIndex = 0; colIndex < metaTile.width; colIndex++) {
         int intensity = metaTile.getPixel(
             metaTile.width - 1 - colIndex, rowIndex, selectedMetaTileIndexTile);
-        metaTileTemp.setPixel(
-            rowIndex, colIndex, selectedMetaTileIndexTile, intensity);
+        metaTileTemp.setPixel(rowIndex, colIndex, 0, intensity);
       }
     }
 
+    _setMetaTileData(metaTileTemp);
+  }
+
+  rotateRight() {}
+
+  _setMetaTileData(MetaTile metaTileTemp) {
     setState(() {
       for (int rowIndex = 0; rowIndex < metaTile.width; rowIndex++) {
         for (int colIndex = 0; colIndex < metaTile.height; colIndex++) {
-          int intensity = metaTileTemp.getPixel(
-              rowIndex, colIndex, selectedMetaTileIndexTile);
+          int intensity = metaTileTemp.getPixel(rowIndex, colIndex, 0);
           metaTile.setPixel(
               rowIndex, colIndex, selectedMetaTileIndexTile, intensity);
         }
       }
     });
   }
-
-  rotateRight() {}
 }
