@@ -298,10 +298,7 @@ class _EditorState extends State<Editor> {
       rowIndex, colIndex, selectedMetaTileIndexTile, selectedIntensity));
 
   flipHorizontal() {
-    var metaTileTemp = MetaTile(width: metaTile.width, height: metaTile.height);
-    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
-      metaTileTemp.tileList.add(Tile());
-    }
+    var metaTileTemp = _newMetaTile();
 
     for (int rowIndex = 0; rowIndex < metaTile.height; rowIndex++) {
       for (int colIndex = 0; colIndex < metaTile.width; colIndex++) {
@@ -315,10 +312,7 @@ class _EditorState extends State<Editor> {
   }
 
   flipVertical() {
-    var metaTileTemp = MetaTile(width: metaTile.width, height: metaTile.height);
-    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
-      metaTileTemp.tileList.add(Tile());
-    }
+    var metaTileTemp = _newMetaTile();
 
     for (int rowIndex = 0; rowIndex < metaTile.height; rowIndex++) {
       for (int colIndex = 0; colIndex < metaTile.width; colIndex++) {
@@ -332,10 +326,7 @@ class _EditorState extends State<Editor> {
   }
 
   rotateLeft() {
-    var metaTileTemp = MetaTile(width: metaTile.width, height: metaTile.height);
-    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
-      metaTileTemp.tileList.add(Tile());
-    }
+    var metaTileTemp = _newMetaTile();
 
     for (int rowIndex = 0; rowIndex < metaTile.height; rowIndex++) {
       for (int colIndex = 0; colIndex < metaTile.width; colIndex++) {
@@ -349,20 +340,25 @@ class _EditorState extends State<Editor> {
   }
 
   rotateRight() {
-    var metaTileTemp = MetaTile(width: metaTile.width, height: metaTile.height);
-    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
-      metaTileTemp.tileList.add(Tile());
-    }
+    var metaTileTemp = _newMetaTile();
 
-    for (int rowIndex = metaTile.width - 1; rowIndex >= 0; rowIndex--) {
-      for (int colIndex = metaTile.height - 1; colIndex >= 0; colIndex--) {
+    for (int rowIndex = 0; rowIndex < metaTile.height; rowIndex++) {
+      for (int colIndex = 0; colIndex < metaTile.width; colIndex++) {
         int intensity = metaTile.getPixel(
             rowIndex, metaTile.width - 1 - colIndex, selectedMetaTileIndexTile);
-        metaTileTemp.setPixel(colIndex,rowIndex, 0, intensity);
+        metaTileTemp.setPixel(colIndex, rowIndex, 0, intensity);
       }
     }
 
     _setMetaTileData(metaTileTemp);
+  }
+
+  _newMetaTile() {
+    var metaTileTemp = MetaTile(width: metaTile.width, height: metaTile.height);
+    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
+      metaTileTemp.tileList.add(Tile());
+    }
+    return metaTileTemp;
   }
 
   _setMetaTileData(MetaTile metaTileTemp) {
