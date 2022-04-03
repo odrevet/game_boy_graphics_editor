@@ -326,7 +326,32 @@ class _EditorState extends State<Editor> {
 
   flipVertical() {}
 
-  rotateLeft() {}
+  rotateLeft() {
+    var metaTileTemp = MetaTile(width: metaTile.width, height: metaTile.height);
+    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
+      metaTileTemp.tileList.add(Tile());
+    }
+
+    for (int rowIndex = 0; rowIndex < metaTile.height; rowIndex++) {
+      for (int colIndex = 0; colIndex < metaTile.width; colIndex++) {
+        int intensity = metaTile.getPixel(
+            metaTile.width - 1 - colIndex, rowIndex, selectedMetaTileIndexTile);
+        metaTileTemp.setPixel(
+            rowIndex, colIndex, selectedMetaTileIndexTile, intensity);
+      }
+    }
+
+    setState(() {
+      for (int rowIndex = 0; rowIndex < metaTile.width; rowIndex++) {
+        for (int colIndex = 0; colIndex < metaTile.height; colIndex++) {
+          int intensity = metaTileTemp.getPixel(
+              rowIndex, colIndex, selectedMetaTileIndexTile);
+          metaTile.setPixel(
+              rowIndex, colIndex, selectedMetaTileIndexTile, intensity);
+        }
+      }
+    });
+  }
 
   rotateRight() {}
 }
