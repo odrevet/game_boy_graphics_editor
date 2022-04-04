@@ -31,7 +31,8 @@ abstract class Graphics {
   List<GraphicElement> fromGBDKSource(source) {
     var arrayElements = <GraphicElement>[];
 
-    RegExp regExp = RegExp(r"(?:unsigned\s+char|uint8_t)\s+(\w+)\[(?:\d+)?\]\s*=\s*\{(.*?)};");
+    RegExp regExp = RegExp(
+        r"(?:unsigned\s+char|uint8_t)\s+(\w+)\[(?:\d+)?\]\s*=\s*\{(.*?)};");
     for (Match match in regExp.allMatches(source)) {
       arrayElements
           .add(GraphicElement(name: match.group(1)!, values: match.group(2)!));

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
-
 import '../../download_stub.dart' if (dart.library.html) '../../download.dart';
 import '../../file_utils.dart';
 import '../../meta_tile.dart';
