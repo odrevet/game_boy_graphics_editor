@@ -32,7 +32,7 @@ abstract class Graphics {
     var arrayElements = <GraphicElement>[];
 
     RegExp regExp = RegExp(
-        r"(?:unsigned\s+char|uint8_t)\s+(\w+)\[(?:\d+)?\]\s*=\s*\{(.*?)};");
+        r"(?:unsigned\s+char|uint8_t|UINT8)\s+(\w+)\[(?:\d+)?\]\s*=\s*\{(.*?)};");
     for (Match match in regExp.allMatches(source)) {
       arrayElements
           .add(GraphicElement(name: match.group(1)!, values: match.group(2)!));
