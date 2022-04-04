@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/meta_tile.dart';
@@ -6,6 +8,7 @@ import 'package:gbdk_graphic_editor/widgets/background/background_app_bar.dart';
 import 'package:gbdk_graphic_editor/widgets/background/background_editor.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/tiles_app_bar.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/tiles_editor.dart';
+import 'package:image/image.dart' as image;
 
 import 'background.dart';
 import 'colors.dart';
@@ -79,7 +82,7 @@ class _EditorState extends State<Editor> {
       floodMode: floodMode,
       toggleFloodMode: _toggleFloodMode,
       toggleColorSet: _toggleColorSet,
-      setMetaTile: _setMetaTile,
+      loadTileFromFilePicker: loadTileFromFilePicker,
       setTilesDimensions: _setTilesDimensions,
       metaTileIndex: selectedMetaTileIndexTile,
       saveGraphics: _saveGraphics,
@@ -371,5 +374,64 @@ class _EditorState extends State<Editor> {
         }
       }
     });
+  }
+
+  bool loadTileFromFilePicker(result) {
+    bool isPng = result.names[0]!.endsWith('.png');
+    late bool hasLoaded;
+    if (isPng) {
+      var img = image.decodePng(File(result.paths[0]!).readAsBytesSync())!;
+
+      img = image.grayscale(img);
+
+      _setTilesDimensions(img.width, img.height);
+
+      for (int i = 0; i < img.width * img.height; i++) {
+        int rowIndex = i % img.width;
+        int colIndex = i ~/ img.width;
+        int pixel = img.getPixelSafe(rowIndex, colIndex);
+
+        int nbColors = colorSet.length - 1;
+        var intensity = nbColors - (((pixel & 0xff) / 0xff) * nbColors).round();
+
+        metaTile.setPixel(rowIndex, colIndex, 0, intensity);
+      }
+      hasLoaded = true;
+    } else {
+      readBytes(result).then((source) {
+        source = metaTile.formatSource(source);
+        var graphicsElements = metaTile.fromGBDKSource(source);
+        if (graphicsElements.length > 1) {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Tile data selection'),
+                    content: SizedBox(
+                      height: 200.0,
+                      width: 150.0,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: graphicsElements.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            onTap: () {
+                              hasLoaded = _setMetaTile(graphicsElements[index]);
+                              Navigator.pop(context);
+                            },
+                            title: Text(graphicsElements[index].name),
+                          );
+                        },
+                      ),
+                    ),
+                  ));
+        } else if (graphicsElements.length == 1) {
+          hasLoaded = _setMetaTile(graphicsElements.first);
+        } else {
+          hasLoaded = false;
+        }
+      });
+    }
+    return hasLoaded;
   }
 }
