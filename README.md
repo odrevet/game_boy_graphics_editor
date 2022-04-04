@@ -1,7 +1,7 @@
 # GameBoyGraphicsEditor (GBGE)
 
 This is a graphic editor for [GBDK](https://github.com/gbdk-2020/gbdk-2020) inspired by 
-` GameBoyTileDesigner (GBTD)` and `GameBoyMapBuilder (GBMB)`. 
+[`GameBoyTileDesigner (GBTD)` and `GameBoyMapBuilder (GBMB)`](https://github.com/gbdk-2020/GBTD_GBMB). 
 
 Here are the pro and cons over GBTD and GBMB : 
 
