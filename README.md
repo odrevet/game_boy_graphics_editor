@@ -3,9 +3,27 @@
 This is a graphic editor for [GBDK](https://github.com/gbdk-2020/gbdk-2020) inspired by 
 [`GameBoyTileDesigner (GBTD)` and `GameBoyMapBuilder (GBMB)`](https://github.com/gbdk-2020/GBTD_GBMB). 
 
-Here are the pro and cons over GBTD and GBMB : 
+# Online version
 
-# Pro
+GBGE can be run in your browser !
+
+https://odrevet.github.io/GameBoyGraphicsEditor
+
+# Features
+
+* Load Tile data from C source file (exported from gbtd) or png (desktop only).
+
+* Save to C source file.
+
+* Flood file
+
+* Shift / rotate / flip tiles
+
+* Load background data from C source file (exported from gbmb).
+
+# Pro and Cons over GBTD and GBMB
+
+## Pro
 
 * GBGE aims to be compatible with .c exported from `GBTD and GBMB`, there are no 'project file', you 
 import / export data directly from your source code. 
@@ -16,7 +34,7 @@ import / export data directly from your source code.
 
 * Free software under the GNU GENERAL PUBLIC LICENSE
 
-# Cons
+## Cons
 
 * Less options (no palette, no compression, no bin/z80 export)
   
@@ -32,10 +50,6 @@ CGB Palette          : None.
 
 Convert to metatiles : No.
 ```
-
-# Online version 
-
-https://odrevet.github.io/GameBoyGraphicsEditor
 
 # References
 
