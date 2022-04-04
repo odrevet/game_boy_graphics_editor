@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as image;
 
 import '../../download_stub.dart' if (dart.library.html) '../../download.dart';
 import '../../file_utils.dart';
@@ -202,47 +205,73 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
             ),
       IconButton(
         icon: const Icon(Icons.folder_open),
-        tooltip: 'Load tiles from C source file',
+        tooltip: 'Load tiles from file',
         onPressed: () => {
-          selectFolder().then((source) {
+          selectFile(['c', 'png']).then((result) {
             late SnackBar snackBar;
-            if (source == null) {
+            if (result == null) {
               snackBar = const SnackBar(
                 content: Text("Not loaded"),
               );
             } else {
-              source = metaTile.formatSource(source);
               late bool hasLoaded;
-              var graphicsElements = metaTile.fromGBDKSource(source);
-              if (graphicsElements.length > 1) {
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Tile data selection'),
-                          content: SizedBox(
-                            height: 200.0, // Change as per your requirement
-                            width: 150.0, // Change as per your requirement
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: graphicsElements.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return ListTile(
-                                  onTap: () {
-                                    hasLoaded =
-                                        setMetaTile(graphicsElements[index]);
-                                    Navigator.pop(context);
-                                  },
-                                  title: Text(graphicsElements[index].name),
-                                );
-                              },
-                            ),
-                          ),
-                        ));
-              } else if (graphicsElements.length == 1) {
-                hasLoaded = setMetaTile(graphicsElements.first);
+              bool isPng = result.names[0]!.endsWith('.png');
+              if (isPng) {
+                var img =
+                    image.decodePng(File(result.paths[0]!).readAsBytesSync())!;
+
+                img = image.grayscale(img);
+
+                setTilesDimensions(img.width, img.height);
+
+                for (int i = 0; i < img.width * img.height; i++) {
+                  int rowIndex = i % img.width;
+                  int colIndex = i ~/ img.width;
+                  int pixel = img.getPixelSafe(rowIndex, colIndex);
+
+                  int nbColors = colorSet.length - 1;
+                  var intensity =
+                      nbColors - (((pixel & 0xff) / 0xff) * nbColors).round();
+
+                  metaTile.setPixel(rowIndex, colIndex, 0, intensity);
+                }
+                hasLoaded = true;
               } else {
-                hasLoaded = false;
+                readBytes(result).then((source) {
+                  source = metaTile.formatSource(source);
+                  var graphicsElements = metaTile.fromGBDKSource(source);
+                  if (graphicsElements.length > 1) {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) => AlertDialog(
+                              title: const Text('Tile data selection'),
+                              content: SizedBox(
+                                height: 200.0, // Change as per your requirement
+                                width: 150.0, // Change as per your requirement
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: graphicsElements.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return ListTile(
+                                      onTap: () {
+                                        hasLoaded = setMetaTile(
+                                            graphicsElements[index]);
+                                        Navigator.pop(context);
+                                      },
+                                      title: Text(graphicsElements[index].name),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ));
+                  } else if (graphicsElements.length == 1) {
+                    hasLoaded = setMetaTile(graphicsElements.first);
+                  } else {
+                    hasLoaded = false;
+                  }
+                });
               }
 
               snackBar = SnackBar(

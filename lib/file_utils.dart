@@ -27,23 +27,18 @@ Future<String?> saveToDirectory(Graphics graphics) async {
   return selectedDirectory;
 }
 
-Future<String?> selectFolder() async {
-  FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,
-    allowedExtensions: ['c'],
-  );
+Future<FilePickerResult?> selectFile(List<String> allowedExtensions) async =>
+    await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: allowedExtensions,
+    );
 
-  if (result != null) {
-    late String source = "";
-    if (kIsWeb) {
-      Uint8List? bytes = result.files.single.bytes;
-      source = String.fromCharCodes(bytes!);
-    } else {
-      File file = File(result.files.single.path!);
-      source = await file.readAsString();
-    }
-
-    return source;
+Future<String> readBytes(FilePickerResult filePickerResult) async {
+  if (kIsWeb) {
+    Uint8List? bytes = filePickerResult.files.single.bytes;
+    return String.fromCharCodes(bytes!);
+  } else {
+    File file = File(filePickerResult.files.single.path!);
+    return await file.readAsString();
   }
-  return null;
 }

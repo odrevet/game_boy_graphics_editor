@@ -64,8 +64,8 @@ class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
         icon: const Icon(Icons.folder_open),
         tooltip: 'Open source file',
         onPressed: () => {
-          selectFolder().then((source) {
-            if (source == null) {
+          selectFile(['c']).then((result) {
+            if (result == null) {
               var snackBar = const SnackBar(
                 content: Text("Not loaded"),
               );
@@ -75,7 +75,8 @@ class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
                 content: Text("Loading"),
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              setBackgroundFromSource(source);
+              readBytes(result)
+                  .then((source) => setBackgroundFromSource(source));
             }
           })
         },
