@@ -242,11 +242,10 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
                     ));
           },
           icon: const Icon(Icons.settings)),
-      _setTileModeButton(),
     ];
 
     return AppBar(
-      title: Text(metaTile.name),
+      title: _setTileModeButton(),
       actions: actions,
     );
   }

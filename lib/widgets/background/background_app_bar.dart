@@ -33,7 +33,7 @@ class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
     return ElevatedButton.icon(
         onPressed: setTileMode,
         icon: const Icon(Icons.wallpaper),
-        label: const Text('Map'));
+        label: const Text('Background'));
   }
 
   @override
@@ -81,11 +81,10 @@ class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
           })
         },
       ),
-      _setTileModeButton()
     ];
 
     return AppBar(
-      title: Text(background.name),
+      title: _setTileModeButton(),
       actions: actions,
     );
   }
