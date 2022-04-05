@@ -382,18 +382,37 @@ class _EditorState extends State<Editor> {
 
       img = image.grayscale(img);
 
-      _setTilesDimensions(img.width, img.height);
-
-      for (int i = 0; i < img.width * img.height; i++) {
-        int rowIndex = i % img.width;
-        int colIndex = i ~/ img.width;
-        int pixel = img.getPixelSafe(rowIndex, colIndex);
-
-        int nbColors = colorSet.length - 1;
-        var intensity = nbColors - (((pixel & 0xff) / 0xff) * nbColors).round();
-
-        metaTile.setPixel(rowIndex, colIndex, 0, intensity);
+      if (img.width % Tile.size != 0 || img.height % Tile.size != 0) {
+        var snackBar = const SnackBar(
+          content:
+              Text("Image height and width should be multiple of ${Tile.size}"),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return false;
       }
+
+      metaTile.tileList.clear();
+      int nbColors = colorSet.length - 1;
+      for (int rowIndexTile = 0;
+          rowIndexTile < img.height;
+          rowIndexTile += Tile.size) {
+        for (int colIndexTile = 0;
+            colIndexTile < img.width;
+            colIndexTile += Tile.size) {
+          var tile = Tile();
+          for (int rowIndex = 0; rowIndex < Tile.size; rowIndex++) {
+            for (int colIndex = 0; colIndex < Tile.size; colIndex++) {
+              int pixel = img.getPixelSafe(
+                  rowIndex + rowIndexTile, colIndex + colIndexTile);
+              int intensity =
+                  nbColors - (((pixel & 0xff) / 0xff) * nbColors).round();
+              tile.setPixel(rowIndex, colIndex, intensity);
+            }
+          }
+          metaTile.tileList.add(tile);
+        }
+      }
+
       hasLoaded = true;
     } else {
       readBytes(result).then((source) {

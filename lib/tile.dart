@@ -15,8 +15,8 @@ class Tile {
     }
 
     for (var index = 0;
-        index < (combined.length ~/ size) * size;
-        index += size * 2) {
+    index < (combined.length ~/ size) * size;
+    index += size * 2) {
       var lo = "";
       var hi = "";
       var combinedSub = combined.substring(index, index + size * 2);
@@ -42,4 +42,8 @@ class Tile {
       data[dotIndex + index * size] = row[dotIndex];
     }
   }
+
+  void setPixel(int colIndex, int rowIndex, int intensity) =>
+      data[colIndex + (rowIndex * size)] = intensity;
+
 }
