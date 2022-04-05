@@ -51,6 +51,10 @@ CGB Palette          : None.
 Convert to metatiles : No.
 ```
 
+* No undo / Redo
+
+* Background editor slow in web build
+
 # References
 
 [laroldsjubilantjunkyard.com](https://laroldsjubilantjunkyard.com/tutorials/how-to-make-a-gameboy-game/sprites-and-backgrounds/)
