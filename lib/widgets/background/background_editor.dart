@@ -1,4 +1,4 @@
-import 'package:context_menus/context_menus.dart';
+import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/widgets/background/background_grid.dart';
 import 'package:gbdk_graphic_editor/widgets/source_display.dart';
@@ -44,37 +44,51 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
           selectedTile: widget.selectedTileIndex),
       Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ContextMenuRegion(
-          contextMenu: GenericContextMenu(
-            buttonConfigs: [
-              ContextMenuButtonConfig("Insert column before",
-                  icon: const Icon(Icons.add),
-                  onPressed: () => setState(() {
-                        widget.background.insertCol(
-                            hoverTileIndex % widget.background.width,
-                            widget.selectedTileIndex);
-                      })),
-              ContextMenuButtonConfig("Delete column",
-                  icon: const Icon(Icons.remove),
-                  onPressed: () => setState(() {
-                        widget.background.deleteCol(
-                            hoverTileIndex % widget.background.width);
-                      })),
-              ContextMenuButtonConfig("Insert row before",
-                  icon: const Icon(Icons.add),
-                  onPressed: () => setState(() {
-                        widget.background.insertRow(
-                            hoverTileIndex ~/ widget.background.width,
-                            widget.selectedTileIndex);
-                      })),
-              ContextMenuButtonConfig("Remove row",
-                  icon: const Icon(Icons.remove),
-                  onPressed: () => setState(() {
-                        widget.background.deleteRow(
-                            hoverTileIndex ~/ widget.background.width);
-                      }))
-            ],
-          ),
+        child: ContextMenuArea(
+          builder: (context) => [
+            ListTile(
+              title: const Text('Insert column before'),
+              onTap: () {
+                setState(() {
+                  widget.background.insertCol(
+                      hoverTileIndex % widget.background.width,
+                      widget.selectedTileIndex);
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              title: const Text('Delete column'),
+              onTap: () {
+                setState(() {
+                  widget.background
+                      .deleteCol(hoverTileIndex % widget.background.width);
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              title: const Text('Insert row before'),
+              onTap: () {
+                setState(() {
+                  widget.background.insertRow(
+                      hoverTileIndex ~/ widget.background.width,
+                      widget.selectedTileIndex);
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            ListTile(
+              title: const Text('Remove row'),
+              onTap: () {
+                setState(() {
+                  widget.background
+                      .deleteRow(hoverTileIndex ~/ widget.background.width);
+                });
+                Navigator.of(context).pop();
+              },
+            )
+          ],
           child: BackgroundGrid(
             colorSet: widget.colorSet,
             showGrid: widget.showGrid,

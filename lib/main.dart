@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:context_menus/context_menus.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/meta_tile.dart';
 import 'package:gbdk_graphic_editor/tile.dart';
@@ -113,30 +112,29 @@ class _EditorState extends State<Editor> {
 
     return Scaffold(
         appBar: appbar,
-        body: ContextMenuOverlay(
-            child: tileMode
-                ? TilesEditor(
-                    metaTile: metaTile,
-                    onRemove: _removeMetaTile,
-                    onInsert: _addMetaTile,
-                    copy: _copy,
-                    past: _past,
-                    setIndex: _setTileIndexTile,
-                    setPixel: _setPixel,
-                    showGrid: showGridTile,
-                    floodMode: floodMode,
-                    selectedIndex: selectedMetaTileIndexTile,
-                    colorSet: colorSet,
-                    preview: Background(
-                        width: 4, height: 4, fill: selectedMetaTileIndexTile))
-                : BackgroundEditor(
-                    background: background,
-                    colorSet: colorSet,
-                    tiles: metaTile,
-                    selectedTileIndex: selectedTileIndexBackground,
-                    onTapTileListView: _setTileIndexBackground,
-                    showGrid: showGridBackground,
-                  )));
+        body: tileMode
+            ? TilesEditor(
+                metaTile: metaTile,
+                onRemove: _removeMetaTile,
+                onInsert: _addMetaTile,
+                copy: _copy,
+                past: _past,
+                setIndex: _setTileIndexTile,
+                setPixel: _setPixel,
+                showGrid: showGridTile,
+                floodMode: floodMode,
+                selectedIndex: selectedMetaTileIndexTile,
+                colorSet: colorSet,
+                preview: Background(
+                    width: 4, height: 4, fill: selectedMetaTileIndexTile))
+            : BackgroundEditor(
+                background: background,
+                colorSet: colorSet,
+                tiles: metaTile,
+                selectedTileIndex: selectedTileIndexBackground,
+                onTapTileListView: _setTileIndexBackground,
+                showGrid: showGridBackground,
+              ));
   }
 
   _saveGraphics(Graphics graphics, BuildContext context) {

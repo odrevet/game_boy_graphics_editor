@@ -1,4 +1,4 @@
-import 'package:context_menus/context_menus.dart';
+import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:gbdk_graphic_editor/background.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_canvas.dart';
@@ -48,7 +48,41 @@ class _TilesEditorState extends State<TilesEditor> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      ContextMenuRegion(
+      ContextMenuArea(
+        builder: (BuildContext context) => [
+          ListTile(
+            leading: const Icon(Icons.add),
+            title: const Text("Insert before"),
+            onTap: () {
+              widget.onInsert(hoverTileIndex);
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.remove),
+            title: const Text("Delete"),
+            onTap: () {
+              widget.onRemove(hoverTileIndex);
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.copy),
+            title: const Text("Copy"),
+            onTap: () {
+              widget.copy(hoverTileIndex);
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.paste),
+            title: const Text("Paste"),
+            onTap: () {
+              widget.past(hoverTileIndex);
+              Navigator.pop(context);
+            },
+          ),
+        ],
         child: MetaTileListView(
             onHover: (index) => setState(() {
                   hoverTileIndex = index;
@@ -57,30 +91,6 @@ class _TilesEditorState extends State<TilesEditor> {
             metaTile: widget.metaTile,
             selectedTile: widget.selectedIndex,
             colorSet: widget.colorSet),
-        contextMenu: GenericContextMenu(
-          buttonConfigs: [
-            ContextMenuButtonConfig(
-              "Insert before",
-              icon: const Icon(Icons.add),
-              onPressed: () => widget.onInsert(hoverTileIndex),
-            ),
-            ContextMenuButtonConfig(
-              "Delete",
-              icon: const Icon(Icons.remove),
-              onPressed: () => widget.onRemove(hoverTileIndex),
-            ),
-            ContextMenuButtonConfig(
-              "Copy",
-              icon: const Icon(Icons.copy),
-              onPressed: () => widget.copy(hoverTileIndex),
-            ),
-            ContextMenuButtonConfig(
-              "Paste",
-              icon: const Icon(Icons.paste),
-              onPressed: () => widget.past(hoverTileIndex),
-            )
-          ],
-        ),
       ),
       Expanded(
         child: Container(
