@@ -111,6 +111,13 @@ class _TilesEditorState extends State<TilesEditor> {
       Expanded(
         child: Column(
           children: [
+            TextFormField(
+              decoration: const InputDecoration(labelText: 'Name'),
+              initialValue: widget.metaTile.name,
+              onChanged: (text) => setState(() {
+                widget.metaTile.name = text;
+              }),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
