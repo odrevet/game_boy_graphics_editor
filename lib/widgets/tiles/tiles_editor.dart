@@ -12,15 +12,15 @@ class TilesEditor extends StatefulWidget {
   final Background preview;
   final MetaTile metaTile;
   final Function setIndex;
-  final Function setPixel;
   final bool showGrid;
   final bool floodMode;
   final int selectedIndex;
-  final Function onRemove;
   final Function onInsert;
+  final Function onRemove;
   final Function copy;
   final Function past;
   final List<Color> colorSet;
+  final int selectedIntensity;
 
   const TilesEditor({
     Key? key,
@@ -29,13 +29,13 @@ class TilesEditor extends StatefulWidget {
     required this.setIndex,
     required this.showGrid,
     required this.floodMode,
-    required this.setPixel,
     required this.selectedIndex,
-    required this.onRemove,
     required this.onInsert,
+    required this.onRemove,
     required this.copy,
     required this.past,
     required this.colorSet,
+    required this.selectedIntensity,
   }) : super(key: key);
 
   @override
@@ -99,11 +99,11 @@ class _TilesEditorState extends State<TilesEditor> {
           child: AspectRatio(
             aspectRatio: widget.metaTile.width / widget.metaTile.height,
             child: MetaTileCanvas(
+                intensity: widget.selectedIntensity,
                 metaTile: widget.metaTile,
                 showGrid: widget.showGrid,
                 floodMode: widget.floodMode,
                 metaTileIndex: widget.selectedIndex,
-                onTap: widget.setPixel,
                 colorSet: widget.colorSet),
           ),
         ),

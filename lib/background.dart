@@ -1,13 +1,13 @@
 import 'package:gbdk_graphic_editor/graphics.dart';
-import 'package:gbdk_graphic_editor/meta_tile.dart';
 
 import 'convert.dart';
+import 'meta_tile.dart';
 
 class Background extends Graphics {
-  MetaTile? tiles;
+  MetaTile? metaTile;
   List<int> data = [];
 
-  Background({height = 0, width = 0, name = "", int fill = 0, this.tiles})
+  Background({height = 0, width = 0, name = "", int fill = 0, this.metaTile})
       : super(name: name, width: width, height: height) {
     data = List<int>.filled(height * width, fill, growable: true);
   }
@@ -16,7 +16,7 @@ class Background extends Graphics {
   String toHeader() {
     return """/*
 Info: 
-  Tile set  : ${tiles?.name ?? ""}    
+  Tile set  : ${metaTile?.name ?? ""}    
 */
 #define ${name}Width $width
 #define ${name}Height $height

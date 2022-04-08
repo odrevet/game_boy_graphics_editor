@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../download_stub.dart' if (dart.library.html) '../../download.dart';
 import '../../file_utils.dart';
 import '../../meta_tile.dart';
+import '../../meta_tile_cubit.dart';
 import '../tiles/intensity_button.dart';
 
 class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
@@ -15,10 +17,6 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final Function setTilesDimensions;
   final bool showGrid;
   final bool floodMode;
-  final VoidCallback rightShift;
-  final VoidCallback leftShift;
-  final VoidCallback upShift;
-  final VoidCallback downShift;
   final Function setIntensity;
   final int selectedIntensity;
   final Function addMetaTile;
@@ -30,10 +28,6 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final Function saveGraphics;
   final int metaTileIndex;
   final List<Color> colorSet;
-  final VoidCallback flipHorizontal;
-  final VoidCallback flipVertical;
-  final VoidCallback rotateLeft;
-  final VoidCallback rotateRight;
 
   const TilesAppBar({
     this.preferredSize = const Size.fromHeight(50.0),
@@ -43,10 +37,6 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.setTilesDimensions,
     required this.showGrid,
     required this.floodMode,
-    required this.rightShift,
-    required this.leftShift,
-    required this.upShift,
-    required this.downShift,
     required this.setIntensity,
     required this.selectedIntensity,
     required this.addMetaTile,
@@ -58,10 +48,6 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.metaTileIndex,
     required this.saveGraphics,
     required this.colorSet,
-    required this.flipHorizontal,
-    required this.flipVertical,
-    required this.rotateLeft,
-    required this.rotateRight,
   }) : super(key: key);
 
   Widget _setTileModeButton() {
@@ -71,7 +57,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
         label: const Text('Tile'));
   }
 
-  Widget _tileDimensionsDropDown() {
+  Widget _tileDimensionsDropDown(BuildContext context) {
     return DropdownButton<String>(
       value: "${metaTile.width} x ${metaTile.height}",
       onChanged: (String? value) {
@@ -96,7 +82,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
             break;
         }
 
-        setTilesDimensions(width, height);
+        context.read<MetaTileCubit>().setDimensions(width, height);
       },
       items: <String>['8 x 8', '8 x 16', '16 x 16', '32 x 32']
           .map<DropdownMenuItem<String>>((String value) {
@@ -113,31 +99,42 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     var actions = <Widget>[];
 
     actions = [
-      IconButton(onPressed: flipVertical, icon: const Icon(Icons.flip)),
       IconButton(
-          onPressed: flipHorizontal,
+          onPressed: () =>
+              context.read<MetaTileCubit>().flipHorizontal(metaTileIndex),
+          icon: const Icon(Icons.flip)),
+      IconButton(
+          onPressed: () =>
+              context.read<MetaTileCubit>().flipVertical(metaTileIndex),
           icon: const RotatedBox(
             quarterTurns: 1,
             child: Icon(Icons.flip),
           )),
       IconButton(
-          onPressed: metaTile.width == metaTile.height ? rotateLeft : null,
+          onPressed: () => metaTile.width == metaTile.height
+              ? context.read<MetaTileCubit>().rotateLeft(metaTileIndex)
+              : null,
           icon: const Icon(Icons.rotate_left)),
       IconButton(
-          onPressed: metaTile.width == metaTile.height ? rotateRight : null,
+          onPressed: () => metaTile.width == metaTile.height
+              ? context.read<MetaTileCubit>().rotateRight(metaTileIndex)
+              : null,
           icon: const Icon(Icons.rotate_right)),
       const VerticalDivider(),
       IconButton(
-          onPressed: upShift,
+          onPressed: () => context.read<MetaTileCubit>().upShift(metaTileIndex),
           icon: const Icon(Icons.keyboard_arrow_up_rounded)),
       IconButton(
-          onPressed: downShift,
+          onPressed: () =>
+              context.read<MetaTileCubit>().downShift(metaTileIndex),
           icon: const Icon(Icons.keyboard_arrow_down_rounded)),
       IconButton(
-          onPressed: leftShift,
+          onPressed: () =>
+              context.read<MetaTileCubit>().leftShift(metaTileIndex),
           icon: const Icon(Icons.keyboard_arrow_left_rounded)),
       IconButton(
-          onPressed: rightShift,
+          onPressed: () =>
+              context.read<MetaTileCubit>().rightShift(metaTileIndex),
           icon: const Icon(Icons.keyboard_arrow_right_rounded)),
       IconButton(
         icon: Icon(floodMode ? Icons.waves : Icons.edit),
@@ -145,7 +142,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
         onPressed: toggleFloodMode,
       ),
       const VerticalDivider(),
-      _tileDimensionsDropDown(),
+      _tileDimensionsDropDown(context),
       IconButton(
         icon: Icon(showGrid ? Icons.grid_on : Icons.grid_off),
         tooltip: '${showGrid ? 'Hide' : 'Show'} grid',

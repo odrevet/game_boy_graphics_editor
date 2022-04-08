@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gbdk_graphic_editor/meta_tile.dart';
+import 'package:gbdk_graphic_editor/meta_tile_cubit.dart';
 import 'package:gbdk_graphic_editor/tile.dart';
 import 'package:gbdk_graphic_editor/widgets/background/background_app_bar.dart';
 import 'package:gbdk_graphic_editor/widgets/background/background_editor.dart';
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'RobotoMono',
         primarySwatch: Colors.grey,
       ),
-      home: const Editor(),
+      home: BlocProvider(create: (_) => MetaTileCubit(), child: const Editor()),
     );
   }
 }
@@ -43,7 +45,7 @@ class Editor extends StatefulWidget {
 
 class _EditorState extends State<Editor> {
   var selectedIntensity = 3;
-  var metaTile = MetaTile(name: "Tiles");
+  late MetaTile metaTile;
   late Background background;
   int selectedMetaTileIndexTile = 0;
   int selectedTileIndexBackground = 0;
@@ -57,84 +59,79 @@ class _EditorState extends State<Editor> {
   @override
   void initState() {
     super.initState();
-    metaTile.tileList.add(Tile());
-    background =
-        Background(width: 20, height: 18, name: "Background", tiles: metaTile);
+    background = Background(width: 20, height: 18, name: "Background");
   }
 
   @override
   Widget build(BuildContext context) {
-    TilesAppBar tileappbar = TilesAppBar(
-      preferredSize: const Size.fromHeight(50.0),
-      metaTile: metaTile,
-      rightShift: _rightShift,
-      leftShift: _leftShift,
-      upShift: _upShift,
-      downShift: _downShift,
-      setIntensity: _setIntensity,
-      selectedIntensity: selectedIntensity,
-      addMetaTile: _addMetaTile,
-      removeMetaTile: _removeMetaTile,
-      setTileMode: _setTileMode,
-      toggleGridTile: _toggleGridTile,
-      showGrid: showGridTile,
-      floodMode: floodMode,
-      toggleFloodMode: _toggleFloodMode,
-      toggleColorSet: _toggleColorSet,
-      loadTileFromFilePicker: loadTileFromFilePicker,
-      setTilesDimensions: _setTilesDimensions,
-      metaTileIndex: selectedMetaTileIndexTile,
-      saveGraphics: _saveGraphics,
-      colorSet: colorSet,
-      flipHorizontal: flipHorizontal,
-      flipVertical: flipVertical,
-      rotateLeft: rotateLeft,
-      rotateRight: rotateRight,
+    return BlocBuilder<MetaTileCubit, MetaTile>(
+      builder: (context, metaTile) {
+        this.metaTile = metaTile; // WIP remove me !
+        TilesAppBar tileappbar = TilesAppBar(
+          preferredSize: const Size.fromHeight(50.0),
+          metaTile: metaTile,
+          setIntensity: _setIntensity,
+          selectedIntensity: selectedIntensity,
+          addMetaTile: _addMetaTile,
+          removeMetaTile: _removeMetaTile,
+          setTileMode: _setTileMode,
+          toggleGridTile: _toggleGridTile,
+          showGrid: showGridTile,
+          floodMode: floodMode,
+          toggleFloodMode: _toggleFloodMode,
+          toggleColorSet: _toggleColorSet,
+          loadTileFromFilePicker: loadTileFromFilePicker,
+          setTilesDimensions: _setTilesDimensions,
+          metaTileIndex: selectedMetaTileIndexTile,
+          saveGraphics: _saveGraphics,
+          colorSet: colorSet,
+        );
+
+        BackgroundAppBar backgroundappbar = BackgroundAppBar(
+          preferredSize: const Size.fromHeight(50.0),
+          setTileMode: _setTileMode,
+          toggleGridBackground: _toggleGridBackground,
+          showGrid: showGridBackground,
+          setBackgroundFromSource: _setBackgroundFromSource,
+          background: background,
+          selectedTileIndex: selectedTileIndexBackground,
+          saveGraphics: _saveGraphics,
+        );
+
+        dynamic appbar;
+        if (tileMode) {
+          appbar = tileappbar;
+        } else {
+          appbar = backgroundappbar;
+        }
+
+        return Scaffold(
+            appBar: appbar,
+            body: tileMode
+                ? TilesEditor(
+                    selectedIntensity: selectedIntensity,
+                    metaTile: metaTile,
+                    onInsert: _addMetaTile,
+                    onRemove: _removeMetaTile,
+                    copy: _copy,
+                    past: _past,
+                    setIndex: _setTileIndexTile,
+                    showGrid: showGridTile,
+                    floodMode: floodMode,
+                    selectedIndex: selectedMetaTileIndexTile,
+                    colorSet: colorSet,
+                    preview: Background(
+                        width: 4, height: 4, fill: selectedMetaTileIndexTile))
+                : BackgroundEditor(
+                    background: background,
+                    colorSet: colorSet,
+                    tiles: metaTile,
+                    selectedTileIndex: selectedTileIndexBackground,
+                    onTapTileListView: _setTileIndexBackground,
+                    showGrid: showGridBackground,
+                  ));
+      },
     );
-
-    BackgroundAppBar backgroundappbar = BackgroundAppBar(
-      preferredSize: const Size.fromHeight(50.0),
-      setTileMode: _setTileMode,
-      toggleGridBackground: _toggleGridBackground,
-      showGrid: showGridBackground,
-      setBackgroundFromSource: _setBackgroundFromSource,
-      background: background,
-      selectedTileIndex: selectedTileIndexBackground,
-      saveGraphics: _saveGraphics,
-    );
-
-    dynamic appbar;
-    if (tileMode) {
-      appbar = tileappbar;
-    } else {
-      appbar = backgroundappbar;
-    }
-
-    return Scaffold(
-        appBar: appbar,
-        body: tileMode
-            ? TilesEditor(
-                metaTile: metaTile,
-                onRemove: _removeMetaTile,
-                onInsert: _addMetaTile,
-                copy: _copy,
-                past: _past,
-                setIndex: _setTileIndexTile,
-                setPixel: _setPixel,
-                showGrid: showGridTile,
-                floodMode: floodMode,
-                selectedIndex: selectedMetaTileIndexTile,
-                colorSet: colorSet,
-                preview: Background(
-                    width: 4, height: 4, fill: selectedMetaTileIndexTile))
-            : BackgroundEditor(
-                background: background,
-                colorSet: colorSet,
-                tiles: metaTile,
-                selectedTileIndex: selectedTileIndexBackground,
-                onTapTileListView: _setTileIndexBackground,
-                showGrid: showGridBackground,
-              ));
   }
 
   _saveGraphics(Graphics graphics, BuildContext context) {
@@ -189,51 +186,6 @@ class _EditorState extends State<Editor> {
         selectedIntensity = intensity;
       });
 
-  List<int> _shift(List<int> list, int v) {
-    var i = v % list.length;
-    return list.sublist(i)..addAll(list.sublist(0, i));
-  }
-
-  void _rightShift() => setState(() {
-        for (int indexRow = 0; indexRow < metaTile.height; indexRow++) {
-          var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow);
-          row.replaceRange(0, row.length, _shift(row, -1));
-          metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
-        }
-      });
-
-  void _leftShift() => setState(() {
-        for (int indexRow = 0; indexRow < metaTile.height; indexRow++) {
-          var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow);
-          row.replaceRange(0, row.length, _shift(row, 1));
-          metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
-        }
-      });
-
-  void _upShift() => setState(() {
-        var rowTemp = metaTile.getRow(selectedMetaTileIndexTile, 0);
-
-        for (int indexRow = 0; indexRow < metaTile.height - 1; indexRow++) {
-          var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow + 1);
-          metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
-        }
-
-        metaTile.setRow(
-            selectedMetaTileIndexTile, metaTile.height - 1, rowTemp);
-      });
-
-  void _downShift() => setState(() {
-        var rowTemp =
-            metaTile.getRow(selectedMetaTileIndexTile, metaTile.height - 1);
-
-        for (int indexRow = metaTile.height - 1; indexRow > 0; indexRow--) {
-          var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow - 1);
-          metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
-        }
-
-        metaTile.setRow(selectedMetaTileIndexTile, 0, rowTemp);
-      });
-
   void _copy(int index) => setState(() {
         tileBuffer.clear();
         for (var i = index; i < index + metaTile.nbTilePerMetaTile(); i++) {
@@ -267,6 +219,8 @@ class _EditorState extends State<Editor> {
         if (metaTile.tileList.isEmpty) {
           _addMetaTile(0);
         }
+
+        selectedMetaTileIndexTile = 0;
       });
 
   void _setTileMode() => setState(() {
@@ -294,85 +248,6 @@ class _EditorState extends State<Editor> {
         background.fromSource(source);
         selectedTileIndexBackground = 0;
       });
-
-  _setPixel(int rowIndex, int colIndex) => setState(() => metaTile.setPixel(
-      rowIndex, colIndex, selectedMetaTileIndexTile, selectedIntensity));
-
-  flipHorizontal() {
-    var metaTileTemp = _newMetaTile();
-
-    for (int rowIndex = 0; rowIndex < metaTile.height; rowIndex++) {
-      for (int colIndex = 0; colIndex < metaTile.width; colIndex++) {
-        int intensity = metaTile.getPixel(
-            rowIndex, metaTile.width - 1 - colIndex, selectedMetaTileIndexTile);
-        metaTileTemp.setPixel(rowIndex, colIndex, 0, intensity);
-      }
-    }
-
-    _setMetaTileData(metaTileTemp);
-  }
-
-  flipVertical() {
-    var metaTileTemp = _newMetaTile();
-
-    for (int rowIndex = 0; rowIndex < metaTile.height; rowIndex++) {
-      for (int colIndex = 0; colIndex < metaTile.width; colIndex++) {
-        int intensity = metaTile.getPixel(
-            metaTile.width - 1 - colIndex, rowIndex, selectedMetaTileIndexTile);
-        metaTileTemp.setPixel(colIndex, rowIndex, 0, intensity);
-      }
-    }
-
-    _setMetaTileData(metaTileTemp);
-  }
-
-  rotateLeft() {
-    var metaTileTemp = _newMetaTile();
-
-    for (int rowIndex = 0; rowIndex < metaTile.height; rowIndex++) {
-      for (int colIndex = 0; colIndex < metaTile.width; colIndex++) {
-        int intensity = metaTile.getPixel(
-            metaTile.width - 1 - colIndex, rowIndex, selectedMetaTileIndexTile);
-        metaTileTemp.setPixel(rowIndex, colIndex, 0, intensity);
-      }
-    }
-
-    _setMetaTileData(metaTileTemp);
-  }
-
-  rotateRight() {
-    var metaTileTemp = _newMetaTile();
-
-    for (int rowIndex = 0; rowIndex < metaTile.height; rowIndex++) {
-      for (int colIndex = 0; colIndex < metaTile.width; colIndex++) {
-        int intensity = metaTile.getPixel(
-            rowIndex, metaTile.width - 1 - colIndex, selectedMetaTileIndexTile);
-        metaTileTemp.setPixel(colIndex, rowIndex, 0, intensity);
-      }
-    }
-
-    _setMetaTileData(metaTileTemp);
-  }
-
-  _newMetaTile() {
-    var metaTileTemp = MetaTile(width: metaTile.width, height: metaTile.height);
-    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
-      metaTileTemp.tileList.add(Tile());
-    }
-    return metaTileTemp;
-  }
-
-  _setMetaTileData(MetaTile metaTileTemp) {
-    setState(() {
-      for (int rowIndex = 0; rowIndex < metaTile.width; rowIndex++) {
-        for (int colIndex = 0; colIndex < metaTile.height; colIndex++) {
-          int intensity = metaTileTemp.getPixel(rowIndex, colIndex, 0);
-          metaTile.setPixel(
-              rowIndex, colIndex, selectedMetaTileIndexTile, intensity);
-        }
-      }
-    });
-  }
 
   bool loadTileFromFilePicker(result) {
     bool isPng = result.names[0]!.endsWith('.png');

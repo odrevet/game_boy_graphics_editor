@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:gbdk_graphic_editor/graphics.dart';
 import 'package:gbdk_graphic_editor/tile.dart';
 
@@ -5,10 +7,22 @@ import 'convert.dart';
 
 // width and height refer how many 8x8 tiles are displayed (in pixel)
 class MetaTile extends Graphics {
-  List<Tile> tileList = [];
+  final List<Tile> tileList;
 
-  MetaTile({String name = '', width = Tile.size, height = Tile.size})
+  MetaTile(
+      {String name = 'tiles',
+      width = Tile.size,
+      height = Tile.size,
+      required this.tileList})
       : super(name: name, height: height, width: width);
+
+  MetaTile copyWith(
+          {List<Tile>? tileList, String? name, int? width, int? height}) =>
+      MetaTile(
+          tileList: tileList ?? this.tileList,
+          name: name ?? this.name,
+          width: width ?? this.width,
+          height: height ?? this.height);
 
   List<String> getRaw() {
     var raw = <String>[];

@@ -8,6 +8,7 @@ class GraphicElement {
 }
 
 abstract class Graphics {
+  // extends Equatable {
   int height;
   int width;
   String name;

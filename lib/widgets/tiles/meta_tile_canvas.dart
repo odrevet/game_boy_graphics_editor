@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_display.dart';
 
 import '../../meta_tile.dart';
+import '../../meta_tile_cubit.dart';
 
 class MetaTileCanvas extends StatefulWidget {
   final MetaTile metaTile;
-  final Function onTap;
   final bool showGrid;
   final bool floodMode;
   final int metaTileIndex;
   final List<Color> colorSet;
+  final int intensity;
 
   late final List<int> pattern;
 
@@ -19,7 +21,7 @@ class MetaTileCanvas extends StatefulWidget {
       required this.floodMode,
       required this.metaTileIndex,
       required this.colorSet,
-      required this.onTap,
+      required this.intensity,
       Key? key})
       : super(key: key) {
     pattern = metaTile.getPattern();
@@ -75,14 +77,18 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
           widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex);
       flood(rowIndex, colIndex, targetColor);
     } else {
-      widget.onTap(rowIndex, colIndex);
+      context
+          .read<MetaTileCubit>()
+          .setPixel(rowIndex, colIndex, widget.metaTileIndex, widget.intensity);
     }
   }
 
   flood(int rowIndex, int colIndex, int targetColor) {
     if (widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex) ==
         targetColor) {
-      widget.onTap(rowIndex, colIndex);
+      context
+          .read<MetaTileCubit>()
+          .setPixel(rowIndex, colIndex, widget.metaTileIndex, widget.intensity);
       if (inbound(rowIndex, colIndex - 1)) {
         flood(rowIndex, colIndex - 1, targetColor);
       }
