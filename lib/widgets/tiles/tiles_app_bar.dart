@@ -19,8 +19,6 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool floodMode;
   final Function setIntensity;
   final int selectedIntensity;
-  final Function addMetaTile;
-  final Function removeMetaTile;
   final VoidCallback toggleGridTile;
   final VoidCallback toggleFloodMode;
   final VoidCallback toggleColorSet;
@@ -39,8 +37,6 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.floodMode,
     required this.setIntensity,
     required this.selectedIntensity,
-    required this.addMetaTile,
-    required this.removeMetaTile,
     required this.toggleGridTile,
     required this.toggleFloodMode,
     required this.toggleColorSet,
@@ -177,12 +173,12 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
       IconButton(
           icon: const Icon(Icons.add),
           tooltip: 'Add tile',
-          onPressed: () => addMetaTile(
+          onPressed: () => context.read<MetaTileCubit>().insert(
               metaTile.tileList.length ~/ metaTile.nbTilePerMetaTile())),
       IconButton(
           icon: const Icon(Icons.remove),
           tooltip: 'Remove tile',
-          onPressed: () => removeMetaTile(metaTileIndex)),
+          onPressed: () => context.read<MetaTileCubit>().remove(metaTileIndex)),
       const VerticalDivider(),
       kIsWeb
           ? IconButton(

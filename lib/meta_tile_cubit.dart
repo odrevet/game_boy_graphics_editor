@@ -175,4 +175,14 @@ class MetaTileCubit extends Cubit<MetaTile> {
 
     emit(metaTile);
   }
+
+  void insert(int index) => emit(state.copyWith(
+      tileList: state.tileList
+        ..insertAll(index * state.nbTilePerMetaTile(),
+            List<Tile>.generate(state.nbTilePerMetaTile(), (_) => Tile()))));
+
+  void remove(int index) => emit(state.copyWith(
+      tileList: state.tileList
+        ..removeRange(index * state.nbTilePerMetaTile(),
+            index * state.nbTilePerMetaTile() + state.nbTilePerMetaTile())));
 }

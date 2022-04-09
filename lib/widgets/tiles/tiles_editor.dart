@@ -17,8 +17,6 @@ class TilesEditor extends StatefulWidget {
   final bool showGrid;
   final bool floodMode;
   final int selectedIndex;
-  final Function onInsert;
-  final Function onRemove;
   final List<Color> colorSet;
   final int selectedIntensity;
   final List<int> tileBuffer;
@@ -31,8 +29,6 @@ class TilesEditor extends StatefulWidget {
     required this.showGrid,
     required this.floodMode,
     required this.selectedIndex,
-    required this.onInsert,
-    required this.onRemove,
     required this.colorSet,
     required this.selectedIntensity,
     required this.tileBuffer,
@@ -54,7 +50,7 @@ class _TilesEditorState extends State<TilesEditor> {
             leading: const Icon(Icons.add),
             title: const Text("Insert before"),
             onTap: () {
-              widget.onInsert(hoverTileIndex);
+              context.read<MetaTileCubit>().insert(hoverTileIndex);
               Navigator.pop(contextMenuAreaContext);
             },
           ),
@@ -62,7 +58,7 @@ class _TilesEditorState extends State<TilesEditor> {
             leading: const Icon(Icons.remove),
             title: const Text("Delete"),
             onTap: () {
-              widget.onRemove(hoverTileIndex);
+              context.read<MetaTileCubit>().remove(hoverTileIndex);
               Navigator.pop(contextMenuAreaContext);
             },
           ),

@@ -72,8 +72,6 @@ class _EditorState extends State<Editor> {
           metaTile: metaTile,
           setIntensity: _setIntensity,
           selectedIntensity: selectedIntensity,
-          addMetaTile: _addMetaTile,
-          removeMetaTile: _removeMetaTile,
           setTileMode: _setTileMode,
           toggleGridTile: _toggleGridTile,
           showGrid: showGridTile,
@@ -111,8 +109,6 @@ class _EditorState extends State<Editor> {
                 ? TilesEditor(
                     selectedIntensity: selectedIntensity,
                     metaTile: metaTile,
-                    onInsert: _addMetaTile,
-                    onRemove: _removeMetaTile,
                     setIndex: _setTileIndexTile,
                     showGrid: showGridTile,
                     floodMode: floodMode,
@@ -183,28 +179,6 @@ class _EditorState extends State<Editor> {
 
   void _setIntensity(intensity) => setState(() {
         selectedIntensity = intensity;
-      });
-
-  void _addMetaTile(int index) => setState(() {
-        var newMetaTile =
-            List<Tile>.generate(metaTile.nbTilePerMetaTile(), (_) => Tile());
-        metaTile.tileList
-            .insertAll(index * metaTile.nbTilePerMetaTile(), newMetaTile);
-        selectedMetaTileIndexTile = index;
-      });
-
-  void _removeMetaTile(int index) => setState(() {
-        metaTile.tileList.removeRange(
-            index * metaTile.nbTilePerMetaTile(),
-            index * metaTile.nbTilePerMetaTile() +
-                metaTile.nbTilePerMetaTile());
-        selectedMetaTileIndexTile = index - 1;
-
-        if (metaTile.tileList.isEmpty) {
-          _addMetaTile(0);
-        }
-
-        selectedMetaTileIndexTile = 0;
       });
 
   void _setTileMode() => setState(() {
