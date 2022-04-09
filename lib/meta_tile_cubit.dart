@@ -67,8 +67,7 @@ class MetaTileCubit extends Cubit<MetaTile> {
   }
 
   _copyMetaTile(MetaTile metaTile) => metaTile.copyWith(
-      tileList: List.generate(metaTile.nbTilePerMetaTile(), (_) => Tile(),
-          growable: false));
+      tileList: List.generate(metaTile.nbTilePerMetaTile(), (_) => Tile()));
 
   _setMetaTileData(
       MetaTile metaTileTemp, MetaTile metaTile, int selectedMetaTileIndexTile) {
