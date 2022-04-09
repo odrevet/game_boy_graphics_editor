@@ -204,7 +204,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
                 content: Text("Not loaded"),
               );
             } else {
-              final bool hasLoaded = loadTileFromFilePicker(result);
+              final bool hasLoaded = loadTileFromFilePicker(result, metaTile);
               snackBar = SnackBar(
                 content: Text(hasLoaded ? "Data loaded" : "Data not loaded"),
               );

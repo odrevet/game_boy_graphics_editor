@@ -45,7 +45,6 @@ class Editor extends StatefulWidget {
 
 class _EditorState extends State<Editor> {
   var selectedIntensity = 3;
-  late MetaTile metaTile;
   late Background background;
   int selectedMetaTileIndexTile = 0;
   int selectedTileIndexBackground = 0;
@@ -66,7 +65,6 @@ class _EditorState extends State<Editor> {
   Widget build(BuildContext context) {
     return BlocBuilder<MetaTileCubit, MetaTile>(
       builder: (context, metaTile) {
-        this.metaTile = metaTile; // WIP remove me !
         TilesAppBar tileappbar = TilesAppBar(
           preferredSize: const Size.fromHeight(50.0),
           metaTile: metaTile,
@@ -141,7 +139,7 @@ class _EditorState extends State<Editor> {
     });
   }
 
-  void _setTilesDimensions(width, height) => setState(() {
+  void _setTilesDimensions(width, height, metaTile) => setState(() {
         metaTile.width = width;
         metaTile.height = height;
         int numberOfTilesNecessary =
@@ -185,7 +183,7 @@ class _EditorState extends State<Editor> {
         tileMode = !tileMode;
       });
 
-  bool _setMetaTile(GraphicElement graphicElement) {
+  bool _setMetaTile(GraphicElement graphicElement, metaTile) {
     bool hasLoaded = true;
     setState(() {
       try {
@@ -196,7 +194,7 @@ class _EditorState extends State<Editor> {
       }
 
       if (hasLoaded) selectedMetaTileIndexTile = 0;
-      _setTilesDimensions(8, 8);
+      _setTilesDimensions(8, 8, metaTile);
     });
     return hasLoaded;
   }
@@ -207,7 +205,7 @@ class _EditorState extends State<Editor> {
         selectedTileIndexBackground = 0;
       });
 
-  bool loadTileFromFilePicker(result) {
+  bool loadTileFromFilePicker(result, metaTile) {
     bool isPng = result.names[0]!.endsWith('.png');
     late bool hasLoaded;
     if (isPng) {
@@ -266,7 +264,8 @@ class _EditorState extends State<Editor> {
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
                             onTap: () {
-                              hasLoaded = _setMetaTile(graphicsElements[index]);
+                              hasLoaded = _setMetaTile(
+                                  graphicsElements[index], metaTile);
                               Navigator.pop(context);
                             },
                             title: Text(graphicsElements[index].name),
@@ -276,7 +275,7 @@ class _EditorState extends State<Editor> {
                     ),
                   ));
         } else if (graphicsElements.length == 1) {
-          hasLoaded = _setMetaTile(graphicsElements.first);
+          hasLoaded = _setMetaTile(graphicsElements.first, metaTile);
         } else {
           hasLoaded = false;
         }
