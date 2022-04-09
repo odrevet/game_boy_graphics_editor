@@ -113,13 +113,12 @@ class _EditorState extends State<Editor> {
                     metaTile: metaTile,
                     onInsert: _addMetaTile,
                     onRemove: _removeMetaTile,
-                    copy: _copy,
-                    past: _past,
                     setIndex: _setTileIndexTile,
                     showGrid: showGridTile,
                     floodMode: floodMode,
                     selectedIndex: selectedMetaTileIndexTile,
                     colorSet: colorSet,
+                    tileBuffer: tileBuffer,
                     preview: Background(
                         width: 4, height: 4, fill: selectedMetaTileIndexTile))
                 : BackgroundEditor(
@@ -184,21 +183,6 @@ class _EditorState extends State<Editor> {
 
   void _setIntensity(intensity) => setState(() {
         selectedIntensity = intensity;
-      });
-
-  void _copy(int index) => setState(() {
-        tileBuffer.clear();
-        for (var i = index; i < index + metaTile.nbTilePerMetaTile(); i++) {
-          tileBuffer.addAll(metaTile.tileList[i].data);
-        }
-      });
-
-  void _past(int index) => setState(() {
-        for (var i = 0; i < tileBuffer.length; i++) {
-          int tileIndex =
-              i ~/ Tile.pixelPerTile + index * metaTile.nbTilePerMetaTile();
-          metaTile.tileList[tileIndex].data[i % 64] = tileBuffer[i];
-        }
       });
 
   void _addMetaTile(int index) => setState(() {

@@ -1,10 +1,12 @@
 import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gbdk_graphic_editor/background.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_canvas.dart';
 import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../meta_tile.dart';
+import '../../meta_tile_cubit.dart';
 import '../background/background_grid.dart';
 import '../source_display.dart';
 
@@ -17,10 +19,9 @@ class TilesEditor extends StatefulWidget {
   final int selectedIndex;
   final Function onInsert;
   final Function onRemove;
-  final Function copy;
-  final Function past;
   final List<Color> colorSet;
   final int selectedIntensity;
+  final List<int> tileBuffer;
 
   const TilesEditor({
     Key? key,
@@ -32,10 +33,9 @@ class TilesEditor extends StatefulWidget {
     required this.selectedIndex,
     required this.onInsert,
     required this.onRemove,
-    required this.copy,
-    required this.past,
     required this.colorSet,
     required this.selectedIntensity,
+    required this.tileBuffer,
   }) : super(key: key);
 
   @override
@@ -49,13 +49,13 @@ class _TilesEditorState extends State<TilesEditor> {
   Widget build(BuildContext context) {
     return Row(children: [
       ContextMenuArea(
-        builder: (BuildContext context) => [
+        builder: (BuildContext contextMenuAreaContext) => [
           ListTile(
             leading: const Icon(Icons.add),
             title: const Text("Insert before"),
             onTap: () {
               widget.onInsert(hoverTileIndex);
-              Navigator.pop(context);
+              Navigator.pop(contextMenuAreaContext);
             },
           ),
           ListTile(
@@ -63,23 +63,27 @@ class _TilesEditorState extends State<TilesEditor> {
             title: const Text("Delete"),
             onTap: () {
               widget.onRemove(hoverTileIndex);
-              Navigator.pop(context);
+              Navigator.pop(contextMenuAreaContext);
             },
           ),
           ListTile(
             leading: const Icon(Icons.copy),
             title: const Text("Copy"),
             onTap: () {
-              widget.copy(hoverTileIndex);
-              Navigator.pop(context);
+              context
+                  .read<MetaTileCubit>()
+                  .copy(hoverTileIndex, widget.tileBuffer);
+              Navigator.pop(contextMenuAreaContext);
             },
           ),
           ListTile(
             leading: const Icon(Icons.paste),
             title: const Text("Paste"),
             onTap: () {
-              widget.past(hoverTileIndex);
-              Navigator.pop(context);
+              context
+                  .read<MetaTileCubit>()
+                  .paste(hoverTileIndex, widget.tileBuffer);
+              Navigator.pop(contextMenuAreaContext);
             },
           ),
         ],
