@@ -66,9 +66,14 @@ class _TilesEditorState extends State<TilesEditor> {
             leading: const Icon(Icons.copy),
             title: const Text("Copy"),
             onTap: () {
-              context
-                  .read<MetaTileCubit>()
-                  .copy(hoverTileIndex, widget.tileBuffer);
+              setState(() {
+                widget.tileBuffer.clear();
+                for (var i = hoverTileIndex;
+                    i < hoverTileIndex + widget.metaTile.nbTilePerMetaTile();
+                    i++) {
+                  widget.tileBuffer.addAll(widget.metaTile.tileList[i].data);
+                }
+              });
               Navigator.pop(contextMenuAreaContext);
             },
           ),

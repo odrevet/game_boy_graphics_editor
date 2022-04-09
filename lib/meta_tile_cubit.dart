@@ -152,17 +152,6 @@ class MetaTileCubit extends Cubit<MetaTile> {
     emit(metaTile);
   }
 
-  void copy(int index, tileBuffer) {
-    var metaTile = state.copyWith();
-
-    tileBuffer.clear();
-    for (var i = index; i < index + metaTile.nbTilePerMetaTile(); i++) {
-      tileBuffer.addAll(metaTile.tileList[i].data);
-    }
-
-    emit(metaTile);
-  }
-
   void paste(int index, tileBuffer) {
     var metaTile = state.copyWith();
 
