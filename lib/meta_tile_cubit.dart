@@ -141,8 +141,7 @@ class MetaTileCubit extends Cubit<MetaTile> {
   }
 
   void setDimensions(width, height) {
-    var metaTile =
-        state.copyWith(tileList: state.tileList, width: width, height: height);
+    var metaTile = state.copyWith(width: width, height: height);
     int numberOfTilesNecessary =
         metaTile.nbTilePerMetaTile() - metaTile.tileList.length;
 
