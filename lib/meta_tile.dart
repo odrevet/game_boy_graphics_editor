@@ -19,7 +19,7 @@ class MetaTile extends Graphics {
   MetaTile copyWith(
           {List<Tile>? tileList, String? name, int? width, int? height}) =>
       MetaTile(
-          tileList: tileList ?? this.tileList,
+          tileList: tileList ?? [...this.tileList],
           name: name ?? this.name,
           width: width ?? this.width,
           height: height ?? this.height);
@@ -130,6 +130,10 @@ class MetaTile extends Graphics {
     int indexTile = index[0];
     int indexPixel = index[1];
     tileList[indexTile].data[indexPixel] = intensity;
+  }
+
+  setTiles(int selectedMetaTileIndex, int intensity) {
+    tileList[0].data.fillRange(0, 64, intensity);
   }
 
   @override

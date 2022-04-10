@@ -66,22 +66,9 @@ class MetaTileCubit extends Cubit<MetaTile> {
     emit(metaTile);
   }
 
-  _copyMetaTile(MetaTile metaTile) => metaTile.copyWith(
-      tileList: List.generate(metaTile.nbTilePerMetaTile(), (_) => Tile()));
-
-  _setMetaTileData(
-      MetaTile metaTileTemp, MetaTile metaTile, int selectedMetaTileIndexTile) {
-    for (int rowIndex = 0; rowIndex < metaTile.width; rowIndex++) {
-      for (int colIndex = 0; colIndex < metaTile.height; colIndex++) {
-        int intensity = metaTileTemp.getPixel(rowIndex, colIndex, 0);
-        metaTile.setPixel(
-            rowIndex, colIndex, selectedMetaTileIndexTile, intensity);
-      }
-    }
-  }
-
   flipHorizontal(int selectedMetaTileIndexTile) {
-    var metaTile = _copyMetaTile(state);
+    var metaTile = state.copyWith();
+    metaTile.tileList[0] = Tile();
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
@@ -91,12 +78,12 @@ class MetaTileCubit extends Cubit<MetaTile> {
       }
     }
 
-    _setMetaTileData(metaTile, state, selectedMetaTileIndexTile);
     emit(metaTile);
   }
 
   flipVertical(int selectedMetaTileIndexTile) {
-    var metaTile = _copyMetaTile(state);
+    var metaTile = state.copyWith();
+    metaTile.tileList[0] = Tile();
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
@@ -106,12 +93,12 @@ class MetaTileCubit extends Cubit<MetaTile> {
       }
     }
 
-    _setMetaTileData(metaTile, state, selectedMetaTileIndexTile);
     emit(metaTile);
   }
 
   void rotateRight(int selectedMetaTileIndexTile) {
-    var metaTile = _copyMetaTile(state);
+    var metaTile = state.copyWith();
+    metaTile.tileList[0] = Tile();
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
@@ -121,12 +108,12 @@ class MetaTileCubit extends Cubit<MetaTile> {
       }
     }
 
-    _setMetaTileData(metaTile, state, selectedMetaTileIndexTile);
     emit(metaTile);
   }
 
   void rotateLeft(int selectedMetaTileIndexTile) {
-    var metaTile = _copyMetaTile(state);
+    var metaTile = state.copyWith();
+    metaTile.tileList[0] = Tile();
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
@@ -136,7 +123,6 @@ class MetaTileCubit extends Cubit<MetaTile> {
       }
     }
 
-    _setMetaTileData(metaTile, state, selectedMetaTileIndexTile);
     emit(metaTile);
   }
 
