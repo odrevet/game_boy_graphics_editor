@@ -14,7 +14,6 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
 
   final VoidCallback setTileMode;
   final MetaTile metaTile;
-  final Function setTilesDimensions;
   final bool showGrid;
   final bool floodMode;
   final Function setIntensity;
@@ -32,7 +31,6 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     Key? key,
     required this.metaTile,
     required this.setTileMode,
-    required this.setTilesDimensions,
     required this.showGrid,
     required this.floodMode,
     required this.setIntensity,

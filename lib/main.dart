@@ -77,7 +77,6 @@ class _EditorState extends State<Editor> {
           toggleFloodMode: _toggleFloodMode,
           toggleColorSet: _toggleColorSet,
           loadTileFromFilePicker: loadTileFromFilePicker,
-          setTilesDimensions: _setTilesDimensions,
           metaTileIndex: selectedMetaTileIndexTile,
           saveGraphics: _saveGraphics,
           colorSet: colorSet,
