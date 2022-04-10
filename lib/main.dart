@@ -138,18 +138,6 @@ class _EditorState extends State<Editor> {
     });
   }
 
-  void _setTilesDimensions(width, height, metaTile) => setState(() {
-        metaTile.width = width;
-        metaTile.height = height;
-        int numberOfTilesNecessary =
-            metaTile.nbTilePerMetaTile() - metaTile.tileList.length;
-
-        for (int i = 0; i < numberOfTilesNecessary; i++) {
-          metaTile.tileList.add(Tile());
-        }
-        selectedMetaTileIndexTile = 0;
-      });
-
   void _setTileIndexBackground(index) => setState(() {
         selectedTileIndexBackground = index;
       });
@@ -193,7 +181,7 @@ class _EditorState extends State<Editor> {
       }
 
       if (hasLoaded) selectedMetaTileIndexTile = 0;
-      _setTilesDimensions(8, 8, metaTile);
+      context.read<MetaTileCubit>().setDimensions(8, 8);
     });
     return hasLoaded;
   }
