@@ -106,11 +106,11 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
       const VerticalDivider(),
       IconButton(
           onPressed: () =>
-              context.read<MetaTileCubit>().flipHorizontal(metaTileIndex),
+              context.read<MetaTileCubit>().flipVertical(metaTileIndex),
           icon: const Icon(Icons.flip)),
       IconButton(
           onPressed: () =>
-              context.read<MetaTileCubit>().flipVertical(metaTileIndex),
+              context.read<MetaTileCubit>().flipHorizontal(metaTileIndex),
           icon: const RotatedBox(
             quarterTurns: 1,
             child: Icon(Icons.flip),
