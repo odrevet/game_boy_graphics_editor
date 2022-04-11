@@ -75,9 +75,10 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
     if (widget.floodMode) {
       int targetColor =
           widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex);
-      widget.metaTile.flood(widget.metaTileIndex, widget.intensity, rowIndex,
-          colIndex, targetColor);
-      context.read<MetaTileCubit>().update();
+      if (targetColor != widget.intensity) {
+        context.read<MetaTileCubit>().flood(rowIndex, colIndex,
+            widget.metaTileIndex, widget.intensity, targetColor);
+      }
     } else if (widget.metaTile
             .getPixel(rowIndex, colIndex, widget.metaTileIndex) !=
         widget.intensity) {

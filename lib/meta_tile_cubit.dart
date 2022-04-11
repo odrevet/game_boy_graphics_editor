@@ -5,15 +5,17 @@ import 'package:replay_bloc/replay_bloc.dart';
 class MetaTileCubit extends ReplayCubit<MetaTile> {
   MetaTileCubit() : super(MetaTile(tileList: [])..tileList.add(Tile()));
 
-  void update() => emit(state.copyWith());
-
   setPixel(int rowIndex, int colIndex, metaTileIndex, intensity) {
-    var metaTile = state.copyWith();
-    if (metaTile.getPixel(rowIndex, colIndex, metaTileIndex) != intensity) {
-      metaTile.setPixel(rowIndex, colIndex, metaTileIndex, intensity);
-      emit(metaTile);
+    if (state.getPixel(rowIndex, colIndex, metaTileIndex) != intensity) {
+      emit(state.copyWith()
+        ..setPixel(rowIndex, colIndex, metaTileIndex, intensity));
     }
   }
+
+  flood(int rowIndex, int colIndex, int metaTileIndex, int intensity,
+          int targetColor) =>
+      emit(state.copyWith()
+        ..flood(metaTileIndex, intensity, rowIndex, colIndex, targetColor));
 
   List<int> _shift(List<int> list, int v) {
     var i = v % list.length;
