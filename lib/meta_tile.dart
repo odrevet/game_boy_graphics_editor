@@ -18,7 +18,7 @@ class MetaTile extends Graphics {
 
   MetaTile copyWith(
       {List<Tile>? tileList, String? name, int? width, int? height}) {
-    var newTileList = <Tile>[];
+    /*var newTileList = <Tile>[];
     if (tileList == null) {
       newTileList = <Tile>[];
       for (var tile in this.tileList) {
@@ -26,10 +26,10 @@ class MetaTile extends Graphics {
         newTile.data = [...tile.data];
         newTileList.add(newTile);
       }
-    }
+    }*/
 
     return MetaTile(
-        tileList: tileList ?? newTileList,
+        tileList: tileList ?? [...this.tileList],
         name: name ?? this.name,
         width: width ?? this.width,
         height: height ?? this.height);
