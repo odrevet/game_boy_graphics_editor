@@ -17,12 +17,23 @@ class MetaTile extends Graphics {
       : super(name: name, height: height, width: width);
 
   MetaTile copyWith(
-          {List<Tile>? tileList, String? name, int? width, int? height}) =>
-      MetaTile(
-          tileList: tileList ?? [...this.tileList],
-          name: name ?? this.name,
-          width: width ?? this.width,
-          height: height ?? this.height);
+      {List<Tile>? tileList, String? name, int? width, int? height}) {
+    var newTileList = <Tile>[];
+    if (tileList == null) {
+      newTileList = <Tile>[];
+      for (var tile in this.tileList) {
+        var newTile = Tile();
+        newTile.data = [...tile.data];
+        newTileList.add(newTile);
+      }
+    }
+
+    return MetaTile(
+        tileList: tileList ?? newTileList,
+        name: name ?? this.name,
+        width: width ?? this.width,
+        height: height ?? this.height);
+  }
 
   List<String> getRaw() {
     var raw = <String>[];

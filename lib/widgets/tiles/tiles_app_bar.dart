@@ -94,6 +94,17 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
 
     actions = [
       IconButton(
+          onPressed: context.read<MetaTileCubit>().canUndo
+              ? context.read<MetaTileCubit>().undo
+              : null,
+          icon: const Icon(Icons.undo)),
+      IconButton(
+          onPressed: context.read<MetaTileCubit>().canRedo
+              ? context.read<MetaTileCubit>().redo
+              : null,
+          icon: const Icon(Icons.redo)),
+      const VerticalDivider(),
+      IconButton(
           onPressed: () =>
               context.read<MetaTileCubit>().flipHorizontal(metaTileIndex),
           icon: const Icon(Icons.flip)),
@@ -130,6 +141,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
           onPressed: () =>
               context.read<MetaTileCubit>().rightShift(metaTileIndex),
           icon: const Icon(Icons.keyboard_arrow_right_rounded)),
+      const VerticalDivider(),
       IconButton(
         icon: Icon(floodMode ? Icons.waves : Icons.edit),
         tooltip: 'Flood fill ${floodMode ? 'on' : 'off'}',

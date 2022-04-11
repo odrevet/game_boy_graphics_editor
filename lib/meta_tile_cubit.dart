@@ -1,8 +1,9 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:replay_bloc/replay_bloc.dart';
+
 import 'package:gbdk_graphic_editor/meta_tile.dart';
 import 'package:gbdk_graphic_editor/tile.dart';
 
-class MetaTileCubit extends Cubit<MetaTile> {
+class MetaTileCubit extends ReplayCubit<MetaTile> {
   MetaTileCubit() : super(MetaTile(tileList: [])..tileList.add(Tile()));
 
   setPixel(int rowIndex, int colIndex, metaTileIndex, intensity) {
@@ -23,8 +24,9 @@ class MetaTileCubit extends Cubit<MetaTile> {
       var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow);
       row.replaceRange(0, row.length, _shift(row, -1));
       metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
-      emit(metaTile);
     }
+
+    emit(metaTile);
   }
 
   void leftShift(int selectedMetaTileIndexTile) {
@@ -34,8 +36,9 @@ class MetaTileCubit extends Cubit<MetaTile> {
       var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow);
       row.replaceRange(0, row.length, _shift(row, 1));
       metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
-      emit(metaTile);
     }
+
+    emit(metaTile);
   }
 
   void upShift(int selectedMetaTileIndexTile) {
