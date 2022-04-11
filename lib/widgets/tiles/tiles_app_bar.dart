@@ -144,7 +144,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
       const VerticalDivider(),
       IconButton(
         icon: Icon(floodMode ? Icons.waves : Icons.edit),
-        tooltip: 'Flood fill ${floodMode ? 'on' : 'off'}',
+        tooltip: floodMode ? 'Flood fill' : 'Draw',
         onPressed: toggleFloodMode,
       ),
       const VerticalDivider(),
