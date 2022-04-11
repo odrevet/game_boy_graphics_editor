@@ -1,15 +1,18 @@
-import 'package:replay_bloc/replay_bloc.dart';
-
 import 'package:gbdk_graphic_editor/meta_tile.dart';
 import 'package:gbdk_graphic_editor/tile.dart';
+import 'package:replay_bloc/replay_bloc.dart';
 
 class MetaTileCubit extends ReplayCubit<MetaTile> {
   MetaTileCubit() : super(MetaTile(tileList: [])..tileList.add(Tile()));
 
+  void update() => emit(state.copyWith());
+
   setPixel(int rowIndex, int colIndex, metaTileIndex, intensity) {
     var metaTile = state.copyWith();
-    metaTile.setPixel(rowIndex, colIndex, metaTileIndex, intensity);
-    emit(metaTile);
+    if (metaTile.getPixel(rowIndex, colIndex, metaTileIndex) != intensity) {
+      metaTile.setPixel(rowIndex, colIndex, metaTileIndex, intensity);
+      emit(metaTile);
+    }
   }
 
   List<int> _shift(List<int> list, int v) {

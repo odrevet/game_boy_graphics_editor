@@ -18,7 +18,7 @@ class MetaTile extends Graphics {
 
   MetaTile copyWith(
       {List<Tile>? tileList, String? name, int? width, int? height}) {
-    /*var newTileList = <Tile>[];
+    var newTileList = <Tile>[];
     if (tileList == null) {
       newTileList = <Tile>[];
       for (var tile in this.tileList) {
@@ -26,10 +26,10 @@ class MetaTile extends Graphics {
         newTile.data = [...tile.data];
         newTileList.add(newTile);
       }
-    }*/
+    }
 
     return MetaTile(
-        tileList: tileList ?? [...this.tileList],
+        tileList: tileList ?? newTileList,
         name: name ?? this.name,
         width: width ?? this.width,
         height: height ?? this.height);
@@ -142,6 +142,28 @@ class MetaTile extends Graphics {
     int indexPixel = index[1];
     tileList[indexTile].data[indexPixel] = intensity;
   }
+
+  flood(int metaTileIndex, int intensity, int rowIndex, int colIndex,
+      int targetColor) {
+    if (getPixel(rowIndex, colIndex, metaTileIndex) == targetColor) {
+      setPixel(rowIndex, colIndex, metaTileIndex, intensity);
+      if (inbound(rowIndex, colIndex - 1)) {
+        flood(metaTileIndex, intensity, rowIndex, colIndex - 1, targetColor);
+      }
+      if (inbound(rowIndex, colIndex + 1)) {
+        flood(metaTileIndex, intensity, rowIndex, colIndex + 1, targetColor);
+      }
+      if (inbound(rowIndex - 1, colIndex)) {
+        flood(metaTileIndex, intensity, rowIndex - 1, colIndex, targetColor);
+      }
+      if (inbound(rowIndex + 1, colIndex)) {
+        flood(metaTileIndex, intensity, rowIndex + 1, colIndex, targetColor);
+      }
+    }
+  }
+
+  inbound(int rowIndex, int colIndex) =>
+      rowIndex >= 0 && rowIndex < height && colIndex >= 0 && colIndex < width;
 
   setTiles(int selectedMetaTileIndex, int intensity) {
     tileList[0].data.fillRange(0, 64, intensity);

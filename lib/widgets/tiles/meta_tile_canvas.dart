@@ -75,38 +75,15 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
     if (widget.floodMode) {
       int targetColor =
           widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex);
-      flood(rowIndex, colIndex, targetColor);
-    } else {
+      widget.metaTile.flood(widget.metaTileIndex, widget.intensity, rowIndex,
+          colIndex, targetColor);
+      context.read<MetaTileCubit>().update();
+    } else if (widget.metaTile
+            .getPixel(rowIndex, colIndex, widget.metaTileIndex) !=
+        widget.intensity) {
       context
           .read<MetaTileCubit>()
           .setPixel(rowIndex, colIndex, widget.metaTileIndex, widget.intensity);
     }
   }
-
-  flood(int rowIndex, int colIndex, int targetColor) {
-    if (widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex) ==
-        targetColor) {
-      context
-          .read<MetaTileCubit>()
-          .setPixel(rowIndex, colIndex, widget.metaTileIndex, widget.intensity);
-      if (inbound(rowIndex, colIndex - 1)) {
-        flood(rowIndex, colIndex - 1, targetColor);
-      }
-      if (inbound(rowIndex, colIndex + 1)) {
-        flood(rowIndex, colIndex + 1, targetColor);
-      }
-      if (inbound(rowIndex - 1, colIndex)) {
-        flood(rowIndex - 1, colIndex, targetColor);
-      }
-      if (inbound(rowIndex + 1, colIndex)) {
-        flood(rowIndex + 1, colIndex, targetColor);
-      }
-    }
-  }
-
-  inbound(int rowIndex, int colIndex) =>
-      rowIndex >= 0 &&
-      rowIndex < widget.metaTile.height &&
-      colIndex >= 0 &&
-      colIndex < widget.metaTile.width;
 }
