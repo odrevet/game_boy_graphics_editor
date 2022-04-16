@@ -105,7 +105,6 @@ class _EditorState extends State<Editor> {
             body: tileMode
                 ? TilesEditor(
                     selectedIntensity: selectedIntensity,
-                    metaTile: metaTile,
                     setIndex: _setTileIndexTile,
                     showGrid: showGridTile,
                     floodMode: floodMode,

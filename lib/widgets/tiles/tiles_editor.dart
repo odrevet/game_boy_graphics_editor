@@ -12,7 +12,6 @@ import '../source_display.dart';
 
 class TilesEditor extends StatefulWidget {
   final Background preview;
-  final MetaTile metaTile;
   final Function setIndex;
   final bool showGrid;
   final bool floodMode;
@@ -24,7 +23,6 @@ class TilesEditor extends StatefulWidget {
   const TilesEditor({
     Key? key,
     required this.preview,
-    required this.metaTile,
     required this.setIndex,
     required this.showGrid,
     required this.floodMode,
@@ -43,6 +41,7 @@ class _TilesEditorState extends State<TilesEditor> {
 
   @override
   Widget build(BuildContext context) {
+    var metaTile = context.read<MetaTileCubit>().state;
     return Row(children: [
       ContextMenuArea(
         builder: (BuildContext contextMenuAreaContext) => [
@@ -69,9 +68,9 @@ class _TilesEditorState extends State<TilesEditor> {
               setState(() {
                 widget.tileBuffer.clear();
                 for (var i = hoverTileIndex;
-                    i < hoverTileIndex + widget.metaTile.nbTilePerMetaTile();
+                    i < hoverTileIndex + metaTile.nbTilePerMetaTile();
                     i++) {
-                  widget.tileBuffer.addAll(widget.metaTile.tileList[i].data);
+                  widget.tileBuffer.addAll(metaTile.tileList[i].data);
                 }
               });
               Navigator.pop(contextMenuAreaContext);
@@ -93,7 +92,7 @@ class _TilesEditorState extends State<TilesEditor> {
                   hoverTileIndex = index;
                 }),
             onTap: (index) => widget.setIndex(index),
-            metaTile: widget.metaTile,
+            metaTile: metaTile,
             selectedTile: widget.selectedIndex,
             colorSet: widget.colorSet),
       ),
@@ -102,10 +101,10 @@ class _TilesEditorState extends State<TilesEditor> {
           padding: const EdgeInsets.all(8.0),
           alignment: Alignment.topCenter,
           child: AspectRatio(
-            aspectRatio: widget.metaTile.width / widget.metaTile.height,
+            aspectRatio: metaTile.width / metaTile.height,
             child: MetaTileCanvas(
                 intensity: widget.selectedIntensity,
-                metaTile: widget.metaTile,
+                metaTile: metaTile,
                 showGrid: widget.showGrid,
                 floodMode: widget.floodMode,
                 metaTileIndex: widget.selectedIndex,
@@ -118,9 +117,10 @@ class _TilesEditorState extends State<TilesEditor> {
           children: [
             TextFormField(
               decoration: const InputDecoration(labelText: 'Name'),
-              initialValue: widget.metaTile.name,
+              key: Key(metaTile.name),
+              initialValue: metaTile.name,
               onChanged: (text) => setState(() {
-                widget.metaTile.name = text;
+                metaTile.name = text;
               }),
             ),
             Padding(
@@ -130,7 +130,7 @@ class _TilesEditorState extends State<TilesEditor> {
                 height: 200,
                 child: BackgroundGrid(
                   background: widget.preview,
-                  metaTile: widget.metaTile,
+                  metaTile: metaTile,
                   colorSet: widget.colorSet,
                 ),
               ),
@@ -138,7 +138,7 @@ class _TilesEditorState extends State<TilesEditor> {
             Expanded(
               child: SingleChildScrollView(
                 child: SourceDisplay(
-                  graphics: widget.metaTile,
+                  graphics: metaTile,
                 ),
               ),
             )

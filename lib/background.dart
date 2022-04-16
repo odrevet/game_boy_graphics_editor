@@ -35,9 +35,14 @@ unsigned char $name[] = {${formatOutput(arrayData)}};""";
 
   @override
   bool fromSource(String source) {
-    var values = fromGBDKSource(source)[0].values;
-    data = List<int>.from(
-        values.split(',').map((value) => int.parse(value)).toList());
+    var graphicsElement = fromGBDKSource(source)[0];
+
+    name = graphicsElement.name;
+
+    data = List<int>.from(graphicsElement.values
+        .split(',')
+        .map((value) => int.parse(value))
+        .toList());
 
     RegExp regExpWidth = RegExp(r"#define \w+Width (\d+)");
     var matchesWidth = regExpWidth.allMatches(source);

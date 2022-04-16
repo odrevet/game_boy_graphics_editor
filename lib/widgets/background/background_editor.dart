@@ -108,6 +108,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
           children: [
             TextFormField(
               decoration: const InputDecoration(labelText: 'Name'),
+              key: Key(widget.background.name),
               initialValue: widget.background.name,
               onChanged: (text) => setState(() {
                 widget.background.name = text;
