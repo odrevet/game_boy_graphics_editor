@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gbdk_graphic_editor/graphics.dart';
+import 'package:GBGE/graphics.dart';
 
 import '../download_stub.dart' if (dart.library.html) '../download.dart';
 import '../file_utils.dart';

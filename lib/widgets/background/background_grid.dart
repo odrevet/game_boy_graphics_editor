@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gbdk_graphic_editor/background.dart';
-import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_display.dart';
+import 'package:GBGE/background.dart';
+import 'package:GBGE/widgets/tiles/meta_tile_display.dart';
 
 import '../../meta_tile.dart';
 

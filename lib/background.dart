@@ -1,4 +1,4 @@
-import 'package:gbdk_graphic_editor/graphics.dart';
+import 'package:GBGE/graphics.dart';
 
 import 'convert.dart';
 import 'meta_tile.dart';

@@ -1,6 +1,6 @@
 {
-    "name": "gbdk_graphic_editor",
-    "short_name": "gbdk_graphic_editor",
+    "name": "GBGE",
+    "short_name": "GBGE",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

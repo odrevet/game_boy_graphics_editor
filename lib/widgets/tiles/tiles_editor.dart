@@ -1,9 +1,9 @@
 import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gbdk_graphic_editor/background.dart';
-import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_canvas.dart';
-import 'package:gbdk_graphic_editor/widgets/tiles/meta_tile_list_view.dart';
+import 'package:GBGE/background.dart';
+import 'package:GBGE/widgets/tiles/meta_tile_canvas.dart';
+import 'package:GBGE/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../meta_tile_cubit.dart';
 import '../background/background_grid.dart';

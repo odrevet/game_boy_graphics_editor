@@ -1,7 +1,7 @@
 import 'dart:core';
 
-import 'package:gbdk_graphic_editor/graphics.dart';
-import 'package:gbdk_graphic_editor/tile.dart';
+import 'package:GBGE/graphics.dart';
+import 'package:GBGE/tile.dart';
 
 import 'convert.dart';
 

@@ -1,5 +1,5 @@
-import 'package:gbdk_graphic_editor/meta_tile.dart';
-import 'package:gbdk_graphic_editor/tile.dart';
+import 'package:GBGE/meta_tile.dart';
+import 'package:GBGE/tile.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
 class MetaTileCubit extends ReplayCubit<MetaTile> {
