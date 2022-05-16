@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../tile.dart';
 
+
 class DotMatrix extends StatefulWidget {
   final List<Color> pixels;
   final bool showGrid;
@@ -10,7 +11,7 @@ class DotMatrix extends StatefulWidget {
       : super(key: key);
 
   @override
-  _DotMatrixState createState() => _DotMatrixState();
+  State<DotMatrix> createState() => _DotMatrixState();
 }
 
 class _DotMatrixState extends State<DotMatrix> {

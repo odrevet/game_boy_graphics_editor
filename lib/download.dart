@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'dart:html' as html;
 
 void download(String content, String downloadName) {
-  final _base64 = base64Encode(content.codeUnits);
+  final base64 = base64Encode(content.codeUnits);
   final anchor =
-      html.AnchorElement(href: 'data:application/octet-stream;base64,$_base64')
+      html.AnchorElement(href: 'data:application/octet-stream;base64,$base64')
         ..target = 'blank';
   anchor.download = downloadName;
   html.document.body?.append(anchor);

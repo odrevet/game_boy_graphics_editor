@@ -15,7 +15,7 @@ class SourceDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     String headerFilename = "${graphics.name}.h";
     String sourceFilename = "${graphics.name}.c";
-    const double? fontSize = 12;
+    const double fontSize = 12;
 
     return Column(
       children: [

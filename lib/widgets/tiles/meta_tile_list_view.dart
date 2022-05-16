@@ -20,7 +20,7 @@ class MetaTileListView extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MetaTileListViewState createState() => _MetaTileListViewState();
+  State<MetaTileListView> createState() => _MetaTileListViewState();
 }
 
 class _MetaTileListViewState extends State<MetaTileListView> {

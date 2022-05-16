@@ -23,7 +23,7 @@ class BackgroundGrid extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _BackgroundGridState createState() => _BackgroundGridState();
+  State<BackgroundGrid> createState() => _BackgroundGridState();
 }
 
 class _BackgroundGridState extends State<BackgroundGrid> {
