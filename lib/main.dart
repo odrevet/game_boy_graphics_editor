@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:GBGE/meta_tile.dart';
-import 'package:GBGE/meta_tile_cubit.dart';
-import 'package:GBGE/tile.dart';
-import 'package:GBGE/widgets/background/background_app_bar.dart';
-import 'package:GBGE/widgets/background/background_editor.dart';
-import 'package:GBGE/widgets/tiles/tiles_app_bar.dart';
-import 'package:GBGE/widgets/tiles/tiles_editor.dart';
+import 'package:game_boy_graphics_editor/meta_tile.dart';
+import 'package:game_boy_graphics_editor/meta_tile_cubit.dart';
+import 'package:game_boy_graphics_editor/tile.dart';
+import 'package:game_boy_graphics_editor/widgets/background/background_app_bar.dart';
+import 'package:game_boy_graphics_editor/widgets/background/background_editor.dart';
+import 'package:game_boy_graphics_editor/widgets/tiles/tiles_app_bar.dart';
+import 'package:game_boy_graphics_editor/widgets/tiles/tiles_editor.dart';
 import 'package:image/image.dart' as image;
 
 import 'background.dart';

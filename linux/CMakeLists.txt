@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "GBGE")
-set(APPLICATION_ID "fr.odrevet.GBGE")
+set(BINARY_NAME "game_boy_graphics_editor")
+set(APPLICATION_ID "fr.odrevet.game_boy_graphics_editor")
 
 cmake_policy(SET CMP0063 NEW)
 

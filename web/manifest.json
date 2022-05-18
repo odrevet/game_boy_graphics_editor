@@ -1,6 +1,6 @@
 {
-    "name": "GBGE",
-    "short_name": "GBGE",
+    "name": "game_boy_graphics_editor",
+    "short_name": "game_boy_graphics_editor",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

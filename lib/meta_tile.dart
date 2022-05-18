@@ -1,7 +1,7 @@
 import 'dart:core';
 
-import 'package:GBGE/graphics.dart';
-import 'package:GBGE/tile.dart';
+import 'package:game_boy_graphics_editor/graphics.dart';
+import 'package:game_boy_graphics_editor/tile.dart';
 
 import 'convert.dart';
 

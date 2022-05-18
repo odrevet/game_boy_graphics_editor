@@ -1,8 +1,8 @@
 import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
-import 'package:GBGE/widgets/background/background_grid.dart';
-import 'package:GBGE/widgets/source_display.dart';
-import 'package:GBGE/widgets/tiles/meta_tile_list_view.dart';
+import 'package:game_boy_graphics_editor/widgets/background/background_grid.dart';
+import 'package:game_boy_graphics_editor/widgets/source_display.dart';
+import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../background.dart';
 import '../../meta_tile.dart';

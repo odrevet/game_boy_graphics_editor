@@ -1,4 +1,4 @@
-import 'package:GBGE/graphics.dart';
+import 'package:game_boy_graphics_editor/graphics.dart';
 
 import 'convert.dart';
 import 'meta_tile.dart';

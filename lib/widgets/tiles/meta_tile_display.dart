@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:GBGE/widgets/tiles/dot_matrix.dart';
+import 'package:game_boy_graphics_editor/widgets/tiles/dot_matrix.dart';
 
 import '../../meta_tile.dart';
 
