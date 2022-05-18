@@ -3,7 +3,7 @@ This is a graphic editor for [GBDK](https://github.com/gbdk-2020/gbdk-2020) insp
 
 # Online version
 
-game_boy_graphics_editor can be run in your browser !
+game_boy_graphics_editor can run a browser !
 
 https://odrevet.github.io/GameBoyGraphicsEditor
 
