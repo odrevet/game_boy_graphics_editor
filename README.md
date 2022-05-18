@@ -1,5 +1,3 @@
-# GameBoyGraphicsEditor (game_boy_graphics_editor)
-
 This is a graphic editor for [GBDK](https://github.com/gbdk-2020/gbdk-2020) inspired by 
 [`GameBoyTileDesigner (GBTD)` and `GameBoyMapBuilder (GBMB)`](https://github.com/gbdk-2020/GBTD_GBMB).
 
