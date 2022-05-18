@@ -5,7 +5,7 @@ This is a graphic editor for [GBDK](https://github.com/gbdk-2020/gbdk-2020) insp
 
 game_boy_graphics_editor can run a browser !
 
-https://odrevet.github.io/GameBoyGraphicsEditor
+https://odrevet.github.io/game_boy_graphics_editor
 
 # Features
 
