@@ -29,6 +29,7 @@ class _MetaTileListViewState extends State<MetaTileListView> {
     return SizedBox(
         width: 180,
         child: ListView.builder(
+          shrinkWrap: true,
           itemCount: widget.metaTile.tileList.length ~/
               widget.metaTile.nbTilePerMetaTile(),
           itemBuilder: (context, index) {

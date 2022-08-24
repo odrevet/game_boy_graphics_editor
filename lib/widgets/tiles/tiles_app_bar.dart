@@ -180,16 +180,6 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
         colorSet: colorSet,
       ),
       const VerticalDivider(),
-      IconButton(
-          icon: const Icon(Icons.add),
-          tooltip: 'Add tile',
-          onPressed: () => context.read<MetaTileCubit>().insert(
-              metaTile.tileList.length ~/ metaTile.nbTilePerMetaTile())),
-      IconButton(
-          icon: const Icon(Icons.remove),
-          tooltip: 'Remove tile',
-          onPressed: () => context.read<MetaTileCubit>().remove(metaTileIndex)),
-      const VerticalDivider(),
       kIsWeb
           ? IconButton(
               icon: const Icon(Icons.download),

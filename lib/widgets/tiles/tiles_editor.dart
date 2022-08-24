@@ -79,21 +79,37 @@ class _TilesEditorState extends State<TilesEditor> {
             leading: const Icon(Icons.paste),
             title: const Text("Paste"),
             onTap: () {
-              context
-                  .read<MetaTileCubit>()
-                  .paste(hoverTileIndex, widget.tileBuffer);
+              context.read<MetaTileCubit>().paste(hoverTileIndex, widget.tileBuffer);
               Navigator.pop(contextMenuAreaContext);
             },
           ),
         ],
-        child: MetaTileListView(
-            onHover: (index) => setState(() {
-                  hoverTileIndex = index;
-                }),
-            onTap: (index) => widget.setIndex(index),
-            metaTile: metaTile,
-            selectedTile: widget.selectedIndex,
-            colorSet: widget.colorSet),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                IconButton(
+                    icon: const Icon(Icons.add),
+                    tooltip: 'Add tile',
+                    onPressed: () => context
+                        .read<MetaTileCubit>()
+                        .insert(metaTile.tileList.length ~/ metaTile.nbTilePerMetaTile())),
+                IconButton(
+                    icon: const Icon(Icons.remove),
+                    tooltip: 'Remove tile',
+                    onPressed: () => context.read<MetaTileCubit>().remove(widget.selectedIndex))
+              ],
+            ),
+            MetaTileListView(
+                onHover: (index) => setState(() {
+                      hoverTileIndex = index;
+                    }),
+                onTap: (index) => widget.setIndex(index),
+                metaTile: metaTile,
+                selectedTile: widget.selectedIndex,
+                colorSet: widget.colorSet),
+          ],
+        ),
       ),
       Expanded(
         child: Container(
