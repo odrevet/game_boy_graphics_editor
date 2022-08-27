@@ -21,11 +21,9 @@ class IntensityButton extends StatelessWidget {
             child: Container(
                 decoration: BoxDecoration(
               color: colorSet[intensity],
-              border: Border.all(
-                  color: intensity == context.read<AppStateCubit>().state.intensity
-                      ? Colors.blue
-                      : Colors.black,
-                  width: 1),
+              border: intensity == context.read<AppStateCubit>().state.intensity
+                  ? Border.all(color: Colors.blue, width: 2)
+                  : Border.all(color: Colors.black, width: 1),
             )),
           ),
         ),
