@@ -13,30 +13,18 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
 
   final VoidCallback setTileMode;
   final MetaTile metaTile;
-  final bool showGrid;
-  final bool floodMode;
-  final int selectedIntensity;
-  final VoidCallback toggleGridTile;
   final VoidCallback toggleColorSet;
   final Function loadTileFromFilePicker;
   final Function saveGraphics;
-  final int metaTileIndex;
-  final List<Color> colorSet;
 
   const TilesAppBar({
     this.preferredSize = const Size.fromHeight(50.0),
     Key? key,
     required this.metaTile,
     required this.setTileMode,
-    required this.showGrid,
-    required this.floodMode,
-    required this.selectedIntensity,
-    required this.toggleGridTile,
     required this.toggleColorSet,
     required this.loadTileFromFilePicker,
-    required this.metaTileIndex,
     required this.saveGraphics,
-    required this.colorSet,
   }) : super(key: key);
 
   Widget _setTileModeButton() {

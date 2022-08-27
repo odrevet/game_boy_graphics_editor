@@ -42,15 +42,9 @@ class _EditorState extends State<Editor> {
             preferredSize: const Size.fromHeight(50.0),
             metaTile: metaTile,
             setTileMode: () => context.read<AppStateCubit>().toggleTileMode(),
-            toggleGridTile: () => context.read<AppStateCubit>().toggleGridTile(),
-            showGrid: appState.showGridTile,
-            floodMode: appState.floodMode,
             toggleColorSet: () => context.read<AppStateCubit>().toggleColorSet(),
             loadTileFromFilePicker: loadTileFromFilePicker,
-            metaTileIndex: appState.metaTileIndexTile,
             saveGraphics: _saveGraphics,
-            colorSet: appState.colorSet,
-            selectedIntensity: appState.intensity,
           );
 
           BackgroundAppBar backgroundappbar = BackgroundAppBar(
