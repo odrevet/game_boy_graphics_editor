@@ -14,7 +14,6 @@ import 'package:image/image.dart' as image;
 
 import '../models/app_state.dart';
 import '../models/background.dart';
-import '../models/colors.dart';
 import '../models/file_utils.dart';
 import '../models/graphics.dart';
 
@@ -27,14 +26,6 @@ class Editor extends StatefulWidget {
 
 class _EditorState extends State<Editor> {
   late Background background;
-  int selectedMetaTileIndexTile = 0;
-  int selectedTileIndexBackground = 0;
-  bool tileMode = true; // edit tile or map
-  bool showGridTile = true;
-  bool floodMode = false;
-  bool showGridBackground = true;
-  var tileBuffer = <int>[]; // copy / past tiles buffer
-  List<Color> colorSet = colorsPocket;
 
   @override
   void initState() {
@@ -50,33 +41,31 @@ class _EditorState extends State<Editor> {
           TilesAppBar tileappbar = TilesAppBar(
             preferredSize: const Size.fromHeight(50.0),
             metaTile: metaTile,
-            setIntensity: _setIntensity,
-            setTileMode: _setTileMode,
-            toggleGridTile: _toggleGridTile,
-            showGrid: showGridTile,
-            floodMode: floodMode,
-            toggleFloodMode: _toggleFloodMode,
-            toggleColorSet: _toggleColorSet,
+            setTileMode: () => context.read<AppStateCubit>().toggleTileMode(),
+            toggleGridTile: () => context.read<AppStateCubit>().toggleGridTile(),
+            showGrid: appState.showGridTile,
+            floodMode: appState.floodMode,
+            toggleColorSet: () => context.read<AppStateCubit>().toggleColorSet(),
             loadTileFromFilePicker: loadTileFromFilePicker,
-            metaTileIndex: selectedMetaTileIndexTile,
+            metaTileIndex: appState.metaTileIndexTile,
             saveGraphics: _saveGraphics,
-            colorSet: colorSet,
-            selectedIntensity: appState.selectedIntensity,
+            colorSet: appState.colorSet,
+            selectedIntensity: appState.intensity,
           );
 
           BackgroundAppBar backgroundappbar = BackgroundAppBar(
             preferredSize: const Size.fromHeight(50.0),
-            setTileMode: _setTileMode,
-            toggleGridBackground: _toggleGridBackground,
-            showGrid: showGridBackground,
+            setTileMode: () => context.read<AppStateCubit>().toggleTileMode(),
+            toggleGridBackground: () => context.read<AppStateCubit>().toggleGridBackground(),
+            showGrid: appState.showGridBackground,
             setBackgroundFromSource: _setBackgroundFromSource,
             background: background,
-            selectedTileIndex: selectedTileIndexBackground,
+            selectedTileIndex: appState.tileIndexBackground,
             saveGraphics: _saveGraphics,
           );
 
           dynamic appbar;
-          if (tileMode) {
+          if (appState.tileMode) {
             appbar = tileappbar;
           } else {
             appbar = backgroundappbar;
@@ -84,22 +73,24 @@ class _EditorState extends State<Editor> {
 
           return Scaffold(
               appBar: appbar,
-              body: tileMode
+              body: appState.tileMode
                   ? TilesEditor(
-                      setIndex: _setTileIndexTile,
-                      showGrid: showGridTile,
-                      floodMode: floodMode,
-                      selectedIndex: selectedMetaTileIndexTile,
-                      colorSet: colorSet,
-                      tileBuffer: tileBuffer,
-                      preview: Background(width: 4, height: 4, fill: selectedMetaTileIndexTile))
+                      setIndex: (index) =>
+                          context.read<AppStateCubit>().setSelectedTileIndex(index),
+                      showGrid: appState.showGridTile,
+                      floodMode: appState.floodMode,
+                      selectedIndex: appState.metaTileIndexTile,
+                      colorSet: appState.colorSet,
+                      tileBuffer: appState.tileBuffer,
+                      preview: Background(width: 4, height: 4, fill: appState.metaTileIndexTile))
                   : BackgroundEditor(
                       background: background,
-                      colorSet: colorSet,
+                      colorSet: appState.colorSet,
                       tiles: metaTile,
-                      selectedTileIndex: selectedTileIndexBackground,
-                      onTapTileListView: _setTileIndexBackground,
-                      showGrid: showGridBackground,
+                      selectedTileIndex: appState.tileIndexBackground,
+                      onTapTileListView: (index) =>
+                          context.read<AppStateCubit>().setTileIndexBackground(index),
+                      showGrid: appState.showGridBackground,
                     ));
         },
       ),
@@ -117,38 +108,6 @@ class _EditorState extends State<Editor> {
     });
   }
 
-  void _setTileIndexBackground(index) => setState(() {
-        selectedTileIndexBackground = index;
-      });
-
-  void _setTileIndexTile(index) => setState(() {
-        selectedMetaTileIndexTile = index;
-      });
-
-  void _toggleFloodMode() => setState(() {
-        floodMode = !floodMode;
-      });
-
-  void _toggleColorSet() => setState(() {
-        colorSet == colorsDMG ? colorSet = colorsPocket : colorSet = colorsDMG;
-      });
-
-  void _toggleGridTile() => setState(() {
-        showGridTile = !showGridTile;
-      });
-
-  void _toggleGridBackground() => setState(() {
-        showGridBackground = !showGridBackground;
-      });
-
-  void _setIntensity(intensity) => setState(() {
-        context.read<AppStateCubit>().setIntensity(intensity);
-      });
-
-  void _setTileMode() => setState(() {
-        tileMode = !tileMode;
-      });
-
   bool _setMetaTile(GraphicElement graphicElement, metaTile) {
     bool hasLoaded = true;
     setState(() {
@@ -159,7 +118,7 @@ class _EditorState extends State<Editor> {
         hasLoaded = false;
       }
 
-      if (hasLoaded) selectedMetaTileIndexTile = 0;
+      if (hasLoaded) context.read<AppStateCubit>().setSelectedTileIndex(0);
       context.read<MetaTileCubit>().setDimensions(8, 8);
     });
     return hasLoaded;
@@ -168,7 +127,7 @@ class _EditorState extends State<Editor> {
   void _setBackgroundFromSource(String source) => setState(() {
         source = background.formatSource(source);
         background.fromSource(source);
-        selectedTileIndexBackground = 0;
+        context.read<AppStateCubit>().setTileIndexBackground(0);
       });
 
   bool loadTileFromFilePicker(result, metaTile) {
@@ -188,7 +147,7 @@ class _EditorState extends State<Editor> {
       }
 
       metaTile.tileList.clear();
-      int nbColors = colorSet.length - 1;
+      int nbColors = context.read<AppStateCubit>().state.colorSet.length - 1;
       for (int rowIndexTile = 0; rowIndexTile < img.height; rowIndexTile += Tile.size) {
         for (int colIndexTile = 0; colIndexTile < img.width; colIndexTile += Tile.size) {
           var tile = Tile();

@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/background.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_canvas.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
+import 'package:game_boy_graphics_editor/widgets/tiles/tile_dimensions_dropdown.dart';
 
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
 import '../../models/app_state.dart';
 import '../background/background_grid.dart';
 import '../source_display.dart';
+import 'intensity_button.dart';
 
 class TilesEditor extends StatefulWidget {
   final Background preview;
@@ -98,7 +100,7 @@ class _TilesEditorState extends State<TilesEditor> {
                   IconButton(
                       icon: const Icon(Icons.remove),
                       tooltip: 'Remove tile',
-                      onPressed: () => context.read<MetaTileCubit>().remove(widget.selectedIndex))
+                      onPressed: () => context.read<MetaTileCubit>().remove(widget.selectedIndex)),
                 ],
               ),
               MetaTileListView(
@@ -112,21 +114,108 @@ class _TilesEditorState extends State<TilesEditor> {
             ],
           ),
         ),
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(8.0),
-            alignment: Alignment.topCenter,
-            child: AspectRatio(
-              aspectRatio: metaTile.width / metaTile.height,
-              child: MetaTileCanvas(
-                  intensity: appState.selectedIntensity,
-                  metaTile: metaTile,
-                  showGrid: widget.showGrid,
-                  floodMode: widget.floodMode,
-                  metaTileIndex: widget.selectedIndex,
-                  colorSet: widget.colorSet),
+        Column(
+          children: [
+            Row(
+              children: [
+                IntensityButton(
+                  intensity: 0,
+                  onPressed: (intensity) => context.read<AppStateCubit>().setIntensity(intensity),
+                  selectedIntensity: appState.intensity,
+                  colorSet: widget.colorSet,
+                ),
+                IntensityButton(
+                  intensity: 1,
+                  onPressed: (intensity) => context.read<AppStateCubit>().setIntensity(intensity),
+                  selectedIntensity: appState.intensity,
+                  colorSet: widget.colorSet,
+                ),
+                IntensityButton(
+                  intensity: 2,
+                  onPressed: (intensity) => context.read<AppStateCubit>().setIntensity(intensity),
+                  selectedIntensity: appState.intensity,
+                  colorSet: widget.colorSet,
+                ),
+                IntensityButton(
+                  intensity: 3,
+                  onPressed: (intensity) => context.read<AppStateCubit>().setIntensity(intensity),
+                  selectedIntensity: appState.intensity,
+                  colorSet: widget.colorSet,
+                ),
+                const VerticalDivider(),
+                IconButton(
+                    onPressed: () =>
+                        context.read<MetaTileCubit>().flipVertical(appState.metaTileIndexTile),
+                    icon: const Icon(Icons.flip)),
+                IconButton(
+                    onPressed: () =>
+                        context.read<MetaTileCubit>().flipHorizontal(appState.metaTileIndexTile),
+                    icon: const RotatedBox(
+                      quarterTurns: 1,
+                      child: Icon(Icons.flip),
+                    )),
+                IconButton(
+                    onPressed: () => metaTile.width == metaTile.height
+                        ? context.read<MetaTileCubit>().rotateLeft(appState.metaTileIndexTile)
+                        : null,
+                    icon: const Icon(Icons.rotate_left)),
+                IconButton(
+                    onPressed: () => metaTile.width == metaTile.height
+                        ? context.read<MetaTileCubit>().rotateRight(appState.metaTileIndexTile)
+                        : null,
+                    icon: const Icon(Icons.rotate_right)),
+                const VerticalDivider(),
+                IconButton(
+                    onPressed: () =>
+                        context.read<MetaTileCubit>().upShift(appState.metaTileIndexTile),
+                    icon: const Icon(Icons.keyboard_arrow_up_rounded)),
+                IconButton(
+                    onPressed: () =>
+                        context.read<MetaTileCubit>().downShift(appState.metaTileIndexTile),
+                    icon: const Icon(Icons.keyboard_arrow_down_rounded)),
+                IconButton(
+                    onPressed: () =>
+                        context.read<MetaTileCubit>().leftShift(appState.metaTileIndexTile),
+                    icon: const Icon(Icons.keyboard_arrow_left_rounded)),
+                IconButton(
+                    onPressed: () =>
+                        context.read<MetaTileCubit>().rightShift(appState.metaTileIndexTile),
+                    icon: const Icon(Icons.keyboard_arrow_right_rounded)),
+                const VerticalDivider(),
+                IconButton(
+                  icon: Icon(appState.floodMode ? Icons.waves : Icons.edit),
+                  tooltip: appState.floodMode ? 'Flood fill' : 'Draw',
+                  onPressed: () => context.read<AppStateCubit>().toggleFloodMode(),
+                ),
+                const VerticalDivider(),
+                const TileDimensionDropdown(),
+                IconButton(
+                  icon: Icon(context.read<AppStateCubit>().state.showGridTile
+                      ? Icons.grid_on
+                      : Icons.grid_off),
+                  tooltip:
+                      '${context.read<AppStateCubit>().state.showGridTile ? 'Hide' : 'Show'} grid',
+                  onPressed: () => context.read<AppStateCubit>().toggleGridTile(),
+                ),
+              ],
             ),
-          ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                alignment: Alignment.topCenter,
+                child: AspectRatio(
+                  aspectRatio: metaTile.width / metaTile.height,
+                  child: MetaTileCanvas(
+                      intensity: appState.intensity,
+                      metaTile: metaTile,
+                      showGrid: widget.showGrid,
+                      floodMode: widget.floodMode,
+                      metaTileIndex: widget.selectedIndex,
+                      colorSet: widget.colorSet),
+                ),
+              ),
+            )
+          ],
         ),
         Expanded(
           child: Column(

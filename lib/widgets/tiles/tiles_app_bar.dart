@@ -6,7 +6,6 @@ import '../../cubits/meta_tile_cubit.dart';
 import '../../models/download_stub.dart' if (dart.library.html) '../../download.dart';
 import '../../models/file_utils.dart';
 import '../../models/meta_tile.dart';
-import '../tiles/intensity_button.dart';
 
 class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
@@ -16,10 +15,8 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   final MetaTile metaTile;
   final bool showGrid;
   final bool floodMode;
-  final Function setIntensity;
   final int selectedIntensity;
   final VoidCallback toggleGridTile;
-  final VoidCallback toggleFloodMode;
   final VoidCallback toggleColorSet;
   final Function loadTileFromFilePicker;
   final Function saveGraphics;
@@ -33,10 +30,8 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     required this.setTileMode,
     required this.showGrid,
     required this.floodMode,
-    required this.setIntensity,
     required this.selectedIntensity,
     required this.toggleGridTile,
-    required this.toggleFloodMode,
     required this.toggleColorSet,
     required this.loadTileFromFilePicker,
     required this.metaTileIndex,
@@ -49,127 +44,21 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
         onPressed: setTileMode, icon: const Icon(Icons.wallpaper), label: const Text('Tile'));
   }
 
-  Widget _tileDimensionsDropDown(BuildContext context) {
-    return DropdownButton<String>(
-      value: "${metaTile.width} x ${metaTile.height}",
-      onChanged: (String? value) {
-        int width = 8;
-        int height = 8;
-        switch (value) {
-          case '8 x 8':
-            width = 8;
-            height = 8;
-            break;
-          case '8 x 16':
-            width = 8;
-            height = 16;
-            break;
-          case '16 x 16':
-            width = 16;
-            height = 16;
-            break;
-          case '32 x 32':
-            width = 32;
-            height = 32;
-            break;
-        }
-
-        context.read<MetaTileCubit>().setDimensions(width, height);
-      },
-      items: <String>['8 x 8', '8 x 16', '16 x 16', '32 x 32']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     var actions = <Widget>[];
 
     actions = [
       IconButton(
-          onPressed:
-              context.read<MetaTileCubit>().canUndo ? context.read<MetaTileCubit>().undo : null,
+          onPressed: context.read<MetaTileCubit>().canUndo
+              ? context.read<MetaTileCubit>().undo
+              : null,
           icon: const Icon(Icons.undo)),
       IconButton(
-          onPressed:
-              context.read<MetaTileCubit>().canRedo ? context.read<MetaTileCubit>().redo : null,
+          onPressed: context.read<MetaTileCubit>().canRedo
+              ? context.read<MetaTileCubit>().redo
+              : null,
           icon: const Icon(Icons.redo)),
-      const VerticalDivider(),
-      IconButton(
-          onPressed: () => context.read<MetaTileCubit>().flipVertical(metaTileIndex),
-          icon: const Icon(Icons.flip)),
-      IconButton(
-          onPressed: () => context.read<MetaTileCubit>().flipHorizontal(metaTileIndex),
-          icon: const RotatedBox(
-            quarterTurns: 1,
-            child: Icon(Icons.flip),
-          )),
-      IconButton(
-          onPressed: () => metaTile.width == metaTile.height
-              ? context.read<MetaTileCubit>().rotateLeft(metaTileIndex)
-              : null,
-          icon: const Icon(Icons.rotate_left)),
-      IconButton(
-          onPressed: () => metaTile.width == metaTile.height
-              ? context.read<MetaTileCubit>().rotateRight(metaTileIndex)
-              : null,
-          icon: const Icon(Icons.rotate_right)),
-      const VerticalDivider(),
-      IconButton(
-          onPressed: () => context.read<MetaTileCubit>().upShift(metaTileIndex),
-          icon: const Icon(Icons.keyboard_arrow_up_rounded)),
-      IconButton(
-          onPressed: () => context.read<MetaTileCubit>().downShift(metaTileIndex),
-          icon: const Icon(Icons.keyboard_arrow_down_rounded)),
-      IconButton(
-          onPressed: () => context.read<MetaTileCubit>().leftShift(metaTileIndex),
-          icon: const Icon(Icons.keyboard_arrow_left_rounded)),
-      IconButton(
-          onPressed: () => context.read<MetaTileCubit>().rightShift(metaTileIndex),
-          icon: const Icon(Icons.keyboard_arrow_right_rounded)),
-      const VerticalDivider(),
-      IconButton(
-        icon: Icon(floodMode ? Icons.waves : Icons.edit),
-        tooltip: floodMode ? 'Flood fill' : 'Draw',
-        onPressed: toggleFloodMode,
-      ),
-      const VerticalDivider(),
-      _tileDimensionsDropDown(context),
-      IconButton(
-        icon: Icon(showGrid ? Icons.grid_on : Icons.grid_off),
-        tooltip: '${showGrid ? 'Hide' : 'Show'} grid',
-        onPressed: toggleGridTile,
-      ),
-      const VerticalDivider(),
-      IntensityButton(
-        intensity: 0,
-        onPressed: setIntensity,
-        selectedIntensity: selectedIntensity,
-        colorSet: colorSet,
-      ),
-      IntensityButton(
-        intensity: 1,
-        onPressed: setIntensity,
-        selectedIntensity: selectedIntensity,
-        colorSet: colorSet,
-      ),
-      IntensityButton(
-        intensity: 2,
-        onPressed: setIntensity,
-        selectedIntensity: selectedIntensity,
-        colorSet: colorSet,
-      ),
-      IntensityButton(
-        intensity: 3,
-        onPressed: setIntensity,
-        selectedIntensity: selectedIntensity,
-        colorSet: colorSet,
-      ),
       const VerticalDivider(),
       kIsWeb
           ? IconButton(
@@ -212,8 +101,8 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
                 builder: (BuildContext context) => AlertDialog(
                       title: const Text('Settings'),
                       content: SizedBox(
-                        height: 200.0, // Change as per your requirement
-                        width: 150.0, // Change as per your requirement
+                        height: 200.0,
+                        width: 150.0,
                         child: Row(
                           children: [
                             const Text("ColorSet"),
