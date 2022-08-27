@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/meta_tile.dart';
 import 'package:game_boy_graphics_editor/models/tile.dart';
@@ -11,6 +12,7 @@ import 'package:game_boy_graphics_editor/widgets/tiles/tiles_app_bar.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tiles_editor.dart';
 import 'package:image/image.dart' as image;
 
+import '../models/app_state.dart';
 import '../models/background.dart';
 import '../models/colors.dart';
 import '../models/file_utils.dart';
@@ -24,7 +26,6 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  var selectedIntensity = 3;
   late Background background;
   int selectedMetaTileIndexTile = 0;
   int selectedTileIndexBackground = 0;
@@ -43,64 +44,65 @@ class _EditorState extends State<Editor> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MetaTileCubit, MetaTile>(
-      builder: (context, metaTile) {
-        TilesAppBar tileappbar = TilesAppBar(
-          preferredSize: const Size.fromHeight(50.0),
-          metaTile: metaTile,
-          setIntensity: _setIntensity,
-          selectedIntensity: selectedIntensity,
-          setTileMode: _setTileMode,
-          toggleGridTile: _toggleGridTile,
-          showGrid: showGridTile,
-          floodMode: floodMode,
-          toggleFloodMode: _toggleFloodMode,
-          toggleColorSet: _toggleColorSet,
-          loadTileFromFilePicker: loadTileFromFilePicker,
-          metaTileIndex: selectedMetaTileIndexTile,
-          saveGraphics: _saveGraphics,
-          colorSet: colorSet,
-        );
+    return BlocBuilder<AppStateCubit, AppState>(
+      builder: (context, appState) => BlocBuilder<MetaTileCubit, MetaTile>(
+        builder: (context, metaTile) {
+          TilesAppBar tileappbar = TilesAppBar(
+            preferredSize: const Size.fromHeight(50.0),
+            metaTile: metaTile,
+            setIntensity: _setIntensity,
+            setTileMode: _setTileMode,
+            toggleGridTile: _toggleGridTile,
+            showGrid: showGridTile,
+            floodMode: floodMode,
+            toggleFloodMode: _toggleFloodMode,
+            toggleColorSet: _toggleColorSet,
+            loadTileFromFilePicker: loadTileFromFilePicker,
+            metaTileIndex: selectedMetaTileIndexTile,
+            saveGraphics: _saveGraphics,
+            colorSet: colorSet,
+            selectedIntensity: appState.selectedIntensity,
+          );
 
-        BackgroundAppBar backgroundappbar = BackgroundAppBar(
-          preferredSize: const Size.fromHeight(50.0),
-          setTileMode: _setTileMode,
-          toggleGridBackground: _toggleGridBackground,
-          showGrid: showGridBackground,
-          setBackgroundFromSource: _setBackgroundFromSource,
-          background: background,
-          selectedTileIndex: selectedTileIndexBackground,
-          saveGraphics: _saveGraphics,
-        );
+          BackgroundAppBar backgroundappbar = BackgroundAppBar(
+            preferredSize: const Size.fromHeight(50.0),
+            setTileMode: _setTileMode,
+            toggleGridBackground: _toggleGridBackground,
+            showGrid: showGridBackground,
+            setBackgroundFromSource: _setBackgroundFromSource,
+            background: background,
+            selectedTileIndex: selectedTileIndexBackground,
+            saveGraphics: _saveGraphics,
+          );
 
-        dynamic appbar;
-        if (tileMode) {
-          appbar = tileappbar;
-        } else {
-          appbar = backgroundappbar;
-        }
+          dynamic appbar;
+          if (tileMode) {
+            appbar = tileappbar;
+          } else {
+            appbar = backgroundappbar;
+          }
 
-        return Scaffold(
-            appBar: appbar,
-            body: tileMode
-                ? TilesEditor(
-                    selectedIntensity: selectedIntensity,
-                    setIndex: _setTileIndexTile,
-                    showGrid: showGridTile,
-                    floodMode: floodMode,
-                    selectedIndex: selectedMetaTileIndexTile,
-                    colorSet: colorSet,
-                    tileBuffer: tileBuffer,
-                    preview: Background(width: 4, height: 4, fill: selectedMetaTileIndexTile))
-                : BackgroundEditor(
-                    background: background,
-                    colorSet: colorSet,
-                    tiles: metaTile,
-                    selectedTileIndex: selectedTileIndexBackground,
-                    onTapTileListView: _setTileIndexBackground,
-                    showGrid: showGridBackground,
-                  ));
-      },
+          return Scaffold(
+              appBar: appbar,
+              body: tileMode
+                  ? TilesEditor(
+                      setIndex: _setTileIndexTile,
+                      showGrid: showGridTile,
+                      floodMode: floodMode,
+                      selectedIndex: selectedMetaTileIndexTile,
+                      colorSet: colorSet,
+                      tileBuffer: tileBuffer,
+                      preview: Background(width: 4, height: 4, fill: selectedMetaTileIndexTile))
+                  : BackgroundEditor(
+                      background: background,
+                      colorSet: colorSet,
+                      tiles: metaTile,
+                      selectedTileIndex: selectedTileIndexBackground,
+                      onTapTileListView: _setTileIndexBackground,
+                      showGrid: showGridBackground,
+                    ));
+        },
+      ),
     );
   }
 
@@ -140,7 +142,7 @@ class _EditorState extends State<Editor> {
       });
 
   void _setIntensity(intensity) => setState(() {
-        selectedIntensity = intensity;
+        context.read<AppStateCubit>().setIntensity(intensity);
       });
 
   void _setTileMode() => setState(() {

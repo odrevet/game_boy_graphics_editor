@@ -9,6 +9,6 @@ class AppState {
   var tileBuffer = <int>[]; // copy / past tiles buffer
   AppState({required this.selectedIntensity});
 
-  copyWith(int? selectedIntensity) =>
+  copyWith({int? selectedIntensity}) =>
       AppState(selectedIntensity: selectedIntensity ?? this.selectedIntensity);
 }

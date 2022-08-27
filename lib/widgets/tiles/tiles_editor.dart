@@ -5,7 +5,9 @@ import 'package:game_boy_graphics_editor/models/background.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_canvas.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
+import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
+import '../../models/app_state.dart';
 import '../background/background_grid.dart';
 import '../source_display.dart';
 
@@ -16,7 +18,6 @@ class TilesEditor extends StatefulWidget {
   final bool floodMode;
   final int selectedIndex;
   final List<Color> colorSet;
-  final int selectedIntensity;
   final List<int> tileBuffer;
 
   const TilesEditor({
@@ -27,7 +28,6 @@ class TilesEditor extends StatefulWidget {
     required this.floodMode,
     required this.selectedIndex,
     required this.colorSet,
-    required this.selectedIntensity,
     required this.tileBuffer,
   }) : super(key: key);
 
@@ -41,125 +41,127 @@ class _TilesEditorState extends State<TilesEditor> {
   @override
   Widget build(BuildContext context) {
     var metaTile = context.read<MetaTileCubit>().state;
-    return Row(children: [
-      ContextMenuArea(
-        builder: (BuildContext contextMenuAreaContext) => [
-          ListTile(
-            leading: const Icon(Icons.add),
-            title: const Text("Insert before"),
-            onTap: () {
-              context.read<MetaTileCubit>().insert(hoverTileIndex);
-              Navigator.pop(contextMenuAreaContext);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.remove),
-            title: const Text("Delete"),
-            onTap: () {
-              context.read<MetaTileCubit>().remove(hoverTileIndex);
-              Navigator.pop(contextMenuAreaContext);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.copy),
-            title: const Text("Copy"),
-            onTap: () {
-              setState(() {
-                widget.tileBuffer.clear();
-                for (var i = hoverTileIndex;
-                    i < hoverTileIndex + metaTile.nbTilePerMetaTile();
-                    i++) {
-                  widget.tileBuffer.addAll(metaTile.tileList[i].data);
-                }
-              });
-              Navigator.pop(contextMenuAreaContext);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.paste),
-            title: const Text("Paste"),
-            onTap: () {
-              context.read<MetaTileCubit>().paste(hoverTileIndex, widget.tileBuffer);
-              Navigator.pop(contextMenuAreaContext);
-            },
-          ),
-        ],
-        child: Column(
-          children: [
-            Row(
-              children: [
-                IconButton(
-                    icon: const Icon(Icons.add),
-                    tooltip: 'Add tile',
-                    onPressed: () => context
-                        .read<MetaTileCubit>()
-                        .insert(metaTile.tileList.length ~/ metaTile.nbTilePerMetaTile())),
-                IconButton(
-                    icon: const Icon(Icons.remove),
-                    tooltip: 'Remove tile',
-                    onPressed: () => context.read<MetaTileCubit>().remove(widget.selectedIndex))
-              ],
+    return BlocBuilder<AppStateCubit, AppState>(
+      builder: (context, appState) => Row(children: [
+        ContextMenuArea(
+          builder: (BuildContext contextMenuAreaContext) => [
+            ListTile(
+              leading: const Icon(Icons.add),
+              title: const Text("Insert before"),
+              onTap: () {
+                context.read<MetaTileCubit>().insert(hoverTileIndex);
+                Navigator.pop(contextMenuAreaContext);
+              },
             ),
-            MetaTileListView(
-                onHover: (index) => setState(() {
-                      hoverTileIndex = index;
-                    }),
-                onTap: (index) => widget.setIndex(index),
-                metaTile: metaTile,
-                selectedTile: widget.selectedIndex,
-                colorSet: widget.colorSet),
+            ListTile(
+              leading: const Icon(Icons.remove),
+              title: const Text("Delete"),
+              onTap: () {
+                context.read<MetaTileCubit>().remove(hoverTileIndex);
+                Navigator.pop(contextMenuAreaContext);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.copy),
+              title: const Text("Copy"),
+              onTap: () {
+                setState(() {
+                  widget.tileBuffer.clear();
+                  for (var i = hoverTileIndex;
+                      i < hoverTileIndex + metaTile.nbTilePerMetaTile();
+                      i++) {
+                    widget.tileBuffer.addAll(metaTile.tileList[i].data);
+                  }
+                });
+                Navigator.pop(contextMenuAreaContext);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.paste),
+              title: const Text("Paste"),
+              onTap: () {
+                context.read<MetaTileCubit>().paste(hoverTileIndex, widget.tileBuffer);
+                Navigator.pop(contextMenuAreaContext);
+              },
+            ),
           ],
-        ),
-      ),
-      Expanded(
-        child: Container(
-          padding: const EdgeInsets.all(8.0),
-          alignment: Alignment.topCenter,
-          child: AspectRatio(
-            aspectRatio: metaTile.width / metaTile.height,
-            child: MetaTileCanvas(
-                intensity: widget.selectedIntensity,
-                metaTile: metaTile,
-                showGrid: widget.showGrid,
-                floodMode: widget.floodMode,
-                metaTileIndex: widget.selectedIndex,
-                colorSet: widget.colorSet),
-          ),
-        ),
-      ),
-      Expanded(
-        child: Column(
-          children: [
-            TextFormField(
-              decoration: const InputDecoration(labelText: 'Name'),
-              key: Key(metaTile.name),
-              initialValue: metaTile.name,
-              onChanged: (text) => setState(() {
-                metaTile.name = text;
-              }),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 200,
-                height: 200,
-                child: BackgroundGrid(
-                  background: widget.preview,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                      icon: const Icon(Icons.add),
+                      tooltip: 'Add tile',
+                      onPressed: () => context
+                          .read<MetaTileCubit>()
+                          .insert(metaTile.tileList.length ~/ metaTile.nbTilePerMetaTile())),
+                  IconButton(
+                      icon: const Icon(Icons.remove),
+                      tooltip: 'Remove tile',
+                      onPressed: () => context.read<MetaTileCubit>().remove(widget.selectedIndex))
+                ],
+              ),
+              MetaTileListView(
+                  onHover: (index) => setState(() {
+                        hoverTileIndex = index;
+                      }),
+                  onTap: (index) => widget.setIndex(index),
                   metaTile: metaTile,
-                  colorSet: widget.colorSet,
-                ),
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: SourceDisplay(
-                  graphics: metaTile,
-                ),
-              ),
-            )
-          ],
+                  selectedTile: widget.selectedIndex,
+                  colorSet: widget.colorSet),
+            ],
+          ),
         ),
-      )
-    ]);
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            alignment: Alignment.topCenter,
+            child: AspectRatio(
+              aspectRatio: metaTile.width / metaTile.height,
+              child: MetaTileCanvas(
+                  intensity: appState.selectedIntensity,
+                  metaTile: metaTile,
+                  showGrid: widget.showGrid,
+                  floodMode: widget.floodMode,
+                  metaTileIndex: widget.selectedIndex,
+                  colorSet: widget.colorSet),
+            ),
+          ),
+        ),
+        Expanded(
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Name'),
+                key: Key(metaTile.name),
+                initialValue: metaTile.name,
+                onChanged: (text) => setState(() {
+                  metaTile.name = text;
+                }),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: BackgroundGrid(
+                    background: widget.preview,
+                    metaTile: metaTile,
+                    colorSet: widget.colorSet,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: SourceDisplay(
+                    graphics: metaTile,
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
+      ]),
+    );
   }
 }

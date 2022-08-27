@@ -4,4 +4,6 @@ import '../models/app_state.dart';
 
 class AppStateCubit extends Cubit<AppState> {
   AppStateCubit() : super(AppState(selectedIntensity: 3));
+
+  void setIntensity(intensity) => emit(state.copyWith(selectedIntensity: intensity));
 }
