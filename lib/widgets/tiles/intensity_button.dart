@@ -11,20 +11,23 @@ class IntensityButton extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    Widget iconButton = IconButton(
-        icon: Icon(Icons.stop, color: colorSet[intensity]),
-        onPressed: () => context.read<AppStateCubit>().setIntensity(intensity));
-
-    if (intensity == context.read<AppStateCubit>().state.intensity) {
-      return Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.blueGrey, width: 1),
+  Widget build(BuildContext context) => MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () => context.read<AppStateCubit>().setIntensity(intensity),
+          child: SizedBox(
+            width: 25,
+            height: 25,
+            child: Container(
+                decoration: BoxDecoration(
+              color: colorSet[intensity],
+              border: Border.all(
+                  color: intensity == context.read<AppStateCubit>().state.intensity
+                      ? Colors.blue
+                      : Colors.black,
+                  width: 1),
+            )),
+          ),
         ),
-        child: iconButton,
       );
-    }
-
-    return iconButton;
-  }
 }

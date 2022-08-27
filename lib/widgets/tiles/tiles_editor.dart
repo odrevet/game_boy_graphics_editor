@@ -106,21 +106,25 @@ class _TilesEditorState extends State<TilesEditor> {
           children: [
             Row(
               children: [
-                IntensityButton(
-                  intensity: 0,
-                  colorSet: appState.colorSet,
-                ),
-                IntensityButton(
-                  intensity: 1,
-                  colorSet: appState.colorSet,
-                ),
-                IntensityButton(
-                  intensity: 2,
-                  colorSet: appState.colorSet,
-                ),
-                IntensityButton(
-                  intensity: 3,
-                  colorSet: appState.colorSet,
+                ButtonBar(
+                  children: [
+                    IntensityButton(
+                      intensity: 0,
+                      colorSet: appState.colorSet,
+                    ),
+                    IntensityButton(
+                      intensity: 1,
+                      colorSet: appState.colorSet,
+                    ),
+                    IntensityButton(
+                      intensity: 2,
+                      colorSet: appState.colorSet,
+                    ),
+                    IntensityButton(
+                      intensity: 3,
+                      colorSet: appState.colorSet,
+                    ),
+                  ],
                 ),
                 const VerticalDivider(),
                 IconButton(
