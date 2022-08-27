@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/background.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_canvas.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
-import 'package:game_boy_graphics_editor/widgets/tiles/tile_dimensions_dropdown.dart';
 
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
@@ -88,7 +87,8 @@ class _TilesEditorState extends State<TilesEditor> {
                   IconButton(
                       icon: const Icon(Icons.remove),
                       tooltip: 'Remove tile',
-                      onPressed: () => context.read<MetaTileCubit>().remove(appState.metaTileIndexTile)),
+                      onPressed: () =>
+                          context.read<MetaTileCubit>().remove(appState.metaTileIndexTile)),
                 ],
               ),
               MetaTileListView(
@@ -161,22 +161,6 @@ class _TilesEditorState extends State<TilesEditor> {
                     onPressed: () =>
                         context.read<MetaTileCubit>().rightShift(appState.metaTileIndexTile),
                     icon: const Icon(Icons.keyboard_arrow_right_rounded)),
-                const VerticalDivider(),
-                IconButton(
-                  icon: Icon(appState.floodMode ? Icons.waves : Icons.edit),
-                  tooltip: appState.floodMode ? 'Flood fill' : 'Draw',
-                  onPressed: () => context.read<AppStateCubit>().toggleFloodMode(),
-                ),
-                const VerticalDivider(),
-                const TileDimensionDropdown(),
-                IconButton(
-                  icon: Icon(context.read<AppStateCubit>().state.showGridTile
-                      ? Icons.grid_on
-                      : Icons.grid_off),
-                  tooltip:
-                      '${context.read<AppStateCubit>().state.showGridTile ? 'Hide' : 'Show'} grid',
-                  onPressed: () => context.read<AppStateCubit>().toggleGridTile(),
-                ),
               ],
             ),
             Expanded(

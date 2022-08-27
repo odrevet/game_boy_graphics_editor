@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/widgets/tiles/tile_dimensions_dropdown.dart';
 
+import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
 import '../../models/download_stub.dart' if (dart.library.html) '../../download.dart';
 import '../../models/file_utils.dart';
@@ -38,15 +40,27 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
 
     actions = [
       IconButton(
-          onPressed: context.read<MetaTileCubit>().canUndo
-              ? context.read<MetaTileCubit>().undo
-              : null,
+          onPressed:
+              context.read<MetaTileCubit>().canUndo ? context.read<MetaTileCubit>().undo : null,
           icon: const Icon(Icons.undo)),
       IconButton(
-          onPressed: context.read<MetaTileCubit>().canRedo
-              ? context.read<MetaTileCubit>().redo
-              : null,
+          onPressed:
+              context.read<MetaTileCubit>().canRedo ? context.read<MetaTileCubit>().redo : null,
           icon: const Icon(Icons.redo)),
+      const VerticalDivider(),
+      IconButton(
+        icon: Icon(context.read<AppStateCubit>().state.floodMode ? Icons.waves : Icons.edit),
+        tooltip: context.read<AppStateCubit>().state.floodMode ? 'Flood fill' : 'Draw',
+        onPressed: () => context.read<AppStateCubit>().toggleFloodMode(),
+      ),
+      const VerticalDivider(),
+      const TileDimensionDropdown(),
+      IconButton(
+        icon:
+            Icon(context.read<AppStateCubit>().state.showGridTile ? Icons.grid_on : Icons.grid_off),
+        tooltip: '${context.read<AppStateCubit>().state.showGridTile ? 'Hide' : 'Show'} grid',
+        onPressed: () => context.read<AppStateCubit>().toggleGridTile(),
+      ),
       const VerticalDivider(),
       kIsWeb
           ? IconButton(
