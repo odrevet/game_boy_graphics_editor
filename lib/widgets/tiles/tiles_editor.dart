@@ -120,26 +120,18 @@ class _TilesEditorState extends State<TilesEditor> {
               children: [
                 IntensityButton(
                   intensity: 0,
-                  onPressed: (intensity) => context.read<AppStateCubit>().setIntensity(intensity),
-                  selectedIntensity: appState.intensity,
                   colorSet: widget.colorSet,
                 ),
                 IntensityButton(
                   intensity: 1,
-                  onPressed: (intensity) => context.read<AppStateCubit>().setIntensity(intensity),
-                  selectedIntensity: appState.intensity,
                   colorSet: widget.colorSet,
                 ),
                 IntensityButton(
                   intensity: 2,
-                  onPressed: (intensity) => context.read<AppStateCubit>().setIntensity(intensity),
-                  selectedIntensity: appState.intensity,
                   colorSet: widget.colorSet,
                 ),
                 IntensityButton(
                   intensity: 3,
-                  onPressed: (intensity) => context.read<AppStateCubit>().setIntensity(intensity),
-                  selectedIntensity: appState.intensity,
                   colorSet: widget.colorSet,
                 ),
                 const VerticalDivider(),

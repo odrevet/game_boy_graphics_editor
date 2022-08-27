@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../cubits/app_state_cubit.dart';
 
 class IntensityButton extends StatelessWidget {
   final int intensity;
-  final int selectedIntensity;
-  final Function onPressed;
   final List<Color> colorSet;
 
   const IntensityButton(
-      {Key? key,
-      required this.intensity,
-      required this.onPressed,
-      required this.selectedIntensity,
-      required this.colorSet})
+      {Key? key, required this.intensity, required this.colorSet})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Widget iconButton = IconButton(
-        icon: Icon(Icons.stop, color: colorSet[intensity]), onPressed: () => onPressed(intensity));
+        icon: Icon(Icons.stop, color: colorSet[intensity]),
+        onPressed: () => context.read<AppStateCubit>().setIntensity(intensity));
 
-    if (intensity == selectedIntensity) {
+    if (intensity == context.read<AppStateCubit>().state.intensity) {
       return Container(
         decoration: BoxDecoration(
           border: Border.all(color: Colors.blueGrey, width: 1),
