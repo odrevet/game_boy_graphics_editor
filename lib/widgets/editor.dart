@@ -49,12 +49,8 @@ class _EditorState extends State<Editor> {
 
           BackgroundAppBar backgroundappbar = BackgroundAppBar(
             preferredSize: const Size.fromHeight(50.0),
-            setTileMode: () => context.read<AppStateCubit>().toggleTileMode(),
-            toggleGridBackground: () => context.read<AppStateCubit>().toggleGridBackground(),
-            showGrid: appState.showGridBackground,
             setBackgroundFromSource: _setBackgroundFromSource,
             background: background,
-            selectedTileIndex: appState.tileIndexBackground,
             saveGraphics: _saveGraphics,
           );
 
