@@ -15,22 +15,10 @@ import 'intensity_button.dart';
 
 class TilesEditor extends StatefulWidget {
   final Background preview;
-  final Function setIndex;
-  final bool showGrid;
-  final bool floodMode;
-  final int selectedIndex;
-  final List<Color> colorSet;
-  final List<int> tileBuffer;
 
   const TilesEditor({
     Key? key,
     required this.preview,
-    required this.setIndex,
-    required this.showGrid,
-    required this.floodMode,
-    required this.selectedIndex,
-    required this.colorSet,
-    required this.tileBuffer,
   }) : super(key: key);
 
   @override
@@ -68,11 +56,11 @@ class _TilesEditorState extends State<TilesEditor> {
               title: const Text("Copy"),
               onTap: () {
                 setState(() {
-                  widget.tileBuffer.clear();
+                  appState.tileBuffer.clear();
                   for (var i = hoverTileIndex;
                       i < hoverTileIndex + metaTile.nbTilePerMetaTile();
                       i++) {
-                    widget.tileBuffer.addAll(metaTile.tileList[i].data);
+                    appState.tileBuffer.addAll(metaTile.tileList[i].data);
                   }
                 });
                 Navigator.pop(contextMenuAreaContext);
@@ -82,7 +70,7 @@ class _TilesEditorState extends State<TilesEditor> {
               leading: const Icon(Icons.paste),
               title: const Text("Paste"),
               onTap: () {
-                context.read<MetaTileCubit>().paste(hoverTileIndex, widget.tileBuffer);
+                context.read<MetaTileCubit>().paste(hoverTileIndex, appState.tileBuffer);
                 Navigator.pop(contextMenuAreaContext);
               },
             ),
@@ -100,17 +88,17 @@ class _TilesEditorState extends State<TilesEditor> {
                   IconButton(
                       icon: const Icon(Icons.remove),
                       tooltip: 'Remove tile',
-                      onPressed: () => context.read<MetaTileCubit>().remove(widget.selectedIndex)),
+                      onPressed: () => context.read<MetaTileCubit>().remove(appState.metaTileIndexTile)),
                 ],
               ),
               MetaTileListView(
                   onHover: (index) => setState(() {
                         hoverTileIndex = index;
                       }),
-                  onTap: (index) => widget.setIndex(index),
+                  onTap: (index) => context.read<AppStateCubit>().setSelectedTileIndex(index),
                   metaTile: metaTile,
-                  selectedTile: widget.selectedIndex,
-                  colorSet: widget.colorSet),
+                  selectedTile: appState.metaTileIndexTile,
+                  colorSet: appState.colorSet),
             ],
           ),
         ),
@@ -120,19 +108,19 @@ class _TilesEditorState extends State<TilesEditor> {
               children: [
                 IntensityButton(
                   intensity: 0,
-                  colorSet: widget.colorSet,
+                  colorSet: appState.colorSet,
                 ),
                 IntensityButton(
                   intensity: 1,
-                  colorSet: widget.colorSet,
+                  colorSet: appState.colorSet,
                 ),
                 IntensityButton(
                   intensity: 2,
-                  colorSet: widget.colorSet,
+                  colorSet: appState.colorSet,
                 ),
                 IntensityButton(
                   intensity: 3,
-                  colorSet: widget.colorSet,
+                  colorSet: appState.colorSet,
                 ),
                 const VerticalDivider(),
                 IconButton(
@@ -200,10 +188,10 @@ class _TilesEditorState extends State<TilesEditor> {
                   child: MetaTileCanvas(
                       intensity: appState.intensity,
                       metaTile: metaTile,
-                      showGrid: widget.showGrid,
-                      floodMode: widget.floodMode,
-                      metaTileIndex: widget.selectedIndex,
-                      colorSet: widget.colorSet),
+                      showGrid: appState.showGridTile,
+                      floodMode: appState.floodMode,
+                      metaTileIndex: appState.metaTileIndexTile,
+                      colorSet: appState.colorSet),
                 ),
               ),
             )
@@ -228,7 +216,7 @@ class _TilesEditorState extends State<TilesEditor> {
                   child: BackgroundGrid(
                     background: widget.preview,
                     metaTile: metaTile,
-                    colorSet: widget.colorSet,
+                    colorSet: appState.colorSet,
                   ),
                 ),
               ),

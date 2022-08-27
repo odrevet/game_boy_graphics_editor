@@ -69,13 +69,6 @@ class _EditorState extends State<Editor> {
               appBar: appbar,
               body: appState.tileMode
                   ? TilesEditor(
-                      setIndex: (index) =>
-                          context.read<AppStateCubit>().setSelectedTileIndex(index),
-                      showGrid: appState.showGridTile,
-                      floodMode: appState.floodMode,
-                      selectedIndex: appState.metaTileIndexTile,
-                      colorSet: appState.colorSet,
-                      tileBuffer: appState.tileBuffer,
                       preview: Background(width: 4, height: 4, fill: appState.metaTileIndexTile))
                   : BackgroundEditor(
                       background: background,
