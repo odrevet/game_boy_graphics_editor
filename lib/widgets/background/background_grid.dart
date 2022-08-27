@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:game_boy_graphics_editor/background.dart';
+import 'package:game_boy_graphics_editor/models/background.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_display.dart';
 
-import '../../meta_tile.dart';
+import '../../models/meta_tile.dart';
 
 class BackgroundGrid extends StatefulWidget {
   final Background background;

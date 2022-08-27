@@ -1,4 +1,4 @@
-import 'package:game_boy_graphics_editor/graphics.dart';
+import 'package:game_boy_graphics_editor/models/graphics.dart';
 
 import 'convert.dart';
 import 'meta_tile.dart';
@@ -39,10 +39,8 @@ unsigned char $name[] = {${formatOutput(arrayData)}};""";
 
     name = graphicsElement.name;
 
-    data = List<int>.from(graphicsElement.values
-        .split(',')
-        .map((value) => int.parse(value))
-        .toList());
+    data =
+        List<int>.from(graphicsElement.values.split(',').map((value) => int.parse(value)).toList());
 
     RegExp regExpWidth = RegExp(r"#define \w+Width (\d+)");
     var matchesWidth = regExpWidth.allMatches(source);

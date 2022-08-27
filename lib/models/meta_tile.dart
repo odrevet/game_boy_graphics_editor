@@ -1,7 +1,7 @@
 import 'dart:core';
 
-import 'package:game_boy_graphics_editor/graphics.dart';
-import 'package:game_boy_graphics_editor/tile.dart';
+import 'package:game_boy_graphics_editor/models/graphics.dart';
+import 'package:game_boy_graphics_editor/models/tile.dart';
 
 import 'convert.dart';
 
@@ -9,15 +9,10 @@ import 'convert.dart';
 class MetaTile extends Graphics {
   final List<Tile> tileList;
 
-  MetaTile(
-      {String name = 'tiles',
-      width = Tile.size,
-      height = Tile.size,
-      required this.tileList})
+  MetaTile({String name = 'tiles', width = Tile.size, height = Tile.size, required this.tileList})
       : super(name: name, height: height, width: width);
 
-  MetaTile copyWith(
-      {List<Tile>? tileList, String? name, int? width, int? height}) {
+  MetaTile copyWith({List<Tile>? tileList, String? name, int? width, int? height}) {
     var newTileList = <Tile>[];
     if (tileList == null) {
       newTileList = <Tile>[];
@@ -84,8 +79,8 @@ class MetaTile extends Graphics {
     for (int i = 0; i < width ~/ Tile.size; i++) {
       int tileIndex = metaTileIndex * nbTilePerMetaTile() +
           getPattern()[i + (rowIndex ~/ Tile.size) * nbTilePerRow()];
-      tileList[tileIndex].setRow(
-          rowIndex % Tile.size, row.sublist(dotOffset, dotOffset + Tile.size));
+      tileList[tileIndex]
+          .setRow(rowIndex % Tile.size, row.sublist(dotOffset, dotOffset + Tile.size));
       dotOffset += Tile.size;
     }
   }
@@ -118,12 +113,9 @@ class MetaTile extends Graphics {
   }
 
   List getTileIndex(int rowIndex, int colIndex, int selectedMetaTileIndex) {
-    int tileIndex =
-        (rowIndex ~/ Tile.size) + (colIndex ~/ Tile.size) * nbTilePerRow();
-    int metaTileIndex =
-        getPattern()[tileIndex] + selectedMetaTileIndex * nbTilePerMetaTile();
-    int pixelIndex =
-        ((colIndex % Tile.size) * Tile.size) + (rowIndex % Tile.size);
+    int tileIndex = (rowIndex ~/ Tile.size) + (colIndex ~/ Tile.size) * nbTilePerRow();
+    int metaTileIndex = getPattern()[tileIndex] + selectedMetaTileIndex * nbTilePerMetaTile();
+    int pixelIndex = ((colIndex % Tile.size) * Tile.size) + (rowIndex % Tile.size);
 
     return [metaTileIndex, pixelIndex];
   }
@@ -135,16 +127,14 @@ class MetaTile extends Graphics {
     return tileList[indexTile].data[indexPixel];
   }
 
-  setPixel(
-      int rowIndex, int colIndex, int selectedMetaTileIndex, int intensity) {
+  setPixel(int rowIndex, int colIndex, int selectedMetaTileIndex, int intensity) {
     var index = getTileIndex(rowIndex, colIndex, selectedMetaTileIndex);
     int indexTile = index[0];
     int indexPixel = index[1];
     tileList[indexTile].data[indexPixel] = intensity;
   }
 
-  flood(int metaTileIndex, int intensity, int rowIndex, int colIndex,
-      int targetColor) {
+  flood(int metaTileIndex, int intensity, int rowIndex, int colIndex, int targetColor) {
     if (getPixel(rowIndex, colIndex, metaTileIndex) == targetColor) {
       setPixel(rowIndex, colIndex, metaTileIndex, intensity);
       if (inbound(rowIndex, colIndex - 1)) {

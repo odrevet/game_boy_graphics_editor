@@ -4,8 +4,8 @@ import 'package:game_boy_graphics_editor/widgets/background/background_grid.dart
 import 'package:game_boy_graphics_editor/widgets/source_display.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
-import '../../background.dart';
-import '../../meta_tile.dart';
+import '../../models/background.dart';
+import '../../models/meta_tile.dart';
 
 class BackgroundEditor extends StatefulWidget {
   final MetaTile tiles;
@@ -37,9 +37,8 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
     return Row(children: [
       MetaTileListView(
           colorSet: widget.colorSet,
-          onTap: (index) => widget.onTapTileListView != null
-              ? widget.onTapTileListView!(index)
-              : null,
+          onTap: (index) =>
+              widget.onTapTileListView != null ? widget.onTapTileListView!(index) : null,
           metaTile: widget.tiles,
           selectedTile: widget.selectedTileIndex),
       Padding(
@@ -51,8 +50,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
               onTap: () {
                 setState(() {
                   widget.background.insertCol(
-                      hoverTileIndex % widget.background.width,
-                      widget.selectedTileIndex);
+                      hoverTileIndex % widget.background.width, widget.selectedTileIndex);
                 });
                 Navigator.of(context).pop();
               },
@@ -61,8 +59,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
               title: const Text('Delete column'),
               onTap: () {
                 setState(() {
-                  widget.background
-                      .deleteCol(hoverTileIndex % widget.background.width);
+                  widget.background.deleteCol(hoverTileIndex % widget.background.width);
                 });
                 Navigator.of(context).pop();
               },
@@ -72,8 +69,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
               onTap: () {
                 setState(() {
                   widget.background.insertRow(
-                      hoverTileIndex ~/ widget.background.width,
-                      widget.selectedTileIndex);
+                      hoverTileIndex ~/ widget.background.width, widget.selectedTileIndex);
                 });
                 Navigator.of(context).pop();
               },
@@ -82,8 +78,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
               title: const Text('Remove row'),
               onTap: () {
                 setState(() {
-                  widget.background
-                      .deleteRow(hoverTileIndex ~/ widget.background.width);
+                  widget.background.deleteRow(hoverTileIndex ~/ widget.background.width);
                 });
                 Navigator.of(context).pop();
               },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/dot_matrix.dart';
 
-import '../../meta_tile.dart';
+import '../../models/meta_tile.dart';
 
 class MetaTileDisplay extends StatelessWidget {
   final MetaTile metaTile;
@@ -26,8 +26,7 @@ class MetaTileDisplay extends StatelessWidget {
         for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++)
           DotMatrix(
               pixels: metaTile
-                  .tileList[metaTileIndex * metaTile.nbTilePerMetaTile() +
-                      metaTile.getPattern()[i]]
+                  .tileList[metaTileIndex * metaTile.nbTilePerMetaTile() + metaTile.getPattern()[i]]
                   .data
                   .map((e) => colorSet[e])
                   .toList(),

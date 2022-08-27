@@ -2,10 +2,10 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../download_stub.dart' if (dart.library.html) '../../download.dart';
-import '../../file_utils.dart';
-import '../../meta_tile.dart';
-import '../../meta_tile_cubit.dart';
+import '../../cubits/meta_tile_cubit.dart';
+import '../../models/download_stub.dart' if (dart.library.html) '../../download.dart';
+import '../../models/file_utils.dart';
+import '../../models/meta_tile.dart';
 import '../tiles/intensity_button.dart';
 
 class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
@@ -46,9 +46,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
 
   Widget _setTileModeButton() {
     return ElevatedButton.icon(
-        onPressed: setTileMode,
-        icon: const Icon(Icons.wallpaper),
-        label: const Text('Tile'));
+        onPressed: setTileMode, icon: const Icon(Icons.wallpaper), label: const Text('Tile'));
   }
 
   Widget _tileDimensionsDropDown(BuildContext context) {
@@ -94,23 +92,19 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
 
     actions = [
       IconButton(
-          onPressed: context.read<MetaTileCubit>().canUndo
-              ? context.read<MetaTileCubit>().undo
-              : null,
+          onPressed:
+              context.read<MetaTileCubit>().canUndo ? context.read<MetaTileCubit>().undo : null,
           icon: const Icon(Icons.undo)),
       IconButton(
-          onPressed: context.read<MetaTileCubit>().canRedo
-              ? context.read<MetaTileCubit>().redo
-              : null,
+          onPressed:
+              context.read<MetaTileCubit>().canRedo ? context.read<MetaTileCubit>().redo : null,
           icon: const Icon(Icons.redo)),
       const VerticalDivider(),
       IconButton(
-          onPressed: () =>
-              context.read<MetaTileCubit>().flipVertical(metaTileIndex),
+          onPressed: () => context.read<MetaTileCubit>().flipVertical(metaTileIndex),
           icon: const Icon(Icons.flip)),
       IconButton(
-          onPressed: () =>
-              context.read<MetaTileCubit>().flipHorizontal(metaTileIndex),
+          onPressed: () => context.read<MetaTileCubit>().flipHorizontal(metaTileIndex),
           icon: const RotatedBox(
             quarterTurns: 1,
             child: Icon(Icons.flip),
@@ -130,16 +124,13 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
           onPressed: () => context.read<MetaTileCubit>().upShift(metaTileIndex),
           icon: const Icon(Icons.keyboard_arrow_up_rounded)),
       IconButton(
-          onPressed: () =>
-              context.read<MetaTileCubit>().downShift(metaTileIndex),
+          onPressed: () => context.read<MetaTileCubit>().downShift(metaTileIndex),
           icon: const Icon(Icons.keyboard_arrow_down_rounded)),
       IconButton(
-          onPressed: () =>
-              context.read<MetaTileCubit>().leftShift(metaTileIndex),
+          onPressed: () => context.read<MetaTileCubit>().leftShift(metaTileIndex),
           icon: const Icon(Icons.keyboard_arrow_left_rounded)),
       IconButton(
-          onPressed: () =>
-              context.read<MetaTileCubit>().rightShift(metaTileIndex),
+          onPressed: () => context.read<MetaTileCubit>().rightShift(metaTileIndex),
           icon: const Icon(Icons.keyboard_arrow_right_rounded)),
       const VerticalDivider(),
       IconButton(
@@ -226,9 +217,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
                         child: Row(
                           children: [
                             const Text("ColorSet"),
-                            TextButton(
-                                onPressed: toggleColorSet,
-                                child: const Text("DMG / Pocket"))
+                            TextButton(onPressed: toggleColorSet, child: const Text("DMG / Pocket"))
                           ],
                         ),
                       ),

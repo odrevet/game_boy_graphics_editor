@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_display.dart';
 
-import '../../meta_tile.dart';
-import '../../meta_tile_cubit.dart';
+import '../../cubits/meta_tile_cubit.dart';
+import '../../models/meta_tile.dart';
 
 class MetaTileCanvas extends StatefulWidget {
   final MetaTile metaTile;
@@ -37,8 +37,7 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) =>
-          MouseRegion(
+      builder: (BuildContext context, BoxConstraints constraints) => MouseRegion(
         cursor: SystemMouseCursors.precise,
         onEnter: (PointerEvent details) => setState(() => isHover = true),
         onExit: (PointerEvent details) => setState(() {
@@ -73,14 +72,13 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
     final colIndex = (localPosition.dy / pixelSize).floor();
 
     if (widget.floodMode) {
-      int targetColor =
-          widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex);
+      int targetColor = widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex);
       if (targetColor != widget.intensity) {
-        context.read<MetaTileCubit>().flood(rowIndex, colIndex,
-            widget.metaTileIndex, widget.intensity, targetColor);
+        context
+            .read<MetaTileCubit>()
+            .flood(rowIndex, colIndex, widget.metaTileIndex, widget.intensity, targetColor);
       }
-    } else if (widget.metaTile
-            .getPixel(rowIndex, colIndex, widget.metaTileIndex) !=
+    } else if (widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex) !=
         widget.intensity) {
       context
           .read<MetaTileCubit>()

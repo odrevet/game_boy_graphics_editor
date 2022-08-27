@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
-import '../../background.dart';
-import '../../download_stub.dart' if (dart.library.html) '../../download.dart';
-import '../../file_utils.dart';
+import '../../models/background.dart';
+import '../../models/download_stub.dart' if (dart.library.html) '../../download.dart';
+import '../../models/file_utils.dart';
 
 class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
@@ -31,9 +31,7 @@ class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
 
   Widget _setTileModeButton() {
     return ElevatedButton.icon(
-        onPressed: setTileMode,
-        icon: const Icon(Icons.wallpaper),
-        label: const Text('Background'));
+        onPressed: setTileMode, icon: const Icon(Icons.wallpaper), label: const Text('Background'));
   }
 
   @override
@@ -75,8 +73,7 @@ class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
                 content: Text("Loading"),
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              readBytes(result)
-                  .then((source) => setBackgroundFromSource(source));
+              readBytes(result).then((source) => setBackgroundFromSource(source));
             }
           })
         },

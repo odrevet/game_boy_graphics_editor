@@ -1,11 +1,11 @@
 import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_boy_graphics_editor/background.dart';
+import 'package:game_boy_graphics_editor/models/background.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_canvas.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
-import '../../meta_tile_cubit.dart';
+import '../../cubits/meta_tile_cubit.dart';
 import '../background/background_grid.dart';
 import '../source_display.dart';
 

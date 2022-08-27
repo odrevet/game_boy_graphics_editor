@@ -14,9 +14,7 @@ class Tile {
       combined += element.toRadixString(2).padLeft(2, "0");
     }
 
-    for (var index = 0;
-        index < (combined.length ~/ size) * size;
-        index += size * 2) {
+    for (var index = 0; index < (combined.length ~/ size) * size; index += size * 2) {
       var lo = "";
       var hi = "";
       var combinedSub = combined.substring(index, index + size * 2);

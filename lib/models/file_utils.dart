@@ -3,11 +3,11 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:game_boy_graphics_editor/graphics.dart';
+import 'package:game_boy_graphics_editor/models/graphics.dart';
 
 Future<void> saveFile(String content, allowedExtensions, [filename]) async {
-  String? fileName = await FilePicker.platform
-      .saveFile(allowedExtensions: allowedExtensions, fileName: filename);
+  String? fileName =
+      await FilePicker.platform.saveFile(allowedExtensions: allowedExtensions, fileName: filename);
   if (fileName != null) {
     File file = File(fileName);
     file.writeAsString(content);
@@ -18,10 +18,8 @@ Future<String?> saveToDirectory(Graphics graphics) async {
   String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
   if (selectedDirectory != null) {
-    File("$selectedDirectory/${graphics.name}.h")
-        .writeAsString(graphics.toHeader());
-    File("$selectedDirectory/${graphics.name}.c")
-        .writeAsString(graphics.toSource());
+    File("$selectedDirectory/${graphics.name}.h").writeAsString(graphics.toHeader());
+    File("$selectedDirectory/${graphics.name}.c").writeAsString(graphics.toSource());
   }
 
   return selectedDirectory;

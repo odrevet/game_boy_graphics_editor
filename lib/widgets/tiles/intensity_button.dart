@@ -17,8 +17,7 @@ class IntensityButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget iconButton = IconButton(
-        icon: Icon(Icons.stop, color: colorSet[intensity]),
-        onPressed: () => onPressed(intensity));
+        icon: Icon(Icons.stop, color: colorSet[intensity]), onPressed: () => onPressed(intensity));
 
     if (intensity == selectedIntensity) {
       return Container(

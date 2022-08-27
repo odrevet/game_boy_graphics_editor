@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:game_boy_graphics_editor/graphics.dart';
+import 'package:game_boy_graphics_editor/models/graphics.dart';
 
-import '../download_stub.dart' if (dart.library.html) '../download.dart';
-import '../file_utils.dart';
+import '../models/download_stub.dart' if (dart.library.html) '../download.dart';
+import '../models/file_utils.dart';
 
 class SourceDisplay extends StatelessWidget {
   final Graphics graphics;
@@ -26,8 +26,7 @@ class SourceDisplay extends StatelessWidget {
             icon: const Icon(Icons.copy),
             onPressed: () {
               final snackBar = SnackBar(
-                content:
-                    Text("Contents of $headerFilename copied into clipboard"),
+                content: Text("Contents of $headerFilename copied into clipboard"),
               );
               Clipboard.setData(ClipboardData(text: graphics.toHeader()));
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -37,14 +36,12 @@ class SourceDisplay extends StatelessWidget {
               ? IconButton(
                   iconSize: 18,
                   icon: const Icon(Icons.download),
-                  onPressed: () =>
-                      download(graphics.toHeader(), headerFilename),
+                  onPressed: () => download(graphics.toHeader(), headerFilename),
                 )
               : IconButton(
                   iconSize: 18,
                   icon: const Icon(Icons.save_as),
-                  onPressed: () =>
-                      saveFile(graphics.toHeader(), ['.h'], headerFilename),
+                  onPressed: () => saveFile(graphics.toHeader(), ['.h'], headerFilename),
                 ),
         ]),
         Align(
@@ -61,8 +58,7 @@ class SourceDisplay extends StatelessWidget {
             icon: const Icon(Icons.copy),
             onPressed: () {
               final snackBar = SnackBar(
-                content: Text(
-                    "Contents of ${graphics.name}.c copied into clipboard"),
+                content: Text("Contents of ${graphics.name}.c copied into clipboard"),
               );
               Clipboard.setData(ClipboardData(text: graphics.toSource()));
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -72,14 +68,12 @@ class SourceDisplay extends StatelessWidget {
               ? IconButton(
                   iconSize: 18,
                   icon: const Icon(Icons.download),
-                  onPressed: () =>
-                      download(graphics.toSource(), sourceFilename),
+                  onPressed: () => download(graphics.toSource(), sourceFilename),
                 )
               : IconButton(
                   iconSize: 18,
                   icon: const Icon(Icons.save_as),
-                  onPressed: () =>
-                      saveFile(graphics.toSource(), ['.c'], sourceFilename),
+                  onPressed: () => saveFile(graphics.toSource(), ['.c'], sourceFilename),
                 ),
         ]),
         Align(

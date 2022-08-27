@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../meta_tile.dart';
+import '../../models/meta_tile.dart';
 import 'meta_tile_display.dart';
 
 class MetaTileListView extends StatefulWidget {
@@ -30,19 +30,16 @@ class _MetaTileListViewState extends State<MetaTileListView> {
         width: 180,
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: widget.metaTile.tileList.length ~/
-              widget.metaTile.nbTilePerMetaTile(),
+          itemCount: widget.metaTile.tileList.length ~/ widget.metaTile.nbTilePerMetaTile(),
           itemBuilder: (context, index) {
             return MouseRegion(
-              onHover: (_) =>
-                  widget.onHover != null ? widget.onHover!(index) : null,
+              onHover: (_) => widget.onHover != null ? widget.onHover!(index) : null,
               child: ListTile(
                 onTap: () => widget.onTap(index),
                 leading: Text(
                   "$index",
                   style: widget.selectedTile == index
-                      ? const TextStyle(
-                          color: Colors.blue, fontWeight: FontWeight.bold)
+                      ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
                       : null,
                 ),
                 title: MetaTileDisplay(
