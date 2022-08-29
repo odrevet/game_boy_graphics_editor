@@ -4,7 +4,7 @@ import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_display.dart';
 
 import '../../models/meta_tile.dart';
 
-class BackgroundGrid extends StatefulWidget {
+class BackgroundGrid extends StatelessWidget {
   final Background background;
   final MetaTile metaTile;
   final Function? onTap;
@@ -23,21 +23,16 @@ class BackgroundGrid extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<BackgroundGrid> createState() => _BackgroundGridState();
-}
-
-class _BackgroundGridState extends State<BackgroundGrid> {
-  @override
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1.0,
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: widget.metaTile.width / widget.metaTile.height,
-          crossAxisCount: widget.background.width,
+          childAspectRatio: metaTile.width / metaTile.height,
+          crossAxisCount: background.width,
         ),
         itemBuilder: _build,
-        itemCount: widget.background.width * widget.background.height,
+        itemCount: background.width * background.height,
       ),
     );
   }
@@ -45,7 +40,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
   Widget _build(BuildContext context, int index) {
     Widget tileWidget;
 
-    if (widget.background.data[index] >= widget.metaTile.tileList.length) {
+    if (background.data[index] >= metaTile.tileList.length) {
       tileWidget = Container(
         alignment: Alignment.center,
         child: const Text(
@@ -57,25 +52,25 @@ class _BackgroundGridState extends State<BackgroundGrid> {
       );
     } else {
       tileWidget = MetaTileDisplay(
-          colorSet: widget.colorSet,
-          metaTile: widget.metaTile,
+          colorSet: colorSet,
+          metaTile: metaTile,
           showGrid: false,
-          metaTileIndex: widget.background.data[index]);
+          metaTileIndex: background.data[index]);
     }
 
-    if (widget.showGrid) {
+    if (showGrid) {
       tileWidget = Container(
         decoration: BoxDecoration(border: Border.all(color: Colors.blueGrey)),
         child: tileWidget,
       );
     }
 
-    if (widget.onTap != null) {
+    if (onTap != null) {
       return MouseRegion(
-        onHover: (_) => widget.onHover != null ? widget.onHover!(index) : null,
+        onHover: (_) => onHover != null ? onHover!(index) : null,
         cursor: SystemMouseCursors.precise,
         child: GestureDetector(
-          onTap: () => widget.onTap!(index),
+          onTap: () => onTap!(index),
           child: tileWidget,
         ),
       );
@@ -85,3 +80,4 @@ class _BackgroundGridState extends State<BackgroundGrid> {
     }
   }
 }
+
