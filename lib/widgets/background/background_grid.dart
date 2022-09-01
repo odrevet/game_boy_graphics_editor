@@ -51,11 +51,11 @@ class BackgroundGrid extends StatelessWidget {
         ),
       );
     } else {
-      tileWidget = MetaTileDisplay(
+      tileWidget = Container(); /*MetaTileDisplay(
           colorSet: colorSet,
           metaTile: metaTile,
           showGrid: false,
-          metaTileIndex: background.data[index]);
+          metaTileIndex: background.data[index]);*/
     }
 
     if (showGrid) {

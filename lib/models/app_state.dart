@@ -3,6 +3,10 @@ import 'dart:ui';
 import 'colors.dart';
 
 class AppState {
+  List<int> tileData;
+  int tileHeight;
+  int tileWidth;
+
   int intensity;
   int metaTileIndexTile;
   int tileIndexBackground;
@@ -14,6 +18,9 @@ class AppState {
   List<Color> colorSet;
 
   AppState({
+    required this.tileData,
+    this.tileHeight = 8,
+    this.tileWidth = 8,
     this.intensity = 3,
     this.metaTileIndexTile = 0,
     this.tileIndexBackground = 0,
@@ -22,7 +29,7 @@ class AppState {
     this.floodMode = false,
     this.showGridBackground = true,
     this.tileBuffer = const <int>[],
-    this.colorSet = colorsPocket,
+    this.colorSet = colorsDMG,
   });
 
   copyWith(
@@ -34,6 +41,7 @@ class AppState {
           bool? floodMode,
           bool? showGridBackground,
           List<int>? tileBuffer,
+          List<int>? tileData,
           List<Color>? colorSet}) =>
       AppState(
         intensity: intensity ?? this.intensity,
@@ -44,6 +52,7 @@ class AppState {
         floodMode: floodMode ?? this.floodMode,
         showGridBackground: showGridBackground ?? this.showGridBackground,
         tileBuffer: tileBuffer ?? this.tileBuffer,
+        tileData: tileData ?? this.tileData,
         colorSet: colorSet ?? this.colorSet,
       );
 }

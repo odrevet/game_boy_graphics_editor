@@ -42,11 +42,11 @@ class _MetaTileListViewState extends State<MetaTileListView> {
                       ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
                       : null,
                 ),
-                title: MetaTileDisplay(
+                title: Container() /*MetaTileDisplay(
                     metaTile: widget.metaTile,
                     showGrid: false,
                     metaTileIndex: index,
-                    colorSet: widget.colorSet),
+                    colorSet: widget.colorSet),*/
               ),
             );
           },

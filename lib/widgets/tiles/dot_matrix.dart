@@ -19,7 +19,7 @@ class _DotMatrixState extends State<DotMatrix> {
         builder: (BuildContext context, BoxConstraints constraints) => CustomPaint(
               painter: DotMatrixPainter(
                   pixels: widget.pixels,
-                  pixelSize: constraints.maxWidth / Tile.size,
+                  pixelSize: constraints.maxWidth / 8,
                   showGrid: widget.showGrid),
             ));
   }
@@ -39,8 +39,8 @@ class DotMatrixPainter extends CustomPainter {
       paint.color = pixel;
       canvas.drawRect(
           Rect.fromLTWH(
-            (index % Tile.size).floor().toDouble() * pixelSize,
-            (index / Tile.size).floor().toDouble() * pixelSize,
+            (index % 8).floor().toDouble() * pixelSize,
+            (index / 8).floor().toDouble() * pixelSize,
             pixelSize,
             pixelSize,
           ),
