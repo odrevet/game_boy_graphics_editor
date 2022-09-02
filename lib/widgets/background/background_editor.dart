@@ -36,10 +36,8 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
   Widget build(BuildContext context) {
     return Row(children: [
       MetaTileListView(
-          colorSet: widget.colorSet,
           onTap: (index) =>
               widget.onTapTileListView != null ? widget.onTapTileListView!(index) : null,
-          metaTile: widget.tiles,
           selectedTile: widget.selectedTileIndex),
       Padding(
         padding: const EdgeInsets.all(16.0),

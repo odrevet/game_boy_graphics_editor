@@ -96,9 +96,7 @@ class _TilesEditorState extends State<TilesEditor> {
                         hoverTileIndex = index;
                       }),
                   onTap: (index) => context.read<AppStateCubit>().setSelectedTileIndex(index),
-                  metaTile: metaTile,
-                  selectedTile: appState.metaTileIndexTile,
-                  colorSet: appState.colorSet),
+                  selectedTile: appState.metaTileIndexTile),
             ],
           ),
         ),

@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../cubits/app_state_cubit.dart';
 import '../../models/meta_tile.dart';
+import 'meta_tile_display.dart';
 
 class MetaTileListView extends StatefulWidget {
-  final MetaTile metaTile;
   final int selectedTile;
   final Function onTap;
   final Function? onHover;
-  final List<Color> colorSet;
 
   const MetaTileListView({
     Key? key,
-    required this.metaTile,
     required this.selectedTile,
     required this.onTap,
-    required this.colorSet,
     this.onHover,
   }) : super(key: key);
 
@@ -29,7 +28,7 @@ class _MetaTileListViewState extends State<MetaTileListView> {
         width: 180,
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: widget.metaTile.tileList.length ~/ widget.metaTile.nbTilePerMetaTile(),
+          itemCount: 1,//widget.metaTile.tileList.length ~/ widget.metaTile.nbTilePerMetaTile(),
           itemBuilder: (context, index) {
             return MouseRegion(
               onHover: (_) => widget.onHover != null ? widget.onHover!(index) : null,
@@ -41,11 +40,11 @@ class _MetaTileListViewState extends State<MetaTileListView> {
                       ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
                       : null,
                 ),
-                title: Container() /*MetaTileDisplay(
-                    metaTile: widget.metaTile,
+                title: MetaTileDisplay(
+                    tileData: context.read<AppStateCubit>().state.tileData,
                     showGrid: false,
                     metaTileIndex: index,
-                    colorSet: widget.colorSet),*/
+                    colorSet: context.read<AppStateCubit>().state.colorSet),
               ),
             );
           },
