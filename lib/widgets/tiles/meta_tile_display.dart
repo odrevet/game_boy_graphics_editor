@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/dot_matrix.dart';
-
-import '../../models/meta_tile.dart';
 
 class MetaTileDisplay extends StatelessWidget {
   final List<int> tileData;
@@ -20,9 +20,9 @@ class MetaTileDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DotMatrix(
-        pixels: tileData
-            .map((e) => colorSet[e])
-            .toList(),
-        showGrid: showGrid);
+        pixels: tileData.map((e) => colorSet[e]).toList(),
+        showGrid: showGrid,
+        width: context.read<AppStateCubit>().state.tileWidth,
+        height: context.read<AppStateCubit>().state.tileHeight);
   }
 }

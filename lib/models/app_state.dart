@@ -42,6 +42,8 @@ class AppState {
           bool? showGridBackground,
           List<int>? tileBuffer,
           List<int>? tileData,
+          int? tileWidth,
+          int? tileHeight,
           List<Color>? colorSet}) =>
       AppState(
         intensity: intensity ?? this.intensity,
@@ -53,6 +55,8 @@ class AppState {
         showGridBackground: showGridBackground ?? this.showGridBackground,
         tileBuffer: tileBuffer ?? this.tileBuffer,
         tileData: tileData ?? this.tileData,
+        tileWidth: tileWidth ?? this.tileWidth,
+        tileHeight: tileHeight ?? this.tileHeight,
         colorSet: colorSet ?? this.colorSet,
       );
 }

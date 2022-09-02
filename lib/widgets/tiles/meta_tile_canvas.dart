@@ -73,7 +73,7 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
 
   draw(dynamic details, BoxConstraints constraints, int intensity, bool floodMode) {
     var localPosition = details.localPosition;
-    final pixelSize = constraints.maxWidth / widget.metaTile.width;
+    final pixelSize = constraints.maxWidth / context.read<AppStateCubit>().state.tileWidth;
     final rowIndex = (localPosition.dx / pixelSize).floor();
     final colIndex = (localPosition.dy / pixelSize).floor();
 

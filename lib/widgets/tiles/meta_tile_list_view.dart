@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../models/meta_tile.dart';
-import 'meta_tile_display.dart';
 
 class MetaTileListView extends StatefulWidget {
   final MetaTile metaTile;

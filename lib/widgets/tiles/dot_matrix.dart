@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 
-import '../../models/tile.dart';
-
-class DotMatrix extends StatefulWidget {
+class DotMatrix extends StatelessWidget {
   final List<Color> pixels;
   final bool showGrid;
+  final int width;
+  final int height;
 
-  const DotMatrix({Key? key, required this.pixels, this.showGrid = false}) : super(key: key);
+  const DotMatrix(
+      {Key? key,
+      required this.pixels,
+      required this.width,
+      required this.height,
+      this.showGrid = false})
+      : super(key: key);
 
-  @override
-  State<DotMatrix> createState() => _DotMatrixState();
-}
-
-class _DotMatrixState extends State<DotMatrix> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) => CustomPaint(
               painter: DotMatrixPainter(
-                  pixels: widget.pixels,
-                  pixelSize: constraints.maxWidth / 8,
-                  showGrid: widget.showGrid),
+                  pixels: pixels, pixelSize: constraints.maxWidth / width, showGrid: showGrid, width: width, height: height),
             ));
   }
 }
@@ -29,8 +28,15 @@ class DotMatrixPainter extends CustomPainter {
   final double pixelSize;
   final List<Color> pixels;
   final bool showGrid;
+  final int width;
+  final int height;
 
-  DotMatrixPainter({required this.pixels, required this.pixelSize, this.showGrid = false});
+  DotMatrixPainter(
+      {required this.pixels,
+      required this.pixelSize,
+      required this.width,
+      required this.height,
+      this.showGrid = false});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -39,8 +45,8 @@ class DotMatrixPainter extends CustomPainter {
       paint.color = pixel;
       canvas.drawRect(
           Rect.fromLTWH(
-            (index % 8).floor().toDouble() * pixelSize,
-            (index / 8).floor().toDouble() * pixelSize,
+            (index % width).floor().toDouble() * pixelSize,
+            (index / height).floor().toDouble() * pixelSize,
             pixelSize,
             pixelSize,
           ),
@@ -49,14 +55,14 @@ class DotMatrixPainter extends CustomPainter {
 
     if (showGrid) {
       paint.color = Colors.blueGrey;
-      for (int index = 1; index <= Tile.size; index++) {
-        canvas.drawLine(Offset((index % Tile.size).floor().toDouble() * pixelSize, 0),
-            Offset((index % Tile.size).floor().toDouble() * pixelSize, size.height), paint);
+      for (int index = 1; index <= width; index++) {
+        canvas.drawLine(Offset((index % width).floor().toDouble() * pixelSize, 0),
+            Offset((index % width).floor().toDouble() * pixelSize, size.height), paint);
       }
 
-      for (int index = 1; index <= Tile.size; index++) {
-        canvas.drawLine(Offset(0, (index % Tile.size).floor().toDouble() * pixelSize),
-            Offset(size.width, (index % Tile.size).floor().toDouble() * pixelSize), paint);
+      for (int index = 1; index <= height; index++) {
+        canvas.drawLine(Offset(0, (index % height).floor().toDouble() * pixelSize),
+            Offset(size.width, (index % height).floor().toDouble() * pixelSize), paint);
       }
     }
   }

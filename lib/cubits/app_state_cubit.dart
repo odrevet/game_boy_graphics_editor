@@ -4,7 +4,9 @@ import 'package:game_boy_graphics_editor/models/colors.dart';
 import '../models/app_state.dart';
 
 class AppStateCubit extends Cubit<AppState> {
-  AppStateCubit() : super(AppState(intensity: 3, metaTileIndexTile: 0, tileData: List.generate(64, (index) => 0)));
+  AppStateCubit()
+      : super(AppState(
+            intensity: 3, metaTileIndexTile: 0, tileData: List.generate(64, (index) => 0)));
 
   void setIntensity(intensity) => emit(state.copyWith(intensity: intensity));
 
@@ -28,4 +30,7 @@ class AppStateCubit extends Cubit<AppState> {
     tileData[colIndex * state.tileWidth + rowIndex] = intensity;
     emit(state.copyWith(tileData: tileData));
   }
+
+  void setDimensions(int width, int height) => emit(state.copyWith(
+      tileWidth: width, tileHeight: height, tileData: List.generate(width * height, (index) => 0)));
 }
