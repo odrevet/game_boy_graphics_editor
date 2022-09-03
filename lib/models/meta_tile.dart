@@ -9,13 +9,19 @@ class MetaTile {
 
   copyWith({List<int>? tileData, int? width, int? height}) => MetaTile(
         tileData: tileData ?? this.tileData,
-    width: width ?? this.width,
-    height: height ?? this.height,
+        width: width ?? this.width,
+        height: height ?? this.height,
       );
 
-  int get tileSize => width * width;
+  int get tileSize => width * height;
 
   List<int> getTile(int index) {
     return tileData.getRange(tileSize * index, tileSize * index + tileSize).toList();
   }
+
+  int getPixel(int rowIndex, int colIndex, int tileIndex) =>
+      tileData[(colIndex * width + rowIndex) + tileSize * tileIndex];
+
+  void setPixel(int rowIndex, int colIndex, int tileIndex, int intensity) =>
+      tileData[(colIndex * width + rowIndex) + tileSize * tileIndex] = intensity;
 }

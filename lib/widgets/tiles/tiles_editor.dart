@@ -80,15 +80,21 @@ class _TilesEditorState extends State<TilesEditor> {
                   IconButton(
                       icon: const Icon(Icons.add),
                       tooltip: 'Add tile',
-                      onPressed: () => context
-                          .read<MetaTileCubit>()
-                          .addTile(context.read<AppStateCubit>().state.tileIndexTile)),
+                      onPressed: () {
+                        int tileIndex = context.read<AppStateCubit>().state.tileIndexTile;
+                        context.read<MetaTileCubit>().addTile(tileIndex);
+                        context.read<AppStateCubit>().setSelectedTileIndex(++tileIndex);
+                      }),
                   IconButton(
                       icon: const Icon(Icons.remove),
                       tooltip: 'Remove tile',
-                      onPressed: () => context
-                          .read<MetaTileCubit>()
-                          .removeTile(context.read<AppStateCubit>().state.tileIndexTile)),
+                      onPressed: () {
+                        int tileIndex = context.read<AppStateCubit>().state.tileIndexTile;
+                        if (tileIndex > 0) {
+                          context.read<MetaTileCubit>().removeTile(tileIndex);
+                          context.read<AppStateCubit>().setSelectedTileIndex(--tileIndex);
+                        }
+                      }),
                 ],
               ),
               MetaTileListView(

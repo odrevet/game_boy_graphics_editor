@@ -4,6 +4,11 @@ import 'package:replay_bloc/replay_bloc.dart';
 class MetaTileCubit extends ReplayCubit<MetaTile> {
   MetaTileCubit() : super(MetaTile(tileData: List.generate(64, (index) => 0)));
 
+  List<int> _shift(List<int> list, int v) {
+    var i = v % list.length;
+    return list.sublist(i)..addAll(list.sublist(0, i));
+  }
+
   void setPixel(int rowIndex, int colIndex, int tileIndexTile, int intensity) {
     List<int> tileData = [...state.tileData];
     tileData[(colIndex * state.width + rowIndex) + state.tileSize * tileIndexTile] = intensity;
@@ -26,25 +31,22 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     emit(state.copyWith(tileData: tileData));
   }
 
-  void rightShift(int selectedMetaTileIndexTile) {}
+  void rightShift(int index) {}
 
-  void leftShift(int selectedMetaTileIndexTile) {}
+  void leftShift(int index) {}
 
-  void upShift(int selectedMetaTileIndexTile) {}
+  void upShift(int index) {}
 
-  void downShift(int selectedMetaTileIndexTile) {}
+  void downShift(int index) {}
 
-  flipHorizontal(int selectedMetaTileIndexTile) {}
+  flipHorizontal(int index) {
+  }
 
-  flipVertical(int selectedMetaTileIndexTile) {}
+  flipVertical(int index) {}
 
-  void rotateRight(int selectedMetaTileIndexTile) {}
+  void rotateRight(int index) {}
 
-  void rotateLeft(int selectedMetaTileIndexTile) {}
+  void rotateLeft(int index) {}
 
   void paste(int index, tileBuffer) {}
-
-  void insert(int index) {}
-
-  void remove(int index) => emit(state.copyWith());
 }
