@@ -37,8 +37,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
     return Row(children: [
       MetaTileListView(
           onTap: (index) =>
-              widget.onTapTileListView != null ? widget.onTapTileListView!(index) : null,
-          selectedTile: widget.selectedTileIndex),
+              widget.onTapTileListView != null ? widget.onTapTileListView!(index) : null),
       Padding(
         padding: const EdgeInsets.all(16.0),
         child: ContextMenuArea(

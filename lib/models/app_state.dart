@@ -8,7 +8,7 @@ class AppState {
   int tileWidth;
 
   int intensity;
-  int metaTileIndexTile;
+  int tileIndexTile;
   int tileIndexBackground;
   bool tileMode; // edit tile or background
   bool showGridTile;
@@ -22,7 +22,7 @@ class AppState {
     this.tileHeight = 8,
     this.tileWidth = 8,
     this.intensity = 3,
-    this.metaTileIndexTile = 0,
+    this.tileIndexTile = 0,
     this.tileIndexBackground = 0,
     this.tileMode = true,
     this.showGridTile = true,
@@ -47,7 +47,7 @@ class AppState {
           List<Color>? colorSet}) =>
       AppState(
         intensity: intensity ?? this.intensity,
-        metaTileIndexTile: metaTileIndexTile ?? this.metaTileIndexTile,
+        tileIndexTile: metaTileIndexTile ?? this.tileIndexTile,
         tileIndexBackground: tileIndexBackground ?? this.tileIndexBackground,
         tileMode: tileMode ?? this.tileMode,
         showGridTile: showGridTile ?? this.showGridTile,
@@ -59,4 +59,12 @@ class AppState {
         tileHeight: tileHeight ?? this.tileHeight,
         colorSet: colorSet ?? this.colorSet,
       );
+
+  int get tileSize => tileWidth * tileHeight;
+
+  List<int> getTile(int index) {
+    return tileData.getRange(tileSize * index, tileSize * index + tileSize).toList();
+  }
+
+  List<int> getCurrentTile() => getTile(tileIndexTile);
 }

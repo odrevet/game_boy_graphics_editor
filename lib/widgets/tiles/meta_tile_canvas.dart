@@ -8,26 +8,9 @@ import '../../models/app_state.dart';
 import '../../models/meta_tile.dart';
 
 class MetaTileCanvas extends StatefulWidget {
-  final MetaTile metaTile;
-  final bool showGrid;
-  final bool floodMode;
-  final int metaTileIndex;
-  final List<Color> colorSet;
-  final int intensity;
-
-  late final List<int> pattern;
-
-  MetaTileCanvas(
-      {required this.metaTile,
-      required this.showGrid,
-      required this.floodMode,
-      required this.metaTileIndex,
-      required this.colorSet,
-      required this.intensity,
-      Key? key})
-      : super(key: key) {
-    pattern = metaTile.getPattern();
-  }
+  const MetaTileCanvas(
+      {Key? key})
+      : super(key: key);
 
   @override
   State<MetaTileCanvas> createState() => _MetaTileCanvasState();
@@ -49,7 +32,7 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
             }),
             child: GestureDetector(
               onPanUpdate: (DragUpdateDetails details) {
-                if (isHover && widget.floodMode == false) {
+                if (isHover && context.read<AppStateCubit>().state.floodMode == false) {
                   draw(details, constraints, appState.intensity, appState.floodMode);
                 }
               },
@@ -59,8 +42,8 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
                 }
               },
               child: MetaTileDisplay(
-                metaTileIndex: appState.metaTileIndexTile,
-                tileData: appState.tileData,
+                metaTileIndex: appState.tileIndexTile,
+                tileData: appState.getCurrentTile(),
                 showGrid: appState.showGridTile,
                 colorSet: appState.colorSet,
               ),
@@ -79,14 +62,14 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
 
     if (floodMode) {
       int targetColor = 42;//widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex);
-      if (targetColor != widget.intensity) {
+      if (targetColor != context.read<AppStateCubit>().state.intensity) {
         context
             .read<MetaTileCubit>()
-            .flood(rowIndex, colIndex, widget.metaTileIndex, intensity, targetColor);
+            .flood(rowIndex, colIndex, context.read<AppStateCubit>().state.tileIndexTile, intensity, targetColor);
       }
-    } else if (true || widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex) !=
-        widget.intensity) {
-      context.read<AppStateCubit>().setPixel(rowIndex, colIndex, intensity);
+    } else if (true /*|| widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex) !=
+        widget.intensity*/) {
+      context.read<AppStateCubit>().setPixel(rowIndex, colIndex);
     }
   }
 }

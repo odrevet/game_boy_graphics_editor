@@ -6,7 +6,7 @@ import '../models/app_state.dart';
 class AppStateCubit extends Cubit<AppState> {
   AppStateCubit()
       : super(AppState(
-      intensity: 3, metaTileIndexTile: 0, tileData: List.generate(64, (index) => 0)));
+      intensity: 3, tileIndexTile: 0, tileData: List.generate(64, (index) => 0)));
 
   void setIntensity(intensity) => emit(state.copyWith(intensity: intensity));
 
@@ -25,9 +25,9 @@ class AppStateCubit extends Cubit<AppState> {
   void toggleGridBackground() =>
       emit(state.copyWith(showGridBackground: !state.showGridBackground));
 
-  void setPixel(rowIndex, colIndex, intensity) {
+  void setPixel(rowIndex, colIndex) {
     List<int> tileData = [...state.tileData];
-    tileData[colIndex * state.tileWidth + rowIndex] = intensity;
+    tileData[(colIndex * state.tileWidth + rowIndex) + state.tileSize * state.tileIndexTile] = state.intensity;
     emit(state.copyWith(tileData: tileData));
   }
 

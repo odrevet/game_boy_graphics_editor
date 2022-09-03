@@ -92,8 +92,7 @@ class _TilesEditorState extends State<TilesEditor> {
                   onHover: (index) => setState(() {
                         hoverTileIndex = index;
                       }),
-                  onTap: (index) => context.read<AppStateCubit>().setSelectedTileIndex(index),
-                  selectedTile: appState.metaTileIndexTile),
+                  onTap: (index) => context.read<AppStateCubit>().setSelectedTileIndex(index)),
             ],
           ),
         ),
@@ -124,41 +123,41 @@ class _TilesEditorState extends State<TilesEditor> {
                 const VerticalDivider(),
                 IconButton(
                     onPressed: () =>
-                        context.read<MetaTileCubit>().flipVertical(appState.metaTileIndexTile),
+                        context.read<MetaTileCubit>().flipVertical(appState.tileIndexTile),
                     icon: const Icon(Icons.flip)),
                 IconButton(
                     onPressed: () =>
-                        context.read<MetaTileCubit>().flipHorizontal(appState.metaTileIndexTile),
+                        context.read<MetaTileCubit>().flipHorizontal(appState.tileIndexTile),
                     icon: const RotatedBox(
                       quarterTurns: 1,
                       child: Icon(Icons.flip),
                     )),
                 IconButton(
                     onPressed: () => metaTile.width == metaTile.height
-                        ? context.read<MetaTileCubit>().rotateLeft(appState.metaTileIndexTile)
+                        ? context.read<MetaTileCubit>().rotateLeft(appState.tileIndexTile)
                         : null,
                     icon: const Icon(Icons.rotate_left)),
                 IconButton(
                     onPressed: () => metaTile.width == metaTile.height
-                        ? context.read<MetaTileCubit>().rotateRight(appState.metaTileIndexTile)
+                        ? context.read<MetaTileCubit>().rotateRight(appState.tileIndexTile)
                         : null,
                     icon: const Icon(Icons.rotate_right)),
                 const VerticalDivider(),
                 IconButton(
                     onPressed: () =>
-                        context.read<MetaTileCubit>().upShift(appState.metaTileIndexTile),
+                        context.read<MetaTileCubit>().upShift(appState.tileIndexTile),
                     icon: const Icon(Icons.keyboard_arrow_up_rounded)),
                 IconButton(
                     onPressed: () =>
-                        context.read<MetaTileCubit>().downShift(appState.metaTileIndexTile),
+                        context.read<MetaTileCubit>().downShift(appState.tileIndexTile),
                     icon: const Icon(Icons.keyboard_arrow_down_rounded)),
                 IconButton(
                     onPressed: () =>
-                        context.read<MetaTileCubit>().leftShift(appState.metaTileIndexTile),
+                        context.read<MetaTileCubit>().leftShift(appState.tileIndexTile),
                     icon: const Icon(Icons.keyboard_arrow_left_rounded)),
                 IconButton(
                     onPressed: () =>
-                        context.read<MetaTileCubit>().rightShift(appState.metaTileIndexTile),
+                        context.read<MetaTileCubit>().rightShift(appState.tileIndexTile),
                     icon: const Icon(Icons.keyboard_arrow_right_rounded)),
               ],
             ),
@@ -168,13 +167,7 @@ class _TilesEditorState extends State<TilesEditor> {
                 alignment: Alignment.topCenter,
                 child: AspectRatio(
                   aspectRatio: metaTile.width / metaTile.height,
-                  child: MetaTileCanvas(
-                      intensity: appState.intensity,
-                      metaTile: metaTile,
-                      showGrid: appState.showGridTile,
-                      floodMode: appState.floodMode,
-                      metaTileIndex: appState.metaTileIndexTile,
-                      colorSet: appState.colorSet),
+                  child: MetaTileCanvas(),
                 ),
               ),
             )

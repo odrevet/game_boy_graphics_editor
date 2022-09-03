@@ -5,13 +5,11 @@ import '../../cubits/app_state_cubit.dart';
 import 'meta_tile_display.dart';
 
 class MetaTileListView extends StatefulWidget {
-  final int selectedTile;
   final Function onTap;
   final Function? onHover;
 
   const MetaTileListView({
     Key? key,
-    required this.selectedTile,
     required this.onTap,
     this.onHover,
   }) : super(key: key);
@@ -40,12 +38,12 @@ class _MetaTileListViewState extends State<MetaTileListView> {
                     onTap: () => widget.onTap(index),
                     leading: Text(
                       "$index",
-                      style: widget.selectedTile == index
+                      style: context.read<AppStateCubit>().state.tileIndexTile == index
                           ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
                           : null,
                     ),
                     title: MetaTileDisplay(
-                        tileData: context.read<AppStateCubit>().state.tileData,
+                        tileData: context.read<AppStateCubit>().state.getTile(index),
                         showGrid: false,
                         metaTileIndex: index,
                         colorSet: context.read<AppStateCubit>().state.colorSet),
