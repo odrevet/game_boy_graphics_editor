@@ -54,16 +54,17 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
     final pixelSize = constraints.maxWidth / context.read<MetaTileCubit>().state.width;
     final rowIndex = (localPosition.dx / pixelSize).floor();
     final colIndex = (localPosition.dy / pixelSize).floor();
+    int targetColor = context
+        .read<MetaTileCubit>()
+        .state
+        .getPixel(rowIndex, colIndex, context.read<AppStateCubit>().state.tileIndexTile);
 
     if (floodMode) {
-      /*int targetColor = 42; //widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex);
       if (targetColor != context.read<AppStateCubit>().state.intensity) {
         context.read<MetaTileCubit>().flood(rowIndex, colIndex,
             context.read<AppStateCubit>().state.tileIndexTile, intensity, targetColor);
-      }*/
-    } else if (true /*|| widget.metaTile.getPixel(rowIndex, colIndex, widget.metaTileIndex) !=
-        widget.intensity*/
-        ) {
+      }
+    } else if (targetColor != intensity) {
       context.read<MetaTileCubit>().setPixel(
           rowIndex,
           colIndex,

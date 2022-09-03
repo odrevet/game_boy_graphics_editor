@@ -9,6 +9,9 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     return list.sublist(i)..addAll(list.sublist(0, i));
   }
 
+  flood(int rowIndex, int colIndex, int metaTileIndex, int intensity, int targetColor) =>
+      emit(state.copyWith()..flood(metaTileIndex, intensity, rowIndex, colIndex, targetColor));
+
   void setPixel(int rowIndex, int colIndex, int tileIndexTile, int intensity) {
     List<int> tileData = [...state.tileData];
     tileData[(colIndex * state.width + rowIndex) + state.tileSize * tileIndexTile] = intensity;
