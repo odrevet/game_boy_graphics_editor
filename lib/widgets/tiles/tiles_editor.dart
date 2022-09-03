@@ -37,18 +37,18 @@ class _TilesEditorState extends State<TilesEditor> {
             ListTile(
               leading: const Icon(Icons.add),
               title: const Text("Insert before"),
-              onTap: () {
+              /*onTap: () {
                 context.read<MetaTileCubit>().insert(hoverTileIndex);
                 Navigator.pop(contextMenuAreaContext);
-              },
+              },*/
             ),
             ListTile(
               leading: const Icon(Icons.remove),
               title: const Text("Delete"),
-              onTap: () {
+              /*onTap: () {
                 context.read<MetaTileCubit>().remove(hoverTileIndex);
                 Navigator.pop(contextMenuAreaContext);
-              },
+              },*/
             ),
             ListTile(
               leading: const Icon(Icons.copy),
@@ -68,10 +68,10 @@ class _TilesEditorState extends State<TilesEditor> {
             ListTile(
               leading: const Icon(Icons.paste),
               title: const Text("Paste"),
-              onTap: () {
+              /*onTap: () {
                 context.read<MetaTileCubit>().paste(hoverTileIndex, appState.tileBuffer);
                 Navigator.pop(contextMenuAreaContext);
-              },
+              },*/
             ),
           ],
           child: Column(
@@ -81,14 +81,11 @@ class _TilesEditorState extends State<TilesEditor> {
                   IconButton(
                       icon: const Icon(Icons.add),
                       tooltip: 'Add tile',
-                      onPressed: () => context
-                          .read<MetaTileCubit>()
-                          .insert(metaTile.tileList.length ~/ metaTile.nbTilePerMetaTile())),
+                      onPressed: () => context.read<AppStateCubit>().addTile()),
                   IconButton(
                       icon: const Icon(Icons.remove),
                       tooltip: 'Remove tile',
-                      onPressed: () =>
-                          context.read<MetaTileCubit>().remove(appState.metaTileIndexTile)),
+                      onPressed: () => context.read<AppStateCubit>().removeTile()),
                 ],
               ),
               MetaTileListView(

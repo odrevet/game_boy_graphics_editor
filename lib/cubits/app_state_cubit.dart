@@ -6,7 +6,7 @@ import '../models/app_state.dart';
 class AppStateCubit extends Cubit<AppState> {
   AppStateCubit()
       : super(AppState(
-            intensity: 3, metaTileIndexTile: 0, tileData: List.generate(64, (index) => 0)));
+      intensity: 3, metaTileIndexTile: 0, tileData: List.generate(64, (index) => 0)));
 
   void setIntensity(intensity) => emit(state.copyWith(intensity: intensity));
 
@@ -31,6 +31,20 @@ class AppStateCubit extends Cubit<AppState> {
     emit(state.copyWith(tileData: tileData));
   }
 
-  void setDimensions(int width, int height) => emit(state.copyWith(
-      tileWidth: width, tileHeight: height, tileData: List.generate(width * height, (index) => 0)));
+  void setDimensions(int width, int height) =>
+      emit(state.copyWith(
+          tileWidth: width,
+          tileHeight: height,
+          tileData: List.generate(width * height, (index) => 0)));
+
+  void addTile() {
+    var newTile = List.generate(state.tileWidth * state.tileHeight, (index) => 0);
+    emit(state.copyWith(tileData: state.tileData + newTile));
+  }
+
+  void removeTile() =>
+      emit(state.copyWith(tileData: state.tileData
+        ..removeRange(
+            state.tileData.length - state.tileWidth * state.tileHeight, state.tileData.length)));
+
 }
