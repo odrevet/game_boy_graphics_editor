@@ -9,7 +9,6 @@ import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
 import '../../models/app_state.dart';
 import '../background/background_grid.dart';
-import '../source_display.dart';
 import 'intensity_button.dart';
 
 class TilesEditor extends StatefulWidget {
@@ -81,11 +80,15 @@ class _TilesEditorState extends State<TilesEditor> {
                   IconButton(
                       icon: const Icon(Icons.add),
                       tooltip: 'Add tile',
-                      onPressed: () => context.read<MetaTileCubit>().addTile()),
+                      onPressed: () => context
+                          .read<MetaTileCubit>()
+                          .addTile(context.read<AppStateCubit>().state.tileIndexTile)),
                   IconButton(
                       icon: const Icon(Icons.remove),
                       tooltip: 'Remove tile',
-                      onPressed: () => context.read<MetaTileCubit>().removeTile()),
+                      onPressed: () => context
+                          .read<MetaTileCubit>()
+                          .removeTile(context.read<AppStateCubit>().state.tileIndexTile)),
                 ],
               ),
               MetaTileListView(
@@ -144,8 +147,7 @@ class _TilesEditorState extends State<TilesEditor> {
                     icon: const Icon(Icons.rotate_right)),
                 const VerticalDivider(),
                 IconButton(
-                    onPressed: () =>
-                        context.read<MetaTileCubit>().upShift(appState.tileIndexTile),
+                    onPressed: () => context.read<MetaTileCubit>().upShift(appState.tileIndexTile),
                     icon: const Icon(Icons.keyboard_arrow_up_rounded)),
                 IconButton(
                     onPressed: () =>
