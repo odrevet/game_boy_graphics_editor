@@ -33,19 +33,24 @@ class _MetaTileListViewState extends State<MetaTileListView> {
           itemBuilder: (context, index) {
             return MouseRegion(
               onHover: (_) => widget.onHover != null ? widget.onHover!(index) : null,
-              child: ListTile(
-                onTap: () => widget.onTap(index),
-                leading: Text(
-                  "$index",
-                  style: widget.selectedTile == index
-                      ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
-                      : null,
+              child: SizedBox(
+                height: 132,
+                child: Card(
+                  child: ListTile(
+                    onTap: () => widget.onTap(index),
+                    leading: Text(
+                      "$index",
+                      style: widget.selectedTile == index
+                          ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
+                          : null,
+                    ),
+                    title: MetaTileDisplay(
+                        tileData: context.read<AppStateCubit>().state.tileData,
+                        showGrid: false,
+                        metaTileIndex: index,
+                        colorSet: context.read<AppStateCubit>().state.colorSet),
+                  ),
                 ),
-                title: MetaTileDisplay(
-                    tileData: context.read<AppStateCubit>().state.tileData,
-                    showGrid: false,
-                    metaTileIndex: index,
-                    colorSet: context.read<AppStateCubit>().state.colorSet),
               ),
             );
           },
