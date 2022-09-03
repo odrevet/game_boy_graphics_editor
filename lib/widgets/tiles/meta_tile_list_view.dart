@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../cubits/app_state_cubit.dart';
-import '../../models/meta_tile.dart';
 import 'meta_tile_display.dart';
 
 class MetaTileListView extends StatefulWidget {
@@ -28,7 +27,9 @@ class _MetaTileListViewState extends State<MetaTileListView> {
         width: 180,
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: 1,//widget.metaTile.tileList.length ~/ widget.metaTile.nbTilePerMetaTile(),
+          itemCount: context.read<AppStateCubit>().state.tileData.length ~/
+              (context.read<AppStateCubit>().state.tileHeight *
+                  context.read<AppStateCubit>().state.tileWidth),
           itemBuilder: (context, index) {
             return MouseRegion(
               onHover: (_) => widget.onHover != null ? widget.onHover!(index) : null,
