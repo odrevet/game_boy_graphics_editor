@@ -34,23 +34,23 @@ class _TilesEditorState extends State<TilesEditor> {
       builder: (context, appState) => Row(children: [
         ContextMenuArea(
           builder: (BuildContext contextMenuAreaContext) => [
-            ListTile(
+            /*ListTile(
               leading: const Icon(Icons.add),
               title: const Text("Insert before"),
-              /*onTap: () {
+              onTap: () {
                 context.read<MetaTileCubit>().insert(hoverTileIndex);
                 Navigator.pop(contextMenuAreaContext);
-              },*/
-            ),
-            ListTile(
+              },
+            ),*/
+            /*ListTile(
               leading: const Icon(Icons.remove),
               title: const Text("Delete"),
-              /*onTap: () {
+              onTap: () {
                 context.read<MetaTileCubit>().remove(hoverTileIndex);
                 Navigator.pop(contextMenuAreaContext);
-              },*/
-            ),
-            ListTile(
+              },
+            ),*/
+            /*ListTile(
               leading: const Icon(Icons.copy),
               title: const Text("Copy"),
               onTap: () {
@@ -64,15 +64,15 @@ class _TilesEditorState extends State<TilesEditor> {
                 });
                 Navigator.pop(contextMenuAreaContext);
               },
-            ),
-            ListTile(
+            ),*/
+            /*ListTile(
               leading: const Icon(Icons.paste),
               title: const Text("Paste"),
-              /*onTap: () {
+              onTap: () {
                 context.read<MetaTileCubit>().paste(hoverTileIndex, appState.tileBuffer);
                 Navigator.pop(contextMenuAreaContext);
-              },*/
-            ),
+              },
+            ),*/
           ],
           child: Column(
             children: [
@@ -81,11 +81,11 @@ class _TilesEditorState extends State<TilesEditor> {
                   IconButton(
                       icon: const Icon(Icons.add),
                       tooltip: 'Add tile',
-                      onPressed: () => context.read<AppStateCubit>().addTile()),
+                      onPressed: () => context.read<MetaTileCubit>().addTile()),
                   IconButton(
                       icon: const Icon(Icons.remove),
                       tooltip: 'Remove tile',
-                      onPressed: () => context.read<AppStateCubit>().removeTile()),
+                      onPressed: () => context.read<MetaTileCubit>().removeTile()),
                 ],
               ),
               MetaTileListView(
@@ -176,14 +176,14 @@ class _TilesEditorState extends State<TilesEditor> {
         Expanded(
           child: Column(
             children: [
-              TextFormField(
+              /*TextFormField(
                 decoration: const InputDecoration(labelText: 'Name'),
                 key: Key(metaTile.name),
                 initialValue: metaTile.name,
                 onChanged: (text) => setState(() {
                   metaTile.name = text;
                 }),
-              ),
+              ),*/
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
@@ -196,13 +196,13 @@ class _TilesEditorState extends State<TilesEditor> {
                   ),
                 ),
               ),
-              Expanded(
+              /*Expanded(
                 child: SingleChildScrollView(
                   child: SourceDisplay(
                     graphics: metaTile,
                   ),
                 ),
-              )
+              )*/
             ],
           ),
         )

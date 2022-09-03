@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
+import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/background.dart';
 
 import '../../models/meta_tile.dart';
@@ -42,7 +43,7 @@ class BackgroundGrid extends StatelessWidget {
   Widget _build(BuildContext context, int index) {
     Widget tileWidget;
 
-    if (background.data[index] >= metaTile.tileList.length) {
+    if (background.data[index] >= metaTile.tileData.length) {
       tileWidget = Container(
         alignment: Alignment.center,
         child: const Text(
@@ -56,7 +57,7 @@ class BackgroundGrid extends StatelessWidget {
       tileWidget = MetaTileDisplay(
           colorSet: colorSet,
           showGrid: false,
-          metaTileIndex: background.data[index], tileData: context.read<AppStateCubit>().state.tileData,);
+          metaTileIndex: background.data[index], tileData: context.read<MetaTileCubit>().state.tileData,);
     }
 
     if (showGrid) {

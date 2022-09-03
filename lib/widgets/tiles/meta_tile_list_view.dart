@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 
 import '../../cubits/app_state_cubit.dart';
 import 'meta_tile_display.dart';
@@ -25,9 +26,9 @@ class _MetaTileListViewState extends State<MetaTileListView> {
         width: 180,
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: context.read<AppStateCubit>().state.tileData.length ~/
-              (context.read<AppStateCubit>().state.tileHeight *
-                  context.read<AppStateCubit>().state.tileWidth),
+          itemCount: context.read<MetaTileCubit>().state.tileData.length ~/
+              (context.read<MetaTileCubit>().state.height *
+                  context.read<MetaTileCubit>().state.width),
           itemBuilder: (context, index) {
             return MouseRegion(
               onHover: (_) => widget.onHover != null ? widget.onHover!(index) : null,
@@ -43,7 +44,7 @@ class _MetaTileListViewState extends State<MetaTileListView> {
                           : null,
                     ),
                     title: MetaTileDisplay(
-                        tileData: context.read<AppStateCubit>().state.getTile(index),
+                        tileData: context.read<MetaTileCubit>().state.getTile(index),
                         showGrid: false,
                         metaTileIndex: index,
                         colorSet: context.read<AppStateCubit>().state.colorSet),

@@ -16,7 +16,7 @@ class Background extends Graphics {
   String toHeader() {
     return """/*
 Info: 
-  Tile set  : ${metaTile?.name ?? ""}    
+  Tile set  : ""
 */
 #define ${name}Width $width
 #define ${name}Height $height
