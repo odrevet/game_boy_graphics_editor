@@ -101,6 +101,7 @@ class _TilesEditorState extends State<TilesEditor> {
                 ],
               ),
               MetaTileListView(
+                selectedTile: context.read<AppStateCubit>().state.tileIndexTile,
                   onHover: (index) => setState(() {
                         hoverTileIndex = index;
                       }),

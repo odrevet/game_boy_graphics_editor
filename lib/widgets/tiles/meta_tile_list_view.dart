@@ -8,11 +8,13 @@ import 'meta_tile_display.dart';
 class MetaTileListView extends StatelessWidget {
   final Function onTap;
   final Function? onHover;
+  final int selectedTile;
 
   const MetaTileListView({
     Key? key,
     required this.onTap,
     this.onHover,
+    required this.selectedTile,
   }) : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class MetaTileListView extends StatelessWidget {
                       onTap: () => onTap(index),
                       leading: Text(
                         "$index",
-                        style: context.read<AppStateCubit>().state.tileIndexTile == index
+                        style: selectedTile == index
                             ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
                             : null,
                       ),

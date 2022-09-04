@@ -34,9 +34,12 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      MetaTileListView(
-          onTap: (index) =>
-              widget.onTapTileListView != null ? widget.onTapTileListView!(index) : null),
+      Expanded(
+        child: MetaTileListView(
+          selectedTile: widget.selectedTileIndex,
+            onTap: (index) =>
+                widget.onTapTileListView != null ? widget.onTapTileListView!(index) : null),
+      ),
       Padding(
         padding: const EdgeInsets.all(16.0),
         child: ContextMenuArea(
