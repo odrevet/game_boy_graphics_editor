@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/meta_tile.dart';
-import 'package:game_boy_graphics_editor/models/tile.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_app_bar.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_editor.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tiles_app_bar.dart';
@@ -121,7 +120,7 @@ class _EditorState extends State<Editor> {
 
       img = image.grayscale(img);
 
-      if (img.width % Tile.size != 0 || img.height % Tile.size != 0) {
+      /*if (img.width % Tile.size != 0 || img.height % Tile.size != 0) {
         var snackBar = const SnackBar(
           content: Text("Image height and width should be multiple of ${Tile.size}"),
         );
@@ -143,7 +142,7 @@ class _EditorState extends State<Editor> {
           }
           metaTile.tileList.add(tile);
         }
-      }
+      }*/
 
       hasLoaded = true;
     } else {
