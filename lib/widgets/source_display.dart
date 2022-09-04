@@ -5,7 +5,7 @@ import '../models/download_stub.dart' if (dart.library.html) '../download.dart';
 import '../models/file_utils.dart';
 
 class SourceDisplay extends StatelessWidget {
-  final name;
+  final String name;
   final List<int> tileData;
 
   const SourceDisplay({Key? key, required this.tileData, required this.name}) : super(key: key);

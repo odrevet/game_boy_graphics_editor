@@ -25,8 +25,8 @@ class MetaTile {
   void setPixel(int rowIndex, int colIndex, int tileIndex, int intensity) =>
       tileData[(colIndex * width + rowIndex) + tileSize * tileIndex] = intensity;
 
-  List<int> getRow(int tileIndex, int rowIndex) =>
-      tileData.sublist(rowIndex * width, rowIndex * height + width);
+  List<int> getRow(int tileIndex, int rowIndex) => tileData.sublist(
+      tileIndex * tileSize + rowIndex * width, tileIndex * tileSize + rowIndex * height + width);
 
   void setRow(int tileIndex, int rowIndex, List<int> row) {
     for (int dotIndex = 0; dotIndex < width; dotIndex++) {
