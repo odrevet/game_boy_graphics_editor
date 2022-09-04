@@ -34,45 +34,47 @@ class _TilesEditorState extends State<TilesEditor> {
       builder: (context, appState) => Row(children: [
         ContextMenuArea(
           builder: (BuildContext contextMenuAreaContext) => [
-            /*ListTile(
+            ListTile(
               leading: const Icon(Icons.add),
-              title: const Text("Insert before"),
+              title: const Text("Insert"),
               onTap: () {
-                context.read<MetaTileCubit>().insert(hoverTileIndex);
-                Navigator.pop(contextMenuAreaContext);
+                {
+                  context.read<MetaTileCubit>().addTile(hoverTileIndex);
+                  context.read<AppStateCubit>().setSelectedTileIndex(++hoverTileIndex);
+                }
               },
-            ),*/
-            /*ListTile(
+            ),
+            ListTile(
               leading: const Icon(Icons.remove),
               title: const Text("Delete"),
               onTap: () {
-                context.read<MetaTileCubit>().remove(hoverTileIndex);
-                Navigator.pop(contextMenuAreaContext);
+                context.read<MetaTileCubit>().removeTile(hoverTileIndex);
+                context.read<AppStateCubit>().setSelectedTileIndex(--hoverTileIndex);
               },
-            ),*/
-            /*ListTile(
+            ),
+            ListTile(
               leading: const Icon(Icons.copy),
               title: const Text("Copy"),
               onTap: () {
                 setState(() {
                   appState.tileBuffer.clear();
-                  for (var i = hoverTileIndex;
+                  /*for (var i = hoverTileIndex;
                       i < hoverTileIndex + metaTile.nbTilePerMetaTile();
                       i++) {
                     appState.tileBuffer.addAll(metaTile.tileList[i].data);
-                  }
+                  }*/
                 });
                 Navigator.pop(contextMenuAreaContext);
               },
-            ),*/
-            /*ListTile(
+            ),
+            ListTile(
               leading: const Icon(Icons.paste),
               title: const Text("Paste"),
               onTap: () {
-                context.read<MetaTileCubit>().paste(hoverTileIndex, appState.tileBuffer);
+                //context.read<MetaTileCubit>().paste(hoverTileIndex, appState.tileBuffer);
                 Navigator.pop(contextMenuAreaContext);
               },
-            ),*/
+            ),
           ],
           child: Column(
             children: [
