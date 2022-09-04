@@ -29,7 +29,7 @@ class _EditorState extends State<Editor> {
   @override
   void initState() {
     super.initState();
-    background = Background(data: [0], width: 20, height: 18, name: "Background");
+    background = Background(data: List.generate(20*18, (index) => 0), width: 20, height: 18, name: "Background");
   }
 
   @override
