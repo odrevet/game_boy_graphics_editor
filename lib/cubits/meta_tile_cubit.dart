@@ -2,7 +2,7 @@ import 'package:game_boy_graphics_editor/models/meta_tile.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
 class MetaTileCubit extends ReplayCubit<MetaTile> {
-  MetaTileCubit() : super(MetaTile(tileData: List.generate(64, (index) => 0)));
+  MetaTileCubit() : super(MetaTile(data: List.generate(64, (index) => 0), height: 8, width: 8));
 
   List<int> _shift(List<int> list, int v) {
     var i = v % list.length;
@@ -13,25 +13,25 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
       emit(state.copyWith()..flood(metaTileIndex, intensity, rowIndex, colIndex, targetColor));
 
   void setPixel(int rowIndex, int colIndex, int tileIndexTile, int intensity) {
-    List<int> tileData = [...state.tileData];
+    List<int> tileData = [...state.data];
     tileData[(colIndex * state.width + rowIndex) + state.tileSize * tileIndexTile] = intensity;
-    emit(state.copyWith(tileData: tileData));
+    emit(state.copyWith(data: tileData));
   }
 
   void setDimensions(int width, int height) => emit(state.copyWith(
-      width: width, height: height, tileData: List.generate(width * height, (index) => 0)));
+      width: width, height: height, data: List.generate(width * height, (index) => 0)));
 
   void addTile(int index) {
-    List<int> tileData = [...state.tileData];
+    List<int> tileData = [...state.data];
     var newTile = List.generate(state.width * state.height, (index) => 0);
     tileData.insertAll((index + 1) * state.tileSize, newTile);
-    emit(state.copyWith(tileData: tileData));
+    emit(state.copyWith(data: tileData));
   }
 
   void removeTile(int tileIndex) {
-    List<int> tileData = [...state.tileData];
+    List<int> tileData = [...state.data];
     tileData.removeRange((tileIndex) * state.tileSize, tileIndex * state.tileSize + state.tileSize);
-    emit(state.copyWith(tileData: tileData));
+    emit(state.copyWith(data: tileData));
   }
 
   void rightShift(int tileIndex, int index) {

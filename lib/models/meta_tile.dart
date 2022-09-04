@@ -1,14 +1,13 @@
 import 'dart:core';
 
-class MetaTile {
-  List<int> tileData;
-  int height;
-  int width;
+import 'package:game_boy_graphics_editor/models/graphics.dart';
 
-  MetaTile({required this.tileData, this.height = 8, this.width = 8});
+class MetaTile extends Graphics {
+  MetaTile({required data, required height, required width})
+      : super(data: data, width: width, height: height);
 
-  copyWith({List<int>? tileData, int? width, int? height}) => MetaTile(
-        tileData: tileData ?? [...this.tileData],
+  copyWith({List<int>? data, int? width, int? height}) => MetaTile(
+        data: data ?? [...this.data],
         width: width ?? this.width,
         height: height ?? this.height,
       );
@@ -16,16 +15,16 @@ class MetaTile {
   int get tileSize => width * height;
 
   List<int> getTile(int index) {
-    return tileData.getRange(tileSize * index, tileSize * index + tileSize).toList();
+    return data.getRange(tileSize * index, tileSize * index + tileSize).toList();
   }
 
   int getPixel(int rowIndex, int colIndex, int tileIndex) =>
-      tileData[(colIndex * width + rowIndex) + tileSize * tileIndex];
+      data[(colIndex * width + rowIndex) + tileSize * tileIndex];
 
   void setPixel(int rowIndex, int colIndex, int tileIndex, int intensity) =>
-      tileData[(colIndex * width + rowIndex) + tileSize * tileIndex] = intensity;
+      data[(colIndex * width + rowIndex) + tileSize * tileIndex] = intensity;
 
-  List<int> getRow(int tileIndex, int rowIndex) => tileData.sublist(
+  List<int> getRow(int tileIndex, int rowIndex) => data.sublist(
       tileIndex * tileSize + rowIndex * width, tileIndex * tileSize + rowIndex * height + width);
 
   void setRow(int tileIndex, int rowIndex, List<int> row) {

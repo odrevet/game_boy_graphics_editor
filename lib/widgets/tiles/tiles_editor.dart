@@ -214,7 +214,7 @@ class _TilesEditorState extends State<TilesEditor> {
               Expanded(
                 child: SingleChildScrollView(
                   child: SourceDisplay(
-                    tileData: context.read<MetaTileCubit>().state.tileData,
+                    tileData: context.read<MetaTileCubit>().state.data,
                     name: appState.tileName,
                     //graphics: metaTile,
                   ),

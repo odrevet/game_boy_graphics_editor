@@ -97,14 +97,14 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
       Flexible(
         child: Column(
           children: [
-            TextFormField(
+            /*TextFormField(
               decoration: const InputDecoration(labelText: 'Name'),
               key: Key(widget.background.name),
               initialValue: widget.background.name,
               onChanged: (text) => setState(() {
                 widget.background.name = text;
               }),
-            ),
+            ),*/
             Row(
               children: [
                 Text("Width ${widget.background.width}"),

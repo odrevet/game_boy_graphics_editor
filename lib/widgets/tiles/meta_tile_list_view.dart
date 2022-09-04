@@ -22,7 +22,7 @@ class MetaTileListView extends StatelessWidget {
           width: 180,
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: context.read<MetaTileCubit>().state.tileData.length ~/
+            itemCount: context.read<MetaTileCubit>().state.data.length ~/
                 (context.read<MetaTileCubit>().state.height *
                     context.read<MetaTileCubit>().state.width),
             itemBuilder: (context, index) {

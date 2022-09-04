@@ -29,7 +29,7 @@ class _EditorState extends State<Editor> {
   @override
   void initState() {
     super.initState();
-    background = Background(width: 20, height: 18, name: "Background");
+    background = Background(data: [0], width: 20, height: 18, name: "Background");
   }
 
   @override
@@ -64,7 +64,7 @@ class _EditorState extends State<Editor> {
               appBar: appbar,
               body: appState.tileMode
                   ? TilesEditor(
-                      preview: Background(width: 4, height: 4, fill: appState.tileIndexTile))
+                      preview: Background(data: <int>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], width: 4, height: 4, fill: appState.tileIndexTile))
                   : BackgroundEditor(
                       background: background,
                       colorSet: appState.colorSet,
@@ -82,15 +82,15 @@ class _EditorState extends State<Editor> {
   _saveGraphics(Graphics graphics, BuildContext context) {
     saveToDirectory(graphics).then((selectedDirectory) {
       if (selectedDirectory != null) {
-        var snackBar = SnackBar(
+        /*var snackBar = SnackBar(
           content: Text("${graphics.name}.h and ${graphics.name}.c saved under $selectedDirectory"),
         );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);*/
       }
     });
   }
 
-  bool _setMetaTile(GraphicElement graphicElement, metaTile) {
+  /*bool _setMetaTile(GraphicElement graphicElement, metaTile) {
     bool hasLoaded = true;
     setState(() {
       try {
@@ -104,12 +104,12 @@ class _EditorState extends State<Editor> {
       context.read<MetaTileCubit>().setDimensions(8, 8);
     });
     return hasLoaded;
-  }
+  }*/
 
   void _setBackgroundFromSource(String source) => setState(() {
-        source = background.formatSource(source);
+        /*source = background.formatSource(source);
         background.fromSource(source);
-        context.read<AppStateCubit>().setTileIndexBackground(0);
+        context.read<AppStateCubit>().setTileIndexBackground(0);*/
       });
 
   bool loadTileFromFilePicker(result, metaTile) {
@@ -164,7 +164,7 @@ class _EditorState extends State<Editor> {
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
                             onTap: () {
-                              hasLoaded = _setMetaTile(graphicsElements[index], metaTile);
+                              //hasLoaded = _setMetaTile(graphicsElements[index], metaTile);
                               Navigator.pop(context);
                             },
                             title: Text(graphicsElements[index].name),
@@ -174,7 +174,7 @@ class _EditorState extends State<Editor> {
                     ),
                   ));
         } else if (graphicsElements.length == 1) {
-          hasLoaded = _setMetaTile(graphicsElements.first, metaTile);
+          //hasLoaded = _setMetaTile(graphicsElements.first, metaTile);
         } else {
           hasLoaded = false;
         }
