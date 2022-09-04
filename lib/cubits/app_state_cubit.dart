@@ -8,7 +8,9 @@ class AppStateCubit extends Cubit<AppState> {
       : super(AppState(
       intensity: 3, tileIndexTile: 0));
 
-  void setIntensity(intensity) => emit(state.copyWith(intensity: intensity));
+  void setIntensity(int intensity) => emit(state.copyWith(intensity: intensity));
+
+  void setTileName(String tileName) => emit(state.copyWith(tileName: tileName));
 
   void setSelectedTileIndex(index) => emit(state.copyWith(metaTileIndexTile: index));
 

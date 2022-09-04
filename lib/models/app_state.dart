@@ -12,6 +12,7 @@ class AppState {
   bool showGridBackground;
   List<int> tileBuffer; // copy / past tiles buffer
   List<Color> colorSet;
+  String tileName;
 
   AppState({
     this.intensity = 3,
@@ -19,6 +20,7 @@ class AppState {
     this.tileIndexBackground = 0,
     this.tileMode = true,
     this.showGridTile = true,
+    this.tileName = "Tile",
     this.floodMode = false,
     this.showGridBackground = true,
     this.tileBuffer = const <int>[],
@@ -31,6 +33,7 @@ class AppState {
           int? tileIndexBackground,
           bool? tileMode,
           bool? showGridTile,
+          String? tileName,
           bool? floodMode,
           bool? showGridBackground,
           List<int>? tileBuffer,
@@ -41,6 +44,7 @@ class AppState {
         tileIndexBackground: tileIndexBackground ?? this.tileIndexBackground,
         tileMode: tileMode ?? this.tileMode,
         showGridTile: showGridTile ?? this.showGridTile,
+        tileName: tileName ?? this.tileName,
         floodMode: floodMode ?? this.floodMode,
         showGridBackground: showGridBackground ?? this.showGridBackground,
         tileBuffer: tileBuffer ?? this.tileBuffer,

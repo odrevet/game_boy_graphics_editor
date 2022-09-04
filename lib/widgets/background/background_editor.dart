@@ -144,10 +144,10 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                         : null),
               ],
             ),
-            Expanded(
+            /*Expanded(
                 child: SingleChildScrollView(
               child: SourceDisplay(graphics: widget.background),
-            )),
+            )),*/
           ],
         ),
       )

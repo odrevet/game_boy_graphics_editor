@@ -9,6 +9,7 @@ import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
 import '../../models/app_state.dart';
 import '../background/background_grid.dart';
+import '../source_display.dart';
 import 'intensity_button.dart';
 
 class TilesEditor extends StatefulWidget {
@@ -184,14 +185,6 @@ class _TilesEditorState extends State<TilesEditor> {
         Expanded(
           child: Column(
             children: [
-              /*TextFormField(
-                decoration: const InputDecoration(labelText: 'Name'),
-                key: Key(metaTile.name),
-                initialValue: metaTile.name,
-                onChanged: (text) => setState(() {
-                  metaTile.name = text;
-                }),
-              ),*/
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
@@ -204,13 +197,22 @@ class _TilesEditorState extends State<TilesEditor> {
                   ),
                 ),
               ),
-              /*Expanded(
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Name'),
+                initialValue: appState.tileName,
+                onChanged: (text) => setState(() {
+                  context.read<AppStateCubit>().setTileName(text);
+                }),
+              ),
+              Expanded(
                 child: SingleChildScrollView(
                   child: SourceDisplay(
-                    graphics: metaTile,
+                    tileData: context.read<MetaTileCubit>().state.tileData,
+                    name: appState.tileName,
+                    //graphics: metaTile,
                   ),
                 ),
-              )*/
+              )
             ],
           ),
         )
