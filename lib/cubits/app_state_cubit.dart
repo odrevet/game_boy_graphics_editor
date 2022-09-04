@@ -4,15 +4,13 @@ import 'package:game_boy_graphics_editor/models/colors.dart';
 import '../models/app_state.dart';
 
 class AppStateCubit extends Cubit<AppState> {
-  AppStateCubit()
-      : super(AppState(
-      intensity: 3, tileIndexTile: 0));
+  AppStateCubit() : super(AppState(intensity: 3, tileIndexTile: 0));
 
   void setIntensity(int intensity) => emit(state.copyWith(intensity: intensity));
 
   void setTileName(String tileName) => emit(state.copyWith(tileName: tileName));
 
-  void setSelectedTileIndex(index) => emit(state.copyWith(metaTileIndexTile: index));
+  void setSelectedTileIndex(index) => emit(state.copyWith(tileIndexTile: index));
 
   void toggleTileMode() => emit(state.copyWith(tileMode: !state.tileMode));
 

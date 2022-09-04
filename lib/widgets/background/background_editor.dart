@@ -1,7 +1,6 @@
 import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_grid.dart';
-import 'package:game_boy_graphics_editor/widgets/source_display.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../models/background.dart';

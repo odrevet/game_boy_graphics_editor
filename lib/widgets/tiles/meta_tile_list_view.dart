@@ -52,6 +52,4 @@ class MetaTileListView extends StatelessWidget {
           )),
     );
   }
-
 }
-

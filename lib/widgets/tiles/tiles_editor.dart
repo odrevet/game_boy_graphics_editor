@@ -154,19 +154,24 @@ class _TilesEditorState extends State<TilesEditor> {
                     icon: const Icon(Icons.rotate_right)),
                 const VerticalDivider(),
                 IconButton(
-                    onPressed: () => context.read<MetaTileCubit>().upShift(appState.tileIndexTile),
+                    onPressed: () => context
+                        .read<MetaTileCubit>()
+                        .upShift(appState.tileIndexTile, appState.tileIndexTile),
                     icon: const Icon(Icons.keyboard_arrow_up_rounded)),
                 IconButton(
-                    onPressed: () =>
-                        context.read<MetaTileCubit>().downShift(appState.tileIndexTile),
+                    onPressed: () => context
+                        .read<MetaTileCubit>()
+                        .downShift(appState.tileIndexTile, appState.tileIndexTile),
                     icon: const Icon(Icons.keyboard_arrow_down_rounded)),
                 IconButton(
-                    onPressed: () =>
-                        context.read<MetaTileCubit>().leftShift(appState.tileIndexTile),
+                    onPressed: () => context
+                        .read<MetaTileCubit>()
+                        .leftShift(appState.tileIndexTile, appState.tileIndexTile),
                     icon: const Icon(Icons.keyboard_arrow_left_rounded)),
                 IconButton(
-                    onPressed: () =>
-                        context.read<MetaTileCubit>().rightShift(appState.tileIndexTile),
+                    onPressed: () => context
+                        .read<MetaTileCubit>()
+                        .rightShift(appState.tileIndexTile, appState.tileIndexTile),
                     icon: const Icon(Icons.keyboard_arrow_right_rounded)),
               ],
             ),

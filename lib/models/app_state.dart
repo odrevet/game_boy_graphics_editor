@@ -29,7 +29,7 @@ class AppState {
 
   copyWith(
           {int? intensity,
-          int? metaTileIndexTile,
+          int? tileIndexTile,
           int? tileIndexBackground,
           bool? tileMode,
           bool? showGridTile,
@@ -40,7 +40,7 @@ class AppState {
           List<Color>? colorSet}) =>
       AppState(
         intensity: intensity ?? this.intensity,
-        tileIndexTile: metaTileIndexTile ?? this.tileIndexTile,
+        tileIndexTile: tileIndexTile ?? this.tileIndexTile,
         tileIndexBackground: tileIndexBackground ?? this.tileIndexBackground,
         tileMode: tileMode ?? this.tileMode,
         showGridTile: showGridTile ?? this.showGridTile,

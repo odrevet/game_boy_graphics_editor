@@ -31,10 +31,6 @@ class Tile {
     return raw;
   }
 
-
-
-
-
   void setPixel(int colIndex, int rowIndex, int intensity) =>
       data[colIndex + (rowIndex * size)] = intensity;
 }

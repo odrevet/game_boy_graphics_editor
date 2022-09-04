@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/background.dart';
 
@@ -55,9 +54,11 @@ class BackgroundGrid extends StatelessWidget {
       );
     } else {
       tileWidget = MetaTileDisplay(
-          colorSet: colorSet,
-          showGrid: false,
-          metaTileIndex: background.data[index], tileData: context.read<MetaTileCubit>().state.tileData,);
+        colorSet: colorSet,
+        showGrid: false,
+        metaTileIndex: background.data[index],
+        tileData: context.read<MetaTileCubit>().state.tileData,
+      );
     }
 
     if (showGrid) {
@@ -82,4 +83,3 @@ class BackgroundGrid extends StatelessWidget {
     }
   }
 }
-

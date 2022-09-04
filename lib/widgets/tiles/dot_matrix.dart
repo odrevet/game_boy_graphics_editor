@@ -19,7 +19,11 @@ class DotMatrix extends StatelessWidget {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) => CustomPaint(
               painter: DotMatrixPainter(
-                  pixels: pixels, pixelSize: (constraints.maxWidth / width), showGrid: showGrid, width: width, height: height),
+                  pixels: pixels,
+                  pixelSize: (constraints.maxWidth / width),
+                  showGrid: showGrid,
+                  width: width,
+                  height: height),
             ));
   }
 }
