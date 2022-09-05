@@ -10,14 +10,22 @@ class GraphicElement {
 }
 
 class GBDKConverter {
-  List<String> getRawTile() {
+  static final GBDKConverter _singleton = GBDKConverter._internal();
+
+  factory GBDKConverter() {
+    return _singleton;
+  }
+
+  GBDKConverter._internal();
+
+  List<String> getRawTile(List<int> tileData) {
     var raw = <String>[];
     const int size = 8;
 
     var combined = "";
-    /*for (var element in data) {
+    for (var element in tileData) {
       combined += element.toRadixString(2).padLeft(2, "0");
-    }*/
+    }
 
     for (var index = 0; index < (combined.length ~/ size) * size; index += size * 2) {
       var lo = "";
@@ -34,16 +42,6 @@ class GBDKConverter {
     }
 
     return raw;
-  }
-
-  List<String> getRaw() {
-    var raw = <String>[];
-
-    /*for (Tile tile in tileList) {
-      raw += tile.getRaw();
-    }*/
-
-    return ["WIP"];//raw;
   }
 
   List<int> getPattern(int width, int height) {
@@ -69,8 +67,8 @@ class GBDKConverter {
 extern unsigned char $name[];""";
   }
 
-  String toSource(String name) {
-    return "unsigned char $name[] =\n{${formatOutput(getRaw())}\n};";
+  String toSource(String name, List<int> tileData) {
+    return "unsigned char $name[] =\n{${formatOutput(getRawTile(tileData))}\n};";
   }
 
   String formatOutput(input) {

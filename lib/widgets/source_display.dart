@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../models/download_stub.dart' if (dart.library.html) '../download.dart';
 import '../models/file_utils.dart';
+import '../models/gbdk_converter.dart';
 
 class SourceDisplay extends StatelessWidget {
   final String name;
@@ -45,7 +46,7 @@ class SourceDisplay extends StatelessWidget {
         ]),
         Align(
             alignment: Alignment.topLeft,
-            child: SelectableText(/*graphics.toHeader()*/ "",
+            child: SelectableText(GBDKConverter().toHeader(name),
                 style: const TextStyle(
                   fontSize: fontSize,
                 ))),
@@ -78,7 +79,7 @@ class SourceDisplay extends StatelessWidget {
         Align(
             alignment: Alignment.topLeft,
             child: SelectableText(
-              "", //graphics.toSource(),
+              GBDKConverter().toSource(name, tileData),
               style: const TextStyle(
                 fontSize: fontSize,
               ),
