@@ -1,13 +1,17 @@
 import 'package:game_boy_graphics_editor/models/graphics.dart';
 
-import 'convert.dart';
-import 'meta_tile.dart';
-
 class Background extends Graphics {
-  Background({required data, height = 0, width = 0, name = "", int fill = 0})
-      : super(data: data, width: width, height: height) {
-    data = List<int>.filled(height * width, fill, growable: true);
-  }
+  Background({height = 20, width = 18, name = "", fill, data})
+      : super(
+            width: width,
+            height: height,
+            data: data ?? List.filled(width * height, fill ?? 0, growable: true));
+
+  copyWith({List<int>? data, int? width, int? height}) => Background(
+    data: data ?? [...this.data],
+    width: width ?? this.width,
+    height: height ?? this.height,
+  );
 
   void insertCol(int at, int fill) {
     width += 1;

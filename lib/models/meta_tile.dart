@@ -3,8 +3,8 @@ import 'dart:core';
 import 'package:game_boy_graphics_editor/models/graphics.dart';
 
 class MetaTile extends Graphics {
-  MetaTile({required data, required height, required width})
-      : super(data: data, width: width, height: height);
+  MetaTile({data, required height, required width})
+      : super(data: data ?? List.filled(width * height, 0, growable: true), width: width, height: height);
 
   copyWith({List<int>? data, int? width, int? height}) => MetaTile(
         data: data ?? [...this.data],

@@ -2,7 +2,7 @@ import 'package:game_boy_graphics_editor/models/meta_tile.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
 class MetaTileCubit extends ReplayCubit<MetaTile> {
-  MetaTileCubit() : super(MetaTile(data: List.generate(64, (index) => 0), height: 8, width: 8));
+  MetaTileCubit() : super(MetaTile(height: 8, width: 8));
 
   List<int> _shift(List<int> list, int v) {
     var i = v % list.length;

@@ -64,9 +64,8 @@ class _EditorState extends State<Editor> {
               appBar: appbar,
               body: appState.tileMode
                   ? TilesEditor(
-                      preview: Background(data: <int>[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], width: 4, height: 4, fill: appState.tileIndexTile))
+                      preview: Background(width: 4, height: 4, fill: appState.tileIndexTile))
                   : BackgroundEditor(
-                      background: background,
                       colorSet: appState.colorSet,
                       tiles: metaTile,
                       selectedTileIndex: appState.tileIndexBackground,

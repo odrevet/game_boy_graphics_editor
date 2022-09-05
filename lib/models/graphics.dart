@@ -1,5 +1,5 @@
 abstract class Graphics {
-  List<int> data = [];
+  List<int> data;
   int height;
   int width;
 
