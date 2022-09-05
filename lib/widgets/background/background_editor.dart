@@ -5,7 +5,9 @@ import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_grid.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
+import '../../cubits/app_state_cubit.dart';
 import '../../models/meta_tile.dart';
+import '../source_display.dart';
 
 class BackgroundEditor extends StatefulWidget {
   final MetaTile tiles;
@@ -98,56 +100,58 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
       Flexible(
         child: Column(
           children: [
-            /*TextFormField(
+            TextFormField(
               decoration: const InputDecoration(labelText: 'Name'),
-              key: Key(widget.background.name),
-              initialValue: widget.background.name,
+              initialValue: context.read<AppStateCubit>().state.backgroundName,
               onChanged: (text) => setState(() {
-                widget.background.name = text;
+                context.read<AppStateCubit>().setBackgroundName(text);
               }),
-            ),*/
-            /*Row(
+            ),
+            Row(
               children: [
-                Text("Width ${widget.background.width}"),
+                Text("Width ${context.read<BackgroundCubit>().state.width}"),
                 IconButton(
                     icon: const Icon(Icons.add),
                     tooltip: 'Add Column',
                     onPressed: () => setState(() {
-                          widget.background.insertCol(0, 0);
+                          context.read<BackgroundCubit>().insertCol(0, 0);
                         })),
                 IconButton(
                     icon: const Icon(Icons.remove),
                     tooltip: 'Remove Column',
-                    onPressed: () => widget.background.width > 1
+                    onPressed: () => context.read<BackgroundCubit>().state.width > 1
                         ? setState(() {
-                            widget.background.deleteCol(0);
+                            context.read<BackgroundCubit>().deleteCol(0);
                           })
                         : null),
               ],
             ),
             Row(
               children: [
-                Text("Height ${widget.background.height}"),
+                Text("Height ${context.read<BackgroundCubit>().state.height}"),
                 IconButton(
                     icon: const Icon(Icons.add),
                     tooltip: 'Add Row',
                     onPressed: () => setState(() {
-                          widget.background.insertRow(0, 0);
+                      context.read<BackgroundCubit>().insertRow(0, 0);
                         })),
                 IconButton(
                     icon: const Icon(Icons.remove),
                     tooltip: 'Remove Row',
-                    onPressed: () => widget.background.height > 1
+                    onPressed: () => context.read<BackgroundCubit>().state.height > 1
                         ? setState(() {
-                            widget.background.deleteRow(0);
+                      context.read<BackgroundCubit>().deleteRow(0);
                           })
                         : null),
               ],
-            ), */
-            /*Expanded(
+            ),
+            Expanded(
                 child: SingleChildScrollView(
-              child: SourceDisplay(graphics: widget.background),
-            )),*/
+              child: SourceDisplay(
+                tileData: [],
+                name: context.read<AppStateCubit>().state.backgroundName,
+              ),
+            )),
           ],
         ),
       )
