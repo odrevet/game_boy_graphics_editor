@@ -85,7 +85,6 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
           ],
           child: BackgroundGrid(
             background: context.read<BackgroundCubit>().state,
-            colorSet: widget.colorSet,
             showGrid: widget.showGrid,
             metaTile: widget.tiles,
             onTap: (index) => setState(() {

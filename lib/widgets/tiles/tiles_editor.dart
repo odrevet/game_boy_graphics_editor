@@ -198,7 +198,6 @@ class _TilesEditorState extends State<TilesEditor> {
                   child: BackgroundGrid(
                     background: Background(width: 4, height: 4, fill: appState.tileIndexTile),
                     metaTile: metaTile,
-                    colorSet: appState.colorSet,
                   ),
                 ),
               ),

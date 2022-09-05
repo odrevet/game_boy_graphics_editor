@@ -10,13 +10,11 @@ class BackgroundGrid extends StatelessWidget {
   final Function? onTap;
   final Function? onHover;
   final bool showGrid;
-  final List<Color> colorSet;
 
   const BackgroundGrid({
     Key? key,
     required this.background,
     required this.metaTile,
-    required this.colorSet,
     this.onTap,
     this.onHover,
     this.showGrid = false,
