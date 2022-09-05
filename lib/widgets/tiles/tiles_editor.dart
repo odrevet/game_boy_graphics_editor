@@ -13,11 +13,8 @@ import '../source_display.dart';
 import 'intensity_button.dart';
 
 class TilesEditor extends StatefulWidget {
-  final Background preview;
-
   const TilesEditor({
     Key? key,
-    required this.preview,
   }) : super(key: key);
 
   @override
@@ -101,7 +98,7 @@ class _TilesEditorState extends State<TilesEditor> {
                 ],
               ),
               MetaTileListView(
-                selectedTile: context.read<AppStateCubit>().state.tileIndexTile,
+                  selectedTile: context.read<AppStateCubit>().state.tileIndexTile,
                   onHover: (index) => setState(() {
                         hoverTileIndex = index;
                       }),
@@ -199,7 +196,7 @@ class _TilesEditorState extends State<TilesEditor> {
                   width: 200,
                   height: 200,
                   child: BackgroundGrid(
-                    background: widget.preview,
+                    background: Background(width: 4, height: 4, fill: appState.tileIndexTile),
                     metaTile: metaTile,
                     colorSet: appState.colorSet,
                   ),

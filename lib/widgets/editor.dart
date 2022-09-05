@@ -29,7 +29,8 @@ class _EditorState extends State<Editor> {
   @override
   void initState() {
     super.initState();
-    background = Background(data: List.generate(20*18, (index) => 0), width: 20, height: 18, name: "Background");
+    background = Background(
+        data: List.generate(20 * 18, (index) => 0), width: 20, height: 18, name: "Background");
   }
 
   @override
@@ -63,8 +64,7 @@ class _EditorState extends State<Editor> {
           return Scaffold(
               appBar: appbar,
               body: appState.tileMode
-                  ? TilesEditor(
-                      preview: Background(width: 4, height: 4, fill: appState.tileIndexTile))
+                  ? TilesEditor()
                   : BackgroundEditor(
                       colorSet: appState.colorSet,
                       tiles: metaTile,

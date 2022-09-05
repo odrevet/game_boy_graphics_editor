@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 
-import '../../cubits/app_state_cubit.dart';
 import 'meta_tile_display.dart';
 
 class MetaTileListView extends StatelessWidget {
@@ -42,10 +41,8 @@ class MetaTileListView extends StatelessWidget {
                             : null,
                       ),
                       title: MetaTileDisplay(
-                          tileData: context.read<MetaTileCubit>().state.getTile(index),
-                          showGrid: false,
-                          metaTileIndex: index,
-                          colorSet: context.read<AppStateCubit>().state.colorSet),
+                        tileData: context.read<MetaTileCubit>().state.getTile(index),
+                      ),
                     ),
                   ),
                 ),

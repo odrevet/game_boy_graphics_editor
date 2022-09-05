@@ -8,10 +8,10 @@ class Background extends Graphics {
             data: data ?? List.filled(width * height, fill ?? 0, growable: true));
 
   copyWith({List<int>? data, int? width, int? height}) => Background(
-    data: data ?? [...this.data],
-    width: width ?? this.width,
-    height: height ?? this.height,
-  );
+        data: data ?? [...this.data],
+        width: width ?? this.width,
+        height: height ?? this.height,
+      );
 
   void insertCol(int at, int fill) {
     width += 1;
