@@ -40,8 +40,10 @@ class MetaTileListView extends StatelessWidget {
                             ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
                             : null,
                       ),
-                      title: MetaTileDisplay(
-                        tileData: context.read<MetaTileCubit>().state.getTile(index),
+                      title: SizedBox(
+                        child: MetaTileDisplay(
+                          tileData: context.read<MetaTileCubit>().state.getTile(index),
+                        ),
                       ),
                     ),
                   ),

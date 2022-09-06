@@ -66,9 +66,7 @@ class _EditorState extends State<Editor> {
               body: appState.tileMode
                   ? TilesEditor()
                   : BackgroundEditor(
-                      colorSet: appState.colorSet,
                       tiles: metaTile,
-                      selectedTileIndex: appState.tileIndexBackground,
                       onTapTileListView: (index) =>
                           context.read<AppStateCubit>().setTileIndexBackground(index),
                       showGrid: appState.showGridBackground,

@@ -1,15 +1,10 @@
 import 'dart:convert';
 
-import 'convert.dart';
+import '../convert.dart';
+import '../graphics.dart';
+import 'source_converter.dart';
 
-class GraphicElement {
-  String name;
-  String values;
-
-  GraphicElement({required this.name, required this.values});
-}
-
-class GBDKConverter {
+class GBDKConverter extends SourceConverter {
   static final GBDKConverter _singleton = GBDKConverter._internal();
 
   factory GBDKConverter() {
@@ -62,21 +57,15 @@ class GBDKConverter {
     return pattern;
   }
 
-  String toHeader(String name) {
+  @override
+  String toHeader(Graphics graphics, String name) {
     return """#define ${name}Bank 0
 extern unsigned char $name[];""";
   }
 
-  String toSource(String name, List<int> tileData) {
-    return "unsigned char $name[] =\n{${formatOutput(getRawTile(tileData))}\n};";
-  }
-
-  String formatOutput(input) {
-    return input.asMap().entries.map((entry) {
-      int idx = entry.key;
-      String val = entry.value;
-      return idx % 8 == 0 ? "\n  $val" : val;
-    }).join(", ");
+  @override
+  String toSource(Graphics graphics, String name) {
+    return "unsigned char $name[] =\n{${formatOutput(getRawTile(graphics.data))}\n};";
   }
 
   List<GraphicElement> fromSource(source) {
@@ -97,3 +86,4 @@ extern unsigned char $name[];""";
     return lines.join();
   }
 }
+

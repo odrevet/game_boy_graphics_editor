@@ -3,13 +3,16 @@ import 'package:flutter/material.dart';
 
 import '../models/download_stub.dart' if (dart.library.html) '../download.dart';
 import '../models/file_utils.dart';
-import '../models/gbdk_converter.dart';
+import '../models/graphics.dart';
+import '../models/sourceConverters/gbdk_converter.dart';
+import '../models/sourceConverters/source_converter.dart';
 
 class SourceDisplay extends StatelessWidget {
   final String name;
-  final List<int> tileData;
+  final Graphics graphics;
+  final SourceConverter sourceConverter;
 
-  const SourceDisplay({Key? key, required this.tileData, required this.name}) : super(key: key);
+  const SourceDisplay({Key? key, required this.graphics, required this.name, required this.sourceConverter}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +49,7 @@ class SourceDisplay extends StatelessWidget {
         ]),
         Align(
             alignment: Alignment.topLeft,
-            child: SelectableText(GBDKConverter().toHeader(name),
+            child: SelectableText(sourceConverter.toHeader(graphics, name),
                 style: const TextStyle(
                   fontSize: fontSize,
                 ))),
@@ -79,7 +82,7 @@ class SourceDisplay extends StatelessWidget {
         Align(
             alignment: Alignment.topLeft,
             child: SelectableText(
-              GBDKConverter().toSource(name, tileData),
+              sourceConverter.toSource(graphics, name),
               style: const TextStyle(
                 fontSize: fontSize,
               ),

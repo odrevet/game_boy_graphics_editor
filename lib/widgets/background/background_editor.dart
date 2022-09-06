@@ -2,6 +2,7 @@ import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
+import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_background_converter.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_grid.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
@@ -11,18 +12,11 @@ import '../source_display.dart';
 
 class BackgroundEditor extends StatefulWidget {
   final MetaTile tiles;
-  final int selectedTileIndex;
   final Function? onTapTileListView;
   final bool showGrid;
-  final List<Color> colorSet;
 
   const BackgroundEditor(
-      {Key? key,
-      required this.tiles,
-      required this.selectedTileIndex,
-      required this.colorSet,
-      this.onTapTileListView,
-      this.showGrid = false})
+      {Key? key, required this.tiles, this.onTapTileListView, this.showGrid = false})
       : super(key: key);
 
   @override
@@ -36,50 +30,42 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
   Widget build(BuildContext context) {
     return Row(children: [
       MetaTileListView(
-          selectedTile: widget.selectedTileIndex,
+          selectedTile: context.read<AppStateCubit>().state.tileIndexBackground,
           onTap: (index) =>
               widget.onTapTileListView != null ? widget.onTapTileListView!(index) : null),
       Padding(
         padding: const EdgeInsets.all(16.0),
         child: ContextMenuArea(
-          builder: (context) => [
+          builder: (contextMenuArea) => [
             ListTile(
               title: const Text('Insert column before'),
               onTap: () {
-                context.read<BackgroundCubit>().insertCol(hoverTileIndex, widget.selectedTileIndex);
-                /*setState(() {
-                  widget.background.insertCol(
-                      hoverTileIndex % widget.background.width, widget.selectedTileIndex);
-                });*/
-                Navigator.of(context).pop();
+                context.read<BackgroundCubit>().insertCol(
+                    hoverTileIndex, context.read<AppStateCubit>().state.tileIndexBackground);
+                Navigator.of(contextMenuArea).pop();
               },
             ),
             ListTile(
               title: const Text('Delete column'),
               onTap: () {
-                /*setState(() {
-                  widget.background.deleteCol(hoverTileIndex % widget.background.width);
-                });*/
-                Navigator.of(context).pop();
+                context.read<BackgroundCubit>().deleteCol(hoverTileIndex);
+                Navigator.of(contextMenuArea).pop();
               },
             ),
             ListTile(
               title: const Text('Insert row before'),
               onTap: () {
-                /*setState(() {
-                  widget.background.insertRow(
-                      hoverTileIndex ~/ widget.background.width, widget.selectedTileIndex);
-                });*/
-                Navigator.of(context).pop();
+                context.read<BackgroundCubit>().insertRow(
+                    hoverTileIndex, context.read<AppStateCubit>().state.tileIndexBackground);
+                Navigator.of(contextMenuArea).pop();
               },
             ),
             ListTile(
               title: const Text('Remove row'),
               onTap: () {
-                /*setState(() {
-                  widget.background.deleteRow(hoverTileIndex ~/ widget.background.width);
-                });*/
-                Navigator.of(context).pop();
+                context.read<BackgroundCubit>().insertRow(
+                    hoverTileIndex, context.read<AppStateCubit>().state.tileIndexBackground);
+                Navigator.of(contextMenuArea).pop();
               },
             )
           ],
@@ -87,9 +73,10 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
             background: context.read<BackgroundCubit>().state,
             showGrid: widget.showGrid,
             metaTile: widget.tiles,
-            onTap: (index) => setState(() {
-              //widget.background.data[index] = widget.selectedTileIndex;
-            }),
+            onTap: (index) => context.read<BackgroundCubit>().setTileIndex(
+                index % context.read<BackgroundCubit>().state.width,
+                index ~/ context.read<BackgroundCubit>().state.width,
+                context.read<AppStateCubit>().state.tileIndexBackground),
             onHover: (index) => setState(() {
               hoverTileIndex = index;
             }),
@@ -132,14 +119,14 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                     icon: const Icon(Icons.add),
                     tooltip: 'Add Row',
                     onPressed: () => setState(() {
-                      context.read<BackgroundCubit>().insertRow(0, 0);
+                          context.read<BackgroundCubit>().insertRow(0, 0);
                         })),
                 IconButton(
                     icon: const Icon(Icons.remove),
                     tooltip: 'Remove Row',
                     onPressed: () => context.read<BackgroundCubit>().state.height > 1
                         ? setState(() {
-                      context.read<BackgroundCubit>().deleteRow(0);
+                            context.read<BackgroundCubit>().deleteRow(0);
                           })
                         : null),
               ],
@@ -147,8 +134,9 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
             Expanded(
                 child: SingleChildScrollView(
               child: SourceDisplay(
-                tileData: [],
+                graphics: context.read<BackgroundCubit>().state,
                 name: context.read<AppStateCubit>().state.backgroundName,
+                sourceConverter: GBDKBackgroundConverter(),
               ),
             )),
           ],

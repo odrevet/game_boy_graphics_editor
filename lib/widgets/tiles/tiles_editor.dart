@@ -2,6 +2,7 @@ import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/background.dart';
+import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_converter.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_canvas.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
@@ -204,15 +205,13 @@ class _TilesEditorState extends State<TilesEditor> {
               TextFormField(
                 decoration: const InputDecoration(labelText: 'Name'),
                 initialValue: appState.tileName,
-                onChanged: (text) => setState(() {
-                  context.read<AppStateCubit>().setTileName(text);
-                }),
-              ),
+                onChanged: (text) => context.read<AppStateCubit>().setTileName(text)),
               Expanded(
                 child: SingleChildScrollView(
                   child: SourceDisplay(
-                    tileData: context.read<MetaTileCubit>().state.data,
+                    graphics: context.read<MetaTileCubit>().state,
                     name: appState.tileName,
+                    sourceConverter: GBDKConverter(),
                     //graphics: metaTile,
                   ),
                 ),
