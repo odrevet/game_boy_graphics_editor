@@ -29,10 +29,13 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      MetaTileListView(
-          selectedTile: context.read<AppStateCubit>().state.tileIndexBackground,
-          onTap: (index) =>
-              widget.onTapTileListView != null ? widget.onTapTileListView!(index) : null),
+      SizedBox(
+        width: 200,
+        child: MetaTileListView(
+            selectedTile: context.read<AppStateCubit>().state.tileIndexBackground,
+            onTap: (index) =>
+                widget.onTapTileListView != null ? widget.onTapTileListView!(index) : null),
+      ),
       Padding(
         padding: const EdgeInsets.all(16.0),
         child: ContextMenuArea(
