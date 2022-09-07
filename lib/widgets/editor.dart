@@ -12,8 +12,8 @@ import 'package:game_boy_graphics_editor/widgets/tiles/tiles_editor.dart';
 import 'package:image/image.dart' as image;
 
 import '../models/app_state.dart';
-import '../models/graphics/background.dart';
 import '../models/file_utils.dart';
+import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 
 class Editor extends StatefulWidget {

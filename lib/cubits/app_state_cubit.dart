@@ -10,7 +10,8 @@ class AppStateCubit extends Cubit<AppState> {
 
   void setTileName(String tileName) => emit(state.copyWith(tileName: tileName));
 
-  void setBackgroundName(String backgroundName) => emit(state.copyWith(backgroundName: backgroundName));
+  void setBackgroundName(String backgroundName) =>
+      emit(state.copyWith(backgroundName: backgroundName));
 
   void setSelectedTileIndex(index) => emit(state.copyWith(tileIndexTile: index));
 

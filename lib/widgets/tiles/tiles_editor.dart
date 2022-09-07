@@ -216,13 +216,13 @@ class _TilesEditorState extends State<TilesEditor> {
                   child: Column(
                     children: [
                       SourceDisplay(
-                        toSource: () => GBDKConverter()
+                        source: GBDKConverter()
                             .toHeader(context.read<MetaTileCubit>().state, appState.tileName),
                         name: appState.tileName, extension: '.h',
                         //graphics: metaTile,
                       ),
                       SourceDisplay(
-                        toSource: () => GBDKConverter()
+                        source: GBDKConverter()
                             .toSource(context.read<MetaTileCubit>().state, appState.tileName),
                         name: appState.tileName, extension: '.c',
                         //graphics: metaTile,

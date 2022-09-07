@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 
-import '../../models/graphics/background.dart';
 import '../../models/file_utils.dart';
+import '../../models/graphics/background.dart';
 
 class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
