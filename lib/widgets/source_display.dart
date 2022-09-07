@@ -23,7 +23,7 @@ class SourceDisplay extends StatelessWidget {
     return Column(
       children: [
         Row(children: [
-          Text(name),
+          Text("$name$extension"),
           IconButton(
             iconSize: 18,
             icon: const Icon(Icons.copy),
