@@ -136,10 +136,21 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
             ),
             Expanded(
                 child: SingleChildScrollView(
-              child: SourceDisplay(
-                graphics: context.read<BackgroundCubit>().state,
-                name: context.read<AppStateCubit>().state.backgroundName,
-                sourceConverter: GBDKBackgroundConverter(),
+              child: Column(
+                children: [SourceDisplay(
+                  toSource: () => GBDKBackgroundConverter().toHeader(
+                      context.read<BackgroundCubit>().state,
+                      context.read<AppStateCubit>().state.backgroundName),
+                  name: context.read<AppStateCubit>().state.backgroundName,
+                  extension: '.h',
+                ),
+                  SourceDisplay(
+                    toSource: () => GBDKBackgroundConverter().toSource(
+                        context.read<BackgroundCubit>().state,
+                        context.read<AppStateCubit>().state.backgroundName),
+                    name: context.read<AppStateCubit>().state.backgroundName,
+                    extension: '.c',
+                  )],
               ),
             )),
           ],

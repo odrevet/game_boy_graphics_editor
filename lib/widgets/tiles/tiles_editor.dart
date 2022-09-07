@@ -104,8 +104,8 @@ class _TilesEditorState extends State<TilesEditor> {
                   child: MetaTileListView(
                       selectedTile: context.read<AppStateCubit>().state.tileIndexTile,
                       onHover: (index) => setState(() {
-                        hoverTileIndex = index;
-                      }),
+                            hoverTileIndex = index;
+                          }),
                       onTap: (index) => context.read<AppStateCubit>().setSelectedTileIndex(index)),
                 ),
               ),
@@ -208,16 +208,26 @@ class _TilesEditorState extends State<TilesEditor> {
                 ),
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Name'),
-                initialValue: appState.tileName,
-                onChanged: (text) => context.read<AppStateCubit>().setTileName(text)),
+                  decoration: const InputDecoration(labelText: 'Name'),
+                  initialValue: appState.tileName,
+                  onChanged: (text) => context.read<AppStateCubit>().setTileName(text)),
               Expanded(
                 child: SingleChildScrollView(
-                  child: SourceDisplay(
-                    graphics: context.read<MetaTileCubit>().state,
-                    name: appState.tileName,
-                    sourceConverter: GBDKConverter(),
-                    //graphics: metaTile,
+                  child: Column(
+                    children: [
+                      SourceDisplay(
+                        toSource: () => GBDKConverter()
+                            .toHeader(context.read<MetaTileCubit>().state, appState.tileName),
+                        name: appState.tileName, extension: '.h',
+                        //graphics: metaTile,
+                      ),
+                      SourceDisplay(
+                        toSource: () => GBDKConverter()
+                            .toSource(context.read<MetaTileCubit>().state, appState.tileName),
+                        name: appState.tileName, extension: '.c',
+                        //graphics: metaTile,
+                      ),
+                    ],
                   ),
                 ),
               )
