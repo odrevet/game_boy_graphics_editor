@@ -189,7 +189,7 @@ class _TilesEditorState extends State<TilesEditor> {
                     alignment: Alignment.topCenter,
                     child: AspectRatio(
                       aspectRatio: metaTile.width / metaTile.height,
-                      child: MetaTileCanvas(),
+                      child: const MetaTileCanvas(),
                     ),
                   ),
                 )
