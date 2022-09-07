@@ -7,7 +7,7 @@ import 'package:game_boy_graphics_editor/widgets/background/background_grid.dart
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../cubits/app_state_cubit.dart';
-import '../../models/meta_tile.dart';
+import '../../models/graphics/meta_tile.dart';
 import '../source_display.dart';
 
 class BackgroundEditor extends StatefulWidget {

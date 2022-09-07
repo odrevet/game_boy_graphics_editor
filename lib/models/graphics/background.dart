@@ -1,4 +1,4 @@
-import 'package:game_boy_graphics_editor/models/graphics.dart';
+import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 class Background extends Graphics {
   Background({height = 20, width = 18, name = "", fill, data})

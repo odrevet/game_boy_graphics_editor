@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import '../convert.dart';
-import '../graphics.dart';
+import '../graphics/graphics.dart';
 import 'source_converter.dart';
 
 class GBDKConverter extends SourceConverter {
@@ -57,6 +56,26 @@ class GBDKConverter extends SourceConverter {
     return pattern;
   }
 
+  List<int> getPatternIndex(int width, int height) {
+    var pattern = <int>[];
+
+    if (width == 8 && height == 8) {
+      pattern = <int>[0]; // 0
+    } else if (width == 8 && height == 16) {
+      pattern = <int>[0, 8]; // 0, 1
+    } else if (width == 16 && height == 16) {
+      pattern = <int>[0, 128, 8, 136]; // 0, 2, 1, 3
+    } else if (width == 32 && height == 32) {
+      // 0, 2, 8, 10, 1, 3, 9, 11, 4, 6, 12, 14, 5, 7, 13, 15
+      pattern = <int>[0, 2, 8, 10, 1, 3, 9, 11, 4, 6, 12, 14, 5, 7, 13, 15];
+
+    } else {
+      throw ('Unknown meta tile size');
+    }
+
+    return pattern;
+  }
+
   @override
   String toHeader(Graphics graphics, String name) {
     return """#define ${name}Bank 0
@@ -65,7 +84,21 @@ extern unsigned char $name[];""";
 
   @override
   String toSource(Graphics graphics, String name) {
-    return "unsigned char $name[] =\n{${formatOutput(getRawTile(graphics.data))}\n};";
+    List<int> reorderedData = [];
+    for (int pixelIndex = 0;
+        pixelIndex < graphics.data.length;
+        pixelIndex += graphics.height * graphics.width) {
+      getPatternIndex(graphics.width, graphics.height).forEach((patternIndex) {
+        for (int col = 0; col < 8; col++) {
+          int start = pixelIndex + patternIndex + col * graphics.width;
+          int end = start + 8;
+          var row = graphics.data.sublist(start, end);
+          reorderedData = [...reorderedData, ...row];
+        }
+      });
+    }
+
+    return "unsigned char $name[] =\n{${formatOutput(getRawTile(reorderedData))}\n};";
   }
 
   List<GraphicElement> fromSource(source) {
@@ -86,4 +119,3 @@ extern unsigned char $name[];""";
     return lines.join();
   }
 }
-

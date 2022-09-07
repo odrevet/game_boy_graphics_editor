@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:game_boy_graphics_editor/models/sourceConverters/source_converter.dart';
-
-import '../convert.dart';
-import '../graphics.dart';
+import '../graphics/graphics.dart';
 
 class GBDKBackgroundConverter extends SourceConverter {
   static final GBDKBackgroundConverter _singleton = GBDKBackgroundConverter._internal();

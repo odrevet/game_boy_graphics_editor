@@ -1,6 +1,6 @@
 import 'dart:core';
 
-import 'package:game_boy_graphics_editor/models/graphics.dart';
+import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 class MetaTile extends Graphics {
   MetaTile({data, required height, required width})

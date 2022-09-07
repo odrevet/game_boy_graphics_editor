@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../models/download_stub.dart' if (dart.library.html) '../download.dart';
 import '../models/file_utils.dart';
-import '../models/graphics.dart';
+import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
 

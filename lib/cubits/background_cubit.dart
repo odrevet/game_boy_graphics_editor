@@ -1,6 +1,6 @@
 import 'package:replay_bloc/replay_bloc.dart';
 
-import '../models/background.dart';
+import '../models/graphics/background.dart';
 
 class BackgroundCubit extends ReplayCubit<Background> {
   BackgroundCubit() : super(Background(height: 20, width: 18));

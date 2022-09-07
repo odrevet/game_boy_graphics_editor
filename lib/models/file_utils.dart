@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:game_boy_graphics_editor/models/graphics.dart';
+import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 Future<void> saveFile(String content, allowedExtensions, [filename]) async {
   String? fileName =

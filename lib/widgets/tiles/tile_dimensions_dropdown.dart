@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
-import 'package:game_boy_graphics_editor/models/meta_tile.dart';
+import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 
 class TileDimensionDropdown extends StatelessWidget {
   const TileDimensionDropdown({Key? key}) : super(key: key);
