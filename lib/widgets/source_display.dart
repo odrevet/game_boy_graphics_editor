@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../models/download_stub.dart' if (dart.library.html) '../download.dart';
 import '../models/file_utils.dart';
@@ -31,7 +32,7 @@ class SourceDisplay extends StatelessWidget {
               final snackBar = SnackBar(
                 content: Text("Contents of $headerFilename copied into clipboard"),
               );
-              //Clipboard.setData(ClipboardData(text: graphics.toHeader()));
+              Clipboard.setData(ClipboardData(text: sourceConverter.toHeader(graphics, name)));
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
           ),
@@ -39,12 +40,12 @@ class SourceDisplay extends StatelessWidget {
               ? IconButton(
                   iconSize: 18,
                   icon: const Icon(Icons.download),
-                  onPressed: () => null, //download(graphics.toHeader(), headerFilename),
+                  onPressed: () => download(sourceConverter.toHeader(graphics, name), headerFilename),
                 )
               : IconButton(
                   iconSize: 18,
                   icon: const Icon(Icons.save_as),
-                  onPressed: () => null, //saveFile(graphics.toHeader(), ['.h'], headerFilename),
+                  onPressed: () => saveFile(sourceConverter.toHeader(graphics, name), ['.h'], headerFilename),
                 ),
         ]),
         Align(
@@ -60,23 +61,23 @@ class SourceDisplay extends StatelessWidget {
             iconSize: 18,
             icon: const Icon(Icons.copy),
             onPressed: () {
-              /*final snackBar = SnackBar(
-                content: Text("Contents of ${graphics.name}.c copied into clipboard"),
+              final snackBar = SnackBar(
+                content: Text("Contents of $name.c copied into clipboard"),
               );
-              Clipboard.setData(ClipboardData(text: graphics.toSource()));
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);*/
+              Clipboard.setData(ClipboardData(text: sourceConverter.toSource(graphics, name)));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
           ),
           kIsWeb
               ? IconButton(
                   iconSize: 18,
                   icon: const Icon(Icons.download),
-                  onPressed: () => download(/*graphics.toSource()*/ "", sourceFilename),
+                  onPressed: () => download(sourceConverter.toSource(graphics, name), sourceFilename),
                 )
               : IconButton(
                   iconSize: 18,
                   icon: const Icon(Icons.save_as),
-                  onPressed: () => saveFile("" /*graphics.toSource()*/, ['.c'], sourceFilename),
+                  onPressed: () => saveFile(sourceConverter.toSource(graphics, name), ['.c'], sourceFilename),
                 ),
         ]),
         Align(
