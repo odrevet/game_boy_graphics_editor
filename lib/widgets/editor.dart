@@ -64,7 +64,7 @@ class _EditorState extends State<Editor> {
           return Scaffold(
               appBar: appbar,
               body: appState.tileMode
-                  ? TilesEditor()
+                  ? const TilesEditor()
                   : BackgroundEditor(
                       tiles: metaTile,
                       onTapTileListView: (index) =>
