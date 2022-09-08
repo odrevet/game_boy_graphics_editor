@@ -72,7 +72,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
           : IconButton(
               icon: const Icon(Icons.save),
               tooltip: 'Save tiles as',
-              onPressed: () => saveGraphics(metaTile, context),
+              onPressed: () => saveGraphics(),
             ),
       IconButton(
         icon: const Icon(Icons.folder_open),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
+import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_app_bar.dart';
@@ -13,7 +14,6 @@ import 'package:image/image.dart' as image;
 
 import '../models/app_state.dart';
 import '../models/file_utils.dart';
-import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 
 class Editor extends StatefulWidget {
@@ -24,14 +24,8 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  late Background background;
-
   @override
-  void initState() {
-    super.initState();
-    background = Background(
-        data: List.generate(20 * 18, (index) => 0), width: 20, height: 18, name: "Background");
-  }
+  void initState();
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +38,16 @@ class _EditorState extends State<Editor> {
             setTileMode: () => context.read<AppStateCubit>().toggleTileMode(),
             toggleColorSet: () => context.read<AppStateCubit>().toggleColorSet(),
             loadTileFromFilePicker: loadTileFromFilePicker,
-            saveGraphics: _saveGraphics,
+            saveGraphics: () =>
+                _saveGraphics(metaTile, context.read<AppStateCubit>().state.tileName, context),
           );
 
           BackgroundAppBar backgroundappbar = BackgroundAppBar(
             preferredSize: const Size.fromHeight(50.0),
             setBackgroundFromSource: _setBackgroundFromSource,
-            background: background,
-            saveGraphics: _saveGraphics,
+            background: context.read<BackgroundCubit>().state,
+            saveGraphics: () => _saveGraphics(context.read<BackgroundCubit>().state,
+                context.read<AppStateCubit>().state.backgroundName, context),
           );
 
           dynamic appbar;
@@ -76,13 +72,13 @@ class _EditorState extends State<Editor> {
     );
   }
 
-  _saveGraphics(Graphics graphics, BuildContext context) {
-    saveToDirectory(graphics).then((selectedDirectory) {
+  _saveGraphics(Graphics graphics, String name, BuildContext context) {
+    saveToDirectory(graphics, name).then((selectedDirectory) {
       if (selectedDirectory != null) {
-        /*var snackBar = SnackBar(
-          content: Text("${graphics.name}.h and ${graphics.name}.c saved under $selectedDirectory"),
+        var snackBar = SnackBar(
+          content: Text("$name.h and $name.c saved under $selectedDirectory"),
         );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);*/
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     });
   }
