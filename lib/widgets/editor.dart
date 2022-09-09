@@ -6,6 +6,7 @@ import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
+import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_converter.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_app_bar.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_editor.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tiles_app_bar.dart';
@@ -15,6 +16,7 @@ import 'package:image/image.dart' as image;
 import '../models/app_state.dart';
 import '../models/file_utils.dart';
 import '../models/graphics/graphics.dart';
+import '../models/sourceConverters/source_converter.dart';
 
 class Editor extends StatefulWidget {
   const Editor({Key? key}) : super(key: key);
@@ -83,21 +85,28 @@ class _EditorState extends State<Editor> {
     });
   }
 
-  /*bool _setMetaTile(GraphicElement graphicElement, metaTile) {
+  bool _setMetaTile(GraphicElement graphicElement) {
     bool hasLoaded = true;
     setState(() {
       try {
-        metaTile.setData(graphicElement.values.split(','));
-        metaTile.name = graphicElement.name;
+        var splitData = graphicElement.values.split(',');
+        context.read<AppStateCubit>().setTileName(graphicElement.name);
+        context.read<MetaTileCubit>().setData(splitData);
+        var d = context.read<MetaTileCubit>().state.data;
+        print(d);
       } catch (e) {
+        print("ERROR $e");
         hasLoaded = false;
       }
+
+
 
       if (hasLoaded) context.read<AppStateCubit>().setSelectedTileIndex(0);
       context.read<MetaTileCubit>().setDimensions(8, 8);
     });
+
     return hasLoaded;
-  }*/
+  }
 
   void _setBackgroundFromSource(String source) => setState(() {
         /*source = background.formatSource(source);
@@ -105,9 +114,9 @@ class _EditorState extends State<Editor> {
         context.read<AppStateCubit>().setTileIndexBackground(0);*/
       });
 
-  bool loadTileFromFilePicker(result, metaTile) {
+  bool loadTileFromFilePicker(result) {
     bool isPng = result.names[0]!.endsWith('.png');
-    late bool hasLoaded;
+    bool hasLoaded = false;
     if (isPng) {
       var img = image.decodePng(File(result.paths[0]!).readAsBytesSync())!;
 
@@ -140,8 +149,8 @@ class _EditorState extends State<Editor> {
       hasLoaded = true;
     } else {
       readBytes(result).then((source) {
-        source = metaTile.formatSource(source);
-        var graphicsElements = metaTile.fromGBDKSource(source);
+        source = GBDKConverter().formatSource(source);
+        var graphicsElements = GBDKConverter().fromSource(source);
         if (graphicsElements.length > 1) {
           showDialog(
               context: context,
@@ -157,7 +166,7 @@ class _EditorState extends State<Editor> {
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
                             onTap: () {
-                              //hasLoaded = _setMetaTile(graphicsElements[index], metaTile);
+                              hasLoaded = _setMetaTile(graphicsElements[index]);
                               Navigator.pop(context);
                             },
                             title: Text(graphicsElements[index].name),
@@ -167,7 +176,7 @@ class _EditorState extends State<Editor> {
                     ),
                   ));
         } else if (graphicsElements.length == 1) {
-          //hasLoaded = _setMetaTile(graphicsElements.first, metaTile);
+          hasLoaded = _setMetaTile(graphicsElements.first);
         } else {
           hasLoaded = false;
         }

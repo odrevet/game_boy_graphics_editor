@@ -1,6 +1,8 @@
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
+import '../models/sourceConverters/source_converter.dart';
+
 class MetaTileCubit extends ReplayCubit<MetaTile> {
   MetaTileCubit() : super(MetaTile(height: 8, width: 8));
 
@@ -137,4 +139,30 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   }
 
   void paste(int tileIndex, tileBuffer) {}
+
+  setData(List<String> values) {
+    int pixelAt = 0;
+    var data = List.filled(state.width * state.height, 0);
+
+    for (var index = 0; index < values.length; index += 2) {
+      var lo = toBinary(values[index]);
+      var hi = toBinary(values[index + 1]);
+
+      var combined = "";
+      for (var index = 0; index < 8; index++) {
+        combined += hi[index] + lo[index];
+      }
+
+      for (var indexBis = 0; indexBis < 8 * 2; indexBis += 2) {
+        String source = combined[indexBis] + combined[indexBis + 1];
+        int intensity = int.parse(source, radix: 2);
+        int tileIndex = pixelAt ~/ 64;
+        int pixelIndex = pixelAt - tileIndex * 64;
+        data[pixelIndex] = intensity;
+        pixelAt++;
+      }
+    }
+
+    emit(state.copyWith(data: data));
+  }
 }
