@@ -87,23 +87,20 @@ class _EditorState extends State<Editor> {
 
   bool _setMetaTile(GraphicElement graphicElement) {
     bool hasLoaded = true;
-    setState(() {
-      try {
-        var splitData = graphicElement.values.split(',');
-        context.read<AppStateCubit>().setTileName(graphicElement.name);
-        context.read<MetaTileCubit>().setData(splitData);
-        var d = context.read<MetaTileCubit>().state.data;
-        print(d);
-      } catch (e) {
-        print("ERROR $e");
-        hasLoaded = false;
-      }
+    try {
+      var splitData = graphicElement.values.split(',');
+      context.read<AppStateCubit>().setTileName(graphicElement.name);
+      context.read<MetaTileCubit>().setData(splitData);
+      var d = context.read<MetaTileCubit>().state.data;
+    } catch (e) {
+      print("ERROR $e");
+      hasLoaded = false;
+    }
 
 
 
-      if (hasLoaded) context.read<AppStateCubit>().setSelectedTileIndex(0);
-      context.read<MetaTileCubit>().setDimensions(8, 8);
-    });
+    if (hasLoaded) context.read<AppStateCubit>().setSelectedTileIndex(0);
+    //context.read<MetaTileCubit>().setDimensions(8, 8);  //TODO
 
     return hasLoaded;
   }
