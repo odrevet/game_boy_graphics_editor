@@ -141,8 +141,7 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   void paste(int tileIndex, tileBuffer) {}
 
   setData(List<String> values) {
-    int pixelAt = 0;
-    var data = List.filled(state.width * state.height, 0);
+    var data = <int>[];
 
     for (var index = 0; index < values.length; index += 2) {
       var lo = toBinary(values[index]);
@@ -154,12 +153,7 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
       }
 
       for (var indexBis = 0; indexBis < 8 * 2; indexBis += 2) {
-        String source = combined[indexBis] + combined[indexBis + 1];
-        int intensity = int.parse(source, radix: 2);
-        int tileIndex = pixelAt ~/ 64;
-        int pixelIndex = pixelAt - tileIndex * 64;
-        data[pixelIndex] = intensity;
-        pixelAt++;
+        data.add(int.parse(combined[indexBis] + combined[indexBis + 1], radix: 2));
       }
     }
 
