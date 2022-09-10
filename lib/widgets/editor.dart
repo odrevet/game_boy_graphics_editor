@@ -91,7 +91,7 @@ class _EditorState extends State<Editor> {
       var splitData = graphicElement.values.split(',');
       context.read<AppStateCubit>().setTileName(graphicElement.name);
       context.read<MetaTileCubit>().setData(splitData);
-      var d = context.read<MetaTileCubit>().state.data;
+      context.read<MetaTileCubit>().state.data;
     } catch (e) {
       print("ERROR $e");
       hasLoaded = false;

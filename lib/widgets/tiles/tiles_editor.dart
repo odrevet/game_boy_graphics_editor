@@ -30,7 +30,6 @@ class _TilesEditorState extends State<TilesEditor> {
   Widget build(BuildContext context) {
     return BlocBuilder<MetaTileCubit, MetaTile>(
       builder: (context, metaTile) {
-        print(metaTile.data);
         return BlocBuilder<AppStateCubit, AppState>(
           builder: (context, appState) => Row(children: [
             ContextMenuArea(

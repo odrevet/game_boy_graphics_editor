@@ -56,25 +56,6 @@ class GBDKConverter extends SourceConverter {
     return pattern;
   }
 
-  List<int> getPatternIndex(int width, int height) {
-    var pattern = <int>[];
-
-    if (width == 8 && height == 8) {
-      pattern = <int>[0]; // 0
-    } else if (width == 8 && height == 16) {
-      pattern = <int>[0, 8]; // 0, 1
-    } else if (width == 16 && height == 16) {
-      pattern = <int>[0, 128, 8, 136]; // 0, 2, 1, 3
-    } else if (width == 32 && height == 32) {
-      // 0, 2, 8, 10, 1, 3, 9, 11, 4, 6, 12, 14, 5, 7, 13, 15
-      pattern = <int>[0, 2, 8, 10, 1, 3, 9, 11, 4, 6, 12, 14, 5, 7, 13, 15];
-    } else {
-      throw ('Unknown meta tile size');
-    }
-
-    return pattern;
-  }
-
   @override
   String toHeader(Graphics graphics, String name) {
     return """#define ${name}Bank 0
@@ -87,10 +68,14 @@ extern unsigned char $name[];""";
     for (int pixelIndex = 0;
         pixelIndex < graphics.data.length;
         pixelIndex += graphics.height * graphics.width) {
-      getPatternIndex(graphics.width, graphics.height).forEach((patternIndex) {
-        for (int col = 0; col < 8; col++) {
-          int start = pixelIndex + patternIndex + col * graphics.width;
-          int end = start + 8;
+      getPattern(graphics.width, graphics.height).forEach((patternIndex) {
+        int tileSize = 8;
+        int nbPixelPerTile = tileSize * tileSize;
+        int nbTilePerRow = (graphics.width ~/ tileSize);
+        int pixel = ((patternIndex % nbTilePerRow) * tileSize) + (patternIndex ~/ nbTilePerRow).floor() * nbPixelPerTile * nbTilePerRow;
+        for (int col = 0; col < tileSize; col++) {
+          int start = pixelIndex + pixel + col * graphics.width;
+          int end = start + tileSize;
           var row = graphics.data.sublist(start, end);
           reorderedData = [...reorderedData, ...row];
         }
