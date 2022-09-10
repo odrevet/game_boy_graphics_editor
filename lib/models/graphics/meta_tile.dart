@@ -15,20 +15,23 @@ class MetaTile extends Graphics {
         height: height ?? this.height,
       );
 
-  int get tileSize => width * height;
+  static int tileSize = 8;
+  static int nbPixelPerTile = tileSize * tileSize;
+  int get nbTilePerRow => (width ~/ tileSize);
+  int get nbPixel => width * height;
 
   List<int> getTile(int index) {
-    return data.getRange(tileSize * index, tileSize * index + tileSize).toList();
+    return data.getRange(nbPixel * index, nbPixel * index + nbPixel).toList();
   }
 
   int getPixel(int rowIndex, int colIndex, int tileIndex) =>
-      data[(colIndex * width + rowIndex) + tileSize * tileIndex];
+      data[(colIndex * width + rowIndex) + nbPixel * tileIndex];
 
   void setPixel(int rowIndex, int colIndex, int tileIndex, int intensity) =>
-      data[(colIndex * width + rowIndex) + tileSize * tileIndex] = intensity;
+      data[(colIndex * width + rowIndex) + nbPixel * tileIndex] = intensity;
 
   List<int> getRow(int tileIndex, int rowIndex) => data.sublist(
-      tileIndex * tileSize + rowIndex * width, tileIndex * tileSize + rowIndex * height + width);
+      tileIndex * nbPixel + rowIndex * width, tileIndex * nbPixel + rowIndex * height + width);
 
   void setRow(int tileIndex, int rowIndex, List<int> row) {
     for (int dotIndex = 0; dotIndex < width; dotIndex++) {

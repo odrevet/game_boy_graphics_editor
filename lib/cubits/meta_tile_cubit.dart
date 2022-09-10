@@ -16,7 +16,7 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
   void setPixel(int rowIndex, int colIndex, int tileIndexTile, int intensity) {
     List<int> tileData = [...state.data];
-    tileData[(colIndex * state.width + rowIndex) + state.tileSize * tileIndexTile] = intensity;
+    tileData[(colIndex * state.width + rowIndex) + state.nbPixel * tileIndexTile] = intensity;
     emit(state.copyWith(data: tileData));
   }
 
@@ -26,13 +26,13 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   void addTile(int index) {
     List<int> tileData = [...state.data];
     var newTile = List.generate(state.width * state.height, (index) => 0);
-    tileData.insertAll((index + 1) * state.tileSize, newTile);
+    tileData.insertAll((index + 1) * state.nbPixel, newTile);
     emit(state.copyWith(data: tileData));
   }
 
   void removeTile(int tileIndex) {
     List<int> tileData = [...state.data];
-    tileData.removeRange((tileIndex) * state.tileSize, tileIndex * state.tileSize + state.tileSize);
+    tileData.removeRange((tileIndex) * state.nbPixel, tileIndex * state.nbPixel + state.nbPixel);
     emit(state.copyWith(data: tileData));
   }
 

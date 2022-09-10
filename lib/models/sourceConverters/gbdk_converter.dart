@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../graphics/graphics.dart';
+import '../graphics/meta_tile.dart';
 import 'source_converter.dart';
 
 class GBDKConverter extends SourceConverter {
@@ -69,13 +70,11 @@ extern unsigned char $name[];""";
         pixelIndex < graphics.data.length;
         pixelIndex += graphics.height * graphics.width) {
       getPattern(graphics.width, graphics.height).forEach((patternIndex) {
-        int tileSize = 8;
-        int nbPixelPerTile = tileSize * tileSize;
-        int nbTilePerRow = (graphics.width ~/ tileSize);
-        int pixel = ((patternIndex % nbTilePerRow) * tileSize) + (patternIndex ~/ nbTilePerRow).floor() * nbPixelPerTile * nbTilePerRow;
-        for (int col = 0; col < tileSize; col++) {
+        int nbTilePerRow = (graphics.width ~/ MetaTile.tileSize);
+        int pixel = ((patternIndex % nbTilePerRow) * MetaTile.tileSize) + (patternIndex ~/ nbTilePerRow).floor() * MetaTile.nbPixelPerTile * nbTilePerRow;
+        for (int col = 0; col < MetaTile.tileSize; col++) {
           int start = pixelIndex + pixel + col * graphics.width;
-          int end = start + tileSize;
+          int end = start + MetaTile.tileSize;
           var row = graphics.data.sublist(start, end);
           reorderedData = [...reorderedData, ...row];
         }
