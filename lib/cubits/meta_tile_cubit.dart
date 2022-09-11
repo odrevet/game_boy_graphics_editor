@@ -140,6 +140,24 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
   void paste(int tileIndex, tileBuffer) {}
 
+  List<int> getPattern(int width, int height) {
+    var pattern = <int>[];
+
+    if (width == 8 && height == 8) {
+      pattern = <int>[0];
+    } else if (width == 8 && height == 16) {
+      pattern = <int>[0, 1];
+    } else if (width == 16 && height == 16) {
+      pattern = <int>[0, 2, 1, 3];
+    } else if (width == 32 && height == 32) {
+      pattern = <int>[0, 2, 8, 10, 1, 3, 9, 11, 4, 6, 12, 14, 5, 7, 13, 15];
+    } else {
+      throw ('Unknown meta tile size');
+    }
+
+    return pattern;
+  }
+
   setData(List<String> values) {
     var data = <int>[];
 
@@ -157,6 +175,26 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
       }
     }
 
-    emit(state.copyWith(data: data));
+    //
+    List<int> reorderedData = [];
+    var pattern = getPattern(state.width, state.height);
+
+    for (int tileIndex = 0; tileIndex < data.length ~/ MetaTile.nbPixelPerTile; tileIndex++) {
+
+      int patternIndex = pattern[tileIndex];
+      int nbTilePerRow = (state.width ~/ MetaTile.tileSize);
+
+      int pixel = ((patternIndex % nbTilePerRow) * MetaTile.tileSize) + (patternIndex ~/ nbTilePerRow).floor() * MetaTile.nbPixelPerTile * nbTilePerRow;
+      for (int col = 0; col < MetaTile.tileSize; col++) {
+        int start = pixel + col * state.width;
+        int end = start + MetaTile.tileSize;
+        print("$patternIndex -> FROM $start TO $end");
+        var row = data.sublist(start, end);
+        reorderedData = [...reorderedData, ...row];
+      }
+    }
+    //
+
+    emit(state.copyWith(data: reorderedData));
   }
 }
