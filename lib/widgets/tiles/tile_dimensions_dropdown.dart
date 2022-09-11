@@ -35,9 +35,12 @@ class TileDimensionDropdown extends StatelessWidget {
               break;
           }
 
+          var flattenedData = GBDKConverter().flatten(context.read<MetaTileCubit>().state);
+          var data = GBDKConverter().reorderData(flattenedData, width, height);
+          context.read<MetaTileCubit>().setData(data);
           context.read<MetaTileCubit>().setDimensions(width, height);
-          //var data = GBDKConverter().reorderData(context.read<MetaTileCubit>().state.data, context.read<MetaTileCubit>().state.width, context.read<MetaTileCubit>().state.height);
-          //context.read<MetaTileCubit>().setData(data);
+
+
         },
         items: <String>['8 x 8', '8 x 16', '16 x 16', '32 x 32']
             .map<DropdownMenuItem<String>>((String value) {

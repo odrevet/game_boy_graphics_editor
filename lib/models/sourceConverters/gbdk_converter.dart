@@ -63,12 +63,12 @@ class GBDKConverter extends SourceConverter {
 extern unsigned char $name[];""";
   }
 
-  @override
-  String toSource(Graphics graphics, String name) {
+
+  List<int> flatten(Graphics graphics){
     List<int> reorderedData = [];
     for (int pixelIndex = 0;
-        pixelIndex < graphics.data.length;
-        pixelIndex += graphics.height * graphics.width) {
+    pixelIndex < graphics.data.length;
+    pixelIndex += graphics.height * graphics.width) {
       getPattern(graphics.width, graphics.height).forEach((patternIndex) {
         int nbTilePerRow = (graphics.width ~/ MetaTile.tileSize);
         int pixel = ((patternIndex % nbTilePerRow) * MetaTile.tileSize) + (patternIndex ~/ nbTilePerRow).floor() * MetaTile.nbPixelPerTile * nbTilePerRow;
@@ -80,7 +80,12 @@ extern unsigned char $name[];""";
         }
       });
     }
+    return reorderedData;
+  }
 
+  @override
+  String toSource(Graphics graphics, String name) {
+    List<int> reorderedData = flatten(graphics);
     return "unsigned char $name[] =\n{${formatOutput(getRawTile(reorderedData))}\n};";
   }
 
@@ -124,6 +129,7 @@ extern unsigned char $name[];""";
   
   
   List<int> reorderData(List<int> data, int width, int height){
+    print("Reorder data to $width, $height");
     // if data is too small, resize it to fit the metaTile dimensions
     if(data.length < width * height){
       data.addAll(List.filled(width * height - data.length, 0));
