@@ -184,11 +184,10 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
       int patternIndex = pattern[tileIndex];
       int nbTilePerRow = (state.width ~/ MetaTile.tileSize);
 
-      int pixel = ((patternIndex % nbTilePerRow) * MetaTile.tileSize) + (patternIndex ~/ nbTilePerRow).floor() * MetaTile.nbPixelPerTile * nbTilePerRow;
+      int pixel = patternIndex * MetaTile.nbPixelPerTile;//((patternIndex % nbTilePerRow) * MetaTile.tileSize) + (patternIndex ~/ nbTilePerRow).floor() * MetaTile.nbPixelPerTile * nbTilePerRow;
       for (int col = 0; col < MetaTile.tileSize; col++) {
-        int start = pixel + col * state.width;
+        int start = pixel + col * MetaTile.tileSize;
         int end = start + MetaTile.tileSize;
-        print("$patternIndex -> FROM $start TO $end");
         var row = data.sublist(start, end);
         reorderedData = [...reorderedData, ...row];
       }
