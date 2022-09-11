@@ -4,6 +4,10 @@ import 'package:replay_bloc/replay_bloc.dart';
 class MetaTileCubit extends ReplayCubit<MetaTile> {
   MetaTileCubit() : super(MetaTile(height: 8, width: 8));
 
+  setData(List<int> data) {
+    emit(state.copyWith(data: data));
+  }
+  
   List<int> _shift(List<int> list, int v) {
     var i = v % list.length;
     return list.sublist(i)..addAll(list.sublist(0, i));
@@ -136,26 +140,4 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   }
 
   void paste(int tileIndex, tileBuffer) {}
-
-  List<int> getPattern(int width, int height) {
-    var pattern = <int>[];
-
-    if (width == 8 && height == 8) {
-      pattern = <int>[0];
-    } else if (width == 8 && height == 16) {
-      pattern = <int>[0, 1];
-    } else if (width == 16 && height == 16) {
-      pattern = <int>[0, 2, 1, 3];
-    } else if (width == 32 && height == 32) {
-      pattern = <int>[0, 2, 8, 10, 1, 3, 9, 11, 4, 6, 12, 14, 5, 7, 13, 15];
-    } else {
-      throw ('Unknown meta tile size');
-    }
-
-    return pattern;
-  }
-
-  setData(List<int> data) {
-    emit(state.copyWith(data: data));
-  }
 }
