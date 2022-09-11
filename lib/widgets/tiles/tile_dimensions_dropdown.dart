@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 
+import '../../models/sourceConverters/gbdk_converter.dart';
+
 class TileDimensionDropdown extends StatelessWidget {
   const TileDimensionDropdown({Key? key}) : super(key: key);
 
@@ -34,6 +36,8 @@ class TileDimensionDropdown extends StatelessWidget {
           }
 
           context.read<MetaTileCubit>().setDimensions(width, height);
+          //var data = GBDKConverter().reorderData(context.read<MetaTileCubit>().state.data, context.read<MetaTileCubit>().state.width, context.read<MetaTileCubit>().state.height);
+          //context.read<MetaTileCubit>().setData(data);
         },
         items: <String>['8 x 8', '8 x 16', '16 x 16', '32 x 32']
             .map<DropdownMenuItem<String>>((String value) {

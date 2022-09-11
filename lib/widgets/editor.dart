@@ -88,19 +88,16 @@ class _EditorState extends State<Editor> {
   bool _setMetaTile(GraphicElement graphicElement) {
     bool hasLoaded = true;
     try {
-      var splitData = graphicElement.values.split(',');
       context.read<AppStateCubit>().setTileName(graphicElement.name);
-      context.read<MetaTileCubit>().setData(splitData);
-      context.read<MetaTileCubit>().state.data;
+      var data = GBDKConverter().fromSource(graphicElement.values.split(','));
+      data = GBDKConverter().reorderData(data, context.read<MetaTileCubit>().state.width, context.read<MetaTileCubit>().state.height);
+      context.read<MetaTileCubit>().setData(data);
     } catch (e) {
       print("ERROR $e");
       hasLoaded = false;
     }
 
-
-
     if (hasLoaded) context.read<AppStateCubit>().setSelectedTileIndex(0);
-    //context.read<MetaTileCubit>().setDimensions(8, 8);  //TODO
 
     return hasLoaded;
   }
@@ -147,7 +144,7 @@ class _EditorState extends State<Editor> {
     } else {
       readBytes(result).then((source) {
         source = GBDKConverter().formatSource(source);
-        var graphicsElements = GBDKConverter().fromSource(source);
+        var graphicsElements = GBDKConverter().readGraphicElementsFromSource(source);
         if (graphicsElements.length > 1) {
           showDialog(
               context: context,

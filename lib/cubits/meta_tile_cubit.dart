@@ -21,7 +21,7 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   }
 
   void setDimensions(int width, int height) => emit(state.copyWith(
-      width: width, height: height, data: List.generate(width * height, (index) => 0)));
+      width: width, height: height));
 
   void addTile(int index) {
     List<int> tileData = [...state.data];
@@ -158,51 +158,7 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     return pattern;
   }
 
-  setData(List<String> values) {
-    var data = <int>[];
-
-    for (var index = 0; index < values.length; index += 2) {
-      var lo = toBinary(values[index]);
-      var hi = toBinary(values[index + 1]);
-
-      var combined = "";
-      for (var index = 0; index < MetaTile.tileSize; index++) {
-        combined += hi[index] + lo[index];
-      }
-
-      for (var indexBis = 0; indexBis < MetaTile.tileSize * 2; indexBis += 2) {
-        data.add(int.parse(combined[indexBis] + combined[indexBis + 1], radix: 2));
-      }
-    }
-
-    // reorder tile data
-
-    // if data is too small, resize it to fit the metaTile dimensions
-    if(data.length < state.width * state.height){
-      data.addAll(List.filled(state.width * state.height - data.length, 0));
-    }
-
-    List<int> reorderedData = List.filled(data.length, 0);
-    var pattern = getPattern(state.width, state.height);
-    int nbTilePerRow = (state.width ~/ MetaTile.tileSize);
-    int nbTilePerMetaTile =(state.width * state.height) ~/ MetaTile.nbPixelPerTile;
-
-    for (int tileIndex = 0; tileIndex < data.length ~/ MetaTile.nbPixelPerTile; tileIndex++) {
-      int patternIndex = pattern[tileIndex % pattern.length];
-
-      int metaTileIndex = tileIndex ~/ nbTilePerMetaTile;
-      int pixel = patternIndex * MetaTile.nbPixelPerTile;
-      for (int col = 0; col < MetaTile.tileSize; col++) {
-        int start = pixel + col * MetaTile.tileSize + (metaTileIndex * state.width * state.height);
-        int end = start + MetaTile.tileSize;
-        var row = data.sublist(start, end);
-        int reorderedPixel = ((tileIndex % nbTilePerRow) * MetaTile.tileSize) +
-            (tileIndex ~/ nbTilePerRow).floor() * MetaTile.nbPixelPerTile * nbTilePerRow +
-            col * state.width;
-        reorderedData.setRange(reorderedPixel, reorderedPixel + MetaTile.tileSize, row);
-      }
-    }
-
-    emit(state.copyWith(data: reorderedData));
+  setData(List<int> data) {
+    emit(state.copyWith(data: data));
   }
 }
