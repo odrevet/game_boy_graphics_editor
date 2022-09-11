@@ -17,7 +17,9 @@ class MetaTile extends Graphics {
 
   static int tileSize = 8;
   static int nbPixelPerTile = tileSize * tileSize;
+
   int get nbTilePerRow => (width ~/ tileSize);
+
   int get nbPixel => width * height;
 
   List<int> getTile(int index) {

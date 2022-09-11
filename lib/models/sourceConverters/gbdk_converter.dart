@@ -63,15 +63,15 @@ class GBDKConverter extends SourceConverter {
 extern unsigned char $name[];""";
   }
 
-
-  List<int> flatten(Graphics graphics){
+  List<int> flatten(Graphics graphics) {
     List<int> reorderedData = [];
     for (int pixelIndex = 0;
-    pixelIndex < graphics.data.length;
-    pixelIndex += graphics.height * graphics.width) {
+        pixelIndex < graphics.data.length;
+        pixelIndex += graphics.height * graphics.width) {
       getPattern(graphics.width, graphics.height).forEach((patternIndex) {
         int nbTilePerRow = (graphics.width ~/ MetaTile.tileSize);
-        int pixel = ((patternIndex % nbTilePerRow) * MetaTile.tileSize) + (patternIndex ~/ nbTilePerRow).floor() * MetaTile.nbPixelPerTile * nbTilePerRow;
+        int pixel = ((patternIndex % nbTilePerRow) * MetaTile.tileSize) +
+            (patternIndex ~/ nbTilePerRow).floor() * MetaTile.nbPixelPerTile * nbTilePerRow;
         for (int col = 0; col < MetaTile.tileSize; col++) {
           int start = pixelIndex + pixel + col * graphics.width;
           int end = start + MetaTile.tileSize;
@@ -84,12 +84,10 @@ extern unsigned char $name[];""";
   }
 
   @override
-  String toSource(Graphics graphics, String name) {
-    List<int> reorderedData = flatten(graphics);
-    return "unsigned char $name[] =\n{${formatOutput(getRawTile(reorderedData))}\n};";
-  }
+  String toSource(Graphics graphics, String name) =>
+      "unsigned char $name[] =\n{${formatOutput(getRawTile(flatten(graphics)))}\n};";
 
-  List<GraphicElement> readGraphicElementsFromSource(source) {
+  List<GraphicElement> readGraphicElementsFromSource(String source) {
     var arrayElements = <GraphicElement>[];
 
     RegExp regExp =
@@ -100,8 +98,8 @@ extern unsigned char $name[];""";
 
     return arrayElements;
   }
-  
-  List<int>fromSource(values){
+
+  List<int> fromSource(values) {
     var data = <int>[];
 
     for (var index = 0; index < values.length; index += 2) {
@@ -117,7 +115,7 @@ extern unsigned char $name[];""";
         data.add(int.parse(combined[indexBis] + combined[indexBis + 1], radix: 2));
       }
     }
-    
+
     return data;
   }
 
@@ -126,19 +124,17 @@ extern unsigned char $name[];""";
     List<String> lines = ls.convert(source);
     return lines.join();
   }
-  
-  
-  List<int> reorderData(List<int> data, int width, int height){
-    print("Reorder data to $width, $height");
+
+  List<int> reorderData(List<int> data, int width, int height) {
     // if data is too small, resize it to fit the metaTile dimensions
-    if(data.length < width * height){
+    if (data.length < width * height) {
       data.addAll(List.filled(width * height - data.length, 0));
     }
 
     List<int> reorderedData = List.filled(data.length, 0);
     var pattern = getPattern(width, height);
     int nbTilePerRow = (width ~/ MetaTile.tileSize);
-    int nbTilePerMetaTile =(width * height) ~/ MetaTile.nbPixelPerTile;
+    int nbTilePerMetaTile = (width * height) ~/ MetaTile.nbPixelPerTile;
 
     for (int tileIndex = 0; tileIndex < data.length ~/ MetaTile.nbPixelPerTile; tileIndex++) {
       int patternIndex = pattern[tileIndex % pattern.length];

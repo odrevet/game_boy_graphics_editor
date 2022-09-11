@@ -1,8 +1,6 @@
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
-import '../models/sourceConverters/source_converter.dart';
-
 class MetaTileCubit extends ReplayCubit<MetaTile> {
   MetaTileCubit() : super(MetaTile(height: 8, width: 8));
 
@@ -20,8 +18,7 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     emit(state.copyWith(data: tileData));
   }
 
-  void setDimensions(int width, int height) => emit(state.copyWith(
-      width: width, height: height));
+  void setDimensions(int width, int height) => emit(state.copyWith(width: width, height: height));
 
   void addTile(int index) {
     List<int> tileData = [...state.data];

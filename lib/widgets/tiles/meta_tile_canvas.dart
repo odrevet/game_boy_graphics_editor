@@ -19,36 +19,34 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MetaTileCubit, MetaTile>(
-      builder: (context, metaTile) {
-        return BlocBuilder<AppStateCubit, AppState>(builder: (context, appState) {
-          return LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) => MouseRegion(
-              cursor: SystemMouseCursors.precise,
-              onEnter: (PointerEvent details) => setState(() => isHover = true),
-              onExit: (PointerEvent details) => setState(() {
-                isHover = false;
-              }),
-              child: GestureDetector(
-                onPanUpdate: (DragUpdateDetails details) {
-                  if (isHover && appState.floodMode == false) {
-                    draw(details, constraints, appState.intensity, appState.floodMode);
-                  }
-                },
-                onTapDown: (TapDownDetails details) {
-                  if (isHover) {
-                    draw(details, constraints, appState.intensity, appState.floodMode);
-                  }
-                },
-                child: MetaTileDisplay(
-                  tileData: metaTile.getTile(appState.tileIndexTile),
-                ),
+    return BlocBuilder<MetaTileCubit, MetaTile>(builder: (context, metaTile) {
+      return BlocBuilder<AppStateCubit, AppState>(builder: (context, appState) {
+        return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) => MouseRegion(
+            cursor: SystemMouseCursors.precise,
+            onEnter: (PointerEvent details) => setState(() => isHover = true),
+            onExit: (PointerEvent details) => setState(() {
+              isHover = false;
+            }),
+            child: GestureDetector(
+              onPanUpdate: (DragUpdateDetails details) {
+                if (isHover && appState.floodMode == false) {
+                  draw(details, constraints, appState.intensity, appState.floodMode);
+                }
+              },
+              onTapDown: (TapDownDetails details) {
+                if (isHover) {
+                  draw(details, constraints, appState.intensity, appState.floodMode);
+                }
+              },
+              child: MetaTileDisplay(
+                tileData: metaTile.getTile(appState.tileIndexTile),
               ),
             ),
-          );
-        });
-      }
-    );
+          ),
+        );
+      });
+    });
   }
 
   draw(dynamic details, BoxConstraints constraints, int intensity, bool floodMode) {
