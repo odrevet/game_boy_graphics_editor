@@ -166,13 +166,20 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
       var hi = toBinary(values[index + 1]);
 
       var combined = "";
-      for (var index = 0; index < 8; index++) {
+      for (var index = 0; index < MetaTile.tileSize; index++) {
         combined += hi[index] + lo[index];
       }
 
-      for (var indexBis = 0; indexBis < 8 * 2; indexBis += 2) {
+      for (var indexBis = 0; indexBis < MetaTile.tileSize * 2; indexBis += 2) {
         data.add(int.parse(combined[indexBis] + combined[indexBis + 1], radix: 2));
       }
+    }
+
+    // reorder tile data
+
+    // if data is too small, resize it to fit the metaTile dimensions
+    if(data.length < state.width * state.height){
+      data.addAll(List.filled(state.width * state.height - data.length, 0));
     }
 
     List<int> reorderedData = List.filled(data.length, 0);
@@ -183,10 +190,8 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     for (int tileIndex = 0; tileIndex < data.length ~/ MetaTile.nbPixelPerTile; tileIndex++) {
       int patternIndex = pattern[tileIndex % pattern.length];
 
-
       int metaTileIndex = tileIndex ~/ nbTilePerMetaTile;
       int pixel = patternIndex * MetaTile.nbPixelPerTile;
-      print("$metaTileIndex $tileIndex $pixel $metaTileIndex ${state.width * state.height * metaTileIndex}");
       for (int col = 0; col < MetaTile.tileSize; col++) {
         int start = pixel + col * MetaTile.tileSize + (metaTileIndex * state.width * state.height);
         int end = start + MetaTile.tileSize;
