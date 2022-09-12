@@ -104,7 +104,8 @@ extern unsigned char $name[];""";
       final tileRowIndex = (pixelIndex ~/ graphics.width) % MetaTile.tileSize;
       final Iterable<int> rowData =
           graphics.data.sublist(pixelIndex, pixelIndex + MetaTile.tileSize);
-      final int start = patternIndex * MetaTile.nbPixelPerTile + tileRowIndex * MetaTile.tileSize;
+      final metaTileIndex = pixelIndex ~/ (graphics.width * graphics.height);
+      final int start = (patternIndex * MetaTile.nbPixelPerTile) + (tileRowIndex * MetaTile.tileSize) + (metaTileIndex * graphics.width * graphics.height);
       final int end = start + MetaTile.tileSize;
       reorderedData.setRange(start, end, rowData);
     }
