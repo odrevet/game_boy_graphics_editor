@@ -63,22 +63,50 @@ class GBDKConverter extends SourceConverter {
 extern unsigned char $name[];""";
   }
 
+  List<int> reorderData(List<int> data, int width, int height) {
+    // if data is too small, resize it to fit the metaTile dimensions
+    if (data.length < width * height) {
+      data.addAll(List.filled(width * height - data.length, 0));
+    }
+
+    List<int> reorderedData = List.filled(data.length, 0);
+    var pattern = getPattern(width, height);
+    int nbTilePerRow = (width ~/ MetaTile.tileSize);
+    int nbTilePerMetaTile = (width * height) ~/ MetaTile.nbPixelPerTile;
+
+    for (int tileIndex = 0; tileIndex < data.length ~/ MetaTile.nbPixelPerTile; tileIndex++) {
+      int patternIndex = pattern[tileIndex % pattern.length];
+      int metaTileIndex = tileIndex ~/ nbTilePerMetaTile;
+      int pixel = patternIndex * MetaTile.nbPixelPerTile;
+      for (int col = 0; col < MetaTile.tileSize; col++) {
+        int start = pixel + col * MetaTile.tileSize + (metaTileIndex * width * height);
+        int end = start + MetaTile.tileSize;
+        var row = data.sublist(start, end);
+        int reorderedPixel = ((tileIndex % nbTilePerRow) * MetaTile.tileSize) +
+            (tileIndex ~/ nbTilePerRow).floor() * MetaTile.nbPixelPerTile * nbTilePerRow +
+            col * width;
+        reorderedData.setRange(reorderedPixel, reorderedPixel + MetaTile.tileSize, row);
+      }
+    }
+
+    return reorderedData;
+  }
+
   List<int> flatten(Graphics graphics) {
-    List<int> reorderedData = [];
-    for (int pixelIndex = 0;
-        pixelIndex < graphics.data.length;
-        pixelIndex += graphics.height * graphics.width) {
-      getPattern(graphics.width, graphics.height).forEach((patternIndex) {
-        int nbTilePerRow = (graphics.width ~/ MetaTile.tileSize);
-        int pixel = ((patternIndex % nbTilePerRow) * MetaTile.tileSize) +
-            (patternIndex ~/ nbTilePerRow).floor() * MetaTile.nbPixelPerTile * nbTilePerRow;
-        for (int col = 0; col < MetaTile.tileSize; col++) {
-          int start = pixelIndex + pixel + col * graphics.width;
-          int end = start + MetaTile.tileSize;
-          var row = graphics.data.sublist(start, end);
-          reorderedData = [...reorderedData, ...row];
-        }
-      });
+    List<int> reorderedData = List.filled(graphics.data.length, 0, growable: true);
+    var pattern = getPattern(graphics.width, graphics.height);
+    final int nbTilePerRow = (graphics.width ~/ MetaTile.tileSize);
+    for (int pixelIndex = 0; pixelIndex < graphics.data.length; pixelIndex += MetaTile.tileSize) {
+      final int rowIndex = pixelIndex ~/ (nbTilePerRow * MetaTile.nbPixelPerTile);
+      final int colIndex = (pixelIndex ~/ MetaTile.tileSize) % nbTilePerRow;
+      final int tileIndex = colIndex + rowIndex * nbTilePerRow;
+      final int patternIndex = pattern[tileIndex % pattern.length];
+      final tileRowIndex = (pixelIndex ~/ graphics.width) % MetaTile.tileSize;
+      final Iterable<int> rowData =
+          graphics.data.sublist(pixelIndex, pixelIndex + MetaTile.tileSize);
+      final int start = patternIndex * MetaTile.nbPixelPerTile + tileRowIndex * MetaTile.tileSize;
+      final int end = start + MetaTile.tileSize;
+      reorderedData.setRange(start, end, rowData);
     }
     return reorderedData;
   }
@@ -123,35 +151,5 @@ extern unsigned char $name[];""";
     LineSplitter ls = const LineSplitter();
     List<String> lines = ls.convert(source);
     return lines.join();
-  }
-
-  List<int> reorderData(List<int> data, int width, int height) {
-    // if data is too small, resize it to fit the metaTile dimensions
-    if (data.length < width * height) {
-      data.addAll(List.filled(width * height - data.length, 0));
-    }
-
-    List<int> reorderedData = List.filled(data.length, 0);
-    var pattern = getPattern(width, height);
-    int nbTilePerRow = (width ~/ MetaTile.tileSize);
-    int nbTilePerMetaTile = (width * height) ~/ MetaTile.nbPixelPerTile;
-
-    for (int tileIndex = 0; tileIndex < data.length ~/ MetaTile.nbPixelPerTile; tileIndex++) {
-      int patternIndex = pattern[tileIndex % pattern.length];
-
-      int metaTileIndex = tileIndex ~/ nbTilePerMetaTile;
-      int pixel = patternIndex * MetaTile.nbPixelPerTile;
-      for (int col = 0; col < MetaTile.tileSize; col++) {
-        int start = pixel + col * MetaTile.tileSize + (metaTileIndex * width * height);
-        int end = start + MetaTile.tileSize;
-        var row = data.sublist(start, end);
-        int reorderedPixel = ((tileIndex % nbTilePerRow) * MetaTile.tileSize) +
-            (tileIndex ~/ nbTilePerRow).floor() * MetaTile.nbPixelPerTile * nbTilePerRow +
-            col * width;
-        reorderedData.setRange(reorderedPixel, reorderedPixel + MetaTile.tileSize, row);
-      }
-    }
-
-    return reorderedData;
   }
 }
