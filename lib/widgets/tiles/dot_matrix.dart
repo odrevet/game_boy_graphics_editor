@@ -49,8 +49,8 @@ class DotMatrixPainter extends CustomPainter {
       paint.color = pixel;
       canvas.drawRect(
           Rect.fromLTWH(
-            (index % width).floor().toDouble() * pixelSize,
-            (index / height).floor().toDouble() * pixelSize,
+            ((index % width).floorToDouble() * pixelSize),
+            ((index / width).floorToDouble() * pixelSize),
             pixelSize,
             pixelSize,
           ),
