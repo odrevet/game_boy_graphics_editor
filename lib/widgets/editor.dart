@@ -36,9 +36,6 @@ class _EditorState extends State<Editor> {
         builder: (context, metaTile) {
           TilesAppBar tileappbar = TilesAppBar(
             preferredSize: const Size.fromHeight(50.0),
-            metaTile: metaTile,
-            setTileMode: () => context.read<AppStateCubit>().toggleTileMode(),
-            toggleColorSet: () => context.read<AppStateCubit>().toggleColorSet(),
             loadTileFromFilePicker: loadTileFromFilePicker,
             saveGraphics: () =>
                 _saveGraphics(metaTile, context.read<AppStateCubit>().state.tileName, context),

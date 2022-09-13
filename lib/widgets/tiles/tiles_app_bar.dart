@@ -12,26 +12,15 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   final Size preferredSize;
 
-  final VoidCallback setTileMode;
-  final MetaTile metaTile;
-  final VoidCallback toggleColorSet;
   final Function loadTileFromFilePicker;
   final Function saveGraphics;
 
   const TilesAppBar({
     this.preferredSize = const Size.fromHeight(50.0),
     Key? key,
-    required this.metaTile,
-    required this.setTileMode,
-    required this.toggleColorSet,
     required this.loadTileFromFilePicker,
     required this.saveGraphics,
   }) : super(key: key);
-
-  Widget _setTileModeButton() {
-    return ElevatedButton.icon(
-        onPressed: setTileMode, icon: const Icon(Icons.wallpaper), label: const Text('Tile'));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +96,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
                         child: Row(
                           children: [
                             const Text("ColorSet"),
-                            TextButton(onPressed: toggleColorSet, child: const Text("DMG / Pocket"))
+                            TextButton(onPressed: () => context.read<AppStateCubit>().toggleColorSet(), child: const Text("DMG / Pocket"))
                           ],
                         ),
                       ),
@@ -117,7 +106,8 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
     ];
 
     return AppBar(
-      title: _setTileModeButton(),
+      title: ElevatedButton.icon(
+          onPressed: () => context.read<AppStateCubit>().toggleTileMode(), icon: const Icon(Icons.wallpaper), label: const Text('Tile')),
       actions: actions,
     );
   }
