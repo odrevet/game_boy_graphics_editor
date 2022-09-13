@@ -51,7 +51,7 @@ class AppState {
         backgroundName: backgroundName ?? this.backgroundName,
         floodMode: floodMode ?? this.floodMode,
         showGridBackground: showGridBackground ?? this.showGridBackground,
-        tileBuffer: tileBuffer ?? this.tileBuffer,
+        tileBuffer: tileBuffer ?? [...this.tileBuffer],
         colorSet: colorSet ?? this.colorSet,
       );
 }

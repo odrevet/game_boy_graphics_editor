@@ -40,6 +40,7 @@ class _TilesEditorState extends State<TilesEditor> {
                   {
                     context.read<MetaTileCubit>().addTile(hoverTileIndex);
                     context.read<AppStateCubit>().setSelectedTileIndex(++hoverTileIndex);
+                    Navigator.pop(contextMenuAreaContext);
                   }
                 },
               ),
@@ -49,20 +50,15 @@ class _TilesEditorState extends State<TilesEditor> {
                 onTap: () {
                   context.read<MetaTileCubit>().removeTile(hoverTileIndex);
                   context.read<AppStateCubit>().setSelectedTileIndex(--hoverTileIndex);
+                  Navigator.pop(contextMenuAreaContext);
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.copy),
                 title: const Text("Copy"),
                 onTap: () {
-                  setState(() {
-                    appState.tileBuffer.clear();
-                    /*for (var i = hoverTileIndex;
-                          i < hoverTileIndex + metaTile.nbTilePerMetaTile();
-                          i++) {
-                        appState.tileBuffer.addAll(metaTile.tileList[i].data);
-                      }*/
-                  });
+                  var tileData = metaTile.getMetaTile(hoverTileIndex);
+                  context.read<AppStateCubit>().setTileBuffer(tileData);
                   Navigator.pop(contextMenuAreaContext);
                 },
               ),
@@ -70,7 +66,7 @@ class _TilesEditorState extends State<TilesEditor> {
                 leading: const Icon(Icons.paste),
                 title: const Text("Paste"),
                 onTap: () {
-                  //context.read<MetaTileCubit>().paste(hoverTileIndex, appState.tileBuffer);
+                  context.read<MetaTileCubit>().setDataAtIndex(hoverTileIndex, appState.tileBuffer);
                   Navigator.pop(contextMenuAreaContext);
                 },
               ),

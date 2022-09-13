@@ -40,7 +40,7 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
                 }
               },
               child: MetaTileDisplay(
-                tileData: metaTile.getTile(appState.tileIndexTile),
+                tileData: metaTile.getMetaTile(appState.tileIndexTile),
               ),
             ),
           ),

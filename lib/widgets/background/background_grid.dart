@@ -50,7 +50,7 @@ class BackgroundGrid extends StatelessWidget {
       );
     } else {
       tileWidget = MetaTileDisplay(
-        tileData: metaTile.getTile(background.data[index]),
+        tileData: metaTile.getMetaTile(background.data[index]),
       );
     }
 

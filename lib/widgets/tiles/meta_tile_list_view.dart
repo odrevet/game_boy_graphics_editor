@@ -41,7 +41,7 @@ class MetaTileListView extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: MetaTileDisplay(
                         showGrid: false,
-                        tileData: context.read<MetaTileCubit>().state.getTile(index),
+                        tileData: context.read<MetaTileCubit>().state.getMetaTile(index),
                       ),
                     ),
                   ),

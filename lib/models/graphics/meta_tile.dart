@@ -22,7 +22,7 @@ class MetaTile extends Graphics {
 
   int get nbPixel => width * height;
 
-  List<int> getTile(int index) {
+  List<int> getMetaTile(int index) {
     return data.getRange(nbPixel * index, nbPixel * index + nbPixel).toList();
   }
 

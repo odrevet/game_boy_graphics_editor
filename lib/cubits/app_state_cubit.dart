@@ -14,6 +14,8 @@ class AppStateCubit extends Cubit<AppState> {
       emit(state.copyWith(backgroundName: backgroundName));
 
   void setSelectedTileIndex(index) => emit(state.copyWith(tileIndexTile: index));
+  
+  void setTileBuffer(tileBuffer) => emit(state.copyWith(tileBuffer: tileBuffer));
 
   void toggleTileMode() => emit(state.copyWith(tileMode: !state.tileMode));
 

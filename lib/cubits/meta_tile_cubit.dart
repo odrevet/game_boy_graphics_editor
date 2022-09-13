@@ -7,7 +7,11 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   setData(List<int> data) {
     emit(state.copyWith(data: data));
   }
-  
+
+  setDataAtIndex(int at, List<int> data) {
+    emit(state.copyWith(data: [...state.data]..setAll(at * state.width * state.height, data)));
+  }
+
   List<int> _shift(List<int> list, int v) {
     var i = v % list.length;
     return list.sublist(i)..addAll(list.sublist(0, i));
@@ -139,5 +143,8 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     emit(metaTile);
   }
 
-  void paste(int tileIndex, tileBuffer) {}
+  void setTile(int tileIndex, List<int> tileData) {
+    var data = [...state.data];
+    for (int col = 0; col < MetaTile.tileSize; col++) {}
+  }
 }
