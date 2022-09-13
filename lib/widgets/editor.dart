@@ -90,7 +90,7 @@ class _EditorState extends State<Editor> {
     try {
       context.read<AppStateCubit>().setTileName(graphicElement.name);
       var data = GBDKConverter().fromSource(graphicElement.values.split(','));
-      data = GBDKConverter().reorderData(data, context.read<MetaTileCubit>().state.width,
+      data = GBDKConverter().reorderFromSourceToCanvas(data, context.read<MetaTileCubit>().state.width,
           context.read<MetaTileCubit>().state.height);
       context.read<MetaTileCubit>().setData(data);
     } catch (e) {

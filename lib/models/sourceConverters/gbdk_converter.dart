@@ -63,7 +63,7 @@ class GBDKConverter extends SourceConverter {
 extern unsigned char $name[];""";
   }
 
-  List<int> reorderData(List<int> data, int width, int height) {
+  List<int> reorderFromSourceToCanvas(List<int> data, int width, int height) {
     // if data is too small, resize it to fit the metaTile dimensions
     if (data.length < width * height) {
       data.addAll(List.filled(width * height - data.length, 0));
@@ -92,7 +92,7 @@ extern unsigned char $name[];""";
     return reorderedData;
   }
 
-  List<int> flatten(Graphics graphics) {
+  List<int> reorderFromCanvasToSource(Graphics graphics) {
     List<int> reorderedData = List.filled(graphics.data.length, 0, growable: true);
     var pattern = getPattern(graphics.width, graphics.height);
     final int nbTilePerRow = (graphics.width ~/ MetaTile.tileSize);
@@ -114,7 +114,7 @@ extern unsigned char $name[];""";
 
   @override
   String toSource(Graphics graphics, String name) =>
-      "unsigned char $name[] =\n{${formatOutput(getRawTile(flatten(graphics)))}\n};";
+      "unsigned char $name[] =\n{${formatOutput(getRawTile(reorderFromCanvasToSource(graphics)))}\n};";
 
   List<GraphicElement> readGraphicElementsFromSource(String source) {
     var arrayElements = <GraphicElement>[];
