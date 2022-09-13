@@ -25,7 +25,7 @@ class AppStateCubit extends Cubit<AppState> {
 
   void toggleGridTile() => emit(state.copyWith(showGridTile: !state.showGridTile));
 
-  void toggleColorSet() => emit(state.copyWith(colorSet: colorsPocket));
+  void toggleColorSet() => emit(state.copyWith(colorSet: state.colorSet == colorsPocket ? colorsDMG : colorsPocket));
 
   void toggleGridBackground() =>
       emit(state.copyWith(showGridBackground: !state.showGridBackground));
