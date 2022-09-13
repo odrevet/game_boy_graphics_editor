@@ -1,5 +1,6 @@
 import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
@@ -206,7 +207,11 @@ class _TilesEditorState extends State<TilesEditor> {
                   ),
                 ),
                 TextFormField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('^[a-zA-Z0-9_]*')),
+                    ],
                     decoration: const InputDecoration(labelText: 'Name'),
+                    //key: Key(appState.tileName),
                     initialValue: appState.tileName,
                     onChanged: (text) => context.read<AppStateCubit>().setTileName(text)),
                 Expanded(
