@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 
-import '../../models/background.dart';
-import '../../models/download_stub.dart' if (dart.library.html) '../../download.dart';
 import '../../models/file_utils.dart';
+import '../../models/graphics/background.dart';
 
 class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
@@ -41,8 +40,8 @@ class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
               icon: const Icon(Icons.download),
               tooltip: 'Download',
               onPressed: () {
-                download(background.toHeader(), '${background.name}.h');
-                download(background.toSource(), '${background.name}.c');
+                //download(background.toHeader(), '${background.name}.h');
+                //download(background.toSource(), '${background.name}.c');
               })
           : IconButton(
               icon: const Icon(Icons.save),

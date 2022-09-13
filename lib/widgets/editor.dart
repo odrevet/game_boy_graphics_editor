@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
+import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
-import 'package:game_boy_graphics_editor/models/meta_tile.dart';
-import 'package:game_boy_graphics_editor/models/tile.dart';
+import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
+import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_converter.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_app_bar.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_editor.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tiles_app_bar.dart';
@@ -13,9 +14,9 @@ import 'package:game_boy_graphics_editor/widgets/tiles/tiles_editor.dart';
 import 'package:image/image.dart' as image;
 
 import '../models/app_state.dart';
-import '../models/background.dart';
 import '../models/file_utils.dart';
-import '../models/graphics.dart';
+import '../models/graphics/graphics.dart';
+import '../models/sourceConverters/source_converter.dart';
 
 class Editor extends StatefulWidget {
   const Editor({Key? key}) : super(key: key);
@@ -25,13 +26,8 @@ class Editor extends StatefulWidget {
 }
 
 class _EditorState extends State<Editor> {
-  late Background background;
-
   @override
-  void initState() {
-    super.initState();
-    background = Background(width: 20, height: 18, name: "Background");
-  }
+  void initState();
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +40,16 @@ class _EditorState extends State<Editor> {
             setTileMode: () => context.read<AppStateCubit>().toggleTileMode(),
             toggleColorSet: () => context.read<AppStateCubit>().toggleColorSet(),
             loadTileFromFilePicker: loadTileFromFilePicker,
-            saveGraphics: _saveGraphics,
+            saveGraphics: () =>
+                _saveGraphics(metaTile, context.read<AppStateCubit>().state.tileName, context),
           );
 
           BackgroundAppBar backgroundappbar = BackgroundAppBar(
             preferredSize: const Size.fromHeight(50.0),
             setBackgroundFromSource: _setBackgroundFromSource,
-            background: background,
-            saveGraphics: _saveGraphics,
+            background: context.read<BackgroundCubit>().state,
+            saveGraphics: () => _saveGraphics(context.read<BackgroundCubit>().state,
+                context.read<AppStateCubit>().state.backgroundName, context),
           );
 
           dynamic appbar;
@@ -64,13 +62,9 @@ class _EditorState extends State<Editor> {
           return Scaffold(
               appBar: appbar,
               body: appState.tileMode
-                  ? TilesEditor(
-                      preview: Background(width: 4, height: 4, fill: appState.metaTileIndexTile))
+                  ? const TilesEditor()
                   : BackgroundEditor(
-                      background: background,
-                      colorSet: appState.colorSet,
                       tiles: metaTile,
-                      selectedTileIndex: appState.tileIndexBackground,
                       onTapTileListView: (index) =>
                           context.read<AppStateCubit>().setTileIndexBackground(index),
                       showGrid: appState.showGridBackground,
@@ -80,48 +74,50 @@ class _EditorState extends State<Editor> {
     );
   }
 
-  _saveGraphics(Graphics graphics, BuildContext context) {
-    saveToDirectory(graphics).then((selectedDirectory) {
+  _saveGraphics(Graphics graphics, String name, BuildContext context) {
+    saveToDirectory(graphics, name).then((selectedDirectory) {
       if (selectedDirectory != null) {
         var snackBar = SnackBar(
-          content: Text("${graphics.name}.h and ${graphics.name}.c saved under $selectedDirectory"),
+          content: Text("$name.h and $name.c saved under $selectedDirectory"),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     });
   }
 
-  bool _setMetaTile(GraphicElement graphicElement, metaTile) {
+  bool _setMetaTile(GraphicElement graphicElement) {
     bool hasLoaded = true;
-    setState(() {
-      try {
-        metaTile.setData(graphicElement.values.split(','));
-        metaTile.name = graphicElement.name;
-      } catch (e) {
-        hasLoaded = false;
-      }
+    try {
+      context.read<AppStateCubit>().setTileName(graphicElement.name);
+      var data = GBDKConverter().fromSource(graphicElement.values.split(','));
+      data = GBDKConverter().reorderFromSourceToCanvas(data, context.read<MetaTileCubit>().state.width,
+          context.read<MetaTileCubit>().state.height);
+      context.read<MetaTileCubit>().setData(data);
+    } catch (e) {
+      print("ERROR $e");
+      hasLoaded = false;
+    }
 
-      if (hasLoaded) context.read<AppStateCubit>().setSelectedTileIndex(0);
-      context.read<MetaTileCubit>().setDimensions(8, 8);
-    });
+    if (hasLoaded) context.read<AppStateCubit>().setSelectedTileIndex(0);
+
     return hasLoaded;
   }
 
   void _setBackgroundFromSource(String source) => setState(() {
-        source = background.formatSource(source);
+        /*source = background.formatSource(source);
         background.fromSource(source);
-        context.read<AppStateCubit>().setTileIndexBackground(0);
+        context.read<AppStateCubit>().setTileIndexBackground(0);*/
       });
 
-  bool loadTileFromFilePicker(result, metaTile) {
+  bool loadTileFromFilePicker(result) {
     bool isPng = result.names[0]!.endsWith('.png');
-    late bool hasLoaded;
+    bool hasLoaded = false;
     if (isPng) {
       var img = image.decodePng(File(result.paths[0]!).readAsBytesSync())!;
 
       img = image.grayscale(img);
 
-      if (img.width % Tile.size != 0 || img.height % Tile.size != 0) {
+      /*if (img.width % Tile.size != 0 || img.height % Tile.size != 0) {
         var snackBar = const SnackBar(
           content: Text("Image height and width should be multiple of ${Tile.size}"),
         );
@@ -143,13 +139,13 @@ class _EditorState extends State<Editor> {
           }
           metaTile.tileList.add(tile);
         }
-      }
+      }*/
 
       hasLoaded = true;
     } else {
       readBytes(result).then((source) {
-        source = metaTile.formatSource(source);
-        var graphicsElements = metaTile.fromGBDKSource(source);
+        source = GBDKConverter().formatSource(source);
+        var graphicsElements = GBDKConverter().readGraphicElementsFromSource(source);
         if (graphicsElements.length > 1) {
           showDialog(
               context: context,
@@ -165,7 +161,7 @@ class _EditorState extends State<Editor> {
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
                             onTap: () {
-                              hasLoaded = _setMetaTile(graphicsElements[index], metaTile);
+                              hasLoaded = _setMetaTile(graphicsElements[index]);
                               Navigator.pop(context);
                             },
                             title: Text(graphicsElements[index].name),
@@ -175,7 +171,7 @@ class _EditorState extends State<Editor> {
                     ),
                   ));
         } else if (graphicsElements.length == 1) {
-          hasLoaded = _setMetaTile(graphicsElements.first, metaTile);
+          hasLoaded = _setMetaTile(graphicsElements.first);
         } else {
           hasLoaded = false;
         }

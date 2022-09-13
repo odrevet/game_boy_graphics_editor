@@ -1,55 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 
-import '../../models/meta_tile.dart';
 import 'meta_tile_display.dart';
 
-class MetaTileListView extends StatefulWidget {
-  final MetaTile metaTile;
-  final int selectedTile;
+class MetaTileListView extends StatelessWidget {
   final Function onTap;
   final Function? onHover;
-  final List<Color> colorSet;
+  final int selectedTile;
 
   const MetaTileListView({
     Key? key,
-    required this.metaTile,
-    required this.selectedTile,
     required this.onTap,
-    required this.colorSet,
     this.onHover,
+    required this.selectedTile,
   }) : super(key: key);
 
   @override
-  State<MetaTileListView> createState() => _MetaTileListViewState();
-}
-
-class _MetaTileListViewState extends State<MetaTileListView> {
-  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 180,
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: widget.metaTile.tileList.length ~/ widget.metaTile.nbTilePerMetaTile(),
-          itemBuilder: (context, index) {
-            return MouseRegion(
-              onHover: (_) => widget.onHover != null ? widget.onHover!(index) : null,
-              child: ListTile(
-                onTap: () => widget.onTap(index),
-                leading: Text(
-                  "$index",
-                  style: widget.selectedTile == index
-                      ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
-                      : null,
-                ),
-                title: MetaTileDisplay(
-                    metaTile: widget.metaTile,
-                    showGrid: false,
-                    metaTileIndex: index,
-                    colorSet: widget.colorSet),
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: context.read<MetaTileCubit>().state.data.length ~/
+          (context.read<MetaTileCubit>().state.height * context.read<MetaTileCubit>().state.width),
+      itemBuilder: (context, index) {
+        return InkWell(
+          onTap: () => onTap(index),
+          child: MouseRegion(
+            onHover: (_) => onHover != null ? onHover!(index) : null,
+            child: Card(
+              child: Column(
+                children: [
+                  Text(index.toString(),
+                      style: selectedTile == index
+                          ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
+                          : null),
+                  SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: MetaTileDisplay(
+                        showGrid: false,
+                        tileData: context.read<MetaTileCubit>().state.getMetaTile(index),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            );
-          },
-        ));
+            ),
+          ),
+        );
+      },
+    );
   }
 }

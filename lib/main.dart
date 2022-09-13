@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
+import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/widgets/editor.dart';
 
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
         ),
         home: MultiBlocProvider(providers: [
           BlocProvider(create: (_) => AppStateCubit()),
-          BlocProvider(create: (_) => MetaTileCubit())
+          BlocProvider(create: (_) => MetaTileCubit()),
+          BlocProvider(create: (_) => BackgroundCubit())
         ], child: const Editor()));
   }
 }

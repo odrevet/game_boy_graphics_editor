@@ -5,9 +5,8 @@ import 'package:game_boy_graphics_editor/widgets/tiles/tile_dimensions_dropdown.
 
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
-import '../../models/download_stub.dart' if (dart.library.html) '../../download.dart';
 import '../../models/file_utils.dart';
-import '../../models/meta_tile.dart';
+import '../../models/graphics/meta_tile.dart';
 
 class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
@@ -67,13 +66,13 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
               icon: const Icon(Icons.download),
               tooltip: 'Download',
               onPressed: () {
-                download(metaTile.toHeader(), '${metaTile.name}.h');
-                download(metaTile.toSource(), '${metaTile.name}.c');
+                //download(metaTile.toHeader(), '${metaTile.name}.h');
+                //download(metaTile.toSource(), '${metaTile.name}.c');
               })
           : IconButton(
               icon: const Icon(Icons.save),
               tooltip: 'Save tiles as',
-              onPressed: () => saveGraphics(metaTile, context),
+              onPressed: () => saveGraphics(),
             ),
       IconButton(
         icon: const Icon(Icons.folder_open),
@@ -86,7 +85,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
                 content: Text("Not loaded"),
               );
             } else {
-              final bool hasLoaded = loadTileFromFilePicker(result, metaTile);
+              final bool hasLoaded = loadTileFromFilePicker(result);
               snackBar = SnackBar(
                 content: Text(hasLoaded ? "Data loaded" : "Data not loaded"),
               );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:game_boy_graphics_editor/models/background.dart';
-import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_display.dart';
+import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 
-import '../../models/meta_tile.dart';
+import '../../models/graphics/meta_tile.dart';
+import '../tiles/meta_tile_display.dart';
 
 class BackgroundGrid extends StatelessWidget {
   final Background background;
@@ -10,13 +10,11 @@ class BackgroundGrid extends StatelessWidget {
   final Function? onTap;
   final Function? onHover;
   final bool showGrid;
-  final List<Color> colorSet;
 
   const BackgroundGrid({
     Key? key,
     required this.background,
     required this.metaTile,
-    required this.colorSet,
     this.onTap,
     this.onHover,
     this.showGrid = false,
@@ -40,7 +38,7 @@ class BackgroundGrid extends StatelessWidget {
   Widget _build(BuildContext context, int index) {
     Widget tileWidget;
 
-    if (background.data[index] >= metaTile.tileList.length) {
+    if (background.data[index] >= metaTile.data.length) {
       tileWidget = Container(
         alignment: Alignment.center,
         child: const Text(
@@ -52,10 +50,8 @@ class BackgroundGrid extends StatelessWidget {
       );
     } else {
       tileWidget = MetaTileDisplay(
-          colorSet: colorSet,
-          metaTile: metaTile,
-          showGrid: false,
-          metaTileIndex: background.data[index]);
+        tileData: metaTile.getMetaTile(background.data[index]),
+      );
     }
 
     if (showGrid) {
@@ -80,4 +76,3 @@ class BackgroundGrid extends StatelessWidget {
     }
   }
 }
-

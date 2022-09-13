@@ -1,180 +1,150 @@
-import 'package:game_boy_graphics_editor/models/meta_tile.dart';
-import 'package:game_boy_graphics_editor/models/tile.dart';
+import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
 class MetaTileCubit extends ReplayCubit<MetaTile> {
-  MetaTileCubit() : super(MetaTile(tileList: [])..tileList.add(Tile()));
+  MetaTileCubit() : super(MetaTile(height: 8, width: 8));
 
-  setPixel(int rowIndex, int colIndex, metaTileIndex, intensity) {
-    if (state.getPixel(rowIndex, colIndex, metaTileIndex) != intensity) {
-      emit(state.copyWith()..setPixel(rowIndex, colIndex, metaTileIndex, intensity));
-    }
+  setData(List<int> data) {
+    emit(state.copyWith(data: data));
   }
 
-  flood(int rowIndex, int colIndex, int metaTileIndex, int intensity, int targetColor) =>
-      emit(state.copyWith()..flood(metaTileIndex, intensity, rowIndex, colIndex, targetColor));
+  setDataAtIndex(int at, List<int> data) {
+    emit(state.copyWith(data: [...state.data]..setAll(at * state.width * state.height, data)));
+  }
 
   List<int> _shift(List<int> list, int v) {
     var i = v % list.length;
     return list.sublist(i)..addAll(list.sublist(0, i));
   }
 
-  void rightShift(int selectedMetaTileIndexTile) {
+  flood(int rowIndex, int colIndex, int metaTileIndex, int intensity, int targetColor) =>
+      emit(state.copyWith()..flood(metaTileIndex, intensity, rowIndex, colIndex, targetColor));
+
+  void setPixel(int rowIndex, int colIndex, int tileIndex, int intensity) {
+    List<int> tileData = [...state.data];
+    tileData[(colIndex * state.width + rowIndex) + state.nbPixel * tileIndex] = intensity;
+    emit(state.copyWith(data: tileData));
+  }
+
+  void setDimensions(int width, int height) => emit(state.copyWith(width: width, height: height));
+
+  void addTile(int index) {
+    List<int> tileData = [...state.data];
+    var newTile = List.generate(state.width * state.height, (index) => 0);
+    tileData.insertAll((index + 1) * state.nbPixel, newTile);
+    emit(state.copyWith(data: tileData));
+  }
+
+  void removeTile(int tileIndex) {
+    List<int> tileData = [...state.data];
+    tileData.removeRange((tileIndex) * state.nbPixel, tileIndex * state.nbPixel + state.nbPixel);
+    emit(state.copyWith(data: tileData));
+  }
+
+  void rightShift(int tileIndex, int index) {
     var metaTile = state.copyWith();
 
     for (int indexRow = 0; indexRow < metaTile.height; indexRow++) {
-      var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow);
+      var row = metaTile.getRow(tileIndex, indexRow);
       row.replaceRange(0, row.length, _shift(row, -1));
-      metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
+      metaTile.setRow(tileIndex, indexRow, row);
     }
 
     emit(metaTile);
   }
 
-  void leftShift(int selectedMetaTileIndexTile) {
+  void leftShift(int tileIndex, int index) {
     var metaTile = state.copyWith();
 
     for (int indexRow = 0; indexRow < metaTile.height; indexRow++) {
-      var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow);
+      var row = metaTile.getRow(tileIndex, indexRow);
       row.replaceRange(0, row.length, _shift(row, 1));
-      metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
+      metaTile.setRow(tileIndex, indexRow, row);
     }
 
     emit(metaTile);
   }
 
-  void upShift(int selectedMetaTileIndexTile) {
+  void upShift(int tileIndex, int index) {
     var metaTile = state.copyWith();
-    var rowTemp = metaTile.getRow(selectedMetaTileIndexTile, 0);
+    var rowTemp = metaTile.getRow(tileIndex, 0);
 
     for (int indexRow = 0; indexRow < metaTile.height - 1; indexRow++) {
-      var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow + 1);
-      metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
+      var row = metaTile.getRow(tileIndex, indexRow + 1);
+      metaTile.setRow(tileIndex, indexRow, row);
     }
 
-    metaTile.setRow(selectedMetaTileIndexTile, metaTile.height - 1, rowTemp);
-
+    metaTile.setRow(tileIndex, metaTile.height - 1, rowTemp);
     emit(metaTile);
   }
 
-  void downShift(int selectedMetaTileIndexTile) {
+  void downShift(int tileIndex, int index) {
     var metaTile = state.copyWith();
-    var rowTemp = metaTile.getRow(selectedMetaTileIndexTile, metaTile.height - 1);
+    var rowTemp = metaTile.getRow(tileIndex, metaTile.height - 1);
 
     for (int indexRow = metaTile.height - 1; indexRow > 0; indexRow--) {
-      var row = metaTile.getRow(selectedMetaTileIndexTile, indexRow - 1);
-      metaTile.setRow(selectedMetaTileIndexTile, indexRow, row);
+      var row = metaTile.getRow(tileIndex, indexRow - 1);
+      metaTile.setRow(tileIndex, indexRow, row);
     }
 
-    metaTile.setRow(selectedMetaTileIndexTile, 0, rowTemp);
+    metaTile.setRow(tileIndex, 0, rowTemp);
     emit(metaTile);
   }
 
-  flipHorizontal(int selectedMetaTileIndexTile) {
+  flipHorizontal(int tileIndex) {
     var metaTile = state.copyWith();
-
-    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
-      int j = selectedMetaTileIndexTile * metaTile.nbTilePerMetaTile() + metaTile.getPattern()[i];
-      metaTile.tileList[j] = Tile();
-    }
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
-        int intensity =
-            state.getPixel(rowIndex, state.width - 1 - colIndex, selectedMetaTileIndexTile);
-        metaTile.setPixel(rowIndex, colIndex, selectedMetaTileIndexTile, intensity);
+        int intensity = state.getPixel(rowIndex, state.width - 1 - colIndex, tileIndex);
+        metaTile.setPixel(rowIndex, colIndex, tileIndex, intensity);
       }
     }
 
     emit(metaTile);
   }
 
-  flipVertical(int selectedMetaTileIndexTile) {
+  flipVertical(int tileIndex) {
     var metaTile = state.copyWith();
-
-    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
-      int j = selectedMetaTileIndexTile * metaTile.nbTilePerMetaTile() + metaTile.getPattern()[i];
-      metaTile.tileList[j] = Tile();
-    }
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
-        int intensity =
-            state.getPixel(state.width - 1 - colIndex, rowIndex, selectedMetaTileIndexTile);
-        metaTile.setPixel(colIndex, rowIndex, selectedMetaTileIndexTile, intensity);
+        int intensity = state.getPixel(state.width - 1 - colIndex, rowIndex, tileIndex);
+        metaTile.setPixel(colIndex, rowIndex, tileIndex, intensity);
       }
     }
 
     emit(metaTile);
   }
 
-  void rotateRight(int selectedMetaTileIndexTile) {
+  void rotateRight(int tileIndex) {
     var metaTile = state.copyWith();
-
-    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
-      int j = selectedMetaTileIndexTile * metaTile.nbTilePerMetaTile() + metaTile.getPattern()[i];
-      metaTile.tileList[j] = Tile();
-    }
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
-        int intensity =
-            state.getPixel(rowIndex, state.width - 1 - colIndex, selectedMetaTileIndexTile);
-        metaTile.setPixel(colIndex, rowIndex, selectedMetaTileIndexTile, intensity);
+        int intensity = state.getPixel(rowIndex, state.width - 1 - colIndex, tileIndex);
+        metaTile.setPixel(colIndex, rowIndex, tileIndex, intensity);
       }
     }
 
     emit(metaTile);
   }
 
-  void rotateLeft(int selectedMetaTileIndexTile) {
+  void rotateLeft(int tileIndex) {
     var metaTile = state.copyWith();
-
-    for (int i = 0; i < metaTile.nbTilePerMetaTile(); i++) {
-      int j = selectedMetaTileIndexTile * metaTile.nbTilePerMetaTile() + metaTile.getPattern()[i];
-      metaTile.tileList[j] = Tile();
-    }
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
-        int intensity =
-            state.getPixel(state.width - 1 - colIndex, rowIndex, selectedMetaTileIndexTile);
-        metaTile.setPixel(rowIndex, colIndex, selectedMetaTileIndexTile, intensity);
+        int intensity = state.getPixel(state.width - 1 - colIndex, rowIndex, tileIndex);
+        metaTile.setPixel(rowIndex, colIndex, tileIndex, intensity);
       }
     }
 
     emit(metaTile);
   }
 
-  void setDimensions(width, height) {
-    var metaTile = state.copyWith(width: width, height: height);
-    int numberOfTilesNecessary = metaTile.nbTilePerMetaTile() - metaTile.tileList.length;
-
-    for (int i = 0; i < numberOfTilesNecessary; i++) {
-      metaTile.tileList.add(Tile());
-    }
-
-    emit(metaTile);
+  void setTile(int tileIndex, List<int> tileData) {
+    var data = [...state.data];
+    for (int col = 0; col < MetaTile.tileSize; col++) {}
   }
-
-  void paste(int index, tileBuffer) {
-    var metaTile = state.copyWith();
-
-    for (var i = 0; i < tileBuffer.length; i++) {
-      int tileIndex = i ~/ Tile.pixelPerTile + index * metaTile.nbTilePerMetaTile();
-      metaTile.tileList[tileIndex].data[i % Tile.pixelPerTile] = tileBuffer[i];
-    }
-
-    emit(metaTile);
-  }
-
-  void insert(int index) => emit(state.copyWith(
-      tileList: state.tileList
-        ..insertAll(index * state.nbTilePerMetaTile(),
-            List<Tile>.generate(state.nbTilePerMetaTile(), (_) => Tile()))));
-
-  void remove(int index) => emit(state.copyWith(
-      tileList: state.tileList
-        ..removeRange(index * state.nbTilePerMetaTile(),
-            index * state.nbTilePerMetaTile() + state.nbTilePerMetaTile())));
 }

@@ -1,34 +1,32 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:game_boy_graphics_editor/models/graphics.dart';
 
 import '../models/download_stub.dart' if (dart.library.html) '../download.dart';
 import '../models/file_utils.dart';
 
 class SourceDisplay extends StatelessWidget {
-  final Graphics graphics;
+  final String name;
+  final String source;
+  final String extension;
 
-  const SourceDisplay({Key? key, required this.graphics}) : super(key: key);
+  const SourceDisplay({Key? key, required this.name, required this.source, required this.extension})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String headerFilename = "${graphics.name}.h";
-    String sourceFilename = "${graphics.name}.c";
-    const double fontSize = 12;
-
     return Column(
       children: [
         Row(children: [
-          Text(headerFilename),
+          Text("$name$extension"),
           IconButton(
             iconSize: 18,
             icon: const Icon(Icons.copy),
             onPressed: () {
               final snackBar = SnackBar(
-                content: Text("Contents of $headerFilename copied into clipboard"),
+                content: Text("Contents of $name copied into clipboard"),
               );
-              Clipboard.setData(ClipboardData(text: graphics.toHeader()));
+              Clipboard.setData(ClipboardData(text: source));
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             },
           ),
@@ -36,52 +34,20 @@ class SourceDisplay extends StatelessWidget {
               ? IconButton(
                   iconSize: 18,
                   icon: const Icon(Icons.download),
-                  onPressed: () => download(graphics.toHeader(), headerFilename),
+                  onPressed: () => download(source, name),
                 )
               : IconButton(
                   iconSize: 18,
                   icon: const Icon(Icons.save_as),
-                  onPressed: () => saveFile(graphics.toHeader(), ['.h'], headerFilename),
-                ),
-        ]),
-        Align(
-            alignment: Alignment.topLeft,
-            child: SelectableText(graphics.toHeader(),
-                style: const TextStyle(
-                  fontSize: fontSize,
-                ))),
-        const Divider(),
-        Row(children: [
-          Text("${graphics.name}.c"),
-          IconButton(
-            iconSize: 18,
-            icon: const Icon(Icons.copy),
-            onPressed: () {
-              final snackBar = SnackBar(
-                content: Text("Contents of ${graphics.name}.c copied into clipboard"),
-              );
-              Clipboard.setData(ClipboardData(text: graphics.toSource()));
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-          ),
-          kIsWeb
-              ? IconButton(
-                  iconSize: 18,
-                  icon: const Icon(Icons.download),
-                  onPressed: () => download(graphics.toSource(), sourceFilename),
-                )
-              : IconButton(
-                  iconSize: 18,
-                  icon: const Icon(Icons.save_as),
-                  onPressed: () => saveFile(graphics.toSource(), ['.c'], sourceFilename),
+                  onPressed: () => saveFile(source, [extension], name),
                 ),
         ]),
         Align(
             alignment: Alignment.topLeft,
             child: SelectableText(
-              graphics.toSource(),
+              source,
               style: const TextStyle(
-                fontSize: fontSize,
+                fontSize: 12,
               ),
             )),
       ],
