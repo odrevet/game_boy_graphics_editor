@@ -2,10 +2,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_tile_converter.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tile_dimensions_dropdown.dart';
 
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
+import '../../models/download_stub.dart';
 import '../../models/file_utils.dart';
 
 class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
@@ -55,8 +57,14 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
               icon: const Icon(Icons.download),
               tooltip: 'Download',
               onPressed: () {
-                //download(metaTile.toHeader(), '${metaTile.name}.h');
-                //download(metaTile.toSource(), '${metaTile.name}.c');
+                download(
+                    GBDKTileConverter().toHeader(context.read<MetaTileCubit>().state,
+                        context.read<AppStateCubit>().state.tileName),
+                    '${context.read<AppStateCubit>().state.tileName}.h');
+                download(
+                    GBDKTileConverter().toSource(context.read<MetaTileCubit>().state,
+                        context.read<AppStateCubit>().state.tileName),
+                    '${context.read<AppStateCubit>().state.tileName}.c');
               })
           : IconButton(
               icon: const Icon(Icons.save),
@@ -108,15 +116,13 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
                                       context.read<AppStateCubit>().setTileName(text)),
                               const Text("Display"),
                               TextButton(
-                                  onPressed: () =>
-                                      context.read<AppStateCubit>().toggleColorSet(),
+                                  onPressed: () => context.read<AppStateCubit>().toggleColorSet(),
                                   child: const Text("DMG / Pocket")),
                               TextButton(
                                   onPressed: () => context
                                       .read<AppStateCubit>()
                                       .toggleDisplayExportPreviewTile(),
                                   child: const Text("Display Export Preview"))
-
                             ],
                           ),
                         ),

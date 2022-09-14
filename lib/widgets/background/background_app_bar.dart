@@ -6,8 +6,9 @@ import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_properties.dart';
 
+import '../../models/download.dart';
 import '../../models/file_utils.dart';
-import '../../models/graphics/background.dart';
+import '../../models/sourceConverters/gbdk_background_converter.dart';
 
 class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
@@ -41,8 +42,14 @@ class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
               icon: const Icon(Icons.download),
               tooltip: 'Download',
               onPressed: () {
-                //download(background.toHeader(), '${background.name}.h');
-                //download(background.toSource(), '${background.name}.c');
+                download(
+                    GBDKBackgroundConverter().toHeader(context.read<BackgroundCubit>().state,
+                        context.read<AppStateCubit>().state.backgroundName),
+                    '${context.read<AppStateCubit>().state.backgroundName}.h');
+                download(
+                    GBDKBackgroundConverter().toSource(context.read<BackgroundCubit>().state,
+                        context.read<AppStateCubit>().state.backgroundName),
+                    '${context.read<AppStateCubit>().state.backgroundName}.c');
               })
           : IconButton(
               icon: const Icon(Icons.save),

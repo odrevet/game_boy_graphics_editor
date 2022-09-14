@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
-import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_tile_converter.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/source_converter.dart';
 
 Future<void> saveFile(String content, allowedExtensions, [filename]) async {
@@ -16,7 +15,8 @@ Future<void> saveFile(String content, allowedExtensions, [filename]) async {
   }
 }
 
-Future<String?> saveToDirectory(Graphics graphics, String name, SourceConverter sourceConverter) async {
+Future<String?> saveToDirectory(
+    Graphics graphics, String name, SourceConverter sourceConverter) async {
   String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
   if (selectedDirectory != null) {
