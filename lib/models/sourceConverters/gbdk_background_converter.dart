@@ -1,3 +1,4 @@
+import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/source_converter.dart';
 
 import '../graphics/graphics.dart';
@@ -26,4 +27,24 @@ extern unsigned char $name[];""";
 #define ${name}Height ${graphics.height}
 #define ${name}Bank 0
 unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalToHex(e)).toList())}};""";
+
+  Graphics fromSource(String source) {
+    var background = Background();
+
+    var values = readGraphicElementsFromSource(source)[0].values;
+    background.data = List<int>.from(values.split(',').map((value) => int.parse(value)).toList());
+
+    RegExp regExpWidth = RegExp(r"#define \w+Width (\d+)");
+    var matchesWidth = regExpWidth.allMatches(source);
+    for (Match match in matchesWidth) {
+      background.width = int.parse(match.group(1)!);
+    }
+
+    RegExp regExpHeight = RegExp(r"#define \w+Height (\d+)");
+    var matchesHeight = regExpHeight.allMatches(source);
+    for (Match match in matchesHeight) {
+      background.height = int.parse(match.group(1)!);
+    }
+    return background;
+  }
 }

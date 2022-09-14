@@ -104,11 +104,14 @@ class _EditorState extends State<Editor> {
     return hasLoaded;
   }
 
-  void _setBackgroundFromSource(String source) => setState(() {
-        /*source = background.formatSource(source);
-        background.fromSource(source);
-        context.read<AppStateCubit>().setTileIndexBackground(0);*/
-      });
+  void _setBackgroundFromSource(String source) {
+    source = GBDKBackgroundConverter().formatSource(source);
+    var graphics = GBDKBackgroundConverter().fromSource(source);
+    context.read<BackgroundCubit>().setData(graphics.data);
+    context.read<BackgroundCubit>().setWidth(graphics.width);
+    context.read<BackgroundCubit>().setHeight(graphics.height);
+    context.read<AppStateCubit>().setTileIndexBackground(0);
+  }
 
   bool loadTileFromFilePicker(result) {
     bool isPng = result.names[0]!.endsWith('.png');

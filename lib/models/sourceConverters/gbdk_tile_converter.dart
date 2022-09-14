@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../graphics/graphics.dart';
 import '../graphics/meta_tile.dart';
 import 'source_converter.dart';
@@ -118,18 +116,6 @@ extern unsigned char $name[];""";
   String toSource(Graphics graphics, String name) =>
       "unsigned char $name[] =\n{${formatOutput(getRawTile(reorderFromCanvasToSource(graphics)))}\n};";
 
-  List<GraphicElement> readGraphicElementsFromSource(String source) {
-    var arrayElements = <GraphicElement>[];
-
-    RegExp regExp =
-        RegExp(r"(?:unsigned\s+char|uint8_t|UINT8)\s+(\w+)\[(?:\d+)?\]\s*=\s*\{(.*?)};");
-    for (Match match in regExp.allMatches(source)) {
-      arrayElements.add(GraphicElement(name: match.group(1)!, values: match.group(2)!));
-    }
-
-    return arrayElements;
-  }
-
   List<int> fromSource(values) {
     var data = <int>[];
 
@@ -148,11 +134,5 @@ extern unsigned char $name[];""";
     }
 
     return data;
-  }
-
-  String formatSource(String source) {
-    LineSplitter ls = const LineSplitter();
-    List<String> lines = ls.convert(source);
-    return lines.join();
   }
 }

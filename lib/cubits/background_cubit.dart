@@ -5,6 +5,18 @@ import '../models/graphics/background.dart';
 class BackgroundCubit extends ReplayCubit<Background> {
   BackgroundCubit() : super(Background(height: 20, width: 18));
 
+  setData(List<int> data) {
+    emit(state.copyWith(data: data));
+  }
+
+  setWidth(int width) {
+    emit(state.copyWith(width: width));
+  }
+
+  setHeight(int height) {
+    emit(state.copyWith(height: height));
+  }
+
   void setTileIndex(int rowIndex, int colIndex, int tileIndex) {
     List<int> tileData = [...state.data];
     tileData[colIndex * state.width + rowIndex] = tileIndex;

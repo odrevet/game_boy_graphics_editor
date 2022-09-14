@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../graphics/graphics.dart';
 
 String toBinary(String value) {
@@ -31,4 +33,22 @@ abstract class SourceConverter {
   String toHeader(Graphics graphics, String name);
 
   String toSource(Graphics graphics, String name);
+
+  String formatSource(String source) {
+    LineSplitter ls = const LineSplitter();
+    List<String> lines = ls.convert(source);
+    return lines.join();
+  }
+
+  List<GraphicElement> readGraphicElementsFromSource(String source) {
+    var arrayElements = <GraphicElement>[];
+
+    RegExp regExp =
+    RegExp(r"(?:unsigned\s+char|uint8_t|UINT8)\s+(\w+)\[(?:\d+)?\]\s*=\s*\{(.*?)};");
+    for (Match match in regExp.allMatches(source)) {
+      arrayElements.add(GraphicElement(name: match.group(1)!, values: match.group(2)!));
+    }
+
+    return arrayElements;
+  }
 }
