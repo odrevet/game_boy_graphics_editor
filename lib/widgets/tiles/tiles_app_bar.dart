@@ -88,7 +88,7 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
           onPressed: () {
             showDialog(
                 context: context,
-                builder: (BuildContext context) => AlertDialog(
+                builder: (BuildContext alertDialogContext) => AlertDialog(
                       title: const Text('Settings'),
                       content: SizedBox(
                         height: 200.0,
