@@ -13,17 +13,17 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Game Boy Graphic Editor',
-        theme: ThemeData(
-          fontFamily: 'RobotoMono',
-          primarySwatch: Colors.grey,
-        ),
-        home: MultiBlocProvider(providers: [
-          BlocProvider(create: (_) => AppStateCubit()),
-          BlocProvider(create: (_) => MetaTileCubit()),
-          BlocProvider(create: (_) => BackgroundCubit())
-        ], child: const Editor()));
-  }
+  Widget build(BuildContext context) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => AppStateCubit()),
+            BlocProvider(create: (_) => MetaTileCubit()),
+            BlocProvider(create: (_) => BackgroundCubit())
+          ],
+          child: MaterialApp(
+              title: 'Game Boy Graphic Editor',
+              theme: ThemeData(
+                fontFamily: 'RobotoMono',
+                primarySwatch: Colors.grey,
+              ),
+              home: const Editor()));
 }

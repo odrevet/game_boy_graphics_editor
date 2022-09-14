@@ -205,24 +205,26 @@ class _TilesEditorState extends State<TilesEditor> {
                     ),
                   ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SourceDisplay(
-                          source: GBDKConverter().toHeader(metaTile, appState.tileName),
-                          name: appState.tileName, extension: '.h',
-                          //graphics: metaTile,
+                context.read<AppStateCubit>().state.showExportPreviewTile
+                    ? Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SourceDisplay(
+                                source: GBDKConverter().toHeader(metaTile, appState.tileName),
+                                name: appState.tileName, extension: '.h',
+                                //graphics: metaTile,
+                              ),
+                              SourceDisplay(
+                                source: GBDKConverter().toSource(metaTile, appState.tileName),
+                                name: appState.tileName, extension: '.c',
+                                //graphics: metaTile,
+                              ),
+                            ],
+                          ),
                         ),
-                        SourceDisplay(
-                          source: GBDKConverter().toSource(metaTile, appState.tileName),
-                          name: appState.tileName, extension: '.c',
-                          //graphics: metaTile,
-                        ),
-                      ],
-                    ),
-                  ),
-                )
+                      )
+                    : Container()
               ],
             ),
           )

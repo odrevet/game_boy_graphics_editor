@@ -30,4 +30,12 @@ class AppStateCubit extends Cubit<AppState> {
 
   void toggleGridBackground() =>
       emit(state.copyWith(showGridBackground: !state.showGridBackground));
+
+  toggleDisplayExportPreviewBackground() {
+    emit(state.copyWith(showExportPreviewBackground: !state.showExportPreviewBackground));
+  }
+
+  toggleDisplayExportPreviewTile() {
+    emit(state.copyWith(showExportPreviewTile: !state.showExportPreviewTile));
+  }
 }

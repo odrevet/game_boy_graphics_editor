@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
+import 'package:game_boy_graphics_editor/widgets/background/background_properties.dart';
 
 import '../../models/file_utils.dart';
 import '../../models/graphics/background.dart';
@@ -68,6 +70,33 @@ class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
           })
         },
       ),
+      IconButton(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext alertDialogContext) => AlertDialog(
+                      title: const Text('Background Settings'),
+                      content: SizedBox(
+                        height: 200,
+                        width: 300,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              const Text("Background properties"),
+                              const BackgroundProperties(),
+                              const Text("Display"),
+                              TextButton(
+                                  onPressed: () => context
+                                      .read<AppStateCubit>()
+                                      .toggleDisplayExportPreviewBackground(),
+                                  child: const Text("Display Export Preview"))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ));
+          },
+          icon: const Icon(Icons.settings))
     ];
 
     return AppBar(

@@ -10,7 +10,6 @@ import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart'
 import '../../cubits/app_state_cubit.dart';
 import '../../models/graphics/meta_tile.dart';
 import '../source_display.dart';
-import 'background_properties.dart';
 
 class BackgroundEditor extends StatefulWidget {
   final MetaTile tiles;
@@ -39,82 +38,85 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
               onTap: (index) =>
                   widget.onTapTileListView != null ? widget.onTapTileListView!(index) : null),
         ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ContextMenuArea(
-            builder: (contextMenuArea) => [
-              ListTile(
-                title: const Text('Insert column before'),
-                onTap: () {
-                  context.read<BackgroundCubit>().insertCol(
-                      hoverTileIndex, context.read<AppStateCubit>().state.tileIndexBackground);
-                  Navigator.of(contextMenuArea).pop();
-                },
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ContextMenuArea(
+              builder: (contextMenuArea) => [
+                ListTile(
+                  title: const Text('Insert column before'),
+                  onTap: () {
+                    context.read<BackgroundCubit>().insertCol(
+                        hoverTileIndex, context.read<AppStateCubit>().state.tileIndexBackground);
+                    Navigator.of(contextMenuArea).pop();
+                  },
+                ),
+                ListTile(
+                  title: const Text('Delete column'),
+                  onTap: () {
+                    context.read<BackgroundCubit>().deleteCol(hoverTileIndex);
+                    Navigator.of(contextMenuArea).pop();
+                  },
+                ),
+                ListTile(
+                  title: const Text('Insert row before'),
+                  onTap: () {
+                    context.read<BackgroundCubit>().insertRow(
+                        hoverTileIndex, context.read<AppStateCubit>().state.tileIndexBackground);
+                    Navigator.of(contextMenuArea).pop();
+                  },
+                ),
+                ListTile(
+                  title: const Text('Remove row'),
+                  onTap: () {
+                    context.read<BackgroundCubit>().insertRow(
+                        hoverTileIndex, context.read<AppStateCubit>().state.tileIndexBackground);
+                    Navigator.of(contextMenuArea).pop();
+                  },
+                )
+              ],
+              child: BackgroundGrid(
+                background: context.read<BackgroundCubit>().state,
+                showGrid: widget.showGrid,
+                metaTile: widget.tiles,
+                onTap: (index) => context.read<BackgroundCubit>().setTileIndex(
+                    index % background.width,
+                    index ~/ background.width,
+                    context.read<AppStateCubit>().state.tileIndexBackground),
+                onHover: (index) => setState(() {
+                  hoverTileIndex = index;
+                }),
               ),
-              ListTile(
-                title: const Text('Delete column'),
-                onTap: () {
-                  context.read<BackgroundCubit>().deleteCol(hoverTileIndex);
-                  Navigator.of(contextMenuArea).pop();
-                },
-              ),
-              ListTile(
-                title: const Text('Insert row before'),
-                onTap: () {
-                  context.read<BackgroundCubit>().insertRow(
-                      hoverTileIndex, context.read<AppStateCubit>().state.tileIndexBackground);
-                  Navigator.of(contextMenuArea).pop();
-                },
-              ),
-              ListTile(
-                title: const Text('Remove row'),
-                onTap: () {
-                  context.read<BackgroundCubit>().insertRow(
-                      hoverTileIndex, context.read<AppStateCubit>().state.tileIndexBackground);
-                  Navigator.of(contextMenuArea).pop();
-                },
-              )
-            ],
-            child: BackgroundGrid(
-              background: context.read<BackgroundCubit>().state,
-              showGrid: widget.showGrid,
-              metaTile: widget.tiles,
-              onTap: (index) => context.read<BackgroundCubit>().setTileIndex(
-                  index % background.width,
-                  index ~/ background.width,
-                  context.read<AppStateCubit>().state.tileIndexBackground),
-              onHover: (index) => setState(() {
-                hoverTileIndex = index;
-              }),
             ),
           ),
         ),
-        Flexible(
-          child: Column(
-            children: [
-              const BackgroundProperties(),
-              Expanded(
-                  child: SingleChildScrollView(
+        context.read<AppStateCubit>().state.showExportPreviewBackground
+            ? Flexible(
                 child: Column(
                   children: [
-                    SourceDisplay(
-                      source: GBDKBackgroundConverter()
-                          .toHeader(background, context.read<AppStateCubit>().state.backgroundName),
-                      name: context.read<AppStateCubit>().state.backgroundName,
-                      extension: '.h',
-                    ),
-                    SourceDisplay(
-                      source: GBDKBackgroundConverter()
-                          .toSource(background, context.read<AppStateCubit>().state.backgroundName),
-                      name: context.read<AppStateCubit>().state.backgroundName,
-                      extension: '.c',
-                    )
+                    Expanded(
+                        child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          SourceDisplay(
+                            source: GBDKBackgroundConverter().toHeader(
+                                background, context.read<AppStateCubit>().state.backgroundName),
+                            name: context.read<AppStateCubit>().state.backgroundName,
+                            extension: '.h',
+                          ),
+                          SourceDisplay(
+                            source: GBDKBackgroundConverter().toSource(
+                                background, context.read<AppStateCubit>().state.backgroundName),
+                            name: context.read<AppStateCubit>().state.backgroundName,
+                            extension: '.c',
+                          )
+                        ],
+                      ),
+                    )),
                   ],
                 ),
-              )),
-            ],
-          ),
-        )
+              )
+            : Container()
       ]);
     });
   }

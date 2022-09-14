@@ -10,6 +10,8 @@ class AppState {
   bool showGridTile;
   bool floodMode;
   bool showGridBackground;
+  bool showExportPreviewBackground;
+  bool showExportPreviewTile;
   List<int> tileBuffer; // copy / past tiles buffer
   List<Color> colorSet;
   String tileName;
@@ -25,6 +27,8 @@ class AppState {
     this.backgroundName = "Background",
     this.floodMode = false,
     this.showGridBackground = true,
+    this.showExportPreviewBackground = false,
+    this.showExportPreviewTile = false,
     this.tileBuffer = const <int>[],
     this.colorSet = colorsDMG,
   });
@@ -39,6 +43,8 @@ class AppState {
           String? backgroundName,
           bool? floodMode,
           bool? showGridBackground,
+          bool? showExportPreviewBackground,
+          bool? showExportPreviewTile,
           List<int>? tileBuffer,
           List<Color>? colorSet}) =>
       AppState(
@@ -51,6 +57,9 @@ class AppState {
         backgroundName: backgroundName ?? this.backgroundName,
         floodMode: floodMode ?? this.floodMode,
         showGridBackground: showGridBackground ?? this.showGridBackground,
+        showExportPreviewBackground:
+            showExportPreviewBackground ?? this.showExportPreviewBackground,
+        showExportPreviewTile: showExportPreviewTile ?? this.showExportPreviewTile,
         tileBuffer: tileBuffer ?? [...this.tileBuffer],
         colorSet: colorSet ?? this.colorSet,
       );

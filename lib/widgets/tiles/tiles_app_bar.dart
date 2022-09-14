@@ -89,29 +89,37 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
             showDialog(
                 context: context,
                 builder: (BuildContext alertDialogContext) => AlertDialog(
-                      title: const Text('Settings'),
-                      content: Column(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp('^[a-zA-Z0-9_]*')),
-                                ],
-                                decoration: const InputDecoration(labelText: 'Name'),
-                                key: Key(context.read<AppStateCubit>().state.tileName),
-                                initialValue: context.read<AppStateCubit>().state.tileName,
-                                onChanged: (text) =>
-                                    context.read<AppStateCubit>().setTileName(text)),
-                          ),
-                          Row(
+                      title: const Text('Tile Settings'),
+                      content: SizedBox(
+                        height: 200,
+                        width: 300,
+                        child: SingleChildScrollView(
+                          child: Column(
                             children: [
-                              const Text("ColorSet"),
+                              const Text("Tile properties"),
+                              TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(RegExp('^[a-zA-Z0-9_]*')),
+                                  ],
+                                  decoration: const InputDecoration(labelText: 'Name'),
+                                  key: Key(context.read<AppStateCubit>().state.tileName),
+                                  initialValue: context.read<AppStateCubit>().state.tileName,
+                                  onChanged: (text) =>
+                                      context.read<AppStateCubit>().setTileName(text)),
+                              const Text("Display"),
                               TextButton(
-                                  onPressed: () => context.read<AppStateCubit>().toggleColorSet(),
+                                  onPressed: () =>
+                                      context.read<AppStateCubit>().toggleColorSet(),
                                   child: const Text("DMG / Pocket")),
+                              TextButton(
+                                  onPressed: () => context
+                                      .read<AppStateCubit>()
+                                      .toggleDisplayExportPreviewTile(),
+                                  child: const Text("Display Export Preview"))
+
                             ],
                           ),
-                        ],
+                        ),
                       ),
                     ));
           },
