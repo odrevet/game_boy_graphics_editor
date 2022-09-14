@@ -39,6 +39,11 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
                   draw(details, constraints, appState.intensity, appState.floodMode);
                 }
               },
+              onSecondaryTapDown: (TapDownDetails details) {
+                if (isHover) {
+                  pickColorAtCursor(details, constraints);
+                }
+              },
               child: MetaTileDisplay(
                 showGrid: context.read<AppStateCubit>().state.showGridTile,
                 tileData: metaTile.getMetaTile(appState.tileIndexTile),
@@ -72,5 +77,17 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
           context.read<AppStateCubit>().state.tileIndexTile,
           context.read<AppStateCubit>().state.intensity);
     }
+  }
+
+  pickColorAtCursor(dynamic details, BoxConstraints constraints) {
+    var localPosition = details.localPosition;
+    final pixelSize = constraints.maxWidth / context.read<MetaTileCubit>().state.width;
+    final rowIndex = (localPosition.dx / pixelSize).floor();
+    final colIndex = (localPosition.dy / pixelSize).floor();
+    int intensityAtCursor = context
+        .read<MetaTileCubit>()
+        .state
+        .getPixel(rowIndex, colIndex, context.read<AppStateCubit>().state.tileIndexTile);
+    context.read<AppStateCubit>().setIntensity(intensityAtCursor);
   }
 }
