@@ -7,7 +7,7 @@ import 'package:game_boy_graphics_editor/widgets/tiles/tile_dimensions_dropdown.
 
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
-import '../../models/download_stub.dart';
+import '../../models/download_stub.dart' if (dart.library.html) '../../models/download.dart';
 import '../../models/file_utils.dart';
 
 class TilesAppBar extends StatelessWidget with PreferredSizeWidget {

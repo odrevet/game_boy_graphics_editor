@@ -1,12 +1,11 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_properties.dart';
 
-import '../../models/download.dart';
+import '../../models/download_stub.dart' if (dart.library.html) '../../models/download.dart';
 import '../../models/file_utils.dart';
 import '../../models/sourceConverters/gbdk_background_converter.dart';
 
