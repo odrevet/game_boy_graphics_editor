@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tile_dimensions_dropdown.dart';
 
@@ -90,15 +91,25 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
                 context: context,
                 builder: (BuildContext alertDialogContext) => AlertDialog(
                       title: const Text('Settings'),
-                      content: SizedBox(
-                        height: 200.0,
-                        width: 150.0,
-                        child: Row(
-                          children: [
-                            const Text("ColorSet"),
-                            TextButton(onPressed: () => context.read<AppStateCubit>().toggleColorSet(), child: const Text("DMG / Pocket"))
-                          ],
-                        ),
+                      content: Column(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(RegExp('^[a-zA-Z0-9_]*')),
+                                ],
+                                decoration: const InputDecoration(labelText: 'Name'),
+                                key: Key(context.read<AppStateCubit>().state.tileName),
+                                initialValue: context.read<AppStateCubit>().state.tileName,
+                                onChanged: (text) => context.read<AppStateCubit>().setTileName(text)),
+                          ),
+                          Row(
+                            children: [
+                              const Text("ColorSet"),
+                              TextButton(onPressed: () => context.read<AppStateCubit>().toggleColorSet(), child: const Text("DMG / Pocket")),
+                            ],
+                          ),
+                        ],
                       ),
                     ));
           },

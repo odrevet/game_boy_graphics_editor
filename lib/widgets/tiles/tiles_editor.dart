@@ -206,14 +206,6 @@ class _TilesEditorState extends State<TilesEditor> {
                     ),
                   ),
                 ),
-                TextFormField(
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp('^[a-zA-Z0-9_]*')),
-                    ],
-                    decoration: const InputDecoration(labelText: 'Name'),
-                    //key: Key(appState.tileName),
-                    initialValue: appState.tileName,
-                    onChanged: (text) => context.read<AppStateCubit>().setTileName(text)),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
