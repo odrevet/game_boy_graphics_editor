@@ -10,6 +10,7 @@ import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart'
 import '../../cubits/app_state_cubit.dart';
 import '../../models/graphics/meta_tile.dart';
 import '../source_display.dart';
+import 'background_properties.dart';
 
 class BackgroundEditor extends StatefulWidget {
   final MetaTile tiles;
@@ -91,51 +92,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
         Flexible(
           child: Column(
             children: [
-              TextFormField(
-                decoration: const InputDecoration(labelText: 'Name'),
-                initialValue: context.read<AppStateCubit>().state.backgroundName,
-                onChanged: (text) => setState(() {
-                  context.read<AppStateCubit>().setBackgroundName(text);
-                }),
-              ),
-              Row(
-                children: [
-                  Text("Width ${background.width}"),
-                  IconButton(
-                      icon: const Icon(Icons.add),
-                      tooltip: 'Add Column',
-                      onPressed: () => setState(() {
-                            context.read<BackgroundCubit>().insertCol(0, 0);
-                          })),
-                  IconButton(
-                      icon: const Icon(Icons.remove),
-                      tooltip: 'Remove Column',
-                      onPressed: () => background.width > 1
-                          ? setState(() {
-                              context.read<BackgroundCubit>().deleteCol(0);
-                            })
-                          : null),
-                ],
-              ),
-              Row(
-                children: [
-                  Text("Height ${background.height}"),
-                  IconButton(
-                      icon: const Icon(Icons.add),
-                      tooltip: 'Add Row',
-                      onPressed: () => setState(() {
-                            context.read<BackgroundCubit>().insertRow(0, 0);
-                          })),
-                  IconButton(
-                      icon: const Icon(Icons.remove),
-                      tooltip: 'Remove Row',
-                      onPressed: () => background.height > 1
-                          ? setState(() {
-                              context.read<BackgroundCubit>().deleteRow(0);
-                            })
-                          : null),
-                ],
-              ),
+              const BackgroundProperties(),
               Expanded(
                   child: SingleChildScrollView(
                 child: Column(
