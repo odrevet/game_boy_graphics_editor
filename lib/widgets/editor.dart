@@ -6,7 +6,7 @@ import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
-import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_converter.dart';
+import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_tile_converter.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_app_bar.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_editor.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tiles_app_bar.dart';
@@ -16,6 +16,7 @@ import 'package:image/image.dart' as image;
 import '../models/app_state.dart';
 import '../models/file_utils.dart';
 import '../models/graphics/graphics.dart';
+import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
 
 class Editor extends StatefulWidget {
@@ -38,15 +39,14 @@ class _EditorState extends State<Editor> {
             preferredSize: const Size.fromHeight(50.0),
             loadTileFromFilePicker: loadTileFromFilePicker,
             saveGraphics: () =>
-                _saveGraphics(metaTile, context.read<AppStateCubit>().state.tileName, context),
+                _saveGraphics(metaTile, context.read<AppStateCubit>().state.tileName, GBDKTileConverter() ,context),
           );
 
           BackgroundAppBar backgroundappbar = BackgroundAppBar(
             preferredSize: const Size.fromHeight(50.0),
             setBackgroundFromSource: _setBackgroundFromSource,
-            background: context.read<BackgroundCubit>().state,
             saveGraphics: () => _saveGraphics(context.read<BackgroundCubit>().state,
-                context.read<AppStateCubit>().state.backgroundName, context),
+                context.read<AppStateCubit>().state.backgroundName, GBDKBackgroundConverter(), context),
           );
 
           dynamic appbar;
@@ -71,8 +71,8 @@ class _EditorState extends State<Editor> {
     );
   }
 
-  _saveGraphics(Graphics graphics, String name, BuildContext context) {
-    saveToDirectory(graphics, name).then((selectedDirectory) {
+  _saveGraphics(Graphics graphics, String name, SourceConverter sourceConverter, BuildContext context) {
+    saveToDirectory(graphics, name, sourceConverter).then((selectedDirectory) {
       if (selectedDirectory != null) {
         var snackBar = SnackBar(
           content: Text("$name.h and $name.c saved under $selectedDirectory"),
@@ -86,8 +86,8 @@ class _EditorState extends State<Editor> {
     bool hasLoaded = true;
     try {
       context.read<AppStateCubit>().setTileName(graphicElement.name);
-      var data = GBDKConverter().fromSource(graphicElement.values.split(','));
-      data = GBDKConverter().reorderFromSourceToCanvas(data,
+      var data = GBDKTileConverter().fromSource(graphicElement.values.split(','));
+      data = GBDKTileConverter().reorderFromSourceToCanvas(data,
           context.read<MetaTileCubit>().state.width, context.read<MetaTileCubit>().state.height);
       context.read<MetaTileCubit>().setData(data);
     } catch (e) {
@@ -141,8 +141,8 @@ class _EditorState extends State<Editor> {
       hasLoaded = true;
     } else {
       readBytes(result).then((source) {
-        source = GBDKConverter().formatSource(source);
-        var graphicsElements = GBDKConverter().readGraphicElementsFromSource(source);
+        source = GBDKTileConverter().formatSource(source);
+        var graphicsElements = GBDKTileConverter().readGraphicElementsFromSource(source);
         if (graphicsElements.length > 1) {
           showDialog(
               context: context,

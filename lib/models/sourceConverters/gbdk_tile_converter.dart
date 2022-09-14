@@ -4,14 +4,14 @@ import '../graphics/graphics.dart';
 import '../graphics/meta_tile.dart';
 import 'source_converter.dart';
 
-class GBDKConverter extends SourceConverter {
-  static final GBDKConverter _singleton = GBDKConverter._internal();
+class GBDKTileConverter extends SourceConverter {
+  static final GBDKTileConverter _singleton = GBDKTileConverter._internal();
 
-  factory GBDKConverter() {
+  factory GBDKTileConverter() {
     return _singleton;
   }
 
-  GBDKConverter._internal();
+  GBDKTileConverter._internal();
 
   List<String> getRawTile(List<int> tileData) {
     var raw = <String>[];

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
+import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_properties.dart';
 
 import '../../models/file_utils.dart';
@@ -13,14 +14,12 @@ class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
   final Size preferredSize;
 
   final Function setBackgroundFromSource;
-  final Background background;
   final Function saveGraphics;
 
   const BackgroundAppBar({
     this.preferredSize = const Size.fromHeight(50.0),
     Key? key,
     required this.setBackgroundFromSource,
-    required this.background,
     required this.saveGraphics,
   }) : super(key: key);
 
@@ -48,7 +47,7 @@ class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
           : IconButton(
               icon: const Icon(Icons.save),
               tooltip: 'Save background as',
-              onPressed: () => saveGraphics(background, context),
+              onPressed: () => saveGraphics(),
             ),
       IconButton(
         icon: const Icon(Icons.folder_open),

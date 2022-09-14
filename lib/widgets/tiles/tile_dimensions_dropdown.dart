@@ -4,7 +4,7 @@ import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 
-import '../../models/sourceConverters/gbdk_converter.dart';
+import '../../models/sourceConverters/gbdk_tile_converter.dart';
 
 class TileDimensionDropdown extends StatelessWidget {
   const TileDimensionDropdown({Key? key}) : super(key: key);
@@ -37,8 +37,8 @@ class TileDimensionDropdown extends StatelessWidget {
           }
 
           var flattenedData =
-              GBDKConverter().reorderFromCanvasToSource(context.read<MetaTileCubit>().state);
-          var data = GBDKConverter().reorderFromSourceToCanvas(flattenedData, width, height);
+              GBDKTileConverter().reorderFromCanvasToSource(context.read<MetaTileCubit>().state);
+          var data = GBDKTileConverter().reorderFromSourceToCanvas(flattenedData, width, height);
           context.read<MetaTileCubit>().setData(data);
           context.read<MetaTileCubit>().setDimensions(width, height);
           context.read<AppStateCubit>().setSelectedTileIndex(0);

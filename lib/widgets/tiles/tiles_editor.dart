@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
-import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_converter.dart';
+import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_tile_converter.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_canvas.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
@@ -211,12 +211,12 @@ class _TilesEditorState extends State<TilesEditor> {
                           child: Column(
                             children: [
                               SourceDisplay(
-                                source: GBDKConverter().toHeader(metaTile, appState.tileName),
+                                source: GBDKTileConverter().toHeader(metaTile, appState.tileName),
                                 name: appState.tileName, extension: '.h',
                                 //graphics: metaTile,
                               ),
                               SourceDisplay(
-                                source: GBDKConverter().toSource(metaTile, appState.tileName),
+                                source: GBDKTileConverter().toSource(metaTile, appState.tileName),
                                 name: appState.tileName, extension: '.c',
                                 //graphics: metaTile,
                               ),
