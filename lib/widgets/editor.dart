@@ -38,15 +38,18 @@ class _EditorState extends State<Editor> {
           TilesAppBar tileappbar = TilesAppBar(
             preferredSize: const Size.fromHeight(50.0),
             loadTileFromFilePicker: loadTileFromFilePicker,
-            saveGraphics: () =>
-                _saveGraphics(metaTile, context.read<AppStateCubit>().state.tileName, GBDKTileConverter() ,context),
+            saveGraphics: () => _saveGraphics(metaTile,
+                context.read<AppStateCubit>().state.tileName, GBDKTileConverter(), context),
           );
 
           BackgroundAppBar backgroundappbar = BackgroundAppBar(
             preferredSize: const Size.fromHeight(50.0),
             setBackgroundFromSource: _setBackgroundFromSource,
-            saveGraphics: () => _saveGraphics(context.read<BackgroundCubit>().state,
-                context.read<AppStateCubit>().state.backgroundName, GBDKBackgroundConverter(), context),
+            saveGraphics: () => _saveGraphics(
+                context.read<BackgroundCubit>().state,
+                context.read<AppStateCubit>().state.backgroundName,
+                GBDKBackgroundConverter(),
+                context),
           );
 
           dynamic appbar;
@@ -71,7 +74,8 @@ class _EditorState extends State<Editor> {
     );
   }
 
-  _saveGraphics(Graphics graphics, String name, SourceConverter sourceConverter, BuildContext context) {
+  _saveGraphics(
+      Graphics graphics, String name, SourceConverter sourceConverter, BuildContext context) {
     saveToDirectory(graphics, name, sourceConverter).then((selectedDirectory) {
       if (selectedDirectory != null) {
         var snackBar = SnackBar(
@@ -114,29 +118,25 @@ class _EditorState extends State<Editor> {
 
       img = image.grayscale(img);
 
-      /*if (img.width % Tile.size != 0 || img.height % Tile.size != 0) {
-        var snackBar = const SnackBar(
-          content: Text("Image height and width should be multiple of ${Tile.size}"),
+      if (img.width % MetaTile.tileSize != 0 || img.height % MetaTile.tileSize != 0) {
+        var snackBar = SnackBar(
+          content: Text("Image height and width should be multiple of ${MetaTile.tileSize}"),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         return false;
       }
 
-      metaTile.tileList.clear();
       int nbColors = context.read<AppStateCubit>().state.colorSet.length - 1;
-      for (int rowIndexTile = 0; rowIndexTile < img.height; rowIndexTile += Tile.size) {
-        for (int colIndexTile = 0; colIndexTile < img.width; colIndexTile += Tile.size) {
-          var tile = Tile();
-          for (int rowIndex = 0; rowIndex < Tile.size; rowIndex++) {
-            for (int colIndex = 0; colIndex < Tile.size; colIndex++) {
-              int pixel = img.getPixelSafe(rowIndex + rowIndexTile, colIndex + colIndexTile);
-              int intensity = nbColors - (((pixel & 0xff) / 0xff) * nbColors).round();
-              tile.setPixel(rowIndex, colIndex, intensity);
-            }
-          }
-          metaTile.tileList.add(tile);
+      var data = <int>[];
+      for (int rowIndexTile = 0; rowIndexTile < img.height; rowIndexTile++) {
+        for (int colIndexTile = 0; colIndexTile < img.width; colIndexTile++) {
+          final int pixel = img.getPixelSafe(colIndexTile, rowIndexTile);
+          data.add(nbColors - (((pixel & 0xff) / 0xff) * nbColors).round());
         }
-      }*/
+      }
+
+      context.read<AppStateCubit>().setTileName(result.names[0].split('.')[0]);
+      context.read<MetaTileCubit>().setData(data);
 
       hasLoaded = true;
     } else {
