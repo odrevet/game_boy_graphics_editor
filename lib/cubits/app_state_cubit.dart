@@ -14,7 +14,7 @@ class AppStateCubit extends Cubit<AppState> {
       emit(state.copyWith(backgroundName: backgroundName));
 
   void setSelectedTileIndex(index) => emit(state.copyWith(tileIndexTile: index));
-  
+
   void setTileBuffer(tileBuffer) => emit(state.copyWith(tileBuffer: tileBuffer));
 
   void toggleTileMode() => emit(state.copyWith(tileMode: !state.tileMode));
@@ -25,7 +25,8 @@ class AppStateCubit extends Cubit<AppState> {
 
   void toggleGridTile() => emit(state.copyWith(showGridTile: !state.showGridTile));
 
-  void toggleColorSet() => emit(state.copyWith(colorSet: state.colorSet == colorsPocket ? colorsDMG : colorsPocket));
+  void toggleColorSet() =>
+      emit(state.copyWith(colorSet: state.colorSet == colorsPocket ? colorsDMG : colorsPocket));
 
   void toggleGridBackground() =>
       emit(state.copyWith(showGridBackground: !state.showGridBackground));

@@ -7,7 +7,6 @@ import 'package:game_boy_graphics_editor/widgets/tiles/tile_dimensions_dropdown.
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
 import '../../models/file_utils.dart';
-import '../../models/graphics/meta_tile.dart';
 
 class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
@@ -101,12 +100,15 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
                                 decoration: const InputDecoration(labelText: 'Name'),
                                 key: Key(context.read<AppStateCubit>().state.tileName),
                                 initialValue: context.read<AppStateCubit>().state.tileName,
-                                onChanged: (text) => context.read<AppStateCubit>().setTileName(text)),
+                                onChanged: (text) =>
+                                    context.read<AppStateCubit>().setTileName(text)),
                           ),
                           Row(
                             children: [
                               const Text("ColorSet"),
-                              TextButton(onPressed: () => context.read<AppStateCubit>().toggleColorSet(), child: const Text("DMG / Pocket")),
+                              TextButton(
+                                  onPressed: () => context.read<AppStateCubit>().toggleColorSet(),
+                                  child: const Text("DMG / Pocket")),
                             ],
                           ),
                         ],
@@ -118,7 +120,9 @@ class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
 
     return AppBar(
       title: ElevatedButton.icon(
-          onPressed: () => context.read<AppStateCubit>().toggleTileMode(), icon: const Icon(Icons.wallpaper), label: const Text('Tile')),
+          onPressed: () => context.read<AppStateCubit>().toggleTileMode(),
+          icon: const Icon(Icons.wallpaper),
+          label: const Text('Tile')),
       actions: actions,
     );
   }

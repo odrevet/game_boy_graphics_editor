@@ -142,9 +142,4 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
     emit(metaTile);
   }
-
-  void setTile(int tileIndex, List<int> tileData) {
-    var data = [...state.data];
-    for (int col = 0; col < MetaTile.tileSize; col++) {}
-  }
 }

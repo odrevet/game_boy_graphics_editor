@@ -8,7 +8,8 @@ class MetaTileDisplay extends StatelessWidget {
   final List<int> tileData;
   final bool showGrid;
 
-  const MetaTileDisplay({required this.tileData, this.showGrid = false, Key? key}) : super(key: key);
+  const MetaTileDisplay({required this.tileData, this.showGrid = false, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) => DotMatrix(
