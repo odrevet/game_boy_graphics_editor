@@ -45,7 +45,7 @@ Convert to metatiles : No.
 
 # Screenshot
 
-![linda](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/.github/screenshots/linda.png)
+![linda](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/linda.png)
 
 # References
 
