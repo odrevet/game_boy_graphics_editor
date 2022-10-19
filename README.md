@@ -43,6 +43,10 @@ CGB Palette          : None.
 Convert to metatiles : No.
 ```
 
+# Screenshot
+
+![linda](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/.github/screenshots/linda.png)
+
 # References
 
 [laroldsjubilantjunkyard.com](https://laroldsjubilantjunkyard.com/tutorials/how-to-make-a-gameboy-game/sprites-and-backgrounds/)
