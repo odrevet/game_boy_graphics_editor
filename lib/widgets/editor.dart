@@ -15,6 +15,7 @@ import 'package:image/image.dart' as image;
 
 import '../models/app_state.dart';
 import '../models/file_utils.dart';
+import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
@@ -106,11 +107,14 @@ class _EditorState extends State<Editor> {
 
   void _setBackgroundFromSource(String source) {
     source = GBDKBackgroundConverter().formatSource(source);
-    var graphics = GBDKBackgroundConverter().fromSource(source);
+    List nameGraphics = GBDKBackgroundConverter().fromSource(source);
+    String name = nameGraphics[0];
+    Graphics graphics = nameGraphics[1];
     context.read<BackgroundCubit>().setData(graphics.data);
     context.read<BackgroundCubit>().setWidth(graphics.width);
     context.read<BackgroundCubit>().setHeight(graphics.height);
     context.read<AppStateCubit>().setTileIndexBackground(0);
+    context.read<AppStateCubit>().setBackgroundName(name);
   }
 
   bool loadTileFromFilePicker(result) {

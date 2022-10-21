@@ -28,11 +28,12 @@ extern unsigned char $name[];""";
 #define ${name}Bank 0
 unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalToHex(e)).toList())}};""";
 
-  Graphics fromSource(String source) {
+  List fromSource(String source) {
     var background = Background();
 
-    var values = readGraphicElementsFromSource(source)[0].values;
-    background.data = List<int>.from(values.split(',').map((value) => int.parse(value)).toList());
+    var graphicElement = readGraphicElementsFromSource(source)[0];
+    background.data =
+        List<int>.from(graphicElement.values.split(',').map((value) => int.parse(value)).toList());
 
     RegExp regExpWidth = RegExp(r"#define \w+Width (\d+)");
     var matchesWidth = regExpWidth.allMatches(source);
@@ -45,6 +46,6 @@ unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalToHex(e)
     for (Match match in matchesHeight) {
       background.height = int.parse(match.group(1)!);
     }
-    return background;
+    return [graphicElement.name, background];
   }
 }
