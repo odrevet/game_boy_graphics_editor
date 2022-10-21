@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 
+import '../../cubits/meta_tile_cubit.dart';
 import '../../models/graphics/meta_tile.dart';
 import '../tiles/meta_tile_display.dart';
 
@@ -37,12 +39,15 @@ class BackgroundGrid extends StatelessWidget {
 
   Widget _build(BuildContext context, int index) {
     Widget tileWidget;
-
-    if (background.data[index] >= metaTile.data.length) {
+    
+    if (background.data[index] >=
+        context.read<MetaTileCubit>().state.data.length ~/
+            (context.read<MetaTileCubit>().state.height *
+                context.read<MetaTileCubit>().state.width)) {
       tileWidget = Container(
         alignment: Alignment.center,
         child: const Text(
-          'Error',
+          "Overflow",
           style: TextStyle(color: Colors.red),
           textAlign: TextAlign.center,
           textDirection: TextDirection.ltr,
