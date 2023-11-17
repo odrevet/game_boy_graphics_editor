@@ -37,46 +37,30 @@ class _EditorState extends State<Editor> {
     return BlocBuilder<AppStateCubit, AppState>(
       builder: (context, appState) => BlocBuilder<MetaTileCubit, MetaTile>(
         builder: (context, metaTile) {
-          /*TilesAppBar tileappbar = TilesAppBar(
-            preferredSize: const Size.fromHeight(50.0),
-            loadTileFromFilePicker: loadTileFromFilePicker,
-            saveGraphics: () => _saveGraphics(metaTile,
-                context.read<AppStateCubit>().state.tileName, GBDKTileConverter(), context),
-          );
+          dynamic editor = appState.tileMode
+              ? const TilesEditor()
+              : BackgroundEditor(
+                  tiles: metaTile,
+                  onTapTileListView: (index) => context
+                      .read<AppStateCubit>()
+                      .setTileIndexBackground(index),
+                  showGrid: appState.showGridBackground,
+                );
 
-          BackgroundAppBar backgroundappbar = BackgroundAppBar(
-            preferredSize: const Size.fromHeight(50.0),
-            setBackgroundFromSource: _setBackgroundFromSource,
-            saveGraphics: () => _saveGraphics(
-                context.read<BackgroundCubit>().state,
-                context.read<AppStateCubit>().state.backgroundName,
-                GBDKBackgroundConverter(),
-                context),
-          );
-
-          dynamic appbar;
-          if (appState.tileMode) {
-            appbar = tileappbar;
-          } else {
-            appbar = backgroundappbar;
-          }*/
-
-          return const Scaffold(
+          return Scaffold(
               //appBar: appbar,
               body: SafeArea(
-                child: Column(
-                  children: [
-                    ApplicationMenuBar(), Expanded(child: TilesEditor())
-                  ],
-                ),
-              ));
+            child: Column(
+              children: [const ApplicationMenuBar(), Expanded(child: editor)],
+            ),
+          ));
         },
       ),
     );
   }
 
-  _saveGraphics(
-      Graphics graphics, String name, SourceConverter sourceConverter, BuildContext context) {
+  _saveGraphics(Graphics graphics, String name, SourceConverter sourceConverter,
+      BuildContext context) {
     saveToDirectory(graphics, name, sourceConverter).then((selectedDirectory) {
       if (selectedDirectory != null) {
         var snackBar = SnackBar(
@@ -91,9 +75,12 @@ class _EditorState extends State<Editor> {
     bool hasLoaded = true;
     try {
       context.read<AppStateCubit>().setTileName(graphicElement.name);
-      var data = GBDKTileConverter().fromSource(graphicElement.values.split(','));
-      data = GBDKTileConverter().reorderFromSourceToCanvas(data,
-          context.read<MetaTileCubit>().state.width, context.read<MetaTileCubit>().state.height);
+      var data =
+          GBDKTileConverter().fromSource(graphicElement.values.split(','));
+      data = GBDKTileConverter().reorderFromSourceToCanvas(
+          data,
+          context.read<MetaTileCubit>().state.width,
+          context.read<MetaTileCubit>().state.height);
       context.read<MetaTileCubit>().setData(data);
     } catch (e) {
       //print("ERROR $e");
@@ -125,9 +112,11 @@ class _EditorState extends State<Editor> {
 
       img = image.grayscale(img);
 
-      if (img.width % MetaTile.tileSize != 0 || img.height % MetaTile.tileSize != 0) {
+      if (img.width % MetaTile.tileSize != 0 ||
+          img.height % MetaTile.tileSize != 0) {
         var snackBar = SnackBar(
-          content: Text("Image height and width should be multiple of ${MetaTile.tileSize}"),
+          content: Text(
+              "Image height and width should be multiple of ${MetaTile.tileSize}"),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         return false;
@@ -149,7 +138,8 @@ class _EditorState extends State<Editor> {
     } else {
       readBytes(result).then((source) {
         source = GBDKTileConverter().formatSource(source);
-        var graphicsElements = GBDKTileConverter().readGraphicElementsFromSource(source);
+        var graphicsElements =
+            GBDKTileConverter().readGraphicElementsFromSource(source);
         if (graphicsElements.length > 1) {
           showDialog(
               context: context,

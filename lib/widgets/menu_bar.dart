@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../cubits/app_state_cubit.dart';
 
 class ApplicationMenuBar extends StatelessWidget {
   const ApplicationMenuBar({super.key});
@@ -12,6 +15,9 @@ class ApplicationMenuBar extends StatelessWidget {
         Expanded(
           child: MenuBar(
             children: <Widget>[
+              MenuItemButton(
+                  onPressed: () => context.read<AppStateCubit>().toggleTileMode(),
+                  child: const Icon(Icons.wallpaper)),
               SubmenuButton(
                 menuChildren: <Widget>[
                   MenuItemButton(
