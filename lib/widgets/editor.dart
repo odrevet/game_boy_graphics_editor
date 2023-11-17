@@ -19,6 +19,7 @@ import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
+import 'menu_bar.dart';
 
 class Editor extends StatefulWidget {
   const Editor({Key? key}) : super(key: key);
@@ -36,7 +37,7 @@ class _EditorState extends State<Editor> {
     return BlocBuilder<AppStateCubit, AppState>(
       builder: (context, appState) => BlocBuilder<MetaTileCubit, MetaTile>(
         builder: (context, metaTile) {
-          TilesAppBar tileappbar = TilesAppBar(
+          /*TilesAppBar tileappbar = TilesAppBar(
             preferredSize: const Size.fromHeight(50.0),
             loadTileFromFilePicker: loadTileFromFilePicker,
             saveGraphics: () => _saveGraphics(metaTile,
@@ -58,18 +59,17 @@ class _EditorState extends State<Editor> {
             appbar = tileappbar;
           } else {
             appbar = backgroundappbar;
-          }
+          }*/
 
-          return Scaffold(
-              appBar: appbar,
-              body: appState.tileMode
-                  ? const TilesEditor()
-                  : BackgroundEditor(
-                      tiles: metaTile,
-                      onTapTileListView: (index) =>
-                          context.read<AppStateCubit>().setTileIndexBackground(index),
-                      showGrid: appState.showGridBackground,
-                    ));
+          return const Scaffold(
+              //appBar: appbar,
+              body: SafeArea(
+                child: Column(
+                  children: [
+                    ApplicationMenuBar(), Expanded(child: TilesEditor())
+                  ],
+                ),
+              ));
         },
       ),
     );

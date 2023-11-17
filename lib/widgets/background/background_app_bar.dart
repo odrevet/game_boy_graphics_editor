@@ -9,7 +9,7 @@ import '../../models/download_stub.dart' if (dart.library.html) '../../models/do
 import '../../models/file_utils.dart';
 import '../../models/sourceConverters/gbdk_background_converter.dart';
 
-class BackgroundAppBar extends StatelessWidget with PreferredSizeWidget {
+class BackgroundAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
 
