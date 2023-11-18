@@ -28,9 +28,13 @@ List<int> hexToIntList(String hexString) {
   return result;
 }
 
+String formatHexPairs(String hexString) =>
+    hexString.replaceAllMapped(RegExp(r".."), (match) => '${match.group(0)}, ');
+
+
 class GraphicElement {
   String name;
-  String values;
+  String values; // source array content e.g 0xFF, 0xF0
 
   GraphicElement({required this.name, required this.values});
 }

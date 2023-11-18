@@ -118,11 +118,11 @@ class ApplicationMenuBar extends StatelessWidget {
                                             onChanged: (text) => context
                                                 .read<AppStateCubit>()
                                                 .setTileName(text)),
-                                        /*TextFormField(
+                                        TextFormField(
                                             maxLines: null,
                                             inputFormatters: [
                                               FilteringTextInputFormatter.allow(
-                                                  RegExp('^[a-zA-Z0-9_]*')),
+                                                  RegExp('^[A-F0-9_]*')),
                                             ],
                                             decoration: const InputDecoration(
                                                 labelText: 'Values'),
@@ -131,9 +131,26 @@ class ApplicationMenuBar extends StatelessWidget {
                                                 .toBin(context
                                                     .read<MetaTileCubit>()
                                                     .state),
-                                            onChanged: (text) => context
-                                                .read<MetaTileCubit>()
-                                                .setData(hexToIntList(text))),*/
+                                            onChanged: (text) {
+                                              print(text);
+                                              print(formatHexPairs(text));
+                                              var data = GBDKTileConverter()
+                                                  .fromSource(formatHexPairs(text).split(','));
+                                              data = GBDKTileConverter()
+                                                  .reorderFromSourceToCanvas(
+                                                      data,
+                                                      context
+                                                          .read<MetaTileCubit>()
+                                                          .state
+                                                          .width,
+                                                      context
+                                                          .read<MetaTileCubit>()
+                                                          .state
+                                                          .height);
+                                              context
+                                                  .read<MetaTileCubit>()
+                                                  .setData(data);
+                                            }),
                                         const Text("Display"),
                                         TextButton(
                                             onPressed: () => context
