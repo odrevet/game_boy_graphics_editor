@@ -10,7 +10,7 @@ import '../../cubits/meta_tile_cubit.dart';
 import '../../models/download_stub.dart' if (dart.library.html) '../../models/download.dart';
 import '../../models/file_utils.dart';
 
-class TilesAppBar extends StatelessWidget with PreferredSizeWidget {
+class TilesAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
 
