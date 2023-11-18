@@ -167,6 +167,7 @@ extern unsigned char $name[];""";
       "unsigned char $name[] =\n{${toHexArray(graphics)}\n};";
 
   List<int> fromSource(values) {
+    print(values);
     var data = <int>[];
 
     for (var index = 0; index < values.length; index += 2) {

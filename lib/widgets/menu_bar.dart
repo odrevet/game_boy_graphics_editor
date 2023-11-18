@@ -122,7 +122,7 @@ class ApplicationMenuBar extends StatelessWidget {
                                             maxLines: null,
                                             inputFormatters: [
                                               FilteringTextInputFormatter.allow(
-                                                  RegExp('^[A-F0-9_]*')),
+                                                  RegExp('^[a-fA-F0-9_]*')),
                                             ],
                                             decoration: const InputDecoration(
                                                 labelText: 'Values'),
@@ -132,8 +132,6 @@ class ApplicationMenuBar extends StatelessWidget {
                                                     .read<MetaTileCubit>()
                                                     .state),
                                             onChanged: (text) {
-                                              print(text);
-                                              print(formatHexPairs(text));
                                               var data = GBDKTileConverter()
                                                   .fromSource(formatHexPairs(text).split(','));
                                               data = GBDKTileConverter()

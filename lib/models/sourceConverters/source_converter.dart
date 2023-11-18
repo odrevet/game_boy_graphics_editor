@@ -28,8 +28,14 @@ List<int> hexToIntList(String hexString) {
   return result;
 }
 
-String formatHexPairs(String hexString) =>
-    hexString.replaceAllMapped(RegExp(r".."), (match) => '${match.group(0)}, ');
+String formatHexPairs(String hexString)
+{
+  if(hexString.length.isOdd){
+    hexString = "${hexString}0";
+  }
+
+  return hexString.replaceAllMapped(RegExp(r".."), (match) => '0x${match.group(0)} ').trimRight().replaceAll(' ', ', ');
+}
 
 
 class GraphicElement {
