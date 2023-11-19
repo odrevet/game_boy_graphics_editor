@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/widgets/tiles/tile_settings.dart';
 
 import '../cubits/app_state_cubit.dart';
 import '../cubits/background_cubit.dart';
@@ -243,82 +244,9 @@ class ApplicationMenuBar extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (BuildContext alertDialogContext) =>
-                              AlertDialog(
-                                title: const Text('Settings'),
-                                content: SizedBox(
-                                  height: 400,
-                                  width: 500,
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        const Text("Properties"),
-                                        TextFormField(
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp('^[a-zA-Z0-9_]*')),
-                                            ],
-                                            decoration: const InputDecoration(
-                                                labelText: 'Name'),
-                                            key: Key(context
-                                                .read<AppStateCubit>()
-                                                .state
-                                                .tileName),
-                                            initialValue: context
-                                                .read<AppStateCubit>()
-                                                .state
-                                                .tileName,
-                                            onChanged: (text) => context
-                                                .read<AppStateCubit>()
-                                                .setTileName(text)),
-                                        TextFormField(
-                                            maxLines: null,
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp('^[a-fA-F0-9_]*')),
-                                            ],
-                                            decoration: const InputDecoration(
-                                                labelText: 'Values'),
-                                            key: const Key('values'),
-                                            initialValue: GBDKTileConverter()
-                                                .toBin(context
-                                                    .read<MetaTileCubit>()
-                                                    .state),
-                                            onChanged: (text) {
-                                              var data = GBDKTileConverter()
-                                                  .fromSource(
-                                                      formatHexPairs(text)
-                                                          .split(','));
-                                              data = GBDKTileConverter()
-                                                  .reorderFromSourceToCanvas(
-                                                      data,
-                                                      context
-                                                          .read<MetaTileCubit>()
-                                                          .state
-                                                          .width,
-                                                      context
-                                                          .read<MetaTileCubit>()
-                                                          .state
-                                                          .height);
-                                              context
-                                                  .read<MetaTileCubit>()
-                                                  .setData(data);
-                                            }),
-                                        const Text("Display"),
-                                        TextButton(
-                                            onPressed: () => context
-                                                .read<AppStateCubit>()
-                                                .toggleColorSet(),
-                                            child: const Text("DMG / Pocket")),
-                                        TextButton(
-                                            onPressed: () => context
-                                                .read<AppStateCubit>()
-                                                .toggleDisplayExportPreviewTile(),
-                                            child: const Text(
-                                                "Display Export Preview"))
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                              const AlertDialog(
+                                title: Text('Settings'),
+                                content: TileSettings(),
                               ));
                     },
                     child: const MenuAcceleratorLabel('Settings'),
@@ -344,3 +272,4 @@ class ApplicationMenuBar extends StatelessWidget {
     );
   }
 }
+
