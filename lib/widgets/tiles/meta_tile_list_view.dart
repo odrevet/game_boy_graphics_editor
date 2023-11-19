@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 
+import '../../models/sourceConverters/source_converter.dart';
 import 'meta_tile_display.dart';
 
 class MetaTileListView extends StatelessWidget {
@@ -30,7 +31,7 @@ class MetaTileListView extends StatelessWidget {
             child: Card(
               child: Column(
                 children: [
-                  Text(index.toString(),
+                  Text("#${index.toString()} ${decimalToHex(index, prefix: true)}",
                       style: selectedTile == index
                           ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
                           : null),
