@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,13 +8,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubits/app_state_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
 
-//import '../models/download.dart';
+import '../../models/download_stub.dart'
+    if (dart.library.html) '../../models/download.dart';
 import '../models/file_utils.dart';
+import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
 
 class ApplicationMenuBar extends StatelessWidget {
   const ApplicationMenuBar({super.key});
+
+  _saveGraphics(Graphics graphics, String name, SourceConverter sourceConverter,
+      BuildContext context) {
+    saveToDirectory(graphics, name, sourceConverter).then((selectedDirectory) {
+      if (selectedDirectory != null) {
+        var snackBar = SnackBar(
+          content: Text("$name.h and $name.c saved under $selectedDirectory"),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,19 +47,32 @@ class ApplicationMenuBar extends StatelessWidget {
                   MenuItemButton(
                     onPressed: () {
                       if (kIsWeb) {
-                        /*download(
-                            GBDKTileConverter().toHeader(context.read<MetaTileCubit>().state,
+                        download(
+                            GBDKTileConverter().toHeader(
+                                context.read<MetaTileCubit>().state,
                                 context.read<AppStateCubit>().state.tileName),
                             '${context.read<AppStateCubit>().state.tileName}.h');
                         download(
-                            GBDKTileConverter().toSource(context.read<MetaTileCubit>().state,
+                            GBDKTileConverter().toSource(
+                                context.read<MetaTileCubit>().state,
                                 context.read<AppStateCubit>().state.tileName),
-                            '${context.read<AppStateCubit>().state.tileName}.c');*/
+                            '${context.read<AppStateCubit>().state.tileName}.c');
                       } else {
-                        //saveGraphics();
+                        _saveGraphics(
+                            context.read<MetaTileCubit>().state,
+                            context.read<AppStateCubit>().state.tileName,
+                            GBDKTileConverter(),
+                            context);
                       }
                     },
-                    child: const MenuAcceleratorLabel('&Save'),
+                    child: const MenuAcceleratorLabel('Save as &source code'),
+                  ),
+                  MenuItemButton(
+                    onPressed: () {
+                      saveFileBin(utf8.encode(GBDKTileConverter()
+                          .toBin(context.read<MetaTileCubit>().state)), ['.bin'], 'data');
+                    },
+                    child: const MenuAcceleratorLabel('Save as &bin'),
                   ),
                   MenuItemButton(
                     onPressed: () {
@@ -55,7 +84,7 @@ class ApplicationMenuBar extends StatelessWidget {
                           );
                         } else {
                           final bool hasLoaded =
-                              false; // loadTileFromFilePicker(result);
+                              loadTileFromFilePicker(result);
                           snackBar = SnackBar(
                             content: Text(
                                 hasLoaded ? "Data loaded" : "Data not loaded"),
@@ -133,7 +162,9 @@ class ApplicationMenuBar extends StatelessWidget {
                                                     .state),
                                             onChanged: (text) {
                                               var data = GBDKTileConverter()
-                                                  .fromSource(formatHexPairs(text).split(','));
+                                                  .fromSource(
+                                                      formatHexPairs(text)
+                                                          .split(','));
                                               data = GBDKTileConverter()
                                                   .reorderFromSourceToCanvas(
                                                       data,

@@ -15,6 +15,15 @@ Future<void> saveFile(String content, allowedExtensions, [filename]) async {
   }
 }
 
+Future<void> saveFileBin(List<int> content, allowedExtensions, [filename]) async {
+  String? fileName =
+  await FilePicker.platform.saveFile(allowedExtensions: allowedExtensions, fileName: filename);
+  if (fileName != null) {
+    File file = File(fileName);
+    file.writeAsBytes(Uint8List.fromList(content));
+  }
+}
+
 Future<String?> saveToDirectory(
     Graphics graphics, String name, SourceConverter sourceConverter) async {
   String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
