@@ -6,12 +6,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubits/app_state_cubit.dart';
+import '../cubits/background_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
 
 import '../../models/download_stub.dart'
     if (dart.library.html) '../../models/download.dart';
 import '../models/file_utils.dart';
 import '../models/graphics/graphics.dart';
+import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
 
@@ -30,6 +32,112 @@ class ApplicationMenuBar extends StatelessWidget {
     });
   }
 
+  bool _setMetaTile(GraphicElement graphicElement, BuildContext context) {
+    bool hasLoaded = true;
+    try {
+      context.read<AppStateCubit>().setTileName(graphicElement.name);
+      var data =
+          GBDKTileConverter().fromSource(graphicElement.values.split(','));
+      data = GBDKTileConverter().reorderFromSourceToCanvas(
+          data,
+          context.read<MetaTileCubit>().state.width,
+          context.read<MetaTileCubit>().state.height);
+      context.read<MetaTileCubit>().setData(data);
+    } catch (e) {
+      if (kDebugMode) {
+        print("ERROR $e");
+      }
+      hasLoaded = false;
+    }
+
+    if (hasLoaded) context.read<AppStateCubit>().setSelectedTileIndex(0);
+
+    return hasLoaded;
+  }
+
+  bool loadTileFromFilePicker(result, BuildContext context) {
+    bool isPng = result.names[0]!.endsWith('.png');
+    bool hasLoaded = false;
+    if (isPng) {
+      /*var img = image.decodePng(File(result.paths[0]!).readAsBytesSync())!;
+
+      img = image.grayscale(img);
+
+      if (img.width % MetaTile.tileSize != 0 ||
+          img.height % MetaTile.tileSize != 0) {
+        var snackBar = SnackBar(
+          content: Text(
+              "Image height and width should be multiple of ${MetaTile.tileSize}"),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return false;
+      }
+
+      int nbColors = context.read<AppStateCubit>().state.colorSet.length - 1;
+      var data = <int>[];
+      for (int rowIndexTile = 0; rowIndexTile < img.height; rowIndexTile++) {
+        for (int colIndexTile = 0; colIndexTile < img.width; colIndexTile++) {
+          final int pixel = img.getPixelSafe(colIndexTile, rowIndexTile);
+          data.add(nbColors - (((pixel & 0xff) / 0xff) * nbColors).round());
+        }
+      }
+
+      context.read<AppStateCubit>().setTileName(result.names[0].split('.')[0]);
+      context.read<MetaTileCubit>().setData(data);
+
+      hasLoaded = true;*/
+    } else {
+      readBytes(result).then((source) {
+        source = GBDKTileConverter().formatSource(source);
+        var graphicsElements =
+            GBDKTileConverter().readGraphicElementsFromSource(source);
+        if (graphicsElements.length > 1) {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Tile data selection'),
+                    content: SizedBox(
+                      height: 200.0,
+                      width: 150.0,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: graphicsElements.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            onTap: () {
+                              hasLoaded = _setMetaTile(
+                                  graphicsElements[index], context);
+                              Navigator.pop(context);
+                            },
+                            title: Text(graphicsElements[index].name),
+                          );
+                        },
+                      ),
+                    ),
+                  ));
+        } else if (graphicsElements.length == 1) {
+          hasLoaded = _setMetaTile(graphicsElements.first, context);
+        } else {
+          hasLoaded = false;
+        }
+      });
+    }
+    return hasLoaded;
+  }
+
+  void _setBackgroundFromSource(String source, BuildContext context) {
+    source = GBDKBackgroundConverter().formatSource(source);
+    List nameGraphics = GBDKBackgroundConverter().fromSource(source);
+    String name = nameGraphics[0];
+    Graphics graphics = nameGraphics[1];
+    context.read<BackgroundCubit>().setData(graphics.data);
+    context.read<BackgroundCubit>().setWidth(graphics.width);
+    context.read<BackgroundCubit>().setHeight(graphics.height);
+    context.read<AppStateCubit>().setTileIndexBackground(0);
+    context.read<AppStateCubit>().setBackgroundName(name);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -38,12 +146,32 @@ class ApplicationMenuBar extends StatelessWidget {
         Expanded(
           child: MenuBar(
             children: <Widget>[
-              MenuItemButton(
-                  onPressed: () =>
-                      context.read<AppStateCubit>().toggleTileMode(),
-                  child: const Icon(Icons.wallpaper)),
               SubmenuButton(
                 menuChildren: <Widget>[
+                  MenuItemButton(
+                    onPressed: () {
+                      selectFile([
+                        'c' /*, 'png'*/
+                      ]).then((result) {
+                        late SnackBar snackBar;
+                        if (result == null) {
+                          snackBar = const SnackBar(
+                            content: Text("Not loaded"),
+                          );
+                        } else {
+                          final bool hasLoaded =
+                          loadTileFromFilePicker(result, context);
+                          snackBar = SnackBar(
+                            content: Text(
+                                hasLoaded ? "Data loaded" : "Data not loaded"),
+                          );
+                        }
+
+                        //ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      });
+                    },
+                    child: const MenuAcceleratorLabel('&Open'),
+                  ),
                   MenuItemButton(
                     onPressed: () {
                       if (kIsWeb) {
@@ -67,35 +195,13 @@ class ApplicationMenuBar extends StatelessWidget {
                     },
                     child: const MenuAcceleratorLabel('Save as &source code'),
                   ),
-                  MenuItemButton(
+                  /*MenuItemButton(
                     onPressed: () {
                       saveFileBin(utf8.encode(GBDKTileConverter()
                           .toBin(context.read<MetaTileCubit>().state)), ['.bin'], 'data');
                     },
                     child: const MenuAcceleratorLabel('Save as &bin'),
-                  ),
-                  MenuItemButton(
-                    onPressed: () {
-                      selectFile(['c', 'png']).then((result) {
-                        late SnackBar snackBar;
-                        if (result == null) {
-                          snackBar = const SnackBar(
-                            content: Text("Not loaded"),
-                          );
-                        } else {
-                          final bool hasLoaded =
-                              false; // loadTileFromFilePicker(result);
-                          snackBar = SnackBar(
-                            content: Text(
-                                hasLoaded ? "Data loaded" : "Data not loaded"),
-                          );
-                        }
-
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      });
-                    },
-                    child: const MenuAcceleratorLabel('&Open'),
-                  ),
+                  ),*/
                 ],
                 child: const MenuAcceleratorLabel('&File'),
               ),
@@ -110,6 +216,23 @@ class ApplicationMenuBar extends StatelessWidget {
                   ),
                 ],
                 child: const MenuAcceleratorLabel('&View'),
+              ),
+
+              // Mode
+              SubmenuButton(
+                menuChildren: <Widget>[
+                  MenuItemButton(
+                    onPressed: () =>
+                        context.read<AppStateCubit>().setMode(true),
+                    child: const MenuAcceleratorLabel('Tile'),
+                  ),
+                  MenuItemButton(
+                    onPressed: () =>
+                        context.read<AppStateCubit>().setMode(false),
+                    child: const MenuAcceleratorLabel('Background'),
+                  ),
+                ],
+                child: const MenuAcceleratorLabel('&Mode'),
               ),
 
               // Edit

@@ -6,6 +6,7 @@ import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_tile_converter.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_canvas.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
+import 'package:game_boy_graphics_editor/widgets/tiles/tile_dimensions_dropdown.dart';
 
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
@@ -177,6 +178,23 @@ class _TilesEditorState extends State<TilesEditor> {
                           .read<MetaTileCubit>()
                           .rightShift(appState.tileIndexTile, appState.tileIndexTile),
                       icon: const Icon(Icons.keyboard_arrow_right_rounded)),
+                  const VerticalDivider(),
+                  IconButton(
+                      onPressed:
+                      context.read<MetaTileCubit>().canUndo ? context.read<MetaTileCubit>().undo : null,
+                      icon: const Icon(Icons.undo)),
+                  IconButton(
+                      onPressed:
+                      context.read<MetaTileCubit>().canRedo ? context.read<MetaTileCubit>().redo : null,
+                      icon: const Icon(Icons.redo)),
+                  const VerticalDivider(),
+                  IconButton(
+                    icon: Icon(context.read<AppStateCubit>().state.floodMode ? Icons.waves : Icons.edit),
+                    tooltip: context.read<AppStateCubit>().state.floodMode ? 'Flood fill' : 'Draw',
+                    onPressed: () => context.read<AppStateCubit>().toggleFloodMode(),
+                  ),
+                  const VerticalDivider(),
+                  const TileDimensionDropdown(),
                 ],
               ),
               Expanded(
