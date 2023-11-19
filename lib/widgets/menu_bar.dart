@@ -84,7 +84,7 @@ class ApplicationMenuBar extends StatelessWidget {
                           );
                         } else {
                           final bool hasLoaded =
-                              loadTileFromFilePicker(result);
+                              false; // loadTileFromFilePicker(result);
                           snackBar = SnackBar(
                             content: Text(
                                 hasLoaded ? "Data loaded" : "Data not loaded"),
