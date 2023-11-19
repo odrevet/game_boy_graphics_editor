@@ -108,7 +108,7 @@ class _EditorState extends State<Editor> {
     bool isPng = result.names[0]!.endsWith('.png');
     bool hasLoaded = false;
     if (isPng) {
-      var img = image.decodePng(File(result.paths[0]!).readAsBytesSync())!;
+      /*var img = image.decodePng(File(result.paths[0]!).readAsBytesSync())!;
 
       img = image.grayscale(img);
 
@@ -134,7 +134,7 @@ class _EditorState extends State<Editor> {
       context.read<AppStateCubit>().setTileName(result.names[0].split('.')[0]);
       context.read<MetaTileCubit>().setData(data);
 
-      hasLoaded = true;
+      hasLoaded = true;*/
     } else {
       readBytes(result).then((source) {
         source = GBDKTileConverter().formatSource(source);
