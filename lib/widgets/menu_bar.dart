@@ -1,8 +1,6 @@
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tile_settings.dart';
 
@@ -17,6 +15,7 @@ import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
+import 'background/background_settings.dart';
 
 class ApplicationMenuBar extends StatelessWidget {
   const ApplicationMenuBar({super.key});
@@ -160,14 +159,18 @@ class ApplicationMenuBar extends StatelessWidget {
                             content: Text("Not loaded"),
                           );
                         } else {
-                          final bool hasLoaded =
-                          loadTileFromFilePicker(result, context);
-                          snackBar = SnackBar(
+                          //bool hasLoaded = false;
+                          if (context.read<AppStateCubit>().state.tileMode) {
+                            loadTileFromFilePicker(result, context);
+                          } else {
+                            readBytes(result).then((source) =>
+                                _setBackgroundFromSource(source, context));
+                          }
+                          /*snackBar = SnackBar(
                             content: Text(
                                 hasLoaded ? "Data loaded" : "Data not loaded"),
-                          );
+                          );*/
                         }
-
                         //ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       });
                     },
@@ -175,23 +178,30 @@ class ApplicationMenuBar extends StatelessWidget {
                   ),
                   MenuItemButton(
                     onPressed: () {
-                      if (kIsWeb) {
-                        download(
-                            GBDKTileConverter().toHeader(
-                                context.read<MetaTileCubit>().state,
-                                context.read<AppStateCubit>().state.tileName),
-                            '${context.read<AppStateCubit>().state.tileName}.h');
-                        download(
-                            GBDKTileConverter().toSource(
-                                context.read<MetaTileCubit>().state,
-                                context.read<AppStateCubit>().state.tileName),
-                            '${context.read<AppStateCubit>().state.tileName}.c');
+                      if (context.read<AppStateCubit>().state.tileMode) {
+                        if (kIsWeb) {
+                          download(
+                              GBDKTileConverter().toHeader(
+                                  context.read<MetaTileCubit>().state,
+                                  context.read<AppStateCubit>().state.tileName),
+                              '${context.read<AppStateCubit>().state.tileName}.h');
+                          download(
+                              GBDKTileConverter().toSource(
+                                  context.read<MetaTileCubit>().state,
+                                  context.read<AppStateCubit>().state.tileName),
+                              '${context.read<AppStateCubit>().state.tileName}.c');
+                        } else {
+                          _saveGraphics(
+                              context.read<MetaTileCubit>().state,
+                              context.read<AppStateCubit>().state.tileName,
+                              GBDKTileConverter(),
+                              context);
+                        }
                       } else {
-                        _saveGraphics(
-                            context.read<MetaTileCubit>().state,
-                            context.read<AppStateCubit>().state.tileName,
-                            GBDKTileConverter(),
-                            context);
+                        saveToDirectory(
+                            context.read<BackgroundCubit>().state,
+                            context.read<AppStateCubit>().state.backgroundName,
+                            GBDKBackgroundConverter());
                       }
                     },
                     child: const MenuAcceleratorLabel('Save as &source code'),
@@ -211,8 +221,12 @@ class ApplicationMenuBar extends StatelessWidget {
               SubmenuButton(
                 menuChildren: <Widget>[
                   MenuItemButton(
-                    onPressed: () =>
-                        context.read<AppStateCubit>().toggleGridTile(),
+                    onPressed: () => context
+                            .read<AppStateCubit>()
+                            .state
+                            .tileMode
+                        ? context.read<AppStateCubit>().toggleGridTile()
+                        : context.read<AppStateCubit>().toggleGridBackground(),
                     child: const MenuAcceleratorLabel('Toggle &grid'),
                   ),
                 ],
@@ -244,9 +258,12 @@ class ApplicationMenuBar extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (BuildContext alertDialogContext) =>
-                              const AlertDialog(
-                                title: Text('Settings'),
-                                content: TileSettings(),
+                              AlertDialog(
+                                title: const Text('Settings'),
+                                content:
+                                    context.read<AppStateCubit>().state.tileMode
+                                        ? const TileSettings()
+                                        : const BackgroundSettings(),
                               ));
                     },
                     child: const MenuAcceleratorLabel('Settings'),
@@ -272,4 +289,3 @@ class ApplicationMenuBar extends StatelessWidget {
     );
   }
 }
-

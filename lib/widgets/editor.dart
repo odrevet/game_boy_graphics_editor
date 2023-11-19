@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
-import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 
@@ -9,8 +8,6 @@ import 'package:game_boy_graphics_editor/widgets/background/background_editor.da
 import 'package:game_boy_graphics_editor/widgets/tiles/tiles_editor.dart';
 
 import '../models/app_state.dart';
-import '../models/graphics/graphics.dart';
-import '../models/sourceConverters/gbdk_background_converter.dart';
 import 'menu_bar.dart';
 
 class Editor extends StatefulWidget {
