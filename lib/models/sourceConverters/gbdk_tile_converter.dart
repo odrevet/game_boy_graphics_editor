@@ -166,7 +166,8 @@ extern unsigned char $name[];""";
   String toSource(Graphics graphics, String name) =>
       "unsigned char $name[] =\n{${toHexArray(graphics)}\n};";
 
-  List<int> fromSource(values) {
+  //TODO values must be formated as 0xFF ... change to a list of int or hex data without 0x ?
+  List<int> fromSource(List<String> values) {
     var data = <int>[];
 
     for (var index = 0; index < values.length; index += 2) {

@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -175,6 +174,51 @@ class ApplicationMenuBar extends StatelessWidget {
                       });
                     },
                     child: const MenuAcceleratorLabel('&Open'),
+                  ),
+                  MenuItemButton(
+                    onPressed: () {
+                      selectFile(['bin']).then((result) {
+                        late SnackBar snackBar;
+                        if (result == null) {
+                          snackBar = const SnackBar(
+                            content: Text("Not loaded"),
+                          );
+                        } else {
+                          //bool hasLoaded = false;
+                          if (context.read<AppStateCubit>().state.tileMode) {
+                            readBin(result).then((bytes) {
+                              String values = "";
+                              for (int byte in bytes) {
+                                // Convert each byte to a hexadecimal string
+                                values +=
+                                    byte.toRadixString(16).padLeft(2, '0');
+                              }
+
+                              var data = GBDKTileConverter().fromSource(
+                                  formatHexPairs(values).split(','));
+                              data = GBDKTileConverter()
+                                  .reorderFromSourceToCanvas(
+                                      data,
+                                      context.read<MetaTileCubit>().state.width,
+                                      context
+                                          .read<MetaTileCubit>()
+                                          .state
+                                          .height);
+                              context.read<MetaTileCubit>().setData(data);
+                            });
+                          } else {
+                            //readBytes(result).then((source) =>
+                            //    _setBackgroundFromSource(source, context));
+                          }
+                          /*snackBar = SnackBar(
+                            content: Text(
+                                hasLoaded ? "Data loaded" : "Data not loaded"),
+                          );*/
+                        }
+                        //ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      });
+                    },
+                    child: const MenuAcceleratorLabel('&Open bin'),
                   ),
                   MenuItemButton(
                     onPressed: () {

@@ -51,3 +51,12 @@ Future<String> readBytes(FilePickerResult filePickerResult) async {
     return await file.readAsString();
   }
 }
+
+Future<List<int>> readBin(FilePickerResult filePickerResult) async {
+  if (kIsWeb) {
+    return filePickerResult.files.single.bytes!;
+  } else {
+    File file = File(filePickerResult.files.single.path!);
+    return await file.readAsBytes();
+  }
+}
