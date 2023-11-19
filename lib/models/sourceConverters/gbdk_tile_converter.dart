@@ -11,6 +11,34 @@ class GBDKTileConverter extends SourceConverter {
 
   GBDKTileConverter._internal();
 
+  List<int> getRawTileInt(List<int> tileData) {
+    var raw = <int>[];
+    const int size = 8;
+
+    var combined = "";
+    for (var element in tileData) {
+      combined += element.toRadixString(2).padLeft(2, "0");
+    }
+
+    for (int index = 0;
+        index < (combined.length ~/ size) * size;
+        index += size * 2) {
+      String lo = "";
+      String hi = "";
+      String combinedSub = combined.substring(index, index + size * 2);
+
+      for (var indexSub = 0; indexSub < 8 * 2; indexSub += 2) {
+        lo += combinedSub[indexSub];
+        hi += combinedSub[indexSub + 1];
+      }
+
+      raw.add(binaryToDec(hi));
+      raw.add(binaryToDec(lo));
+    }
+
+    return raw;
+  }
+
   List<String> getRawTile(List<int> tileData) {
     var raw = <String>[];
     const int size = 8;
@@ -20,7 +48,9 @@ class GBDKTileConverter extends SourceConverter {
       combined += element.toRadixString(2).padLeft(2, "0");
     }
 
-    for (var index = 0; index < (combined.length ~/ size) * size; index += size * 2) {
+    for (var index = 0;
+        index < (combined.length ~/ size) * size;
+        index += size * 2) {
       var lo = "";
       var hi = "";
       var combinedSub = combined.substring(index, index + size * 2);
@@ -72,18 +102,24 @@ extern unsigned char $name[];""";
     int nbTilePerRow = (width ~/ MetaTile.tileSize);
     int nbTilePerMetaTile = (width * height) ~/ MetaTile.nbPixelPerTile;
 
-    for (int tileIndex = 0; tileIndex < data.length ~/ MetaTile.nbPixelPerTile; tileIndex++) {
+    for (int tileIndex = 0;
+        tileIndex < data.length ~/ MetaTile.nbPixelPerTile;
+        tileIndex++) {
       int patternIndex = pattern[tileIndex % pattern.length];
       int metaTileIndex = tileIndex ~/ nbTilePerMetaTile;
       int pixel = patternIndex * MetaTile.nbPixelPerTile;
       for (int col = 0; col < MetaTile.tileSize; col++) {
-        int start = pixel + col * MetaTile.tileSize + (metaTileIndex * width * height);
+        int start =
+            pixel + col * MetaTile.tileSize + (metaTileIndex * width * height);
         int end = start + MetaTile.tileSize;
         var row = data.sublist(start, end);
         int reorderedPixel = ((tileIndex % nbTilePerRow) * MetaTile.tileSize) +
-            (tileIndex ~/ nbTilePerRow).floor() * MetaTile.nbPixelPerTile * nbTilePerRow +
+            (tileIndex ~/ nbTilePerRow).floor() *
+                MetaTile.nbPixelPerTile *
+                nbTilePerRow +
             col * width;
-        reorderedData.setRange(reorderedPixel, reorderedPixel + MetaTile.tileSize, row);
+        reorderedData.setRange(
+            reorderedPixel, reorderedPixel + MetaTile.tileSize, row);
       }
     }
 
@@ -91,11 +127,15 @@ extern unsigned char $name[];""";
   }
 
   List<int> reorderFromCanvasToSource(Graphics graphics) {
-    List<int> reorderedData = List.filled(graphics.data.length, 0, growable: true);
+    List<int> reorderedData =
+        List.filled(graphics.data.length, 0, growable: true);
     var pattern = getPattern(graphics.width, graphics.height);
     final int nbTilePerRow = (graphics.width ~/ MetaTile.tileSize);
-    for (int pixelIndex = 0; pixelIndex < graphics.data.length; pixelIndex += MetaTile.tileSize) {
-      final int rowIndex = pixelIndex ~/ (nbTilePerRow * MetaTile.nbPixelPerTile);
+    for (int pixelIndex = 0;
+        pixelIndex < graphics.data.length;
+        pixelIndex += MetaTile.tileSize) {
+      final int rowIndex =
+          pixelIndex ~/ (nbTilePerRow * MetaTile.nbPixelPerTile);
       final int colIndex = (pixelIndex ~/ MetaTile.tileSize) % nbTilePerRow;
       final int tileIndex = colIndex + rowIndex * nbTilePerRow;
       final int patternIndex = pattern[tileIndex % pattern.length];
@@ -113,8 +153,18 @@ extern unsigned char $name[];""";
   }
 
   @override
+  String toBin(Graphics graphics) =>
+      getRawTileInt(reorderFromCanvasToSource(graphics))
+          .map((e) => decimalToHex(e, prefix: false))
+          .join();
+
+  @override
+  String toHexArray(Graphics graphics) =>
+      formatOutput(getRawTile(reorderFromCanvasToSource(graphics)));
+
+  @override
   String toSource(Graphics graphics, String name) =>
-      "unsigned char $name[] =\n{${formatOutput(getRawTile(reorderFromCanvasToSource(graphics)))}\n};";
+      "unsigned char $name[] =\n{${toHexArray(graphics)}\n};";
 
   List<int> fromSource(values) {
     var data = <int>[];
@@ -129,7 +179,8 @@ extern unsigned char $name[];""";
       }
 
       for (var indexBis = 0; indexBis < MetaTile.tileSize * 2; indexBis += 2) {
-        data.add(int.parse(combined[indexBis] + combined[indexBis + 1], radix: 2));
+        data.add(
+            int.parse(combined[indexBis] + combined[indexBis + 1], radix: 2));
       }
     }
 
