@@ -10,6 +10,7 @@ import '../cubits/meta_tile_cubit.dart';
 import '../../models/download_stub.dart'
     if (dart.library.html) '../../models/download.dart';
 import '../models/file_utils.dart';
+import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
@@ -137,6 +138,15 @@ class ApplicationMenuBar extends StatelessWidget {
     context.read<AppStateCubit>().setBackgroundName(name);
   }
 
+  void _setBackgroundFromBin(List<int> raw, BuildContext context) {
+    Graphics graphics = Background(data: raw);
+    context.read<BackgroundCubit>().setData(graphics.data);
+    context.read<BackgroundCubit>().setWidth(graphics.width);
+    context.read<BackgroundCubit>().setHeight(graphics.height);
+    context.read<AppStateCubit>().setTileIndexBackground(0);
+    context.read<AppStateCubit>().setBackgroundName("data");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -162,8 +172,8 @@ class ApplicationMenuBar extends StatelessWidget {
                           if (context.read<AppStateCubit>().state.tileMode) {
                             loadTileFromFilePicker(result, context);
                           } else {
-                            readBytes(result).then((source) =>
-                                _setBackgroundFromSource(source, context));
+                            readBytes(result).then(
+                                (raw) => _setBackgroundFromSource(raw, context));
                           }
                           /*snackBar = SnackBar(
                             content: Text(
@@ -207,8 +217,20 @@ class ApplicationMenuBar extends StatelessWidget {
                               context.read<MetaTileCubit>().setData(data);
                             });
                           } else {
-                            //readBytes(result).then((source) =>
-                            //    _setBackgroundFromSource(source, context));
+                            readBin(result).then((bytes) {
+                              String values = "";
+                              for (int byte in bytes) {
+                                // Convert each byte to a hexadecimal string
+                                values +=
+                                    byte.toRadixString(16).padLeft(2, '0');
+                              }
+                              var data = <int>[];
+                              for (var index = 0; index < values.length; index += 2) {
+                                data.add(
+                                    int.parse("${values[index]}${values[index+1]}", radix: 16));
+                              }
+                              _setBackgroundFromBin(data, context);
+                            });
                           }
                           /*snackBar = SnackBar(
                             content: Text(
