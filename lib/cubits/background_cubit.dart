@@ -3,7 +3,7 @@ import 'package:replay_bloc/replay_bloc.dart';
 import '../models/graphics/background.dart';
 
 class BackgroundCubit extends ReplayCubit<Background> {
-  BackgroundCubit() : super(Background(height: 20, width: 18));
+  BackgroundCubit() : super(Background(height: 18, width: 20));
 
   setData(List<int> data) {
     emit(state.copyWith(data: data));

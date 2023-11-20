@@ -1,7 +1,7 @@
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 class Background extends Graphics {
-  Background({height = 20, width = 18, name = "", fill, data})
+  Background({height = 18, width = 20, name = "", fill, data})
       : super(
             width: width,
             height: height,
