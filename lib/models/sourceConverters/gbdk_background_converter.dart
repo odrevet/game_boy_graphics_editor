@@ -26,7 +26,7 @@ extern unsigned char $name[];""";
   String toSource(Graphics graphics, String name) => """#define ${name}Width ${graphics.width}
 #define ${name}Height ${graphics.height}
 #define ${name}Bank 0
-unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalToHex(e)).toList())}};""";
+unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalToHex(e, prefix: true)).toList())}};""";
 
   List fromSource(String source) {
     var background = Background();
