@@ -44,7 +44,7 @@ class BackgroundGrid extends StatelessWidget {
     if (background.data[index] >=
         (context.read<MetaTileCubit>().state.data.length ~/
             (context.read<MetaTileCubit>().state.height *
-                context.read<MetaTileCubit>().state.width) - context.read<BackgroundCubit>().state.origin)) {
+                context.read<MetaTileCubit>().state.width))) {
       tileWidget = Container(
         alignment: Alignment.center,
         child: const Text(
@@ -56,7 +56,7 @@ class BackgroundGrid extends StatelessWidget {
       );
     } else {
       tileWidget = MetaTileDisplay(
-        tileData: metaTile.getMetaTile(background.data[index]),
+        tileData: metaTile.getMetaTile(background.data[index] - context.read<BackgroundCubit>().state.origin),
       );
     }
 
