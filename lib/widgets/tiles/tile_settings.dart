@@ -22,67 +22,40 @@ class TileSettings extends StatelessWidget {
             const Text("Properties"),
             TextFormField(
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                      RegExp('^[a-zA-Z0-9_]*')),
+                  FilteringTextInputFormatter.allow(RegExp('^[a-zA-Z0-9_]*')),
                 ],
-                decoration: const InputDecoration(
-                    labelText: 'Name'),
-                key: Key(context
-                    .read<AppStateCubit>()
-                    .state
-                    .tileName),
-                initialValue: context
-                    .read<AppStateCubit>()
-                    .state
-                    .tileName,
-                onChanged: (text) => context
-                    .read<AppStateCubit>()
-                    .setTileName(text)),
+                decoration: const InputDecoration(labelText: 'Name'),
+                key: Key(context.read<AppStateCubit>().state.tileName),
+                initialValue: context.read<AppStateCubit>().state.tileName,
+                onChanged: (text) =>
+                    context.read<AppStateCubit>().setTileName(text)),
             TextFormField(
                 maxLines: null,
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                      RegExp('^[a-fA-F0-9_]*')),
+                  FilteringTextInputFormatter.allow(RegExp('^[a-fA-F0-9_]*')),
                 ],
-                decoration: const InputDecoration(
-                    labelText: 'Values'),
+                decoration: const InputDecoration(labelText: 'Values'),
                 key: const Key('values'),
                 initialValue: GBDKTileConverter()
-                    .toBin(context
-                    .read<MetaTileCubit>()
-                    .state),
+                    .toBin(context.read<MetaTileCubit>().state),
                 onChanged: (text) {
                   var data = GBDKTileConverter()
-                      .fromSource(
-                      formatHexPairs(text)
-                          .split(','));
-                  data = GBDKTileConverter()
-                      .reorderFromSourceToCanvas(
+                      .fromSource(formatHexPairs(text).split(','));
+                  data = GBDKTileConverter().reorderFromSourceToCanvas(
                       data,
-                      context
-                          .read<MetaTileCubit>()
-                          .state
-                          .width,
-                      context
-                          .read<MetaTileCubit>()
-                          .state
-                          .height);
-                  context
-                      .read<MetaTileCubit>()
-                      .setData(data);
+                      context.read<MetaTileCubit>().state.width,
+                      context.read<MetaTileCubit>().state.height);
+                  context.read<MetaTileCubit>().setData(data);
                 }),
             const Text("Display"),
             TextButton(
-                onPressed: () => context
-                    .read<AppStateCubit>()
-                    .toggleColorSet(),
+                onPressed: () => context.read<AppStateCubit>().toggleColorSet(),
                 child: const Text("DMG / Pocket")),
             TextButton(
                 onPressed: () => context
                     .read<AppStateCubit>()
                     .toggleDisplayExportPreviewTile(),
-                child: const Text(
-                    "Display Export Preview"))
+                child: const Text("Display Export Preview"))
           ],
         ),
       ),

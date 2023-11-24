@@ -46,4 +46,11 @@ class BackgroundCubit extends ReplayCubit<Background> {
     background.deleteRow(at);
     emit(background);
   }
+
+  setOrigin(int origin) {
+    var metaTile = state.copyWith();
+    metaTile.origin = origin;
+
+    emit(metaTile);
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
@@ -46,6 +47,16 @@ class BackgroundProperties extends StatelessWidget {
                       background.height > 1 ? context.read<BackgroundCubit>().deleteRow(0) : null),
             ],
           ),
+          TextFormField(
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp('^[0-9]*')),
+              ],
+              decoration: const InputDecoration(labelText: 'Origin'),
+              key: const Key('tileOrigin'),
+              initialValue:
+              context.read<BackgroundCubit>().state.origin.toString(),
+              onChanged: (text) =>
+                  context.read<BackgroundCubit>().setOrigin(int.parse(text))),
         ],
       );
     });

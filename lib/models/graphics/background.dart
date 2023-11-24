@@ -7,6 +7,8 @@ class Background extends Graphics {
             height: height,
             data: data ?? List.filled(width * height, fill ?? 0, growable: true));
 
+  int origin = 0;
+
   copyWith({List<int>? data, int? width, int? height}) => Background(
         data: data ?? [...this.data],
         width: width ?? this.width,
