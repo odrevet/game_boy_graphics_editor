@@ -54,4 +54,16 @@ const unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalTo
     }
     return [graphicElement.name, background];
   }
+
+
+  Background fromGraphicElement(GraphicElement graphicElement) {
+    var background = Background();
+
+    String values = graphicElement.values.replaceFirst(RegExp(r',\s*$'), '');
+
+    background.data =
+    List<int>.from(values.split(',').map((value) => int.parse(value)).toList());
+
+    return background;
+  }
 }

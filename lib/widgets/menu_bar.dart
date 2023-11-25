@@ -127,15 +127,42 @@ class ApplicationMenuBar extends StatelessWidget {
   }
 
   void _setBackgroundFromSource(String source, BuildContext context) {
-    source = GBDKBackgroundConverter().formatSource(source);
-    List nameGraphics = GBDKBackgroundConverter().fromSource(source);
-    String name = nameGraphics[0];
-    Graphics graphics = nameGraphics[1];
-    context.read<BackgroundCubit>().setData(graphics.data);
-    context.read<BackgroundCubit>().setWidth(graphics.width);
-    context.read<BackgroundCubit>().setHeight(graphics.height);
-    context.read<AppStateCubit>().setTileIndexBackground(0);
-    context.read<AppStateCubit>().setBackgroundName(name);
+    source = GBDKTileConverter().formatSource(source);
+    var graphicsElements = GBDKBackgroundConverter().readGraphicElementsFromSource(source);
+    if (graphicsElements.length > 1) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) =>
+              AlertDialog(
+                title: const Text('Tile data selection'),
+                content: SizedBox(
+                  height: 200.0,
+                  width: 150.0,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: graphicsElements.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                        onTap: () {
+                          String values = graphicsElements[index].values;
+                          Background background = GBDKBackgroundConverter().fromGraphicElement(graphicsElements[index]);
+                          context.read<BackgroundCubit>().setData(background.data);
+                          context.read<AppStateCubit>().setTileIndexBackground(0);
+                          Navigator.pop(context);
+                        },
+                        title: Text(graphicsElements[index].name),
+                      );
+                    },
+                  ),
+                ),
+              ));
+    }
+    else if (graphicsElements.length == 1){
+      Background background = GBDKBackgroundConverter().fromGraphicElement(graphicsElements[0]);
+      context.read<BackgroundCubit>().setData(background.data);
+      context.read<AppStateCubit>().setTileIndexBackground(0);
+    }
   }
 
   void _setBackgroundFromBin(List<int> raw, BuildContext context) {
@@ -173,7 +200,7 @@ class ApplicationMenuBar extends StatelessWidget {
                             loadTileFromFilePicker(result, context);
                           } else {
                             readBytes(result).then(
-                                (raw) => _setBackgroundFromSource(raw, context));
+                                (source) => _setBackgroundFromSource(source, context));
                           }
                           /*snackBar = SnackBar(
                             content: Text(
