@@ -40,10 +40,7 @@ const unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalTo
     var background = Background();
 
     var graphicElement = readGraphicElementsFromSource(source)[0];
-    background.data = List<int>.from(graphicElement.values
-        .split(',')
-        .map((value) => int.parse(value))
-        .toList());
+    background.data = graphicElement.values;
 
     RegExp regExpWidth = RegExp(r"#define \w+Width (\d+)");
     var matchesWidth = regExpWidth.allMatches(source);
@@ -59,14 +56,6 @@ const unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalTo
     return [graphicElement.name, background];
   }
 
-  Background fromGraphicElement(GraphicElement graphicElement) {
-    var background = Background();
-
-    String values = graphicElement.values.replaceFirst(RegExp(r',\s*$'), '');
-
-    background.data = List<int>.from(
-        values.split(',').map((value) => int.parse(value)).toList());
-
-    return background;
-  }
+  Background fromGraphicElement(GraphicElement graphicElement) =>
+      Background(data: graphicElement.values);
 }

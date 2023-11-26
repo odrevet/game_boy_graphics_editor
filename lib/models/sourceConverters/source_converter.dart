@@ -2,8 +2,12 @@ import 'dart:convert';
 
 import '../graphics/graphics.dart';
 
-String toBinary(String value) {
+String hexToBinary(String value) {
   return int.parse(value).toRadixString(2).padLeft(8, "0");
+}
+
+String decToBinary(int value) {
+  return value.toRadixString(2).padLeft(8, "0");
 }
 
 String binaryToHex(value) {
@@ -39,9 +43,10 @@ String formatHexPairs(String hexString) {
       .replaceAll(' ', ', ');
 }
 
+// Elements read from source
 class GraphicElement {
   String name;
-  String values; // source array content e.g 0xFF, 0xF0
+  List<int> values;
 
   GraphicElement({required this.name, required this.values});
 }
@@ -71,8 +76,12 @@ abstract class SourceConverter {
     RegExp regExp = RegExp(
         r"(?:unsigned\s+char|uint8_t|UINT8)\s+(\w+)\[(?:\d+)?\]\s*=\s*\{(.*?)};");
     for (Match match in regExp.allMatches(source)) {
-      arrayElements
-          .add(GraphicElement(name: match.group(1)!, values: match.group(2)!));
+      // remove trailing comma if any
+      String matchedValues = match.group(2)!.replaceFirst(RegExp(r',\s*$'), '');
+
+      List<int> values = List<int>.from(
+          matchedValues.split(',').map((value) => int.parse(value)).toList());
+      arrayElements.add(GraphicElement(name: match.group(1)!, values: values));
     }
 
     return arrayElements;

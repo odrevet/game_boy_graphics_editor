@@ -36,7 +36,7 @@ class ApplicationMenuBar extends StatelessWidget {
     try {
       context.read<AppStateCubit>().setTileName(graphicElement.name);
       var data =
-          GBDKTileConverter().fromSource(graphicElement.values.split(','));
+          GBDKTileConverter().fromSource(graphicElement.values);
       data = GBDKTileConverter().reorderFromSourceToCanvas(
           data,
           context.read<MetaTileCubit>().state.width,
@@ -144,7 +144,6 @@ class ApplicationMenuBar extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         onTap: () {
-                          String values = graphicsElements[index].values;
                           Background background = GBDKBackgroundConverter()
                               .fromGraphicElement(graphicsElements[index]);
                           context
@@ -228,15 +227,7 @@ class ApplicationMenuBar extends StatelessWidget {
                           //bool hasLoaded = false;
                           if (context.read<AppStateCubit>().state.tileMode) {
                             readBin(result).then((bytes) {
-                              String values = "";
-                              for (int byte in bytes) {
-                                // Convert each byte to a hexadecimal string
-                                values +=
-                                    byte.toRadixString(16).padLeft(2, '0');
-                              }
-
-                              var data = GBDKTileConverter().fromSource(
-                                  formatHexPairs(values).split(','));
+                              var data = GBDKTileConverter().fromSource(bytes);
                               data = GBDKTileConverter()
                                   .reorderFromSourceToCanvas(
                                       data,

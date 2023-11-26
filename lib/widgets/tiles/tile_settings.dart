@@ -39,8 +39,8 @@ class TileSettings extends StatelessWidget {
                 initialValue: GBDKTileConverter()
                     .toBin(context.read<MetaTileCubit>().state),
                 onChanged: (text) {
-                  var data = GBDKTileConverter()
-                      .fromSource(formatHexPairs(text).split(','));
+                  var values = hexToIntList(text);
+                  var data = GBDKTileConverter().fromSource(values);
                   data = GBDKTileConverter().reorderFromSourceToCanvas(
                       data,
                       context.read<MetaTileCubit>().state.width,

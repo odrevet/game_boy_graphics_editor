@@ -165,14 +165,13 @@ extern unsigned char $name[];""";
   @override
   String toSource(Graphics graphics, String name) =>
       "unsigned char $name[] =\n{${toHexArray(graphics)}\n};";
-
-  //TODO values must be formated as 0xFF ... change to a list of int or hex data without 0x ?
-  List<int> fromSource(List<String> values) {
+  
+  List<int> fromSource(List<int> values) {
     var data = <int>[];
 
     for (var index = 0; index < values.length; index += 2) {
-      var lo = toBinary(values[index]);
-      var hi = toBinary(values[index + 1]);
+      var lo = decToBinary(values[index]);
+      var hi = decToBinary(values[index + 1]);
 
       var combined = "";
       for (var index = 0; index < MetaTile.tileSize; index++) {
