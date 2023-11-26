@@ -44,12 +44,12 @@ class BackgroundGrid extends StatelessWidget {
     if (background.data[index] >=
         (context.read<MetaTileCubit>().state.data.length ~/
             (context.read<MetaTileCubit>().state.height *
-                context.read<MetaTileCubit>().state.width))) {
+                context.read<MetaTileCubit>().state.width)) + context.read<BackgroundCubit>().state.origin) {
       tileWidget = Container(
         alignment: Alignment.center,
-        child: const Text(
-          "Overflow",
-          style: TextStyle(color: Colors.red),
+        child: Text(
+          "${background.data[index]} !",
+          style: const TextStyle(color: Colors.red),
           textAlign: TextAlign.center,
           textDirection: TextDirection.ltr,
         ),
