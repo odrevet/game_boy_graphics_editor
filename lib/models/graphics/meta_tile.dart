@@ -33,7 +33,8 @@ class MetaTile extends Graphics {
       data[(colIndex * width + rowIndex) + nbPixel * tileIndex] = intensity;
 
   List<int> getRow(int tileIndex, int rowIndex) => data.sublist(
-      tileIndex * nbPixel + rowIndex * width, tileIndex * nbPixel + rowIndex * height + width);
+      tileIndex * nbPixel + rowIndex * width,
+      tileIndex * nbPixel + rowIndex * height + width);
 
   void setRow(int tileIndex, int rowIndex, List<int> row) {
     for (int dotIndex = 0; dotIndex < width; dotIndex++) {
@@ -41,7 +42,8 @@ class MetaTile extends Graphics {
     }
   }
 
-  flood(int metaTileIndex, int intensity, int rowIndex, int colIndex, int targetColor) {
+  flood(int metaTileIndex, int intensity, int rowIndex, int colIndex,
+      int targetColor) {
     if (getPixel(rowIndex, colIndex, metaTileIndex) == targetColor) {
       setPixel(rowIndex, colIndex, metaTileIndex, intensity);
       if (inbound(rowIndex, colIndex - 1)) {

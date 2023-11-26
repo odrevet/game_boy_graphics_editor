@@ -40,11 +40,12 @@ class BackgroundGrid extends StatelessWidget {
 
   Widget _build(BuildContext context, int index) {
     Widget tileWidget;
-    
+
     if (background.data[index] >=
         (context.read<MetaTileCubit>().state.data.length ~/
-            (context.read<MetaTileCubit>().state.height *
-                context.read<MetaTileCubit>().state.width)) + context.read<BackgroundCubit>().state.origin) {
+                (context.read<MetaTileCubit>().state.height *
+                    context.read<MetaTileCubit>().state.width)) +
+            context.read<BackgroundCubit>().state.origin) {
       tileWidget = Container(
         alignment: Alignment.center,
         child: Text(
@@ -56,7 +57,8 @@ class BackgroundGrid extends StatelessWidget {
       );
     } else {
       tileWidget = MetaTileDisplay(
-        tileData: metaTile.getMetaTile(background.data[index] - context.read<BackgroundCubit>().state.origin),
+        tileData: metaTile.getMetaTile(background.data[index] -
+            context.read<BackgroundCubit>().state.origin),
       );
     }
 

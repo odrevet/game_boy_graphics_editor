@@ -9,7 +9,8 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   }
 
   setDataAtIndex(int at, List<int> data) {
-    emit(state.copyWith(data: [...state.data]..setAll(at * state.width * state.height, data)));
+    emit(state.copyWith(
+        data: [...state.data]..setAll(at * state.width * state.height, data)));
   }
 
   List<int> _shift(List<int> list, int v) {
@@ -17,16 +18,20 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     return list.sublist(i)..addAll(list.sublist(0, i));
   }
 
-  flood(int rowIndex, int colIndex, int metaTileIndex, int intensity, int targetColor) =>
-      emit(state.copyWith()..flood(metaTileIndex, intensity, rowIndex, colIndex, targetColor));
+  flood(int rowIndex, int colIndex, int metaTileIndex, int intensity,
+          int targetColor) =>
+      emit(state.copyWith()
+        ..flood(metaTileIndex, intensity, rowIndex, colIndex, targetColor));
 
   void setPixel(int rowIndex, int colIndex, int tileIndex, int intensity) {
     List<int> tileData = [...state.data];
-    tileData[(colIndex * state.width + rowIndex) + state.nbPixel * tileIndex] = intensity;
+    tileData[(colIndex * state.width + rowIndex) + state.nbPixel * tileIndex] =
+        intensity;
     emit(state.copyWith(data: tileData));
   }
 
-  void setDimensions(int width, int height) => emit(state.copyWith(width: width, height: height));
+  void setDimensions(int width, int height) =>
+      emit(state.copyWith(width: width, height: height));
 
   void addTile(int index) {
     List<int> tileData = [...state.data];
@@ -37,7 +42,8 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
   void removeTile(int tileIndex) {
     List<int> tileData = [...state.data];
-    tileData.removeRange((tileIndex) * state.nbPixel, tileIndex * state.nbPixel + state.nbPixel);
+    tileData.removeRange(
+        (tileIndex) * state.nbPixel, tileIndex * state.nbPixel + state.nbPixel);
     emit(state.copyWith(data: tileData));
   }
 
@@ -96,7 +102,8 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
-        int intensity = state.getPixel(rowIndex, state.width - 1 - colIndex, tileIndex);
+        int intensity =
+            state.getPixel(rowIndex, state.width - 1 - colIndex, tileIndex);
         metaTile.setPixel(rowIndex, colIndex, tileIndex, intensity);
       }
     }
@@ -109,7 +116,8 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
-        int intensity = state.getPixel(state.width - 1 - colIndex, rowIndex, tileIndex);
+        int intensity =
+            state.getPixel(state.width - 1 - colIndex, rowIndex, tileIndex);
         metaTile.setPixel(colIndex, rowIndex, tileIndex, intensity);
       }
     }
@@ -122,7 +130,8 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
-        int intensity = state.getPixel(rowIndex, state.width - 1 - colIndex, tileIndex);
+        int intensity =
+            state.getPixel(rowIndex, state.width - 1 - colIndex, tileIndex);
         metaTile.setPixel(colIndex, rowIndex, tileIndex, intensity);
       }
     }
@@ -135,7 +144,8 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
-        int intensity = state.getPixel(state.width - 1 - colIndex, rowIndex, tileIndex);
+        int intensity =
+            state.getPixel(state.width - 1 - colIndex, rowIndex, tileIndex);
         metaTile.setPixel(rowIndex, colIndex, tileIndex, intensity);
       }
     }

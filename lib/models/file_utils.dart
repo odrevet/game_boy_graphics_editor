@@ -7,17 +7,18 @@ import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/source_converter.dart';
 
 Future<void> saveFile(String content, allowedExtensions, [filename]) async {
-  String? fileName =
-      await FilePicker.platform.saveFile(allowedExtensions: allowedExtensions, fileName: filename);
+  String? fileName = await FilePicker.platform
+      .saveFile(allowedExtensions: allowedExtensions, fileName: filename);
   if (fileName != null) {
     File file = File(fileName);
     file.writeAsString(content);
   }
 }
 
-Future<void> saveFileBin(List<int> content, allowedExtensions, [filename]) async {
-  String? fileName =
-  await FilePicker.platform.saveFile(allowedExtensions: allowedExtensions, fileName: filename);
+Future<void> saveFileBin(List<int> content, allowedExtensions,
+    [filename]) async {
+  String? fileName = await FilePicker.platform
+      .saveFile(allowedExtensions: allowedExtensions, fileName: filename);
   if (fileName != null) {
     File file = File(fileName);
     file.writeAsBytes(Uint8List.fromList(content));
@@ -29,8 +30,10 @@ Future<String?> saveToDirectory(
   String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
   if (selectedDirectory != null) {
-    File("$selectedDirectory/$name.h").writeAsString(sourceConverter.toHeader(graphics, name));
-    File("$selectedDirectory/$name.c").writeAsString(sourceConverter.toSource(graphics, name));
+    File("$selectedDirectory/$name.h")
+        .writeAsString(sourceConverter.toHeader(graphics, name));
+    File("$selectedDirectory/$name.c")
+        .writeAsString(sourceConverter.toSource(graphics, name));
   }
 
   return selectedDirectory;

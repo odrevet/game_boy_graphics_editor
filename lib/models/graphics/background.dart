@@ -5,7 +5,8 @@ class Background extends Graphics {
       : super(
             width: width,
             height: height,
-            data: data ?? List.filled(width * height, fill ?? 0, growable: true));
+            data:
+                data ?? List.filled(width * height, fill ?? 0, growable: true));
 
   int origin = 0;
 

@@ -7,7 +7,8 @@ class IntensityButton extends StatelessWidget {
   final int intensity;
   final List<Color> colorSet;
 
-  const IntensityButton({Key? key, required this.intensity, required this.colorSet})
+  const IntensityButton(
+      {Key? key, required this.intensity, required this.colorSet})
       : super(key: key);
 
   @override

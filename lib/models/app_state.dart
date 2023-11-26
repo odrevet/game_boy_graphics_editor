@@ -59,7 +59,8 @@ class AppState {
         showGridBackground: showGridBackground ?? this.showGridBackground,
         showExportPreviewBackground:
             showExportPreviewBackground ?? this.showExportPreviewBackground,
-        showExportPreviewTile: showExportPreviewTile ?? this.showExportPreviewTile,
+        showExportPreviewTile:
+            showExportPreviewTile ?? this.showExportPreviewTile,
         tileBuffer: tileBuffer ?? [...this.tileBuffer],
         colorSet: colorSet ?? this.colorSet,
       );

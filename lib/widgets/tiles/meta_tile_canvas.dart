@@ -22,7 +22,8 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
     return BlocBuilder<MetaTileCubit, MetaTile>(builder: (context, metaTile) {
       return BlocBuilder<AppStateCubit, AppState>(builder: (context, appState) {
         return LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) => MouseRegion(
+          builder: (BuildContext context, BoxConstraints constraints) =>
+              MouseRegion(
             cursor: SystemMouseCursors.precise,
             onEnter: (PointerEvent details) => setState(() => isHover = true),
             onExit: (PointerEvent details) => setState(() {
@@ -31,12 +32,14 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
             child: GestureDetector(
               onPanUpdate: (DragUpdateDetails details) {
                 if (isHover && appState.floodMode == false) {
-                  draw(details, constraints, appState.intensity, appState.floodMode);
+                  draw(details, constraints, appState.intensity,
+                      appState.floodMode);
                 }
               },
               onTapDown: (TapDownDetails details) {
                 if (isHover) {
-                  draw(details, constraints, appState.intensity, appState.floodMode);
+                  draw(details, constraints, appState.intensity,
+                      appState.floodMode);
                 }
               },
               onSecondaryTapDown: (TapDownDetails details) {
@@ -55,20 +58,24 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
     });
   }
 
-  draw(dynamic details, BoxConstraints constraints, int intensity, bool floodMode) {
+  draw(dynamic details, BoxConstraints constraints, int intensity,
+      bool floodMode) {
     var localPosition = details.localPosition;
-    final pixelSize = constraints.maxWidth / context.read<MetaTileCubit>().state.width;
+    final pixelSize =
+        constraints.maxWidth / context.read<MetaTileCubit>().state.width;
     final rowIndex = (localPosition.dx / pixelSize).floor();
     final colIndex = (localPosition.dy / pixelSize).floor();
-    int targetColor = context
-        .read<MetaTileCubit>()
-        .state
-        .getPixel(rowIndex, colIndex, context.read<AppStateCubit>().state.tileIndexTile);
+    int targetColor = context.read<MetaTileCubit>().state.getPixel(
+        rowIndex, colIndex, context.read<AppStateCubit>().state.tileIndexTile);
 
     if (floodMode) {
       if (targetColor != context.read<AppStateCubit>().state.intensity) {
-        context.read<MetaTileCubit>().flood(rowIndex, colIndex,
-            context.read<AppStateCubit>().state.tileIndexTile, intensity, targetColor);
+        context.read<MetaTileCubit>().flood(
+            rowIndex,
+            colIndex,
+            context.read<AppStateCubit>().state.tileIndexTile,
+            intensity,
+            targetColor);
       }
     } else if (targetColor != intensity) {
       context.read<MetaTileCubit>().setPixel(
@@ -81,13 +88,12 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
 
   pickColorAtCursor(dynamic details, BoxConstraints constraints) {
     var localPosition = details.localPosition;
-    final pixelSize = constraints.maxWidth / context.read<MetaTileCubit>().state.width;
+    final pixelSize =
+        constraints.maxWidth / context.read<MetaTileCubit>().state.width;
     final rowIndex = (localPosition.dx / pixelSize).floor();
     final colIndex = (localPosition.dy / pixelSize).floor();
-    int intensityAtCursor = context
-        .read<MetaTileCubit>()
-        .state
-        .getPixel(rowIndex, colIndex, context.read<AppStateCubit>().state.tileIndexTile);
+    int intensityAtCursor = context.read<MetaTileCubit>().state.getPixel(
+        rowIndex, colIndex, context.read<AppStateCubit>().state.tileIndexTile);
     context.read<AppStateCubit>().setIntensity(intensityAtCursor);
   }
 }

@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tile_settings.dart';
 
+import '../../models/download_stub.dart'
+    if (dart.library.html) '../../models/download.dart';
 import '../cubits/app_state_cubit.dart';
 import '../cubits/background_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
-
-import '../../models/download_stub.dart'
-    if (dart.library.html) '../../models/download.dart';
 import '../models/file_utils.dart';
 import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
@@ -128,13 +127,13 @@ class ApplicationMenuBar extends StatelessWidget {
 
   void _setBackgroundFromSource(String source, BuildContext context) {
     source = GBDKTileConverter().formatSource(source);
-    var graphicsElements = GBDKBackgroundConverter().readGraphicElementsFromSource(source);
+    var graphicsElements =
+        GBDKBackgroundConverter().readGraphicElementsFromSource(source);
     if (graphicsElements.length > 1) {
       showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (BuildContext context) =>
-              AlertDialog(
+          builder: (BuildContext context) => AlertDialog(
                 title: const Text('Tile data selection'),
                 content: SizedBox(
                   height: 200.0,
@@ -146,9 +145,14 @@ class ApplicationMenuBar extends StatelessWidget {
                       return ListTile(
                         onTap: () {
                           String values = graphicsElements[index].values;
-                          Background background = GBDKBackgroundConverter().fromGraphicElement(graphicsElements[index]);
-                          context.read<BackgroundCubit>().setData(background.data);
-                          context.read<AppStateCubit>().setTileIndexBackground(0);
+                          Background background = GBDKBackgroundConverter()
+                              .fromGraphicElement(graphicsElements[index]);
+                          context
+                              .read<BackgroundCubit>()
+                              .setData(background.data);
+                          context
+                              .read<AppStateCubit>()
+                              .setTileIndexBackground(0);
                           Navigator.pop(context);
                         },
                         title: Text(graphicsElements[index].name),
@@ -157,9 +161,9 @@ class ApplicationMenuBar extends StatelessWidget {
                   ),
                 ),
               ));
-    }
-    else if (graphicsElements.length == 1){
-      Background background = GBDKBackgroundConverter().fromGraphicElement(graphicsElements[0]);
+    } else if (graphicsElements.length == 1) {
+      Background background =
+          GBDKBackgroundConverter().fromGraphicElement(graphicsElements[0]);
       context.read<BackgroundCubit>().setData(background.data);
       context.read<AppStateCubit>().setTileIndexBackground(0);
     }
@@ -199,8 +203,8 @@ class ApplicationMenuBar extends StatelessWidget {
                           if (context.read<AppStateCubit>().state.tileMode) {
                             loadTileFromFilePicker(result, context);
                           } else {
-                            readBytes(result).then(
-                                (source) => _setBackgroundFromSource(source, context));
+                            readBytes(result).then((source) =>
+                                _setBackgroundFromSource(source, context));
                           }
                           /*snackBar = SnackBar(
                             content: Text(
@@ -252,9 +256,12 @@ class ApplicationMenuBar extends StatelessWidget {
                                     byte.toRadixString(16).padLeft(2, '0');
                               }
                               var data = <int>[];
-                              for (var index = 0; index < values.length; index += 2) {
-                                data.add(
-                                    int.parse("${values[index]}${values[index+1]}", radix: 16));
+                              for (var index = 0;
+                                  index < values.length;
+                                  index += 2) {
+                                data.add(int.parse(
+                                    "${values[index]}${values[index + 1]}",
+                                    radix: 16));
                               }
                               _setBackgroundFromBin(data, context);
                             });

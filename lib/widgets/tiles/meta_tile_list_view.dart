@@ -22,7 +22,8 @@ class MetaTileListView extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: context.read<MetaTileCubit>().state.data.length ~/
-          (context.read<MetaTileCubit>().state.height * context.read<MetaTileCubit>().state.width),
+          (context.read<MetaTileCubit>().state.height *
+              context.read<MetaTileCubit>().state.width),
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () => onTap(index),
@@ -31,9 +32,11 @@ class MetaTileListView extends StatelessWidget {
             child: Card(
               child: Column(
                 children: [
-                  Text("#${index.toString()} ${decimalToHex(index, prefix: true)}",
+                  Text(
+                      "#${index.toString()} ${decimalToHex(index, prefix: true)}",
                       style: selectedTile == index
-                          ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
+                          ? const TextStyle(
+                              color: Colors.blue, fontWeight: FontWeight.bold)
                           : null),
                   SizedBox(
                     width: 200,
@@ -42,7 +45,10 @@ class MetaTileListView extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: MetaTileDisplay(
                         showGrid: false,
-                        tileData: context.read<MetaTileCubit>().state.getMetaTile(index),
+                        tileData: context
+                            .read<MetaTileCubit>()
+                            .state
+                            .getMetaTile(index),
                       ),
                     ),
                   ),

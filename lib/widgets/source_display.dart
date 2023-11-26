@@ -2,7 +2,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../models/download_stub.dart' if (dart.library.html) '../models/download.dart';
+import '../models/download_stub.dart'
+    if (dart.library.html) '../models/download.dart';
 import '../models/file_utils.dart';
 
 class SourceDisplay extends StatelessWidget {
@@ -10,7 +11,11 @@ class SourceDisplay extends StatelessWidget {
   final String source;
   final String extension;
 
-  const SourceDisplay({Key? key, required this.name, required this.source, required this.extension})
+  const SourceDisplay(
+      {Key? key,
+      required this.name,
+      required this.source,
+      required this.extension})
       : super(key: key);
 
   @override

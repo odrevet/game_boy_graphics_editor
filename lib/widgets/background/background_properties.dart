@@ -11,13 +11,15 @@ class BackgroundProperties extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BackgroundCubit, Background>(builder: (context, background) {
+    return BlocBuilder<BackgroundCubit, Background>(
+        builder: (context, background) {
       return Column(
         children: [
           TextFormField(
             decoration: const InputDecoration(labelText: 'Name'),
             initialValue: context.read<AppStateCubit>().state.backgroundName,
-            onChanged: (text) => context.read<AppStateCubit>().setBackgroundName(text),
+            onChanged: (text) =>
+                context.read<AppStateCubit>().setBackgroundName(text),
           ),
           Row(
             children: [
@@ -25,12 +27,14 @@ class BackgroundProperties extends StatelessWidget {
               IconButton(
                   icon: const Icon(Icons.add),
                   tooltip: 'Add Column',
-                  onPressed: () => context.read<BackgroundCubit>().insertCol(0, 0)),
+                  onPressed: () =>
+                      context.read<BackgroundCubit>().insertCol(0, 0)),
               IconButton(
                   icon: const Icon(Icons.remove),
                   tooltip: 'Remove Column',
-                  onPressed: () =>
-                      background.width > 1 ? context.read<BackgroundCubit>().deleteCol(0) : null),
+                  onPressed: () => background.width > 1
+                      ? context.read<BackgroundCubit>().deleteCol(0)
+                      : null),
             ],
           ),
           Row(
@@ -39,12 +43,14 @@ class BackgroundProperties extends StatelessWidget {
               IconButton(
                   icon: const Icon(Icons.add),
                   tooltip: 'Add Row',
-                  onPressed: () => context.read<BackgroundCubit>().insertRow(0, 0)),
+                  onPressed: () =>
+                      context.read<BackgroundCubit>().insertRow(0, 0)),
               IconButton(
                   icon: const Icon(Icons.remove),
                   tooltip: 'Remove Row',
-                  onPressed: () =>
-                      background.height > 1 ? context.read<BackgroundCubit>().deleteRow(0) : null),
+                  onPressed: () => background.height > 1
+                      ? context.read<BackgroundCubit>().deleteRow(0)
+                      : null),
             ],
           ),
           TextFormField(
@@ -54,7 +60,7 @@ class BackgroundProperties extends StatelessWidget {
               decoration: const InputDecoration(labelText: 'Origin'),
               key: const Key('tileOrigin'),
               initialValue:
-              context.read<BackgroundCubit>().state.origin.toString(),
+                  context.read<BackgroundCubit>().state.origin.toString(),
               onChanged: (text) =>
                   context.read<BackgroundCubit>().setOrigin(int.parse(text))),
         ],

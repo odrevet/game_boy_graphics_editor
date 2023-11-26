@@ -17,7 +17,10 @@ class BackgroundEditor extends StatefulWidget {
   final bool showGrid;
 
   const BackgroundEditor(
-      {Key? key, required this.tiles, this.onTapTileListView, this.showGrid = false})
+      {Key? key,
+      required this.tiles,
+      this.onTapTileListView,
+      this.showGrid = false})
       : super(key: key);
 
   @override
@@ -29,14 +32,17 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BackgroundCubit, Background>(builder: (context, background) {
+    return BlocBuilder<BackgroundCubit, Background>(
+        builder: (context, background) {
       return Row(children: [
         SizedBox(
           width: 200,
           child: MetaTileListView(
-              selectedTile: context.read<AppStateCubit>().state.tileIndexBackground,
-              onTap: (index) =>
-                  widget.onTapTileListView != null ? widget.onTapTileListView!(index) : null),
+              selectedTile:
+                  context.read<AppStateCubit>().state.tileIndexBackground,
+              onTap: (index) => widget.onTapTileListView != null
+                  ? widget.onTapTileListView!(index)
+                  : null),
         ),
         Expanded(
           child: Padding(
@@ -47,7 +53,11 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                   title: const Text('Insert column before'),
                   onTap: () {
                     context.read<BackgroundCubit>().insertCol(
-                        hoverTileIndex, context.read<AppStateCubit>().state.tileIndexBackground);
+                        hoverTileIndex,
+                        context
+                            .read<AppStateCubit>()
+                            .state
+                            .tileIndexBackground);
                     Navigator.of(contextMenuArea).pop();
                   },
                 ),
@@ -62,7 +72,11 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                   title: const Text('Insert row before'),
                   onTap: () {
                     context.read<BackgroundCubit>().insertRow(
-                        hoverTileIndex, context.read<AppStateCubit>().state.tileIndexBackground);
+                        hoverTileIndex,
+                        context
+                            .read<AppStateCubit>()
+                            .state
+                            .tileIndexBackground);
                     Navigator.of(contextMenuArea).pop();
                   },
                 ),
@@ -70,7 +84,11 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                   title: const Text('Remove row'),
                   onTap: () {
                     context.read<BackgroundCubit>().insertRow(
-                        hoverTileIndex, context.read<AppStateCubit>().state.tileIndexBackground);
+                        hoverTileIndex,
+                        context
+                            .read<AppStateCubit>()
+                            .state
+                            .tileIndexBackground);
                     Navigator.of(contextMenuArea).pop();
                   },
                 )
@@ -100,14 +118,28 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                         children: [
                           SourceDisplay(
                             source: GBDKBackgroundConverter().toHeader(
-                                background, context.read<AppStateCubit>().state.backgroundName),
-                            name: context.read<AppStateCubit>().state.backgroundName,
+                                background,
+                                context
+                                    .read<AppStateCubit>()
+                                    .state
+                                    .backgroundName),
+                            name: context
+                                .read<AppStateCubit>()
+                                .state
+                                .backgroundName,
                             extension: '.h',
                           ),
                           SourceDisplay(
                             source: GBDKBackgroundConverter().toSource(
-                                background, context.read<AppStateCubit>().state.backgroundName),
-                            name: context.read<AppStateCubit>().state.backgroundName,
+                                background,
+                                context
+                                    .read<AppStateCubit>()
+                                    .state
+                                    .backgroundName),
+                            name: context
+                                .read<AppStateCubit>()
+                                .state
+                                .backgroundName,
                             extension: '.c',
                           )
                         ],

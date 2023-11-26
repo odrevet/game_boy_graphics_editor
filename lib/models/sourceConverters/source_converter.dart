@@ -28,15 +28,16 @@ List<int> hexToIntList(String hexString) {
   return result;
 }
 
-String formatHexPairs(String hexString)
-{
-  if(hexString.length.isOdd){
+String formatHexPairs(String hexString) {
+  if (hexString.length.isOdd) {
     hexString = "${hexString}0";
   }
 
-  return hexString.replaceAllMapped(RegExp(r".."), (match) => '0x${match.group(0)} ').trimRight().replaceAll(' ', ', ');
+  return hexString
+      .replaceAllMapped(RegExp(r".."), (match) => '0x${match.group(0)} ')
+      .trimRight()
+      .replaceAll(' ', ', ');
 }
-
 
 class GraphicElement {
   String name;
@@ -67,10 +68,11 @@ abstract class SourceConverter {
   List<GraphicElement> readGraphicElementsFromSource(String source) {
     var arrayElements = <GraphicElement>[];
 
-    RegExp regExp =
-    RegExp(r"(?:unsigned\s+char|uint8_t|UINT8)\s+(\w+)\[(?:\d+)?\]\s*=\s*\{(.*?)};");
+    RegExp regExp = RegExp(
+        r"(?:unsigned\s+char|uint8_t|UINT8)\s+(\w+)\[(?:\d+)?\]\s*=\s*\{(.*?)};");
     for (Match match in regExp.allMatches(source)) {
-      arrayElements.add(GraphicElement(name: match.group(1)!, values: match.group(2)!));
+      arrayElements
+          .add(GraphicElement(name: match.group(1)!, values: match.group(2)!));
     }
 
     return arrayElements;

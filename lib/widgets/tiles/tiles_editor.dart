@@ -40,7 +40,9 @@ class _TilesEditorState extends State<TilesEditor> {
                 onTap: () {
                   {
                     context.read<MetaTileCubit>().addTile(hoverTileIndex);
-                    context.read<AppStateCubit>().setSelectedTileIndex(++hoverTileIndex);
+                    context
+                        .read<AppStateCubit>()
+                        .setSelectedTileIndex(++hoverTileIndex);
                     Navigator.pop(contextMenuAreaContext);
                   }
                 },
@@ -50,7 +52,9 @@ class _TilesEditorState extends State<TilesEditor> {
                 title: const Text("Delete"),
                 onTap: () {
                   context.read<MetaTileCubit>().removeTile(hoverTileIndex);
-                  context.read<AppStateCubit>().setSelectedTileIndex(--hoverTileIndex);
+                  context
+                      .read<AppStateCubit>()
+                      .setSelectedTileIndex(--hoverTileIndex);
                   Navigator.pop(contextMenuAreaContext);
                 },
               ),
@@ -67,7 +71,9 @@ class _TilesEditorState extends State<TilesEditor> {
                 leading: const Icon(Icons.paste),
                 title: const Text("Paste"),
                 onTap: () {
-                  context.read<MetaTileCubit>().setDataAtIndex(hoverTileIndex, appState.tileBuffer);
+                  context
+                      .read<MetaTileCubit>()
+                      .setDataAtIndex(hoverTileIndex, appState.tileBuffer);
                   Navigator.pop(contextMenuAreaContext);
                 },
               ),
@@ -80,18 +86,24 @@ class _TilesEditorState extends State<TilesEditor> {
                         icon: const Icon(Icons.add),
                         tooltip: 'Add tile',
                         onPressed: () {
-                          int tileIndex = context.read<AppStateCubit>().state.tileIndexTile;
+                          int tileIndex =
+                              context.read<AppStateCubit>().state.tileIndexTile;
                           context.read<MetaTileCubit>().addTile(tileIndex);
-                          context.read<AppStateCubit>().setSelectedTileIndex(++tileIndex);
+                          context
+                              .read<AppStateCubit>()
+                              .setSelectedTileIndex(++tileIndex);
                         }),
                     IconButton(
                         icon: const Icon(Icons.remove),
                         tooltip: 'Remove tile',
                         onPressed: () {
-                          int tileIndex = context.read<AppStateCubit>().state.tileIndexTile;
+                          int tileIndex =
+                              context.read<AppStateCubit>().state.tileIndexTile;
                           if (tileIndex > 0) {
                             context.read<MetaTileCubit>().removeTile(tileIndex);
-                            context.read<AppStateCubit>().setSelectedTileIndex(--tileIndex);
+                            context
+                                .read<AppStateCubit>()
+                                .setSelectedTileIndex(--tileIndex);
                           }
                         }),
                   ],
@@ -100,12 +112,14 @@ class _TilesEditorState extends State<TilesEditor> {
                   child: SizedBox(
                     width: 200,
                     child: MetaTileListView(
-                        selectedTile: context.read<AppStateCubit>().state.tileIndexTile,
+                        selectedTile:
+                            context.read<AppStateCubit>().state.tileIndexTile,
                         onHover: (index) => setState(() {
                               hoverTileIndex = index;
                             }),
-                        onTap: (index) =>
-                            context.read<AppStateCubit>().setSelectedTileIndex(index)),
+                        onTap: (index) => context
+                            .read<AppStateCubit>()
+                            .setSelectedTileIndex(index)),
                   ),
                 ),
               ],
@@ -137,61 +151,70 @@ class _TilesEditorState extends State<TilesEditor> {
                   ),
                   const VerticalDivider(),
                   IconButton(
-                      onPressed: () =>
-                          context.read<MetaTileCubit>().flipVertical(appState.tileIndexTile),
+                      onPressed: () => context
+                          .read<MetaTileCubit>()
+                          .flipVertical(appState.tileIndexTile),
                       icon: const Icon(Icons.flip)),
                   IconButton(
-                      onPressed: () =>
-                          context.read<MetaTileCubit>().flipHorizontal(appState.tileIndexTile),
+                      onPressed: () => context
+                          .read<MetaTileCubit>()
+                          .flipHorizontal(appState.tileIndexTile),
                       icon: const RotatedBox(
                         quarterTurns: 1,
                         child: Icon(Icons.flip),
                       )),
                   IconButton(
                       onPressed: () => metaTile.width == metaTile.height
-                          ? context.read<MetaTileCubit>().rotateLeft(appState.tileIndexTile)
+                          ? context
+                              .read<MetaTileCubit>()
+                              .rotateLeft(appState.tileIndexTile)
                           : null,
                       icon: const Icon(Icons.rotate_left)),
                   IconButton(
                       onPressed: () => metaTile.width == metaTile.height
-                          ? context.read<MetaTileCubit>().rotateRight(appState.tileIndexTile)
+                          ? context
+                              .read<MetaTileCubit>()
+                              .rotateRight(appState.tileIndexTile)
                           : null,
                       icon: const Icon(Icons.rotate_right)),
                   const VerticalDivider(),
                   IconButton(
-                      onPressed: () => context
-                          .read<MetaTileCubit>()
-                          .upShift(appState.tileIndexTile, appState.tileIndexTile),
+                      onPressed: () => context.read<MetaTileCubit>().upShift(
+                          appState.tileIndexTile, appState.tileIndexTile),
                       icon: const Icon(Icons.keyboard_arrow_up_rounded)),
                   IconButton(
-                      onPressed: () => context
-                          .read<MetaTileCubit>()
-                          .downShift(appState.tileIndexTile, appState.tileIndexTile),
+                      onPressed: () => context.read<MetaTileCubit>().downShift(
+                          appState.tileIndexTile, appState.tileIndexTile),
                       icon: const Icon(Icons.keyboard_arrow_down_rounded)),
                   IconButton(
-                      onPressed: () => context
-                          .read<MetaTileCubit>()
-                          .leftShift(appState.tileIndexTile, appState.tileIndexTile),
+                      onPressed: () => context.read<MetaTileCubit>().leftShift(
+                          appState.tileIndexTile, appState.tileIndexTile),
                       icon: const Icon(Icons.keyboard_arrow_left_rounded)),
                   IconButton(
-                      onPressed: () => context
-                          .read<MetaTileCubit>()
-                          .rightShift(appState.tileIndexTile, appState.tileIndexTile),
+                      onPressed: () => context.read<MetaTileCubit>().rightShift(
+                          appState.tileIndexTile, appState.tileIndexTile),
                       icon: const Icon(Icons.keyboard_arrow_right_rounded)),
                   const VerticalDivider(),
                   IconButton(
-                      onPressed:
-                      context.read<MetaTileCubit>().canUndo ? context.read<MetaTileCubit>().undo : null,
+                      onPressed: context.read<MetaTileCubit>().canUndo
+                          ? context.read<MetaTileCubit>().undo
+                          : null,
                       icon: const Icon(Icons.undo)),
                   IconButton(
-                      onPressed:
-                      context.read<MetaTileCubit>().canRedo ? context.read<MetaTileCubit>().redo : null,
+                      onPressed: context.read<MetaTileCubit>().canRedo
+                          ? context.read<MetaTileCubit>().redo
+                          : null,
                       icon: const Icon(Icons.redo)),
                   const VerticalDivider(),
                   IconButton(
-                    icon: Icon(context.read<AppStateCubit>().state.floodMode ? Icons.waves : Icons.edit),
-                    tooltip: context.read<AppStateCubit>().state.floodMode ? 'Flood fill' : 'Draw',
-                    onPressed: () => context.read<AppStateCubit>().toggleFloodMode(),
+                    icon: Icon(context.read<AppStateCubit>().state.floodMode
+                        ? Icons.waves
+                        : Icons.edit),
+                    tooltip: context.read<AppStateCubit>().state.floodMode
+                        ? 'Flood fill'
+                        : 'Draw',
+                    onPressed: () =>
+                        context.read<AppStateCubit>().toggleFloodMode(),
                   ),
                   const VerticalDivider(),
                   const TileDimensionDropdown(),
@@ -218,7 +241,8 @@ class _TilesEditorState extends State<TilesEditor> {
                     width: 200,
                     height: 200,
                     child: BackgroundGrid(
-                      background: Background(width: 4, height: 4, fill: appState.tileIndexTile),
+                      background: Background(
+                          width: 4, height: 4, fill: appState.tileIndexTile),
                       metaTile: metaTile,
                     ),
                   ),
@@ -229,12 +253,14 @@ class _TilesEditorState extends State<TilesEditor> {
                           child: Column(
                             children: [
                               SourceDisplay(
-                                source: GBDKTileConverter().toHeader(metaTile, appState.tileName),
+                                source: GBDKTileConverter()
+                                    .toHeader(metaTile, appState.tileName),
                                 name: appState.tileName, extension: '.h',
                                 //graphics: metaTile,
                               ),
                               SourceDisplay(
-                                source: GBDKTileConverter().toSource(metaTile, appState.tileName),
+                                source: GBDKTileConverter()
+                                    .toSource(metaTile, appState.tileName),
                                 name: appState.tileName, extension: '.c',
                                 //graphics: metaTile,
                               ),

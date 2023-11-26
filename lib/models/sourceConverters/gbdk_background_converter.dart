@@ -4,7 +4,8 @@ import 'package:game_boy_graphics_editor/models/sourceConverters/source_converte
 import '../graphics/graphics.dart';
 
 class GBDKBackgroundConverter extends SourceConverter {
-  static final GBDKBackgroundConverter _singleton = GBDKBackgroundConverter._internal();
+  static final GBDKBackgroundConverter _singleton =
+      GBDKBackgroundConverter._internal();
 
   factory GBDKBackgroundConverter() {
     return _singleton;
@@ -31,15 +32,18 @@ extern const unsigned char $name[];
   }
 
   @override
-  String toSource(Graphics graphics, String name) => """#define ${name}Width ${graphics.width}
+  String toSource(Graphics graphics, String name) =>
+      """#define ${name}Width ${graphics.width}
 const unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalToHex(e, prefix: true)).toList())}};""";
 
   List fromSource(String source) {
     var background = Background();
 
     var graphicElement = readGraphicElementsFromSource(source)[0];
-    background.data =
-        List<int>.from(graphicElement.values.split(',').map((value) => int.parse(value)).toList());
+    background.data = List<int>.from(graphicElement.values
+        .split(',')
+        .map((value) => int.parse(value))
+        .toList());
 
     RegExp regExpWidth = RegExp(r"#define \w+Width (\d+)");
     var matchesWidth = regExpWidth.allMatches(source);
@@ -55,14 +59,13 @@ const unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalTo
     return [graphicElement.name, background];
   }
 
-
   Background fromGraphicElement(GraphicElement graphicElement) {
     var background = Background();
 
     String values = graphicElement.values.replaceFirst(RegExp(r',\s*$'), '');
 
-    background.data =
-    List<int>.from(values.split(',').map((value) => int.parse(value)).toList());
+    background.data = List<int>.from(
+        values.split(',').map((value) => int.parse(value)).toList());
 
     return background;
   }
