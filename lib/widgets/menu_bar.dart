@@ -91,30 +91,7 @@ class ApplicationMenuBar extends StatelessWidget {
         var graphicsElements =
             GBDKTileConverter().readGraphicElementsFromSource(source);
         if (graphicsElements.length > 1) {
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Tile data selection'),
-                    content: SizedBox(
-                      height: 200.0,
-                      width: 150.0,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: graphicsElements.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            onTap: () {
-                              hasLoaded = _setMetaTile(
-                                  graphicsElements[index], context);
-                              Navigator.pop(context);
-                            },
-                            title: Text(graphicsElements[index].name),
-                          );
-                        },
-                      ),
-                    ),
-                  ));
+          hasLoaded = _showGraphicElementChooseDialog(context, graphicsElements, _onTapTile);
         } else if (graphicsElements.length == 1) {
           hasLoaded = _setMetaTile(graphicsElements.first, context);
         } else {
@@ -122,6 +99,53 @@ class ApplicationMenuBar extends StatelessWidget {
         }
       });
     }
+    return hasLoaded;
+  }
+
+
+  bool _onTapTile(GraphicElement graphicElement, context)
+  {
+      return _setMetaTile(graphicElement, context);
+  }
+
+  bool _onTapBackground(GraphicElement graphicElement, BuildContext context){
+    Background background = GBDKBackgroundConverter()
+        .fromGraphicElement(graphicElement);
+    context
+        .read<BackgroundCubit>()
+        .setData(background.data);
+    context
+        .read<AppStateCubit>()
+        .setTileIndexBackground(0);
+    return true;
+  }
+
+  _showGraphicElementChooseDialog(BuildContext context, List<GraphicElement> graphicsElements, Function onTap){
+    bool hasLoaded = false;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Graphic element selection'),
+          content: SizedBox(
+            height: 200.0,
+            width: 150.0,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: graphicsElements.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  onTap: () {
+                    hasLoaded = _onTapTile(graphicsElements[index], context);
+                    Navigator.pop(context);
+                  },
+                  title: Text(graphicsElements[index].name),
+                );
+              },
+            ),
+          ),
+        ));
+
     return hasLoaded;
   }
 
@@ -144,14 +168,7 @@ class ApplicationMenuBar extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         onTap: () {
-                          Background background = GBDKBackgroundConverter()
-                              .fromGraphicElement(graphicsElements[index]);
-                          context
-                              .read<BackgroundCubit>()
-                              .setData(background.data);
-                          context
-                              .read<AppStateCubit>()
-                              .setTileIndexBackground(0);
+                          _onTapBackground(graphicsElements[index], context);
                           Navigator.pop(context);
                         },
                         title: Text(graphicsElements[index].name),
