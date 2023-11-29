@@ -17,8 +17,8 @@ import 'intensity_button.dart';
 
 class TilesEditor extends StatefulWidget {
   const TilesEditor({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<TilesEditor> createState() => _TilesEditorState();

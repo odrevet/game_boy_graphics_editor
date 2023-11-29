@@ -7,7 +7,7 @@ import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import '../../cubits/app_state_cubit.dart';
 
 class BackgroundProperties extends StatelessWidget {
-  const BackgroundProperties({Key? key}) : super(key: key);
+  const BackgroundProperties({super.key});
 
   @override
   Widget build(BuildContext context) {

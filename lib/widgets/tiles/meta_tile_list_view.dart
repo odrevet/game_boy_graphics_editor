@@ -11,11 +11,11 @@ class MetaTileListView extends StatelessWidget {
   final int selectedTile;
 
   const MetaTileListView({
-    Key? key,
+    super.key,
     required this.onTap,
     this.onHover,
     required this.selectedTile,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

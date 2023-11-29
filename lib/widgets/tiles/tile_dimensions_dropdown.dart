@@ -7,7 +7,7 @@ import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import '../../models/sourceConverters/gbdk_tile_converter.dart';
 
 class TileDimensionDropdown extends StatelessWidget {
-  const TileDimensionDropdown({Key? key}) : super(key: key);
+  const TileDimensionDropdown({super.key});
 
   @override
   Widget build(BuildContext context) {

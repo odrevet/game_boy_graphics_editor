@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
@@ -24,6 +26,9 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 fontFamily: 'RobotoMono',
                 primarySwatch: Colors.grey,
+              ),
+              scrollBehavior: const MaterialScrollBehavior().copyWith(
+                dragDevices: PointerDeviceKind.values.toSet(),
               ),
               home: const Editor()));
 }

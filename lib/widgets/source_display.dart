@@ -12,11 +12,10 @@ class SourceDisplay extends StatelessWidget {
   final String extension;
 
   const SourceDisplay(
-      {Key? key,
+      {super.key,
       required this.name,
       required this.source,
-      required this.extension})
-      : super(key: key);
+      required this.extension});
 
   @override
   Widget build(BuildContext context) {

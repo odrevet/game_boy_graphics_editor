@@ -11,7 +11,7 @@ import '../models/app_state.dart';
 import 'menu_bar.dart';
 
 class Editor extends StatefulWidget {
-  const Editor({Key? key}) : super(key: key);
+  const Editor({super.key});
 
   @override
   State<Editor> createState() => _EditorState();

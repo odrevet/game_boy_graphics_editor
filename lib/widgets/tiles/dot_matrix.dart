@@ -7,12 +7,11 @@ class DotMatrix extends StatelessWidget {
   final int height;
 
   const DotMatrix(
-      {Key? key,
+      {super.key,
       required this.pixels,
       required this.width,
       required this.height,
-      this.showGrid = false})
-      : super(key: key);
+      this.showGrid = false});
 
   @override
   Widget build(BuildContext context) {

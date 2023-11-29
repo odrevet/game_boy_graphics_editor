@@ -17,11 +17,10 @@ class BackgroundEditor extends StatefulWidget {
   final bool showGrid;
 
   const BackgroundEditor(
-      {Key? key,
+      {super.key,
       required this.tiles,
       this.onTapTileListView,
-      this.showGrid = false})
-      : super(key: key);
+      this.showGrid = false});
 
   @override
   State<BackgroundEditor> createState() => _BackgroundEditorState();

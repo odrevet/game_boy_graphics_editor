@@ -8,8 +8,7 @@ class IntensityButton extends StatelessWidget {
   final List<Color> colorSet;
 
   const IntensityButton(
-      {Key? key, required this.intensity, required this.colorSet})
-      : super(key: key);
+      {super.key, required this.intensity, required this.colorSet});
 
   @override
   Widget build(BuildContext context) => MouseRegion(

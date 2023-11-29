@@ -8,7 +8,7 @@ import '../../cubits/meta_tile_cubit.dart';
 import '../../models/app_state.dart';
 
 class MetaTileCanvas extends StatefulWidget {
-  const MetaTileCanvas({Key? key}) : super(key: key);
+  const MetaTileCanvas({super.key});
 
   @override
   State<MetaTileCanvas> createState() => _MetaTileCanvasState();
