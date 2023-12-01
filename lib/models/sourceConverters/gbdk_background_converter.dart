@@ -33,8 +33,7 @@ extern const unsigned char $name[];
 
   @override
   String toSource(Graphics graphics, String name) =>
-      """#define ${name}Width ${graphics.width}
-const unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalToHex(e, prefix: true)).toList())}};""";
+      """const unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalToHex(e, prefix: true)).toList())}};""";
 
   List fromSource(String source) {
     var background = Background();
