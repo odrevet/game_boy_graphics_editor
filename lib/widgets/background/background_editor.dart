@@ -33,7 +33,9 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
   Widget build(BuildContext context) {
     return BlocBuilder<BackgroundCubit, Background>(
         builder: (context, background) {
-      return Row(children: [
+      return Row(crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
         SizedBox(
           width: 200,
           child: MetaTileListView(
