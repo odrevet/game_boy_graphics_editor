@@ -26,6 +26,10 @@ class MyApp extends StatelessWidget {
               theme: ThemeData(
                 fontFamily: 'RobotoMono',
                 primarySwatch: Colors.grey,
+                colorScheme: ColorScheme.fromSeed(
+                  brightness: MediaQuery.platformBrightnessOf(context),
+                  seedColor: Colors.grey,
+                ),
               ),
               scrollBehavior: const MaterialScrollBehavior().copyWith(
                 dragDevices: PointerDeviceKind.values.toSet(),
