@@ -4,16 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_tile_converter.dart';
-import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_canvas.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
-import 'package:game_boy_graphics_editor/widgets/tiles/tile_dimensions_dropdown.dart';
 
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
 import '../../models/app_state.dart';
 import '../background/background_grid.dart';
 import '../source_display.dart';
-import 'intensity_button.dart';
+import 'meta_tile_toolbar.dart';
 
 class TilesEditor extends StatefulWidget {
   const TilesEditor({
@@ -123,113 +121,8 @@ class _TilesEditorState extends State<TilesEditor> {
               ],
             ),
           ),
-          Column(
-            children: [
-              Row(
-                children: [
-                  ButtonBar(
-                    children: [
-                      IntensityButton(
-                        intensity: 0,
-                        colorSet: appState.colorSet,
-                      ),
-                      IntensityButton(
-                        intensity: 1,
-                        colorSet: appState.colorSet,
-                      ),
-                      IntensityButton(
-                        intensity: 2,
-                        colorSet: appState.colorSet,
-                      ),
-                      IntensityButton(
-                        intensity: 3,
-                        colorSet: appState.colorSet,
-                      ),
-                    ],
-                  ),
-                  const VerticalDivider(),
-                  IconButton(
-                      onPressed: () => context
-                          .read<MetaTileCubit>()
-                          .flipVertical(appState.tileIndexTile),
-                      icon: const Icon(Icons.flip)),
-                  IconButton(
-                      onPressed: () => context
-                          .read<MetaTileCubit>()
-                          .flipHorizontal(appState.tileIndexTile),
-                      icon: const RotatedBox(
-                        quarterTurns: 1,
-                        child: Icon(Icons.flip),
-                      )),
-                  IconButton(
-                      onPressed: () => metaTile.width == metaTile.height
-                          ? context
-                              .read<MetaTileCubit>()
-                              .rotateLeft(appState.tileIndexTile)
-                          : null,
-                      icon: const Icon(Icons.rotate_left)),
-                  IconButton(
-                      onPressed: () => metaTile.width == metaTile.height
-                          ? context
-                              .read<MetaTileCubit>()
-                              .rotateRight(appState.tileIndexTile)
-                          : null,
-                      icon: const Icon(Icons.rotate_right)),
-                  const VerticalDivider(),
-                  IconButton(
-                      onPressed: () => context.read<MetaTileCubit>().upShift(
-                          appState.tileIndexTile, appState.tileIndexTile),
-                      icon: const Icon(Icons.keyboard_arrow_up_rounded)),
-                  IconButton(
-                      onPressed: () => context.read<MetaTileCubit>().downShift(
-                          appState.tileIndexTile, appState.tileIndexTile),
-                      icon: const Icon(Icons.keyboard_arrow_down_rounded)),
-                  IconButton(
-                      onPressed: () => context.read<MetaTileCubit>().leftShift(
-                          appState.tileIndexTile, appState.tileIndexTile),
-                      icon: const Icon(Icons.keyboard_arrow_left_rounded)),
-                  IconButton(
-                      onPressed: () => context.read<MetaTileCubit>().rightShift(
-                          appState.tileIndexTile, appState.tileIndexTile),
-                      icon: const Icon(Icons.keyboard_arrow_right_rounded)),
-                  const VerticalDivider(),
-                  IconButton(
-                      onPressed: context.read<MetaTileCubit>().canUndo
-                          ? context.read<MetaTileCubit>().undo
-                          : null,
-                      icon: const Icon(Icons.undo)),
-                  IconButton(
-                      onPressed: context.read<MetaTileCubit>().canRedo
-                          ? context.read<MetaTileCubit>().redo
-                          : null,
-                      icon: const Icon(Icons.redo)),
-                  const VerticalDivider(),
-                  IconButton(
-                    icon: Icon(context.read<AppStateCubit>().state.floodMode
-                        ? Icons.waves
-                        : Icons.edit),
-                    tooltip: context.read<AppStateCubit>().state.floodMode
-                        ? 'Flood fill'
-                        : 'Draw',
-                    onPressed: () =>
-                        context.read<AppStateCubit>().toggleFloodMode(),
-                  ),
-                  const VerticalDivider(),
-                  const TileDimensionDropdown(),
-                ],
-              ),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  alignment: Alignment.topCenter,
-                  child: AspectRatio(
-                    aspectRatio: metaTile.width / metaTile.height,
-                    child: const MetaTileCanvas(),
-                  ),
-                ),
-              )
-            ],
-          ),
+          // ignore: prefer_const_constructors
+          MetaTileToolbar(),
           Expanded(
             child: Column(
               children: [
