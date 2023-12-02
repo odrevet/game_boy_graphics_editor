@@ -108,8 +108,8 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         TapGestureRecognizer:
             GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
           () => TapGestureRecognizer(),
-          (TapGestureRecognizer t) =>
-              t.onTap = () => print('$index:$currentCol'),
+          (TapGestureRecognizer t) => t.onTap =
+              () => widget.onTap!(index * widget.background.width + currentCol),
         ),
       },
     );
