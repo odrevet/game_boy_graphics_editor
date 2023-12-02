@@ -234,7 +234,7 @@ class ApplicationMenuBar extends StatelessWidget {
                   ),
                   MenuItemButton(
                     onPressed: () {
-                      selectFile(['bin']).then((result) {
+                      selectFile(['*']).then((result) {
                         late SnackBar snackBar;
                         if (result == null) {
                           snackBar = const SnackBar(
