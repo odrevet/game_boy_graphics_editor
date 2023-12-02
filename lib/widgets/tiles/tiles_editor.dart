@@ -108,18 +108,18 @@ class _TilesEditorState extends State<TilesEditor> {
                         }),
                   ],
                 ),
-                SizedBox(
-                  width: 200,
-                  child: MetaTileListView(
-                      selectedTile:
-                      context.read<AppStateCubit>().state.tileIndexTile,
-                      onHover: (index) => setState(() {
-                        hoverTileIndex = index;
-                      }),
-                      onTap: (index) => context
-                          .read<AppStateCubit>()
-                          .setSelectedTileIndex(index)),
-                )
+                Expanded(
+                  child: SizedBox(
+                    width: 200,
+                    child: MetaTileListView(
+                        selectedTile: context.read<AppStateCubit>().state.tileIndexTile,
+                        onHover: (index) => setState(() {
+                          hoverTileIndex = index;
+                        }),
+                        onTap: (index) =>
+                            context.read<AppStateCubit>().setSelectedTileIndex(index)),
+                  ),
+                ),
               ],
             ),
           ),
