@@ -25,37 +25,22 @@ class MetaTileListView extends StatelessWidget {
           (context.read<MetaTileCubit>().state.height *
               context.read<MetaTileCubit>().state.width),
       itemBuilder: (context, index) {
-        return InkWell(
-          onTap: () => onTap(index),
-          child: MouseRegion(
-            onHover: (_) => onHover != null ? onHover!(index) : null,
-            child: Card(
-              child: Column(
-                children: [
-                  Text(
-                      "#${index.toString()} ${decimalToHex(index, prefix: true)}",
-                      style: selectedTile == index
-                          ? const TextStyle(
-                              color: Colors.blue, fontWeight: FontWeight.bold)
-                          : null),
-                  SizedBox(
-                    width: 200,
-                    height: 200,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: MetaTileDisplay(
-                        showGrid: false,
-                        tileData: context
-                            .read<MetaTileCubit>()
-                            .state
-                            .getMetaTile(index),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+        return ListTile(
+          leading: SizedBox(
+            width: 40,
+            height: 40,
+            child: MetaTileDisplay(
+              showGrid: false,
+              tileData: context.read<MetaTileCubit>().state.getMetaTile(index),
             ),
           ),
+          title: Text(
+              "#${index.toString()} ${decimalToHex(index, prefix: true)}",
+              style: selectedTile == index
+                  ? const TextStyle(
+                      color: Colors.blue, fontWeight: FontWeight.bold)
+                  : null),
+          onTap: () => onTap(index),
         );
       },
     );
