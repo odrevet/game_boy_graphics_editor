@@ -86,6 +86,9 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         extent: const FixedTableSpanExtent(40),
         onEnter: (_) => setState(() {
               currentCol = index;
+              if(widget.onHover != null){
+                widget.onHover!(currentRow * widget.background.width + currentCol);
+              }
             }));
   }
 
@@ -99,12 +102,18 @@ class _BackgroundGridState extends State<BackgroundGrid> {
     return TableSpan(
       foregroundDecoration: widget.showGrid ? decoration : null,
       extent: const FixedTableSpanExtent(40),
+        onEnter: (_) => setState(() {
+          currentRow = index;
+          if(widget.onHover != null){
+            widget.onHover!(currentRow * widget.background.width + currentCol);
+          }
+        }),
       recognizerFactories: <Type, GestureRecognizerFactory>{
         TapGestureRecognizer:
             GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
           () => TapGestureRecognizer(),
           (TapGestureRecognizer t) => t.onTap =
-              () => widget.onTap!(index * widget.background.width + currentCol),
+              () => widget.onTap!(currentRow * widget.background.width + currentCol),
         ),
       },
     );

@@ -2,9 +2,11 @@ import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
+import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_background_converter.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_grid.dart';
+import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_display.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../cubits/app_state_cubit.dart';
@@ -97,22 +99,45 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                       },
                     )
                   ],
-                  child: BackgroundGrid(
-                    background: context.read<BackgroundCubit>().state,
-                    showGrid: widget.showGrid,
-                    metaTile: widget.tiles,
-                    onTap: (index) => context
-                        .read<BackgroundCubit>()
-                        .setTileIndex(
-                            index % background.width,
-                            index ~/ background.width,
-                            context
-                                .read<AppStateCubit>()
-                                .state
-                                .tileIndexBackground),
-                    onHover: (index) => setState(() {
-                      hoverTileIndex = index;
-                    }),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: BackgroundGrid(
+                          background: context.read<BackgroundCubit>().state,
+                          showGrid: widget.showGrid,
+                          metaTile: widget.tiles,
+                          onTap: (index) => context
+                              .read<BackgroundCubit>()
+                              .setTileIndex(
+                                  index % background.width,
+                                  index ~/ background.width,
+                                  context
+                                      .read<AppStateCubit>()
+                                      .state
+                                      .tileIndexBackground),
+                          onHover: (index) => setState(() {
+                            hoverTileIndex = index;
+                          }),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: MetaTileDisplay(
+                                  tileData: context
+                                      .read<MetaTileCubit>()
+                                      .state
+                                      .getMetaTile(context
+                                          .read<BackgroundCubit>()
+                                          .state
+                                          .data[hoverTileIndex]))),
+                          Text(
+                              " $hoverTileIndex ${context.read<BackgroundCubit>().state.data[hoverTileIndex]}"),
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ),
