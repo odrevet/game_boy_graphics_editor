@@ -165,7 +165,7 @@ extern unsigned char $name[];""";
   @override
   String toSource(Graphics graphics, String name) =>
       "unsigned char $name[] =\n{${toHexArray(graphics)}\n};";
-  
+
   List<int> fromSource(List<int> values) {
     var data = <int>[];
 

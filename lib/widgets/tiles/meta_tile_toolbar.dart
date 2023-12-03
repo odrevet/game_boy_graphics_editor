@@ -58,9 +58,8 @@ class MetaTileToolbar extends StatelessWidget {
             IconButton(
                 onPressed: () => context.read<MetaTileCubit>().state.width ==
                         context.read<MetaTileCubit>().state.height
-                    ? context
-                        .read<MetaTileCubit>()
-                        .rotateRight(context.read<AppStateCubit>().state.tileIndexTile)
+                    ? context.read<MetaTileCubit>().rotateRight(
+                        context.read<AppStateCubit>().state.tileIndexTile)
                     : null,
                 icon: const Icon(Icons.rotate_right)),
             const VerticalDivider(),

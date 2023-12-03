@@ -78,8 +78,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
   TableSpan _buildColumnSpan(int index) {
     const TableSpanDecoration decoration = TableSpanDecoration(
       border: TableSpanBorder(
-        trailing: BorderSide(width: 1, color: Colors.lightBlue)
-      ),
+          trailing: BorderSide(width: 1, color: Colors.lightBlue)),
     );
 
     return TableSpan(
