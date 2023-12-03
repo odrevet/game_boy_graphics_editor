@@ -78,12 +78,12 @@ class _BackgroundGridState extends State<BackgroundGrid> {
   TableSpan _buildColumnSpan(int index) {
     const TableSpanDecoration decoration = TableSpanDecoration(
       border: TableSpanBorder(
-        trailing: BorderSide(),
+        trailing: BorderSide(width: 1, color: Colors.lightBlue)
       ),
     );
 
     return TableSpan(
-        foregroundDecoration: decoration,
+        foregroundDecoration: widget.showGrid ? decoration : null,
         extent: const FixedTableSpanExtent(40),
         onEnter: (_) => setState(() {
               currentCol = index;
@@ -91,18 +91,14 @@ class _BackgroundGridState extends State<BackgroundGrid> {
   }
 
   TableSpan _buildRowSpan(int index) {
-    TableSpanDecoration decoration = TableSpanDecoration(
-      border: widget.showGrid
-          ? const TableSpanBorder(
-              trailing: BorderSide(
-                width: 10,
-              ),
-            )
-          : null,
+    const TableSpanDecoration decoration = TableSpanDecoration(
+      border: TableSpanBorder(
+        trailing: BorderSide(width: 1, color: Colors.lightBlue),
+      ),
     );
 
     return TableSpan(
-      backgroundDecoration: decoration,
+      foregroundDecoration: widget.showGrid ? decoration : null,
       extent: const FixedTableSpanExtent(40),
       recognizerFactories: <Type, GestureRecognizerFactory>{
         TapGestureRecognizer:
