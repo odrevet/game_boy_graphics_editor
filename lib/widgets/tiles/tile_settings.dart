@@ -47,15 +47,6 @@ class TileSettings extends StatelessWidget {
                       context.read<MetaTileCubit>().state.height);
                   context.read<MetaTileCubit>().setData(data);
                 }),
-            const Text("Display"),
-            TextButton(
-                onPressed: () => context.read<AppStateCubit>().toggleColorSet(),
-                child: const Text("DMG / Pocket")),
-            TextButton(
-                onPressed: () => context
-                    .read<AppStateCubit>()
-                    .toggleDisplayExportPreviewTile(),
-                child: const Text("Display Export Preview"))
           ],
         ),
       ),

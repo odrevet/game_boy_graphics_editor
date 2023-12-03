@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/widgets/settings_dialog.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tile_settings.dart';
 import '../cubits/app_state_cubit.dart';
 import 'background/background_settings.dart';
@@ -83,12 +84,21 @@ class ApplicationMenuBar extends StatelessWidget {
                           context: context,
                           builder: (BuildContext alertDialogContext) =>
                               AlertDialog(
-                                title: const Text('Settings'),
+                                title: const Text('Properties'),
                                 content:
-                                    context.read<AppStateCubit>().state.tileMode
-                                        ? const TileSettings()
-                                        : const BackgroundSettings(),
+                                context.read<AppStateCubit>().state.tileMode
+                                    ? const TileSettings()
+                                    : const BackgroundSettings(),
                               ));
+                    },
+                    child: const MenuAcceleratorLabel('Properties'),
+                  ),
+                  MenuItemButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext alertDialogContext) =>
+                              const AlertDialog(content: SettingsDialog()));
                     },
                     child: const MenuAcceleratorLabel('Settings'),
                   ),

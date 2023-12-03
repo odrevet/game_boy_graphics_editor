@@ -8,20 +8,13 @@ class BackgroundSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return const SizedBox(
       height: 200,
       width: 300,
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const Text("Background properties"),
-            const BackgroundProperties(),
-            const Text("Display"),
-            TextButton(
-                onPressed: () => context
-                    .read<AppStateCubit>()
-                    .toggleDisplayExportPreviewBackground(),
-                child: const Text("Display Export Preview"))
+            BackgroundProperties(),
           ],
         ),
       ),
