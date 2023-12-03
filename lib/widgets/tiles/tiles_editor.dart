@@ -125,35 +125,23 @@ class _TilesEditorState extends State<TilesEditor> {
             ),
           ),
           // ignore: prefer_const_constructors
-          Column(
-            children: [
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  alignment: Alignment.topCenter,
-                  child: AspectRatio(
-                    aspectRatio: context.read<MetaTileCubit>().state.width /
-                        context.read<MetaTileCubit>().state.height,
-                    child: const MetaTileCanvas(),
-                  ),
-                ),
-              )
-
-            ],
+          Expanded(
+            child: AspectRatio(
+              aspectRatio: context.read<MetaTileCubit>().state.width /
+                  context.read<MetaTileCubit>().state.height,
+              child: const MetaTileCanvas(),
+            ),
           ),
           Expanded(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    width: 200,
-                    height: 200,
-                    child: BackgroundGrid(
-                      background: Background(
-                          width: 4, height: 4, fill: appState.tileIndexTile),
-                      metaTile: metaTile,
-                    ),
+                SizedBox(
+                  width: 200,
+                  height: 200,
+                  child: BackgroundGrid(
+                    background: Background(
+                        width: 4, height: 4, fill: appState.tileIndexTile),
+                    metaTile: metaTile,
                   ),
                 ),
                 context.read<AppStateCubit>().state.showExportPreviewTile
