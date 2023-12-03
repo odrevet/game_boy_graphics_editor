@@ -24,13 +24,16 @@ class MyApp extends StatelessWidget {
           child: MaterialApp(
               title: 'Game Boy Graphic Editor',
               theme: ThemeData(
-                fontFamily: 'RobotoMono',
-                primarySwatch: Colors.grey,
-                colorScheme: ColorScheme.fromSeed(
-                  brightness: MediaQuery.platformBrightnessOf(context),
-                  seedColor: Colors.grey,
-                ),
-              ),
+                  fontFamily: 'RobotoMono',
+                  primarySwatch: Colors.grey,
+                  colorScheme: ColorScheme.fromSeed(
+                    brightness: MediaQuery.platformBrightnessOf(context),
+                    seedColor: Colors.grey,
+                  ),
+                  scrollbarTheme: const ScrollbarThemeData().copyWith(
+                    thumbColor: MaterialStateProperty.all(Colors.blue[500]),
+                    thickness: MaterialStateProperty.all(4.0),
+                  )),
               scrollBehavior: const MaterialScrollBehavior().copyWith(
                 dragDevices: PointerDeviceKind.values.toSet(),
               ),

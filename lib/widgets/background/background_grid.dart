@@ -39,16 +39,24 @@ class _BackgroundGridState extends State<BackgroundGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return TableView.builder(
-      verticalDetails:
-          ScrollableDetails.vertical(controller: _verticalController),
-      horizontalDetails:
-          ScrollableDetails.horizontal(controller: _horizontalController),
-      cellBuilder: _buildCell,
-      columnCount: widget.background.width,
-      columnBuilder: _buildColumnSpan,
-      rowCount: widget.background.height,
-      rowBuilder: _buildRowSpan,
+    return Scrollbar(
+      thumbVisibility: true,
+      controller: _horizontalController,
+      child: Scrollbar(
+        thumbVisibility: true,
+          controller: _verticalController,
+        child: TableView.builder(
+          verticalDetails:
+              ScrollableDetails.vertical(controller: _verticalController),
+          horizontalDetails:
+              ScrollableDetails.horizontal(controller: _horizontalController),
+          cellBuilder: _buildCell,
+          columnCount: widget.background.width,
+          columnBuilder: _buildColumnSpan,
+          rowCount: widget.background.height,
+          rowBuilder: _buildRowSpan,
+        ),
+      ),
     );
   }
 
