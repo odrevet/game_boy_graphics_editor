@@ -11,6 +11,7 @@ import '../../cubits/meta_tile_cubit.dart';
 import '../../models/app_state.dart';
 import '../background/background_grid.dart';
 import '../source_display.dart';
+import 'meta_tile_canvas.dart';
 import 'meta_tile_toolbar.dart';
 
 class TilesEditor extends StatefulWidget {
@@ -124,7 +125,23 @@ class _TilesEditorState extends State<TilesEditor> {
             ),
           ),
           // ignore: prefer_const_constructors
-          MetaTileToolbar(),
+          Column(
+            children: [
+              const MetaTileToolbar(),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  alignment: Alignment.topCenter,
+                  child: AspectRatio(
+                    aspectRatio: context.read<MetaTileCubit>().state.width /
+                        context.read<MetaTileCubit>().state.height,
+                    child: const MetaTileCanvas(),
+                  ),
+                ),
+              )
+
+            ],
+          ),
           Expanded(
             child: Column(
               children: [
