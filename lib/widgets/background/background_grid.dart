@@ -87,7 +87,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         onEnter: (_) => setState(() {
               currentCol = index;
               if(widget.onHover != null){
-                widget.onHover!(currentRow * widget.background.width + currentCol);
+                widget.onHover!(currentCol, currentRow);
               }
             }));
   }
@@ -105,7 +105,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         onEnter: (_) => setState(() {
           currentRow = index;
           if(widget.onHover != null){
-            widget.onHover!(currentRow * widget.background.width + currentCol);
+            widget.onHover!(currentCol, currentRow);
           }
         }),
       recognizerFactories: <Type, GestureRecognizerFactory>{

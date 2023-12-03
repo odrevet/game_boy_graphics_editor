@@ -29,10 +29,12 @@ class BackgroundEditor extends StatefulWidget {
 }
 
 class _BackgroundEditorState extends State<BackgroundEditor> {
-  int hoverTileIndex = 0;
+  int hoverTileIndexX = 0;
+  int hoverTileIndexY = 0;
 
   @override
   Widget build(BuildContext context) {
+    int hoverTileIndex = hoverTileIndexY * context.read<BackgroundCubit>().state.width + hoverTileIndexX;
     return BlocBuilder<BackgroundCubit, Background>(
         builder: (context, background) {
       return Row(
@@ -53,7 +55,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                 padding: const EdgeInsets.all(16.0),
                 child: ContextMenuArea(
                   builder: (contextMenuArea) => [
-                    ListTile(
+                    /*ListTile(
                       title: const Text('Insert column before'),
                       onTap: () {
                         context.read<BackgroundCubit>().insertCol(
@@ -97,7 +99,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                                 .tileIndexBackground);
                         Navigator.of(contextMenuArea).pop();
                       },
-                    )
+                    )*/
                   ],
                   child: Column(
                     children: [
@@ -115,8 +117,9 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                                       .read<AppStateCubit>()
                                       .state
                                       .tileIndexBackground),
-                          onHover: (index) => setState(() {
-                            hoverTileIndex = index;
+                          onHover: (x, y) => setState(() {
+                            hoverTileIndexX = x;
+                            hoverTileIndexY = y;
                           }),
                         ),
                       ),
@@ -134,7 +137,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                                           .state
                                           .data[hoverTileIndex]))),
                           Text(
-                              " $hoverTileIndex ${context.read<BackgroundCubit>().state.data[hoverTileIndex]}"),
+                              " ${context.read<BackgroundCubit>().state.data[hoverTileIndex]} $hoverTileIndexX/${context.read<BackgroundCubit>().state.width}:$hoverTileIndexY/${context.read<BackgroundCubit>().state.height}"),
                         ],
                       )
                     ],
