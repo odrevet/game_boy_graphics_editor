@@ -37,10 +37,9 @@ class _EditorState extends State<Editor> {
                 );
 
           return Scaffold(
-              //appBar: appbar,
               body: SafeArea(
             child: Column(
-              children: [const ApplicationMenuBar(), Expanded(child: editor)],
+              children: [ApplicationMenuBar(), Expanded(child: editor)],
             ),
           ));
         },

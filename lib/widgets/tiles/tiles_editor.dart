@@ -127,7 +127,6 @@ class _TilesEditorState extends State<TilesEditor> {
           // ignore: prefer_const_constructors
           Column(
             children: [
-              const MetaTileToolbar(),
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.all(8.0),

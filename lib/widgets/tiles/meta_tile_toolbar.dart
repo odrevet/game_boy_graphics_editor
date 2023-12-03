@@ -12,8 +12,9 @@ class MetaTileToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return         Row(
+    return Row(
       children: [
+        const VerticalDivider(),
         ButtonBar(
           children: [
             IntensityButton(
@@ -48,16 +49,16 @@ class MetaTileToolbar extends StatelessWidget {
             )),
         IconButton(
             onPressed: () => context.read<MetaTileCubit>().state.width ==
-                context.read<MetaTileCubit>().state.height
+                    context.read<MetaTileCubit>().state.height
                 ? context.read<MetaTileCubit>().rotateLeft(
-                context.read<AppStateCubit>().state.tileIndexTile)
+                    context.read<AppStateCubit>().state.tileIndexTile)
                 : null,
             icon: const Icon(Icons.rotate_left)),
         IconButton(
             onPressed: () => context.read<MetaTileCubit>().state.width ==
-                context.read<MetaTileCubit>().state.height
+                    context.read<MetaTileCubit>().state.height
                 ? context.read<MetaTileCubit>().rotateRight(
-                context.read<AppStateCubit>().state.tileIndexTile)
+                    context.read<AppStateCubit>().state.tileIndexTile)
                 : null,
             icon: const Icon(Icons.rotate_right)),
         const VerticalDivider(),
