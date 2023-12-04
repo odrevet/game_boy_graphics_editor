@@ -133,7 +133,7 @@ bool _loadTileFromFilePicker(result, BuildContext context) {
         GBDKTileConverter().readGraphicElementsFromSource(source);
     if (graphicsElements.length > 1) {
       hasLoaded = _showGraphicElementChooseDialog(
-          context, graphicsElements, _onTapTile);
+          context, graphicsElements, _setTilesFromGraphicElement);
     } else if (graphicsElements.length == 1) {
       hasLoaded = _setMetaTile(graphicsElements.first, context);
     } else {
@@ -143,11 +143,13 @@ bool _loadTileFromFilePicker(result, BuildContext context) {
   return hasLoaded;
 }
 
-bool _onTapTile(GraphicElement graphicElement, context) {
+bool _setTilesFromGraphicElement(
+    GraphicElement graphicElement, BuildContext context) {
   return _setMetaTile(graphicElement, context);
 }
 
-bool onTapBackground(GraphicElement graphicElement, BuildContext context) {
+bool _setBackgroundFromGraphicElement(
+    GraphicElement graphicElement, BuildContext context) {
   Background background =
       GBDKBackgroundConverter().fromGraphicElement(graphicElement);
   context.read<BackgroundCubit>().setData(background.data);
@@ -172,7 +174,7 @@ _showGraphicElementChooseDialog(BuildContext context,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     onTap: () {
-                      hasLoaded = _onTapTile(graphicsElements[index], context);
+                      onTap(graphicsElements[index], context);
                       Navigator.pop(context);
                     },
                     title: Text(graphicsElements[index].name),
@@ -190,29 +192,8 @@ void _setBackgroundFromSource(String source, BuildContext context) {
   var graphicsElements =
       GBDKBackgroundConverter().readGraphicElementsFromSource(source);
   if (graphicsElements.length > 1) {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) => AlertDialog(
-              title: const Text('Tile data selection'),
-              content: SizedBox(
-                height: 200.0,
-                width: 150.0,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: graphicsElements.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      onTap: () {
-                        onTapBackground(graphicsElements[index], context);
-                        Navigator.pop(context);
-                      },
-                      title: Text(graphicsElements[index].name),
-                    );
-                  },
-                ),
-              ),
-            ));
+    _showGraphicElementChooseDialog(
+        context, graphicsElements, _setBackgroundFromGraphicElement);
   } else if (graphicsElements.length == 1) {
     Background background =
         GBDKBackgroundConverter().fromGraphicElement(graphicsElements[0]);
