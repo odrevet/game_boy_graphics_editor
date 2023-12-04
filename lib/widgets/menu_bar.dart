@@ -22,15 +22,15 @@ class ApplicationMenuBar extends StatelessWidget {
                 menuChildren: <Widget>[
                   MenuItemButton(
                     onPressed: () => onFileOpen(context),
-                    child: const MenuAcceleratorLabel('&Open'),
+                    child: const MenuAcceleratorLabel('&Open from c source'),
                   ),
                   MenuItemButton(
                     onPressed: () => onFileOpenBin(context),
-                    child: const MenuAcceleratorLabel('&Open bin'),
+                    child: const MenuAcceleratorLabel('Open from &bin'),
                   ),
                   MenuItemButton(
                     onPressed: () => onFileSaveAsSourceCode(context),
-                    child: const MenuAcceleratorLabel('Save as &source code'),
+                    child: const MenuAcceleratorLabel('&Save as source code'),
                   ),
                   /*MenuItemButton(
                     onPressed: () {
