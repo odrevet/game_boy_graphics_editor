@@ -126,7 +126,6 @@ bool _setMetaTile(GraphicElement graphicElement, BuildContext context) {
 }
 
 bool _loadTileFromFilePicker(result, BuildContext context) {
-  bool isPng = result.names[0]!.endsWith('.png');
   bool hasLoaded = false;
   readBytes(result).then((source) {
     source = GBDKTileConverter().formatSource(source);
@@ -225,8 +224,8 @@ void _setBackgroundFromSource(String source, BuildContext context) {
 void _setBackgroundFromBin(List<int> raw, BuildContext context) {
   Graphics graphics = Background(data: raw);
   context.read<BackgroundCubit>().setData(graphics.data);
-  context.read<BackgroundCubit>().setWidth(graphics.width);
-  context.read<BackgroundCubit>().setHeight(graphics.height);
+  //context.read<BackgroundCubit>().setWidth(graphics.width);
+  //context.read<BackgroundCubit>().setHeight(graphics.height);
   context.read<AppStateCubit>().setTileIndexBackground(0);
   context.read<AppStateCubit>().setBackgroundName("data");
 }
