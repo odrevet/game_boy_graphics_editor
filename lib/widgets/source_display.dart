@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../models/download_stub.dart'
     if (dart.library.html) '../models/download.dart';
-import '../models/file_utils.dart';
+import '../models/filepicker_helper.dart';
 
 class SourceDisplay extends StatelessWidget {
   final String name;

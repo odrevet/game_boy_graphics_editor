@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
+import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_tile_converter.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/source_converter.dart';
 
 Future<void> saveFile(String content, allowedExtensions, [filename]) async {
@@ -25,7 +26,7 @@ Future<void> saveFileBin(List<int> content, allowedExtensions,
   }
 }
 
-Future<String?> saveToDirectory(
+Future<String?> saveSourceToDirectory(
     Graphics graphics, String name, SourceConverter sourceConverter) async {
   String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
@@ -34,6 +35,19 @@ Future<String?> saveToDirectory(
         .writeAsString(sourceConverter.toHeader(graphics, name));
     File("$selectedDirectory/$name.c")
         .writeAsString(sourceConverter.toSource(graphics, name));
+  }
+
+  return selectedDirectory;
+}
+
+Future<String?> saveBinToDirectory(
+    Graphics graphics, String name) async {
+  String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+
+  if (selectedDirectory != null) {
+    List<int> bytes = GBDKTileConverter().toBin(graphics).codeUnits;
+    File("$selectedDirectory/$name.bin")
+        .writeAsBytesSync(bytes);
   }
 
   return selectedDirectory;

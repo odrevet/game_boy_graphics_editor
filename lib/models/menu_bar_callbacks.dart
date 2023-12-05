@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +9,7 @@ import '../../models/download_stub.dart'
 import '../cubits/app_state_cubit.dart';
 import '../cubits/background_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
-import '../models/file_utils.dart';
+import '../models/filepicker_helper.dart';
 import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_background_converter.dart';
@@ -84,16 +86,21 @@ onFileSaveAsSourceCode(BuildContext context) {
           context);
     }
   } else {
-    saveToDirectory(
+    saveSourceToDirectory(
         context.read<BackgroundCubit>().state,
         context.read<AppStateCubit>().state.backgroundName,
         GBDKBackgroundConverter());
   }
 }
 
+
+onFileSaveAsBin(BuildContext context) async {
+  saveBinToDirectory(context.read<MetaTileCubit>().state, context.read<AppStateCubit>().state.tileName);
+}
+
 _saveGraphics(Graphics graphics, String name, SourceConverter sourceConverter,
     BuildContext context) {
-  saveToDirectory(graphics, name, sourceConverter).then((selectedDirectory) {
+  saveSourceToDirectory(graphics, name, sourceConverter).then((selectedDirectory) {
     if (selectedDirectory != null) {
       var snackBar = SnackBar(
         content: Text("$name.h and $name.c saved under $selectedDirectory"),
@@ -205,8 +212,6 @@ void _setBackgroundFromSource(String source, BuildContext context) {
 void _setBackgroundFromBin(List<int> raw, BuildContext context) {
   Graphics graphics = Background(data: raw);
   context.read<BackgroundCubit>().setData(graphics.data);
-  //context.read<BackgroundCubit>().setWidth(graphics.width);
-  //context.read<BackgroundCubit>().setHeight(graphics.height);
   context.read<AppStateCubit>().setTileIndexBackground(0);
   context.read<AppStateCubit>().setBackgroundName("data");
 }

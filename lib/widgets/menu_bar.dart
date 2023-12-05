@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/widgets/settings_dialog.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_toolbar.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tile_settings.dart';
 import '../cubits/app_state_cubit.dart';
+import '../cubits/meta_tile_cubit.dart';
+import '../models/graphics/graphics.dart';
+import '../models/sourceConverters/gbdk_tile_converter.dart';
 import 'background/background_settings.dart';
 import '../models/menu_bar_callbacks.dart';
 
@@ -33,11 +38,8 @@ class ApplicationMenuBar extends StatelessWidget {
                     child: const MenuAcceleratorLabel('&Save as source code'),
                   ),
                   /*MenuItemButton(
-                    onPressed: () {
-                      saveFileBin(utf8.encode(GBDKTileConverter()
-                          .toBin(context.read<MetaTileCubit>().state)), ['.bin'], 'data');
-                    },
-                    child: const MenuAcceleratorLabel('Save as &bin'),
+                    onPressed: () => onFileSaveAsBin(context),
+                    child: const MenuAcceleratorLabel('Save tiles as &bin'),
                   ),*/
                 ],
                 child: const MenuAcceleratorLabel('&File'),
