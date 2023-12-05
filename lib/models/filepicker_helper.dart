@@ -45,7 +45,9 @@ Future<String?> saveBinToDirectory(
   String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
   if (selectedDirectory != null) {
-    List<int> bytes = GBDKTileConverter().toBin(graphics).codeUnits;
+    List<int> bytes = GBDKTileConverter().getRawTileInt(GBDKTileConverter().reorderFromCanvasToSource(graphics));
+
+
     File("$selectedDirectory/$name.bin")
         .writeAsBytesSync(bytes);
   }
