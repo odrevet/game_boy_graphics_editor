@@ -23,8 +23,18 @@ class BackgroundProperties extends StatelessWidget {
           ),
           Row(
             children: [
-              Text("Width ${background.width}"),
-              IconButton(
+              Expanded(
+                child: TextFormField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('^[0-9]*')),
+                    ],
+                    decoration: const InputDecoration(labelText: 'Width'),
+                    key: Key(context.read<AppStateCubit>().state.tileName),
+                    initialValue: context.read<BackgroundCubit>().state.width.toString(),
+                    onChanged: (text) =>
+                        context.read<BackgroundCubit>().setWidth(int.parse(text))),
+              ),
+              /*IconButton(
                   icon: const Icon(Icons.add),
                   tooltip: 'Add Column',
                   onPressed: () =>
@@ -34,13 +44,23 @@ class BackgroundProperties extends StatelessWidget {
                   tooltip: 'Remove Column',
                   onPressed: () => background.width > 1
                       ? context.read<BackgroundCubit>().deleteCol(0)
-                      : null),
+                      : null),*/
             ],
           ),
           Row(
             children: [
-              Text("Height ${background.height}"),
-              IconButton(
+              Expanded(
+                child: TextFormField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('^[0-9]*')),
+                    ],
+                    decoration: const InputDecoration(labelText: 'Height'),
+                    key: Key(context.read<AppStateCubit>().state.tileName),
+                    initialValue: context.read<BackgroundCubit>().state.height.toString(),
+                    onChanged: (text) =>
+                        context.read<BackgroundCubit>().setHeight(int.parse(text))),
+              ),
+              /*IconButton(
                   icon: const Icon(Icons.add),
                   tooltip: 'Add Row',
                   onPressed: () =>
@@ -50,7 +70,7 @@ class BackgroundProperties extends StatelessWidget {
                   tooltip: 'Remove Row',
                   onPressed: () => background.height > 1
                       ? context.read<BackgroundCubit>().deleteRow(0)
-                      : null),
+                      : null),*/
             ],
           ),
           TextFormField(
