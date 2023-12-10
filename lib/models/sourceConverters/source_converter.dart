@@ -87,11 +87,11 @@ abstract class SourceConverter {
     return arrayElements;
   }
 
-  Map<String, String> readDefineFromSource(String source) {
-    Map<String, String> defines = {};
-    RegExp regExp = RegExp(r"#define (.+) (.+)");
+  Map<String, int> readDefinesFromSource(String source) {
+    Map<String, int> defines = {};
+    RegExp regExp = RegExp(r"#define (\w+) (\d+)");
     for (Match match in regExp.allMatches(source)) {
-      // WIP
+      defines[match.group(1)!] = int.parse(match.group(2)!);
     }
     return defines;
   }
