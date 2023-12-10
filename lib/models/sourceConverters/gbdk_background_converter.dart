@@ -35,26 +35,6 @@ extern const unsigned char $name[];
   String toSource(Graphics graphics, String name) =>
       """const unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalToHex(e, prefix: true)).toList())}};""";
 
-  List fromSource(String source) {
-    var background = Background();
-
-    var graphicElement = readGraphicElementsFromSource(source)[0];
-    background.data = graphicElement.values;
-
-    RegExp regExpWidth = RegExp(r"#define \w+Width (\d+)");
-    var matchesWidth = regExpWidth.allMatches(source);
-    for (Match match in matchesWidth) {
-      background.width = int.parse(match.group(1)!);
-    }
-
-    RegExp regExpHeight = RegExp(r"#define \w+Height (\d+)");
-    var matchesHeight = regExpHeight.allMatches(source);
-    for (Match match in matchesHeight) {
-      background.height = int.parse(match.group(1)!);
-    }
-    return [graphicElement.name, background];
-  }
-
   Background fromGraphicElement(GraphicElement graphicElement) =>
       Background(data: graphicElement.values);
 }
