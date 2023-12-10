@@ -40,16 +40,26 @@ Future<String?> saveSourceToDirectory(
   return selectedDirectory;
 }
 
-Future<String?> saveBinToDirectory(
+Future<String?> saveBinToDirectoryTile(Graphics graphics, String name) async {
+  String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+
+  if (selectedDirectory != null) {
+    List<int> bytes = GBDKTileConverter()
+        .getRawTileInt(GBDKTileConverter().reorderFromCanvasToSource(graphics));
+
+    File("$selectedDirectory/$name.bin").writeAsBytesSync(bytes);
+  }
+
+  return selectedDirectory;
+}
+
+Future<String?> saveBinToDirectoryBackground(
     Graphics graphics, String name) async {
   String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
   if (selectedDirectory != null) {
-    List<int> bytes = GBDKTileConverter().getRawTileInt(GBDKTileConverter().reorderFromCanvasToSource(graphics));
-
-
-    File("$selectedDirectory/$name.bin")
-        .writeAsBytesSync(bytes);
+    List<int> bytes = graphics.data;
+    File("$selectedDirectory/$name.bin").writeAsBytesSync(bytes);
   }
 
   return selectedDirectory;

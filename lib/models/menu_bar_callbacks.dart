@@ -94,8 +94,12 @@ onFileSaveAsSourceCode(BuildContext context) {
 }
 
 
-onFileSaveAsBin(BuildContext context) async {
-  saveBinToDirectory(context.read<MetaTileCubit>().state, context.read<AppStateCubit>().state.tileName);
+onFileSaveAsBinTile(BuildContext context) async {
+  saveBinToDirectoryTile(context.read<MetaTileCubit>().state, context.read<AppStateCubit>().state.tileName);
+}
+
+onFileSaveAsBinBackground(BuildContext context) async {
+  saveBinToDirectoryBackground(context.read<BackgroundCubit>().state, context.read<AppStateCubit>().state.backgroundName);
 }
 
 _saveGraphics(Graphics graphics, String name, SourceConverter sourceConverter,

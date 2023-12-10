@@ -38,8 +38,12 @@ class ApplicationMenuBar extends StatelessWidget {
                     child: const MenuAcceleratorLabel('&Save as source code'),
                   ),
                   MenuItemButton(
-                    onPressed: () => onFileSaveAsBin(context),
-                    child: const MenuAcceleratorLabel('Save tiles as &bin'),
+                    onPressed: () => {
+                          context.read<AppStateCubit>()
+                          .state
+                          .tileMode ? onFileSaveAsBinTile(context) : onFileSaveAsBinBackground(context)
+                      },
+                    child: const MenuAcceleratorLabel('Save as &bin'),
                   ),
                 ],
                 child: const MenuAcceleratorLabel('&File'),
