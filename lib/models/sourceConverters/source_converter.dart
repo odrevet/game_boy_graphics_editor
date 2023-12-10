@@ -86,4 +86,13 @@ abstract class SourceConverter {
 
     return arrayElements;
   }
+
+  Map<String, String> readDefineFromSource(String source) {
+    Map<String, String> defines = {};
+    RegExp regExp = RegExp(r"#define (.+) (.+)");
+    for (Match match in regExp.allMatches(source)) {
+      // WIP
+    }
+    return defines;
+  }
 }
