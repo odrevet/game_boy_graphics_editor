@@ -45,6 +45,14 @@ class ApplicationMenuBar extends StatelessWidget {
                       },
                     child: const MenuAcceleratorLabel('Save as &bin'),
                   ),
+                  MenuItemButton(
+                    onPressed: () => {
+                      context.read<AppStateCubit>()
+                          .state
+                          .tileMode ? onFileTilesSaveAsPNG(context) : onFileTilesSaveAsPNG(context)
+                    },
+                    child: const MenuAcceleratorLabel('Save Tiles as &png'),
+                  ),
                 ],
                 child: const MenuAcceleratorLabel('&File'),
               ),

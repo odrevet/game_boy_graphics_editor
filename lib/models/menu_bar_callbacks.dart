@@ -102,6 +102,13 @@ onFileSaveAsBinBackground(BuildContext context) async {
   saveBinToDirectoryBackground(context.read<BackgroundCubit>().state, context.read<AppStateCubit>().state.backgroundName);
 }
 
+
+onFileTilesSaveAsPNG(BuildContext context) async {
+  List<int> tileData = context.read<MetaTileCubit>().state.getMetaTile(0);
+  List<Color> tileColors = tileData.map((e) => context.read<AppStateCubit>().state.colorSet[e]).toList();
+  savePNGToDirectoryTiles(tileColors, context.read<AppStateCubit>().state.tileName);
+}
+
 _saveGraphics(Graphics graphics, String name, SourceConverter sourceConverter,
     BuildContext context) {
   saveSourceToDirectory(graphics, name, sourceConverter).then((selectedDirectory) {

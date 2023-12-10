@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 
+import 'package:image/image.dart' as img;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
@@ -64,6 +66,27 @@ Future<String?> saveBinToDirectoryBackground(
 
   return selectedDirectory;
 }
+
+Future<String?> savePNGToDirectoryTiles(
+    List<Color> tileColors, String name) async {
+  String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+
+  if (selectedDirectory != null) {
+    final image = img.Image(width: 8, height: 8);
+    int index = 0;
+    for (var pixel in image) {
+      Color color = tileColors[index];
+      pixel.setRgb(color.red, color.green, color.blue);
+      index++;
+    }
+
+    final png = img.encodePng(image);
+    await File("$selectedDirectory/$name.png").writeAsBytes(png);
+  }
+
+  return selectedDirectory;
+}
+
 
 Future<FilePickerResult?> selectFile(List<String> allowedExtensions) async =>
     await FilePicker.platform.pickFiles(
