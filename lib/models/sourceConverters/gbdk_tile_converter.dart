@@ -39,34 +39,6 @@ class GBDKTileConverter extends SourceConverter {
     return raw;
   }
 
-  List<String> getRawTile(List<int> tileData) {
-    var raw = <String>[];
-    const int size = 8;
-
-    var combined = "";
-    for (var element in tileData) {
-      combined += element.toRadixString(2).padLeft(2, "0");
-    }
-
-    for (var index = 0;
-        index < (combined.length ~/ size) * size;
-        index += size * 2) {
-      var lo = "";
-      var hi = "";
-      var combinedSub = combined.substring(index, index + size * 2);
-
-      for (var indexSub = 0; indexSub < 8 * 2; indexSub += 2) {
-        lo += combinedSub[indexSub];
-        hi += combinedSub[indexSub + 1];
-      }
-
-      raw.add(binaryToHex(hi));
-      raw.add(binaryToHex(lo));
-    }
-
-    return raw;
-  }
-
   List<int> getPattern(int width, int height) {
     var pattern = <int>[];
 
@@ -159,12 +131,12 @@ extern unsigned char $name[];""";
           .join();
 
   @override
-  String toHexArray(Graphics graphics) =>
-      formatOutput(getRawTile(reorderFromCanvasToSource(graphics)));
-
-  @override
-  String toSource(Graphics graphics, String name) =>
-      "unsigned char $name[] =\n{${toHexArray(graphics)}\n};";
+  String toSource(Graphics graphics, String name) {
+    List<String> dataOrdered = getRawTileInt(reorderFromCanvasToSource(graphics))
+        .map((e) => decimalToHex(e, prefix: true))
+        .toList();
+    return "unsigned char $name[] =\n{${formatOutput(dataOrdered)}\n};";
+  }
 
   List<int> fromSource(List<int> values) {
     var data = <int>[];
