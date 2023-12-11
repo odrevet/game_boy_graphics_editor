@@ -29,7 +29,7 @@ class MetaTileListView extends StatelessWidget {
             height: 40,
             child: MetaTileDisplay(
               showGrid: false,
-              tileData: context.read<MetaTileCubit>().state.getMetaTile(index),
+              tileData: context.read<MetaTileCubit>().state.getTileAtIndex(index),
             ),
           ),
           title: Text(

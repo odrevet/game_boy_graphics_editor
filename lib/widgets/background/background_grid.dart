@@ -77,7 +77,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
       );
     } else {
       return MetaTileDisplay(
-        tileData: widget.metaTile.getMetaTile(widget.background.data[index] -
+        tileData: widget.metaTile.getTileAtIndex(widget.background.data[index] -
             context.read<BackgroundCubit>().state.origin),
       );
     }

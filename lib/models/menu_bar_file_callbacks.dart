@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:image/image.dart' as img;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -105,28 +106,31 @@ onFileSaveAsBinBackground(BuildContext context) async {
 
 
 onFileTilesSaveAsPNG(BuildContext context) async {
-  List<int> tileData = context.read<MetaTileCubit>().state.data;
-  int width = context.read<MetaTileCubit>().state.width;
-  int height = context.read<MetaTileCubit>().state.height;
-  List<Color> tileColors = tileData.map((e) => context.read<AppStateCubit>().state.colorSet[e]).toList();
-  String tileName = context.read<AppStateCubit>().state.tileName;
-
-  String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-
+  FilePicker.platform.getDirectoryPath().then((selectedDirectory) {
   if (selectedDirectory != null) {
-    final image = img.Image(width: width, height: height);
-    int index = 0;
-    for (var pixel in image) {
-      Color color = tileColors[index];
-      pixel.setRgb(color.red, color.green, color.blue);
-      index++;
+    MetaTile metaTile = context.read<MetaTileCubit>().state;
+    int width = context.read<MetaTileCubit>().state.width;
+    int height = context.read<MetaTileCubit>().state.height;
+    List<Color> colorSet = context.read<AppStateCubit>().state.colorSet;
+    String tileName = context.read<AppStateCubit>().state.tileName;
+    int count = context.read<MetaTileCubit>().count();
+
+    final image = img.Image(width: width * count, height: height);
+    for(int tileIndex = 0;tileIndex < count;tileIndex++){
+      var tile =  metaTile.getTileAtIndex(tileIndex);
+      for(int pixelIndex = 0;pixelIndex < width * height; pixelIndex++){
+        int x = pixelIndex % width + tileIndex * width;
+        int y = pixelIndex ~/ width;
+        var pixel = image.getPixel(x, y);
+        pixel.setRgb(colorSet[tile[pixelIndex]].red, colorSet[tile[pixelIndex]].green, colorSet[tile[pixelIndex]].red);
+      }
     }
 
     final png = img.encodePng(image);
-    await File("$selectedDirectory/$tileName.png").writeAsBytes(png);
+    File("$selectedDirectory/$tileName.png").writeAsBytesSync(png);
   }
 
-  return selectedDirectory;
+  });
 }
 
 _saveGraphics(Graphics graphics, String name, SourceConverter sourceConverter,

@@ -49,7 +49,7 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
               },
               child: MetaTileDisplay(
                 showGrid: context.read<AppStateCubit>().state.showGridTile,
-                tileData: metaTile.getMetaTile(appState.tileIndexTile),
+                tileData: metaTile.getTileAtIndex(appState.tileIndexTile),
               ),
             ),
           ),

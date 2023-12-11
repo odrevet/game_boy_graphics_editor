@@ -132,7 +132,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                                   tileData: context
                                       .read<MetaTileCubit>()
                                       .state
-                                      .getMetaTile(context
+                                      .getTileAtIndex(context
                                           .read<BackgroundCubit>()
                                           .state
                                           .data[hoverTileIndex]))),
