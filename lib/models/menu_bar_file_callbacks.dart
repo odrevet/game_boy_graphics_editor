@@ -105,14 +105,16 @@ onFileSaveAsBinBackground(BuildContext context) async {
 
 
 onFileTilesSaveAsPNG(BuildContext context) async {
-  List<int> tileData = context.read<MetaTileCubit>().state.getMetaTile(0);
+  List<int> tileData = context.read<MetaTileCubit>().state.data;
+  int width = context.read<MetaTileCubit>().state.width;
+  int height = context.read<MetaTileCubit>().state.height;
   List<Color> tileColors = tileData.map((e) => context.read<AppStateCubit>().state.colorSet[e]).toList();
   String tileName = context.read<AppStateCubit>().state.tileName;
 
   String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
   if (selectedDirectory != null) {
-    final image = img.Image(width: 8, height: 8);
+    final image = img.Image(width: width, height: height);
     int index = 0;
     for (var pixel in image) {
       Color color = tileColors[index];
