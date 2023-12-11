@@ -1,10 +1,11 @@
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../models/download_stub.dart'
     if (dart.library.html) '../models/download.dart';
-import '../models/filepicker_helper.dart';
 
 class SourceDisplay extends StatelessWidget {
   final String name;
@@ -43,8 +44,14 @@ class SourceDisplay extends StatelessWidget {
               : IconButton(
                   iconSize: 18,
                   icon: const Icon(Icons.save_as),
-                  onPressed: () => saveFile(source, [extension], name),
-                ),
+                  onPressed: () async {
+                    var fileName = await FilePicker.platform.saveFile(
+                        allowedExtensions: [extension], fileName: name);
+                    if (fileName != null) {
+                      var file = File(fileName);
+                      file.writeAsString(source);
+                    }
+                  }),
         ]),
         Align(
             alignment: Alignment.topLeft,

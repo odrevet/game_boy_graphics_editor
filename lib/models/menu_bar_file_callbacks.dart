@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:image/image.dart' as img;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +10,12 @@ import '../../models/download_stub.dart'
 import '../cubits/app_state_cubit.dart';
 import '../cubits/background_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
-import '../models/filepicker_helper.dart';
 import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
+
 
 onFileOpen(BuildContext context) {
   selectFile(['c']).then((result) {
@@ -106,7 +107,24 @@ onFileSaveAsBinBackground(BuildContext context) async {
 onFileTilesSaveAsPNG(BuildContext context) async {
   List<int> tileData = context.read<MetaTileCubit>().state.getMetaTile(0);
   List<Color> tileColors = tileData.map((e) => context.read<AppStateCubit>().state.colorSet[e]).toList();
-  savePNGToDirectoryTiles(tileColors, context.read<AppStateCubit>().state.tileName);
+  String tileName = context.read<AppStateCubit>().state.tileName;
+
+  String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+
+  if (selectedDirectory != null) {
+    final image = img.Image(width: 8, height: 8);
+    int index = 0;
+    for (var pixel in image) {
+      Color color = tileColors[index];
+      pixel.setRgb(color.red, color.green, color.blue);
+      index++;
+    }
+
+    final png = img.encodePng(image);
+    await File("$selectedDirectory/$tileName.png").writeAsBytes(png);
+  }
+
+  return selectedDirectory;
 }
 
 _saveGraphics(Graphics graphics, String name, SourceConverter sourceConverter,
@@ -225,4 +243,88 @@ void _setBackgroundFromBin(List<int> raw, BuildContext context) {
   context.read<BackgroundCubit>().setData(graphics.data);
   context.read<AppStateCubit>().setTileIndexBackground(0);
   context.read<AppStateCubit>().setBackgroundName("data");
+}
+
+Future<void> saveFile(String content, allowedExtensions, [filename]) async {
+  String? fileName = await FilePicker.platform
+      .saveFile(allowedExtensions: allowedExtensions, fileName: filename);
+  if (fileName != null) {
+    File file = File(fileName);
+    file.writeAsString(content);
+  }
+}
+
+Future<void> saveFileBin(List<int> content, allowedExtensions,
+    [filename]) async {
+  String? fileName = await FilePicker.platform
+      .saveFile(allowedExtensions: allowedExtensions, fileName: filename);
+  if (fileName != null) {
+    File file = File(fileName);
+    file.writeAsBytes(Uint8List.fromList(content));
+  }
+}
+
+Future<String?> saveSourceToDirectory(
+    Graphics graphics, String name, SourceConverter sourceConverter) async {
+  String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+
+  if (selectedDirectory != null) {
+    File("$selectedDirectory/$name.h")
+        .writeAsString(sourceConverter.toHeader(graphics, name));
+    File("$selectedDirectory/$name.c")
+        .writeAsString(sourceConverter.toSource(graphics, name));
+  }
+
+  return selectedDirectory;
+}
+
+Future<String?> saveBinToDirectoryTile(Graphics graphics, String name) async {
+  String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+
+  if (selectedDirectory != null) {
+    List<int> bytes = GBDKTileConverter()
+        .getRawTileInt(GBDKTileConverter().reorderFromCanvasToSource(graphics));
+
+    File("$selectedDirectory/$name.bin").writeAsBytesSync(bytes);
+  }
+
+  return selectedDirectory;
+}
+
+Future<String?> saveBinToDirectoryBackground(
+    Graphics graphics, String name) async {
+  String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+
+  if (selectedDirectory != null) {
+    List<int> bytes = graphics.data;
+    File("$selectedDirectory/$name.bin").writeAsBytesSync(bytes);
+  }
+
+  return selectedDirectory;
+}
+
+
+Future<FilePickerResult?> selectFile(List<String> allowedExtensions) async =>
+    await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: allowedExtensions,
+    );
+
+Future<String> readBytes(FilePickerResult filePickerResult) async {
+  if (kIsWeb) {
+    Uint8List? bytes = filePickerResult.files.single.bytes;
+    return String.fromCharCodes(bytes!);
+  } else {
+    File file = File(filePickerResult.files.single.path!);
+    return await file.readAsString();
+  }
+}
+
+Future<List<int>> readBin(FilePickerResult filePickerResult) async {
+  if (kIsWeb) {
+    return filePickerResult.files.single.bytes!;
+  } else {
+    File file = File(filePickerResult.files.single.path!);
+    return await file.readAsBytes();
+  }
 }

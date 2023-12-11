@@ -10,7 +10,7 @@ import '../cubits/meta_tile_cubit.dart';
 import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import 'background/background_settings.dart';
-import '../models/menu_bar_callbacks.dart';
+import '../models/menu_bar_file_callbacks.dart';
 
 class ApplicationMenuBar extends StatelessWidget {
   const ApplicationMenuBar({super.key});
