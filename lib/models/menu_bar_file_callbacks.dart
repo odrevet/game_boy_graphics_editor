@@ -153,7 +153,7 @@ onFileBackgroundSaveAsPNG(BuildContext context) async {
 
           // get coordinate in destination image and set pixel
           int x = pixelIndex % metaTile.width + backgroundIndex * metaTile.width;
-          int y = pixelIndex ~/ metaTile.width + backgroundIndex ~/ background.width;
+          int y = pixelIndex ~/ metaTile.width + (backgroundIndex ~/ background.width) * (metaTile.height - 1);
           var pixel = image.getPixel(x, y);
 
           pixel.setRgb(color.red, color.green, color.blue);
