@@ -125,12 +125,10 @@ class _TilesEditorState extends State<TilesEditor> {
             ),
           ),
           // ignore: prefer_const_constructors
-          Expanded(
-            child: AspectRatio(
-              aspectRatio: context.read<MetaTileCubit>().state.width /
-                  context.read<MetaTileCubit>().state.height,
-              child: const MetaTileCanvas(),
-            ),
+          AspectRatio(
+            aspectRatio: context.read<MetaTileCubit>().state.width /
+                context.read<MetaTileCubit>().state.height,
+            child: const MetaTileCanvas(),
           ),
           Expanded(
             child: Column(
