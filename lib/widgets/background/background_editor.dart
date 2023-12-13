@@ -34,7 +34,9 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
 
   @override
   Widget build(BuildContext context) {
-    int hoverTileIndex = hoverTileIndexY * context.read<BackgroundCubit>().state.width + hoverTileIndexX;
+    int hoverTileIndex =
+        hoverTileIndexY * context.read<BackgroundCubit>().state.width +
+            hoverTileIndexX;
     return BlocBuilder<BackgroundCubit, Background>(
         builder: (context, background) {
       return Row(
@@ -128,14 +130,36 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                           SizedBox(
                               height: 20,
                               width: 20,
-                              child: MetaTileDisplay(
-                                  tileData: context
-                                      .read<MetaTileCubit>()
-                                      .state
-                                      .getTileAtIndex(context
+                              child: (context
                                           .read<BackgroundCubit>()
                                           .state
-                                          .data[hoverTileIndex]))),
+                                          .data[hoverTileIndex] >=
+                                      (context
+                                                  .read<MetaTileCubit>()
+                                                  .state
+                                                  .data
+                                                  .length ~/
+                                              (context
+                                                      .read<MetaTileCubit>()
+                                                      .state
+                                                      .height *
+                                                  context
+                                                      .read<MetaTileCubit>()
+                                                      .state
+                                                      .width)) +
+                                          context
+                                              .read<BackgroundCubit>()
+                                              .state
+                                              .origin)
+                                  ? const Text('?')
+                                  : MetaTileDisplay(
+                                      tileData: context
+                                          .read<MetaTileCubit>()
+                                          .state
+                                          .getTileAtIndex(context
+                                              .read<BackgroundCubit>()
+                                              .state
+                                              .data[hoverTileIndex]))),
                           Text(
                               " ${context.read<BackgroundCubit>().state.data[hoverTileIndex]} $hoverTileIndexX/${context.read<BackgroundCubit>().state.width}:$hoverTileIndexY/${context.read<BackgroundCubit>().state.height}"),
                         ],
