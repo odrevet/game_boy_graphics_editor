@@ -19,17 +19,18 @@ class MetaTileListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var metaTile = context.read<MetaTileCubit>().state;
     return ListView.builder(
       shrinkWrap: true,
       itemCount: context.read<MetaTileCubit>().count(),
       itemBuilder: (context, index) {
         return ListTile(
           leading: SizedBox(
-            width: 40,
+            width: 40 * (metaTile.width / metaTile.height),
             height: 40,
             child: MetaTileDisplay(
               showGrid: false,
-              tileData: context.read<MetaTileCubit>().state.getTileAtIndex(index),
+              tileData: metaTile.getTileAtIndex(index),
             ),
           ),
           title: Text(
