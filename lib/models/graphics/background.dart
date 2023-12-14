@@ -43,4 +43,12 @@ class Background extends Graphics {
       data.removeAt(at * width);
     }
   }
+
+  int getDataAt(int x, int y){
+    return data[(y * width) + x];
+  }
+
+  void setDataAt(int x, int y, int value){
+    data[(y * width) + x] = value;
+  }
 }
