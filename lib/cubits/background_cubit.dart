@@ -58,10 +58,10 @@ class BackgroundCubit extends ReplayCubit<Background> {
   }
 
   transpose() {
-    Background background = state.copyWith();
+    Background background = state.copyWith(width: state.height, height: state.width);
 
-    for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
-      for (int colIndex = 0; colIndex < state.width; colIndex++) {
+    for (int rowIndex = 0; rowIndex < background.height; rowIndex++) {
+      for (int colIndex = 0; colIndex < background.width; colIndex++) {
         int value = state.getDataAt(rowIndex, colIndex);
         background.setDataAt(colIndex, rowIndex, value);
       }
