@@ -16,6 +16,7 @@ class AppState {
   List<Color> colorSet;
   String tileName;
   String backgroundName;
+  String gbdkPath;
 
   AppState({
     this.intensity = 3,
@@ -31,6 +32,7 @@ class AppState {
     this.showExportPreviewTile = false,
     this.tileBuffer = const <int>[],
     this.colorSet = colorsDMG,
+    this.gbdkPath = '',
   });
 
   copyWith(
@@ -41,6 +43,7 @@ class AppState {
           bool? showGridTile,
           String? tileName,
           String? backgroundName,
+          String? gbdkPath,
           bool? floodMode,
           bool? showGridBackground,
           bool? showExportPreviewBackground,
@@ -53,6 +56,7 @@ class AppState {
         tileIndexBackground: tileIndexBackground ?? this.tileIndexBackground,
         tileMode: tileMode ?? this.tileMode,
         showGridTile: showGridTile ?? this.showGridTile,
+        gbdkPath: gbdkPath ?? this.gbdkPath,
         tileName: tileName ?? this.tileName,
         backgroundName: backgroundName ?? this.backgroundName,
         floodMode: floodMode ?? this.floodMode,

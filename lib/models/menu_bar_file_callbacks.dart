@@ -75,7 +75,8 @@ onFileOpenBinRLE(BuildContext context) {
       var systemTempDir = Directory.systemTemp;
       String inputPath = result.files.single.path!;
       String outputPath = "${systemTempDir.path}/decompressed.bin";
-      Process.run('gbcompress', ['-d', '--alg=rle', inputPath, outputPath]);
+      
+      Process.run('${context.read<AppStateCubit>().state.gbdkPath}/gbcompress', ['-d', '--alg=rle', inputPath, outputPath]);
 
       // read decompressed data
       var file = File(outputPath);

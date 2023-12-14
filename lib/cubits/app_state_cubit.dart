@@ -25,6 +25,9 @@ class AppStateCubit extends Cubit<AppState> {
   void setTileBuffer(tileBuffer) =>
       emit(state.copyWith(tileBuffer: tileBuffer));
 
+  void setGbdkPath(gbdkPath) =>
+      emit(state.copyWith(gbdkPath: gbdkPath));
+
   void toggleTileMode() => emit(state.copyWith(tileMode: !state.tileMode));
 
   void setMode(bool isTile) => emit(state.copyWith(tileMode: isTile));

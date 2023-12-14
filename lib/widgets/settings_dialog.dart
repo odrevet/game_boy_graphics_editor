@@ -27,7 +27,13 @@ class SettingsDialog extends StatelessWidget {
                 onPressed: () => context
                     .read<AppStateCubit>()
                     .toggleDisplayExportPreviewBackground(),
-                child: const Text("Display Background source preview"))
+                child: const Text("Display Background source preview")),
+            TextFormField(
+                decoration: const InputDecoration(labelText: 'GBDK Path'),
+                key: Key(context.read<AppStateCubit>().state.tileName),
+                initialValue: context.read<AppStateCubit>().state.gbdkPath,
+                onChanged: (text) =>
+                    context.read<AppStateCubit>().setGbdkPath(text)),
           ],
         ),
       ),
