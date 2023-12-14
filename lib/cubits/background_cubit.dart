@@ -10,11 +10,15 @@ class BackgroundCubit extends ReplayCubit<Background> {
   }
 
   setWidth(int width) {
-    emit(state.copyWith(width: width));
+    Background background = state.copyWith(
+        width: width, data: List.filled(width * state.height, 0));
+    emit(background);
   }
 
   setHeight(int height) {
-    emit(state.copyWith(height: height));
+    Background background = state.copyWith(
+        height: height, data: List.filled(height * state.width, 0));
+    emit(background);
   }
 
   void setTileIndex(int rowIndex, int colIndex, int tileIndex) {
