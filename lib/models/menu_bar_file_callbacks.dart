@@ -18,18 +18,18 @@ import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
 
 onFileOpen(BuildContext context) {
-  selectFile(['c']).then((result) {
+  selectFile(['c', 'h']).then((result) {
     late SnackBar snackBar;
     if (result == null) {
       snackBar = const SnackBar(
         content: Text("Not loaded"),
       );
     } else {
-      //bool hasLoaded = false;
+      //bool hasLoaded = false
       if (context.read<AppStateCubit>().state.tileMode) {
         _loadTileFromFilePicker(result, context);
       } else {
-        readBytes(result)
+        readString(result)
             .then((source) => _setBackgroundFromSource(source, context));
       }
     }
@@ -229,10 +229,26 @@ bool _setMetaTile(GraphicElement graphicElement, BuildContext context) {
   return hasLoaded;
 }
 
+void _setPropertiesFromDefines(Map<String, int> defines, BuildContext context) {
+  defines.forEach((key, value) {
+    if (key.endsWith('TILE_ORIGIN')) {
+      context.read<BackgroundCubit>().setOrigin(value);
+    } else if (key.endsWith('WIDTH')) {
+      context.read<BackgroundCubit>().setWidth(value ~/ 8);
+    } else if (key.endsWith('HEIGHT')) {
+      context.read<BackgroundCubit>().setHeight(value ~/ 8);
+    }
+  });
+}
+
 bool _loadTileFromFilePicker(result, BuildContext context) {
   bool hasLoaded = false;
-  readBytes(result).then((source) {
+  readString(result).then((source) {
     source = GBDKTileConverter().formatSource(source);
+
+    Map<String, int> defines = GBDKTileConverter().readDefinesFromSource(source);
+    _setPropertiesFromDefines(defines, context);
+
     var graphicsElements =
         GBDKTileConverter().readGraphicElementsFromSource(source);
     if (graphicsElements.length > 1) {
@@ -292,7 +308,11 @@ _showGraphicElementChooseDialog(BuildContext context,
 }
 
 void _setBackgroundFromSource(String source, BuildContext context) {
-  source = GBDKTileConverter().formatSource(source);
+  source = GBDKBackgroundConverter().formatSource(source);
+
+  Map<String, int> defines = GBDKBackgroundConverter().readDefinesFromSource(source);
+  _setPropertiesFromDefines(defines, context);
+
   var graphicsElements =
       GBDKBackgroundConverter().readGraphicElementsFromSource(source);
   if (graphicsElements.length > 1) {
@@ -377,7 +397,7 @@ Future<FilePickerResult?> selectFile(List<String> allowedExtensions) async =>
       allowedExtensions: allowedExtensions,
     );
 
-Future<String> readBytes(FilePickerResult filePickerResult) async {
+Future<String> readString(FilePickerResult filePickerResult) async {
   if (kIsWeb) {
     Uint8List? bytes = filePickerResult.files.single.bytes;
     return String.fromCharCodes(bytes!);
