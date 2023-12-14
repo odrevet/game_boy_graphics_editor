@@ -17,7 +17,6 @@ import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
 
-
 onFileOpen(BuildContext context) {
   selectFile(['c']).then((result) {
     late SnackBar snackBar;
@@ -37,34 +36,51 @@ onFileOpen(BuildContext context) {
   });
 }
 
+_setBinFromBytes(BuildContext context, List<int> bytes) {
+  if (context.read<AppStateCubit>().state.tileMode) {
+    var data = GBDKTileConverter().fromSource(bytes);
+    data = GBDKTileConverter().reorderFromSourceToCanvas(
+        data,
+        context.read<MetaTileCubit>().state.width,
+        context.read<MetaTileCubit>().state.height);
+    context.read<MetaTileCubit>().setData(data);
+  } else {
+    String values = "";
+    for (int byte in bytes) {
+      // Convert each byte to a hexadecimal string
+      values += byte.toRadixString(16).padLeft(2, '0');
+    }
+    var data = <int>[];
+    for (var index = 0; index < values.length; index += 2) {
+      data.add(int.parse("${values[index]}${values[index + 1]}", radix: 16));
+    }
+    _setBackgroundFromBin(data, context);
+  }
+}
+
 onFileOpenBin(BuildContext context) {
   selectFile(['*']).then((result) {
-    if (result == null) {
-    } else {
-      if (context.read<AppStateCubit>().state.tileMode) {
-        readBin(result).then((bytes) {
-          var data = GBDKTileConverter().fromSource(bytes);
-          data = GBDKTileConverter().reorderFromSourceToCanvas(
-              data,
-              context.read<MetaTileCubit>().state.width,
-              context.read<MetaTileCubit>().state.height);
-          context.read<MetaTileCubit>().setData(data);
-        });
-      } else {
-        readBin(result).then((bytes) {
-          String values = "";
-          for (int byte in bytes) {
-            // Convert each byte to a hexadecimal string
-            values += byte.toRadixString(16).padLeft(2, '0');
-          }
-          var data = <int>[];
-          for (var index = 0; index < values.length; index += 2) {
-            data.add(
-                int.parse("${values[index]}${values[index + 1]}", radix: 16));
-          }
-          _setBackgroundFromBin(data, context);
-        });
-      }
+    if (result != null) {
+      readBin(result).then((bytes) {
+        _setBinFromBytes(context, bytes);
+      });
+    }
+  });
+}
+
+onFileOpenBinRLE(BuildContext context) {
+  selectFile(['*']).then((result) {
+    if (result != null) {
+      // decompress to a temp file
+      var systemTempDir = Directory.systemTemp;
+      String inputPath = result.files.single.path!;
+      String outputPath = "${systemTempDir.path}/decompressed.bin";
+      Process.run('gbcompress', ['-d', '--alg=rle', inputPath, outputPath]);
+
+      // read decompressed data
+      var file = File(outputPath);
+      var bytes = file.readAsBytesSync();
+      _setBinFromBytes(context, bytes);
     }
   });
 }
@@ -95,43 +111,45 @@ onFileSaveAsSourceCode(BuildContext context) {
   }
 }
 
-
 onFileSaveAsBinTile(BuildContext context) async {
-  saveBinToDirectoryTile(context.read<MetaTileCubit>().state, context.read<AppStateCubit>().state.tileName);
+  saveBinToDirectoryTile(context.read<MetaTileCubit>().state,
+      context.read<AppStateCubit>().state.tileName);
 }
 
 onFileSaveAsBinBackground(BuildContext context) async {
-  saveBinToDirectoryBackground(context.read<BackgroundCubit>().state, context.read<AppStateCubit>().state.backgroundName);
+  saveBinToDirectoryBackground(context.read<BackgroundCubit>().state,
+      context.read<AppStateCubit>().state.backgroundName);
 }
-
 
 onFileTilesSaveAsPNG(BuildContext context) async {
   FilePicker.platform.getDirectoryPath().then((selectedDirectory) {
-  if (selectedDirectory != null) {
-    MetaTile metaTile = context.read<MetaTileCubit>().state;
-    List<Color> colorSet = context.read<AppStateCubit>().state.colorSet;
-    String tileName = context.read<AppStateCubit>().state.tileName;
-    int count = context.read<MetaTileCubit>().count();
+    if (selectedDirectory != null) {
+      MetaTile metaTile = context.read<MetaTileCubit>().state;
+      List<Color> colorSet = context.read<AppStateCubit>().state.colorSet;
+      String tileName = context.read<AppStateCubit>().state.tileName;
+      int count = context.read<MetaTileCubit>().count();
 
-    final image = img.Image(width: metaTile.width * count, height: metaTile.height);
-    for(int tileIndex = 0;tileIndex < count;tileIndex++){
-      var tile =  metaTile.getTileAtIndex(tileIndex);
-      for(int pixelIndex = 0;pixelIndex < metaTile.width * metaTile.height; pixelIndex++){
-        //get color in source tile
-        var color = colorSet[tile[pixelIndex]];
+      final image =
+          img.Image(width: metaTile.width * count, height: metaTile.height);
+      for (int tileIndex = 0; tileIndex < count; tileIndex++) {
+        var tile = metaTile.getTileAtIndex(tileIndex);
+        for (int pixelIndex = 0;
+            pixelIndex < metaTile.width * metaTile.height;
+            pixelIndex++) {
+          //get color in source tile
+          var color = colorSet[tile[pixelIndex]];
 
-        // get coordinate in destination image and set pixel
-        int x = pixelIndex % metaTile.width + tileIndex * metaTile.width;
-        int y = pixelIndex ~/ metaTile.width;
-        var pixel = image.getPixel(x, y);
-        pixel.setRgb(color.red, color.green, color.blue);
+          // get coordinate in destination image and set pixel
+          int x = pixelIndex % metaTile.width + tileIndex * metaTile.width;
+          int y = pixelIndex ~/ metaTile.width;
+          var pixel = image.getPixel(x, y);
+          pixel.setRgb(color.red, color.green, color.blue);
+        }
       }
+
+      final png = img.encodePng(image);
+      File("$selectedDirectory/$tileName.png").writeAsBytesSync(png);
     }
-
-    final png = img.encodePng(image);
-    File("$selectedDirectory/$tileName.png").writeAsBytesSync(png);
-  }
-
   });
 }
 
@@ -141,19 +159,28 @@ onFileBackgroundSaveAsPNG(BuildContext context) async {
       MetaTile metaTile = context.read<MetaTileCubit>().state;
       Background background = context.read<BackgroundCubit>().state;
       List<Color> colorSet = context.read<AppStateCubit>().state.colorSet;
-      String backgroundName = context.read<AppStateCubit>().state.backgroundName;
+      String backgroundName =
+          context.read<AppStateCubit>().state.backgroundName;
 
-      final image = img.Image(width: background.width * metaTile.width, height: background.height * metaTile.height);
-      for(int backgroundIndex = 0;backgroundIndex < background.width * background.height;backgroundIndex++){
-        var tile =  metaTile.getTileAtIndex(background.data[backgroundIndex]);
+      final image = img.Image(
+          width: background.width * metaTile.width,
+          height: background.height * metaTile.height);
+      for (int backgroundIndex = 0;
+          backgroundIndex < background.width * background.height;
+          backgroundIndex++) {
+        var tile = metaTile.getTileAtIndex(background.data[backgroundIndex]);
 
-        for(int pixelIndex = 0;pixelIndex < metaTile.width * metaTile.height; pixelIndex++){
+        for (int pixelIndex = 0;
+            pixelIndex < metaTile.width * metaTile.height;
+            pixelIndex++) {
           //get color in source tile
           var color = colorSet[tile[pixelIndex]];
 
           // get coordinate in destination image and set pixel
-          int x = pixelIndex % metaTile.width + backgroundIndex * metaTile.width;
-          int y = pixelIndex ~/ metaTile.width + (backgroundIndex ~/ background.width) * (metaTile.height - 1);
+          int x =
+              pixelIndex % metaTile.width + backgroundIndex * metaTile.width;
+          int y = pixelIndex ~/ metaTile.width +
+              (backgroundIndex ~/ background.width) * (metaTile.height - 1);
           var pixel = image.getPixel(x, y);
 
           pixel.setRgb(color.red, color.green, color.blue);
@@ -163,13 +190,13 @@ onFileBackgroundSaveAsPNG(BuildContext context) async {
       final png = img.encodePng(image);
       File("$selectedDirectory/$backgroundName.png").writeAsBytesSync(png);
     }
-
   });
 }
 
 _saveGraphics(Graphics graphics, String name, SourceConverter sourceConverter,
     BuildContext context) {
-  saveSourceToDirectory(graphics, name, sourceConverter).then((selectedDirectory) {
+  saveSourceToDirectory(graphics, name, sourceConverter)
+      .then((selectedDirectory) {
     if (selectedDirectory != null) {
       var snackBar = SnackBar(
         content: Text("$name.h and $name.c saved under $selectedDirectory"),
@@ -342,7 +369,6 @@ Future<String?> saveBinToDirectoryBackground(
 
   return selectedDirectory;
 }
-
 
 Future<FilePickerResult?> selectFile(List<String> allowedExtensions) async =>
     await FilePicker.platform.pickFiles(

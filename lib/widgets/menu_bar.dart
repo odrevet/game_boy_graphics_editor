@@ -27,11 +27,15 @@ class ApplicationMenuBar extends StatelessWidget {
                 menuChildren: <Widget>[
                   MenuItemButton(
                     onPressed: () => onFileOpen(context),
-                    child: const MenuAcceleratorLabel('&Open from c source'),
+                    child: const MenuAcceleratorLabel('&Open c source'),
                   ),
                   MenuItemButton(
                     onPressed: () => onFileOpenBin(context),
-                    child: const MenuAcceleratorLabel('Open from &bin'),
+                    child: const MenuAcceleratorLabel('Open &bin'),
+                  ),
+                  MenuItemButton(
+                    onPressed: () => onFileOpenBinRLE(context),
+                    child: const MenuAcceleratorLabel('Open &rle compressed bin'),
                   ),
                   MenuItemButton(
                     onPressed: () => onFileSaveAsSourceCode(context),

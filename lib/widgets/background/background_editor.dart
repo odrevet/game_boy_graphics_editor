@@ -126,7 +126,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                         ),
                       ),
                       Row(
-                        children: [
+                        children: [/*
                           SizedBox(
                               height: 20,
                               width: 20,
@@ -159,9 +159,9 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                                           .getTileAtIndex(context
                                               .read<BackgroundCubit>()
                                               .state
-                                              .data[hoverTileIndex]))),
+                                              .data[hoverTileIndex]))),*/
                           Text(
-                              " ${context.read<BackgroundCubit>().state.data[hoverTileIndex]} $hoverTileIndexX/${context.read<BackgroundCubit>().state.width}:$hoverTileIndexY/${context.read<BackgroundCubit>().state.height}"),
+                              " $hoverTileIndexX/${context.read<BackgroundCubit>().state.width}:$hoverTileIndexY/${context.read<BackgroundCubit>().state.height}"),
                         ],
                       )
                     ],

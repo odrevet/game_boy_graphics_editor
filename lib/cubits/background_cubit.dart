@@ -60,7 +60,6 @@ class BackgroundCubit extends ReplayCubit<Background> {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
         int value = state.getDataAt(rowIndex, colIndex);
         background.setDataAt(colIndex, rowIndex, value);
-
       }
     }
 
