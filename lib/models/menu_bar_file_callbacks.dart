@@ -75,16 +75,16 @@ onFileOpenBinRLE(BuildContext context) {
       var systemTempDir = Directory.systemTemp;
       String inputPath = result.files.single.path!;
       String outputPath = "${systemTempDir.path}/decompressed.bin";
-      
-      Process.runSync('${context.read<AppStateCubit>().state.gbdkPath}/gbcompress', ['-d', '--alg=rle', inputPath, outputPath]);
 
-      // read decompressed data
-      var file = File(outputPath);
-      var bytes = file.readAsBytesSync();
-      _setBinFromBytes(context, bytes);
+      Process.runSync(
+          '${context.read<AppStateCubit>().state.gbdkPath}/gbcompress',
+          ['-d', '--alg=rle', inputPath, outputPath]);
 
+      // read decompressed data and tmp delete file
       File decompressed = File(outputPath);
       if (decompressed.existsSync()) {
+        var bytes = decompressed.readAsBytesSync();
+        _setBinFromBytes(context, bytes);
         decompressed.deleteSync();
       }
     }
@@ -251,7 +251,8 @@ bool _loadTileFromFilePicker(result, BuildContext context) {
   readString(result).then((source) {
     source = GBDKTileConverter().formatSource(source);
 
-    Map<String, int> defines = GBDKTileConverter().readDefinesFromSource(source);
+    Map<String, int> defines =
+        GBDKTileConverter().readDefinesFromSource(source);
     _setPropertiesFromDefines(defines, context);
 
     var graphicsElements =
@@ -275,8 +276,8 @@ bool _setTilesFromGraphicElement(
 
 bool _setBackgroundFromGraphicElement(
     GraphicElement graphicElement, BuildContext context) {
-  Background background =
-  GBDKBackgroundConverter().fromGraphicElementTransposed(graphicElement);//GBDKBackgroundConverter().fromGraphicElement(graphicElement);
+  Background background = GBDKBackgroundConverter().fromGraphicElementTransposed(
+      graphicElement); //GBDKBackgroundConverter().fromGraphicElement(graphicElement);
   context.read<BackgroundCubit>().setData(background.data);
   context.read<AppStateCubit>().setTileIndexBackground(0);
   return true;
@@ -315,7 +316,8 @@ _showGraphicElementChooseDialog(BuildContext context,
 void _setBackgroundFromSource(String source, BuildContext context) {
   source = GBDKBackgroundConverter().formatSource(source);
 
-  Map<String, int> defines = GBDKBackgroundConverter().readDefinesFromSource(source);
+  Map<String, int> defines =
+      GBDKBackgroundConverter().readDefinesFromSource(source);
   _setPropertiesFromDefines(defines, context);
 
   var graphicsElements =
