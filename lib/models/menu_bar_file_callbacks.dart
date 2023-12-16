@@ -76,12 +76,17 @@ onFileOpenBinRLE(BuildContext context) {
       String inputPath = result.files.single.path!;
       String outputPath = "${systemTempDir.path}/decompressed.bin";
       
-      Process.run('${context.read<AppStateCubit>().state.gbdkPath}/gbcompress', ['-d', '--alg=rle', inputPath, outputPath]);
+      Process.runSync('${context.read<AppStateCubit>().state.gbdkPath}/gbcompress', ['-d', '--alg=rle', inputPath, outputPath]);
 
       // read decompressed data
       var file = File(outputPath);
       var bytes = file.readAsBytesSync();
       _setBinFromBytes(context, bytes);
+
+      File decompressed = File(outputPath);
+      if (decompressed.existsSync()) {
+        decompressed.deleteSync();
+      }
     }
   });
 }
@@ -271,7 +276,7 @@ bool _setTilesFromGraphicElement(
 bool _setBackgroundFromGraphicElement(
     GraphicElement graphicElement, BuildContext context) {
   Background background =
-      GBDKBackgroundConverter().fromGraphicElement(graphicElement);
+  GBDKBackgroundConverter().fromGraphicElementTransposed(graphicElement);//GBDKBackgroundConverter().fromGraphicElement(graphicElement);
   context.read<BackgroundCubit>().setData(background.data);
   context.read<AppStateCubit>().setTileIndexBackground(0);
   return true;
