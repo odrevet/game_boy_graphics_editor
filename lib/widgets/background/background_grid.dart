@@ -66,7 +66,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         (context.read<MetaTileCubit>().state.data.length ~/
                 (context.read<MetaTileCubit>().state.height *
                     context.read<MetaTileCubit>().state.width)) +
-            context.read<BackgroundCubit>().state.origin) {
+            context.read<BackgroundCubit>().state.tileOrigin) {
       return Container(
         alignment: Alignment.center,
         child: Text(
@@ -78,7 +78,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
     } else {
       return MetaTileDisplay(
         tileData: widget.metaTile.getTileAtIndex(widget.background.data[index] -
-            context.read<BackgroundCubit>().state.origin),
+            context.read<BackgroundCubit>().state.tileOrigin),
       );
     }
   }

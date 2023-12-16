@@ -80,7 +80,7 @@ class BackgroundProperties extends StatelessWidget {
               decoration: const InputDecoration(labelText: 'Origin'),
               key: const Key('tileOrigin'),
               initialValue:
-                  context.read<BackgroundCubit>().state.origin.toString(),
+                  context.read<BackgroundCubit>().state.tileOrigin.toString(),
               onChanged: (text) =>
                   context.read<BackgroundCubit>().setOrigin(int.parse(text))),
         ],

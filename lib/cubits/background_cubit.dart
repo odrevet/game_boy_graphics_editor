@@ -53,7 +53,7 @@ class BackgroundCubit extends ReplayCubit<Background> {
 
   setOrigin(int origin) {
     Background background = state.copyWith();
-    background.origin = origin;
+    background.tileOrigin = origin;
     emit(background);
   }
 

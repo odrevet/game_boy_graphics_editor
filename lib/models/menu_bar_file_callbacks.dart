@@ -276,8 +276,8 @@ bool _setTilesFromGraphicElement(
 
 bool _setBackgroundFromGraphicElement(
     GraphicElement graphicElement, BuildContext context) {
-  Background background = GBDKBackgroundConverter().fromGraphicElementTransposed(
-      graphicElement); //GBDKBackgroundConverter().fromGraphicElement(graphicElement);
+  Background background = GBDKBackgroundConverter().fromGraphicElement(
+      graphicElement); //GBDKBackgroundConverter().fromGraphicElementTransposed(graphicElement);
   context.read<BackgroundCubit>().setData(background.data);
   context.read<AppStateCubit>().setTileIndexBackground(0);
   return true;
