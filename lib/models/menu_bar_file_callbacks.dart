@@ -276,10 +276,9 @@ bool _setTilesFromGraphicElement(
 
 bool _setBackgroundFromGraphicElement(
     GraphicElement graphicElement, BuildContext context) {
-  Background background = GBDKBackgroundConverter().fromGraphicElementTransposed(
+  Background background = GBDKBackgroundConverter().fromGraphicElement(
       graphicElement);
   context.read<BackgroundCubit>().setData(background.data);
-  context.read<AppStateCubit>().setTileIndexBackground(0);
   return true;
 }
 
@@ -336,7 +335,30 @@ void _setBackgroundFromSource(String source, BuildContext context) {
 void _setBackgroundFromBin(List<int> raw, BuildContext context) {
   Graphics graphics = Background(data: raw);
   context.read<BackgroundCubit>().setData(graphics.data);
-  context.read<AppStateCubit>().setTileIndexBackground(0);
+  context.read<AppStateCubit>().setBackgroundName("data");
+}
+
+void _setBackgroundFromBinTransposed(List<int> raw, BuildContext context) {
+  Background background = Background(data: List.filled(raw.length, 0),
+  height: context.read<BackgroundCubit>().state.height,
+  width: context.read<BackgroundCubit>().state.width);
+
+  int x = 0;
+  int y = 0;
+  for(int index = 0;index < raw.length;index++){
+    int value = raw[index];
+
+    print("$index $x $y -> $value");
+    background.setDataAt(x, y, value);
+
+    y++;
+    if(y >= background.height){
+      y = 0;
+      x++;
+    }
+  }
+
+  context.read<BackgroundCubit>().setData(background.data);
   context.read<AppStateCubit>().setBackgroundName("data");
 }
 

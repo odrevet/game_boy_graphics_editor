@@ -37,18 +37,4 @@ extern const unsigned char $name[];
 
   Background fromGraphicElement(GraphicElement graphicElement) =>
       Background(data: graphicElement.values);
-
-  Background fromGraphicElementTransposed(GraphicElement graphicElement) {
-    var background = Background(data: graphicElement.values);
-
-    for (int rowIndex = 0; rowIndex < background.height; rowIndex++) {
-      for (int colIndex = 0; colIndex < background.width; colIndex++) {
-        int value = graphicElement.values[(rowIndex * background.width) + colIndex];
-        background.setDataAt(colIndex, rowIndex, value);
-      }
-    }
-
-
-    return background;
-  }
 }
