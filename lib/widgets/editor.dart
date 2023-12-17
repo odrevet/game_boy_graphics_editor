@@ -6,9 +6,19 @@ import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 
 import 'package:game_boy_graphics_editor/widgets/background/background_editor.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tiles_editor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/app_state.dart';
 import 'menu_bar.dart';
+
+Future<void> _initPreferences(BuildContext context) async {
+  SharedPreferences.getInstance().then((prefs) {
+    String? storedString = prefs.getString('gbdkPath');
+    if(storedString != null) {
+      context.read<AppStateCubit>().state.gbdkPath = storedString;
+    }
+  });
+}
 
 class Editor extends StatefulWidget {
   const Editor({super.key});
@@ -19,7 +29,12 @@ class Editor extends StatefulWidget {
 
 class _EditorState extends State<Editor> {
   @override
-  void initState();
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _initPreferences(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

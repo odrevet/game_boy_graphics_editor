@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../cubits/app_state_cubit.dart';
 
 class SettingsDialog extends StatelessWidget {
@@ -32,8 +33,11 @@ class SettingsDialog extends StatelessWidget {
                 decoration: const InputDecoration(labelText: 'GBDK Path'),
                 key: Key(context.read<AppStateCubit>().state.tileName),
                 initialValue: context.read<AppStateCubit>().state.gbdkPath,
-                onChanged: (text) =>
-                    context.read<AppStateCubit>().setGbdkPath(text)),
+                onChanged: (text)
+                async {context.read<AppStateCubit>().setGbdkPath(text);
+                final SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.setString('gbdkPath', text);
+                }),
           ],
         ),
       ),

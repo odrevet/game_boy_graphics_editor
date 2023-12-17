@@ -39,7 +39,6 @@ extern const unsigned char $name[];
       Background(data: graphicElement.values);
 
   Background fromGraphicElementTransposed(GraphicElement graphicElement) {
-    // WIP
     var background = Background(data: graphicElement.values);
 
     for (int rowIndex = 0; rowIndex < background.height; rowIndex++) {
