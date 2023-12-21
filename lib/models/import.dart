@@ -20,32 +20,17 @@ onImport(BuildContext context, bool tile, String type, bool transpose,
   selectFile(['*']).then((result) {
     if (result != null) {
       if (type == 'Binary') {
-        readBin(result).then((List<int> content) {
-          if (tile) {
-            List<int> data = GBDKTileConverter().combine(content);
-            data = GBDKTileConverter().reorderFromSourceToCanvas(
-                data,
-                context.read<MetaTileCubit>().state.width,
-                context.read<MetaTileCubit>().state.height);
-            context.read<MetaTileCubit>().setData(data);
-          } else {
-            String values = "";
-            for (int byte in content) {
-              // Convert each byte to a hexadecimal string
-              values += byte.toRadixString(16).padLeft(2, '0');
-            }
-            var data = <int>[];
-            for (var index = 0; index < values.length; index += 2) {
-              data.add(
-                  int.parse("${values[index]}${values[index + 1]}", radix: 16));
-            }
-            if (transpose) {
-              _setBackgroundFromBinTransposed(data, context);
-            } else {
-              _setBackgroundFromBin(data, context);
-            }
+        if (decompress) {
+          String inputPath = result.files.single.path!;
+          List<int>? content = _decompress(inputPath, context);
+          if (content != null) {
+            loadBin(content, tile, transpose, context);
           }
-        });
+        } else {
+          readBin(result).then((List<int> content) {
+            loadBin(content, tile, transpose, context);
+          });
+        }
       } else {
         readString(result).then((String source) {
           if (tile) {
@@ -59,6 +44,34 @@ onImport(BuildContext context, bool tile, String type, bool transpose,
   });
 }
 
+void loadBin(List<int> content, bool tile, bool transpose, BuildContext context){
+  if (tile) {
+    List<int> data = GBDKTileConverter().combine(content);
+    data = GBDKTileConverter().reorderFromSourceToCanvas(
+        data,
+        context.read<MetaTileCubit>().state.width,
+        context.read<MetaTileCubit>().state.height);
+    context.read<MetaTileCubit>().setData(data);
+  } else {
+    String values = "";
+    for (int byte in content) {
+      // Convert each byte to a hexadecimal string
+      values += byte.toRadixString(16).padLeft(2, '0');
+    }
+    var data = <int>[];
+    for (var index = 0; index < values.length; index += 2) {
+      data.add(int.parse("${values[index]}${values[index + 1]}",
+          radix: 16));
+    }
+    if (transpose) {
+      _setBackgroundFromBinTransposed(data, context);
+    } else {
+      _setBackgroundFromBin(data, context);
+    }
+  }
+
+}
+
 void _setTilesFromSource(String source, BuildContext context) {
   source = GBDKTileConverter().formatSource(source);
 
@@ -68,8 +81,7 @@ void _setTilesFromSource(String source, BuildContext context) {
   var graphicsElements =
       GBDKTileConverter().readGraphicElementsFromSource(source);
   if (graphicsElements.length > 1) {
-    _showGraphicElementChooseDialog(
-        context, graphicsElements, _setMetaTile);
+    _showGraphicElementChooseDialog(context, graphicsElements, _setMetaTile);
   } else if (graphicsElements.length == 1) {
     _setMetaTile(graphicsElements.first, context);
   }
@@ -93,28 +105,23 @@ void _setBackgroundFromSource(String source, BuildContext context) {
   }
 }
 
-/*onFileOpenBinRLE(BuildContext context) {
-  selectFile(['*']).then((result) {
-    if (result != null) {
-      // decompress to a temp file
-      var systemTempDir = Directory.systemTemp;
-      String inputPath = result.files.single.path!;
-      String outputPath = "${systemTempDir.path}/decompressed.bin";
+List<int>? _decompress(String inputPath, BuildContext context) {
+  // decompress to a temp file
+  var systemTempDir = Directory.systemTemp;
+  String outputPath = "${systemTempDir.path}/decompressed.bin";
 
-      Process.runSync(
-          '${context.read<AppStateCubit>().state.gbdkPath}/gbcompress',
-          ['-d', '--alg=rle', inputPath, outputPath]);
+  Process.runSync('${context.read<AppStateCubit>().state.gbdkPath}/gbcompress',
+      ['-d', '--alg=rle', inputPath, outputPath]);
 
-      // read decompressed data and tmp delete file
-      File decompressed = File(outputPath);
-      if (decompressed.existsSync()) {
-        var bytes = decompressed.readAsBytesSync();
-        _setBinFromBytes(context, bytes);
-        decompressed.deleteSync();
-      }
-    }
-  });
-}*/
+  // read decompressed data and tmp delete file
+  File decompressed = File(outputPath);
+  if (decompressed.existsSync()) {
+    decompressed.deleteSync();
+    return decompressed.readAsBytesSync();
+  }
+
+  return null;
+}
 
 bool _setMetaTile(GraphicElement graphicElement, BuildContext context) {
   bool hasLoaded = true;
@@ -217,6 +224,8 @@ void _setBackgroundFromBinTransposed(List<int> raw, BuildContext context) {
   context.read<BackgroundCubit>().setData(background.data);
   context.read<AppStateCubit>().setBackgroundName("data");
 }
+
+//// File picker helpers ////
 
 Future<FilePickerResult?> selectFile(List<String> allowedExtensions) async =>
     await FilePicker.platform.pickFiles(

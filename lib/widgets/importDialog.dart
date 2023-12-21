@@ -64,7 +64,7 @@ class _ImportDialogState extends State<ImportDialog> {
                 });
               },
             ),
-            /*CheckboxListTile(
+            CheckboxListTile(
               title: const Text("RLE decompress"),
               value: compressedRLE,
               onChanged: (bool? value) {
@@ -72,7 +72,7 @@ class _ImportDialogState extends State<ImportDialog> {
                   compressedRLE = value!;
                 });
               },
-            ),*/
+            ),
             CheckboxListTile(
               title: const Text("Transpose"),
               value: transpose,
