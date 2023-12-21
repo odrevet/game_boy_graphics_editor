@@ -22,8 +22,8 @@ onImport(BuildContext context, bool tile, String type, bool transpose,
       if (type == 'Binary') {
         if (decompress) {
           String inputPath = result.files.single.path!;
-          List<int>? content = _decompress(inputPath, context);
-          if (content != null) {
+          List<int> content = _decompress(inputPath, context);
+          if (content.isNotEmpty) {
             loadBin(content, tile, transpose, context);
           }
         } else {
@@ -105,7 +105,8 @@ void _setBackgroundFromSource(String source, BuildContext context) {
   }
 }
 
-List<int>? _decompress(String inputPath, BuildContext context) {
+List<int> _decompress(String inputPath, BuildContext context) {
+  var content = <int>[];
   // decompress to a temp file
   var systemTempDir = Directory.systemTemp;
   String outputPath = "${systemTempDir.path}/decompressed.bin";
@@ -116,11 +117,11 @@ List<int>? _decompress(String inputPath, BuildContext context) {
   // read decompressed data and tmp delete file
   File decompressed = File(outputPath);
   if (decompressed.existsSync()) {
+    content = decompressed.readAsBytesSync();
     decompressed.deleteSync();
-    return decompressed.readAsBytesSync();
   }
 
-  return null;
+  return content;
 }
 
 bool _setMetaTile(GraphicElement graphicElement, BuildContext context) {
