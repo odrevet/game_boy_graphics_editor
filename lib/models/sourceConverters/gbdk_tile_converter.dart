@@ -138,7 +138,7 @@ extern unsigned char $name[];""";
     return "unsigned char $name[] =\n{${formatOutput(dataOrdered)}\n};";
   }
 
-  List<int> fromSource(List<int> values) {
+  List<int> combine(List<int> values) {
     var data = <int>[];
 
     for (var index = 0; index < values.length; index += 2) {

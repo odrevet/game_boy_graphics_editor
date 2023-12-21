@@ -22,11 +22,27 @@ onImport(BuildContext context, bool tile, String type, bool transpose,
       if (type == 'Binary') {
         readBin(result).then((List<int> content) {
           if (tile) {
+            List<int> data = GBDKTileConverter().combine(content);
+            data = GBDKTileConverter().reorderFromSourceToCanvas(
+                data,
+                context.read<MetaTileCubit>().state.width,
+                context.read<MetaTileCubit>().state.height);
+            context.read<MetaTileCubit>().setData(data);
           } else {
+            String values = "";
+            for (int byte in content) {
+              // Convert each byte to a hexadecimal string
+              values += byte.toRadixString(16).padLeft(2, '0');
+            }
+            var data = <int>[];
+            for (var index = 0; index < values.length; index += 2) {
+              data.add(
+                  int.parse("${values[index]}${values[index + 1]}", radix: 16));
+            }
             if (transpose) {
-              _setBackgroundFromBinTransposed(content, context);
+              _setBackgroundFromBinTransposed(data, context);
             } else {
-              _setBackgroundFromBin(content, context);
+              _setBackgroundFromBin(data, context);
             }
           }
         });
@@ -79,29 +95,7 @@ void _setBackgroundFromSource(String source, BuildContext context) {
   }
 }
 
-_setBinFromBytes(BuildContext context, List<int> bytes) {
-  if (context.read<AppStateCubit>().state.tileMode) {
-    var data = GBDKTileConverter().fromSource(bytes);
-    data = GBDKTileConverter().reorderFromSourceToCanvas(
-        data,
-        context.read<MetaTileCubit>().state.width,
-        context.read<MetaTileCubit>().state.height);
-    context.read<MetaTileCubit>().setData(data);
-  } else {
-    String values = "";
-    for (int byte in bytes) {
-      // Convert each byte to a hexadecimal string
-      values += byte.toRadixString(16).padLeft(2, '0');
-    }
-    var data = <int>[];
-    for (var index = 0; index < values.length; index += 2) {
-      data.add(int.parse("${values[index]}${values[index + 1]}", radix: 16));
-    }
-    _setBackgroundFromBinTransposed(data, context);
-  }
-}
-
-onFileOpenBinRLE(BuildContext context) {
+/*onFileOpenBinRLE(BuildContext context) {
   selectFile(['*']).then((result) {
     if (result != null) {
       // decompress to a temp file
@@ -122,13 +116,13 @@ onFileOpenBinRLE(BuildContext context) {
       }
     }
   });
-}
+}*/
 
 bool _setMetaTile(GraphicElement graphicElement, BuildContext context) {
   bool hasLoaded = true;
   try {
     context.read<AppStateCubit>().setTileName(graphicElement.name);
-    var data = GBDKTileConverter().fromSource(graphicElement.values);
+    var data = GBDKTileConverter().combine(graphicElement.values);
     data = GBDKTileConverter().reorderFromSourceToCanvas(
         data,
         context.read<MetaTileCubit>().state.width,
