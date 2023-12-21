@@ -16,6 +16,7 @@ dependencies:
   flutter_bloc: ^8.1.0
   replay_bloc: ^0.2.0
   two_dimensional_scrollables: ^0.0.4
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_test:
