@@ -69,7 +69,7 @@ void _setTilesFromSource(String source, BuildContext context) {
       GBDKTileConverter().readGraphicElementsFromSource(source);
   if (graphicsElements.length > 1) {
     _showGraphicElementChooseDialog(
-        context, graphicsElements, _setTilesFromGraphicElement);
+        context, graphicsElements, _setMetaTile);
   } else if (graphicsElements.length == 1) {
     _setMetaTile(graphicsElements.first, context);
   }
@@ -88,10 +88,8 @@ void _setBackgroundFromSource(String source, BuildContext context) {
     _showGraphicElementChooseDialog(
         context, graphicsElements, _setBackgroundFromGraphicElement);
   } else if (graphicsElements.length == 1) {
-    Background background =
-        GBDKBackgroundConverter().fromGraphicElement(graphicsElements[0]);
-    context.read<BackgroundCubit>().setData(background.data);
     context.read<AppStateCubit>().setTileIndexBackground(0);
+    _setBackgroundFromGraphicElement(graphicsElements.first, context);
   }
 }
 
@@ -150,11 +148,6 @@ void _setPropertiesFromDefines(Map<String, int> defines, BuildContext context) {
       context.read<BackgroundCubit>().setHeight(value ~/ 8);
     }
   });
-}
-
-bool _setTilesFromGraphicElement(
-    GraphicElement graphicElement, BuildContext context) {
-  return _setMetaTile(graphicElement, context);
 }
 
 bool _setBackgroundFromGraphicElement(
