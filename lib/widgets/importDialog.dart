@@ -11,7 +11,7 @@ class ImportDialog extends StatefulWidget {
 class _ImportDialogState extends State<ImportDialog> {
   bool compressedRLE = false;
   bool transpose = false;
-  bool tile = true;
+  String parse = 'Tile';
   String type = 'Auto';
 
   @override
@@ -25,7 +25,7 @@ class _ImportDialogState extends State<ImportDialog> {
           children: [
             ElevatedButton.icon(
               onPressed: () {
-                onImport(context, tile, type, transpose, compressedRLE);
+                onImport(context, parse, type, transpose, compressedRLE);
               },
               icon: const Icon(Icons.file_open),
               label: const Text('File'),
@@ -34,7 +34,7 @@ class _ImportDialogState extends State<ImportDialog> {
               children: [
                 const Expanded(child: Padding(
                   padding: EdgeInsets.all(15.0),
-                  child: Text("Type"),
+                  child: Text("Data type"),
                 )),
                 DropdownButton<String>(
                   value: type,
@@ -54,14 +54,29 @@ class _ImportDialogState extends State<ImportDialog> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              title: const Text("Tile"),
-              value: tile,
-              onChanged: (bool? value) {
-                setState(() {
-                  tile = value!;
-                });
-              },
+            Row(
+              children: [
+                const Expanded(child: Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Text("Parse as"),
+                )),
+                DropdownButton<String>(
+                  value: parse,
+                  onChanged: (String? value) {
+                    setState(() {
+                      parse = value!;
+                    });
+
+                  },
+                  items: <String>['Tile', 'Background']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
             CheckboxListTile(
               title: const Text("RLE decompress"),

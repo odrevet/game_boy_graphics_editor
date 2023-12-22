@@ -16,14 +16,14 @@ import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
 import 'package:path/path.dart' as p;
 
-onImport(BuildContext context, bool tile, String type, bool transpose,
+onImport(BuildContext context, String parse, String type, bool transpose,
     bool decompress) {
+  bool tile = parse == 'Tile';
   selectFile(['*']).then((result) {
     if (result != null) {
       if(type == 'Auto'){
         String inputPath = result.files.single.name;
         String extension = p.extension(inputPath);
-        print(extension);
         if(extension == '.c' || extension == '.h'){
           type = 'Source code';
         }
