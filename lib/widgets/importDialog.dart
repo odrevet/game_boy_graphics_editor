@@ -18,8 +18,6 @@ class _ImportDialogState extends State<ImportDialog> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 400,
-      width: 500,
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,25 +105,28 @@ class _ImportDialogState extends State<ImportDialog> {
                         context: context,
                         builder: (BuildContext alertDialogContext) =>
                             AlertDialog(
-                                content: Row(
-                              children: [
-                                Expanded(
-                                  child: TextFormField(
-                                      decoration: const InputDecoration(
-                                          labelText: 'URL'),
-                                      onChanged: (text) => setState(() {
-                                            url = text;
-                                          })),
-                                ),
-                                ElevatedButton.icon(
-                                  onPressed: () {
-                                    onImportHttp(context, parse, type,
-                                        transpose, compressedRLE, url);
-                                  },
-                                  icon: const Icon(Icons.download),
-                                  label: const Text('Load'),
-                                )
-                              ],
+                                content: SizedBox(
+                              width: 500,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(
+                                        decoration: const InputDecoration(
+                                            labelText: 'URL'),
+                                        onChanged: (text) => setState(() {
+                                              url = text;
+                                            })),
+                                  ),
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      onImportHttp(context, parse, type,
+                                          transpose, compressedRLE, url);
+                                    },
+                                    icon: const Icon(Icons.download),
+                                    label: const Text('Load'),
+                                  )
+                                ],
+                              ),
                             )));
                   },
                   icon: const Icon(Icons.http),

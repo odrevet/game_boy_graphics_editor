@@ -7,6 +7,7 @@ import 'package:game_boy_graphics_editor/widgets/tiles/tile_settings.dart';
 import '../cubits/app_state_cubit.dart';
 import '../models/export.dart';
 import 'background/background_settings.dart';
+import 'exportDialog.dart';
 
 
 class ApplicationMenuBar extends StatelessWidget {
@@ -35,25 +36,17 @@ class ApplicationMenuBar extends StatelessWidget {
                     child: const MenuAcceleratorLabel('&Import'),
                   ),
                   MenuItemButton(
-                    onPressed: () => onFileSaveAsSourceCode(context),
-                    child: const MenuAcceleratorLabel('&Save as source code'),
-                  ),
-                  MenuItemButton(
-                    onPressed: () => {
-                          context.read<AppStateCubit>()
-                          .state
-                          .tileMode ? onFileSaveAsBinTile(context) : onFileSaveAsBinBackground(context)
-                      },
-                    child: const MenuAcceleratorLabel('Save as &bin'),
-                  ),
-                  MenuItemButton(
-                    onPressed: () => {
-                      context.read<AppStateCubit>()
-                          .state
-                          .tileMode ? onFileTilesSaveAsPNG(context) : onFileBackgroundSaveAsPNG(context)
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext alertDialogContext) =>
+                          const AlertDialog(
+                              title: Text('Export'),
+                              content: ExportDialog()
+                          ));
                     },
-                    child: const MenuAcceleratorLabel('Save as &png'),
-                  ),
+                    child: const MenuAcceleratorLabel('&Export'),
+                  )
                 ],
                 child: const MenuAcceleratorLabel('&File'),
               ),
