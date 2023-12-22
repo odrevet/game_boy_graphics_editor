@@ -18,6 +18,7 @@ dependencies:
   two_dimensional_scrollables: ^0.0.4
   shared_preferences: ^2.2.0
   path: ^1.8.3
+  http: ^1.1.2
 
 dev_dependencies:
   flutter_test:

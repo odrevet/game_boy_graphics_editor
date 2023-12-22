@@ -15,6 +15,16 @@ import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
 import 'package:path/path.dart' as p;
+import 'package:http/http.dart' as http;
+
+// WIP, only handle uncompressed binary content at the moment
+onImportHttp(BuildContext context, String parse, String type, bool transpose,
+    bool decompress, String url) {
+  bool tile = parse == 'Tile';
+  http.readBytes(Uri.parse(url)).then((content) {
+    loadBin(content, tile, transpose, context);
+  });
+}
 
 onImport(BuildContext context, String parse, String type, bool transpose,
     bool decompress) {

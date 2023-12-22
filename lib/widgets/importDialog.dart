@@ -13,6 +13,7 @@ class _ImportDialogState extends State<ImportDialog> {
   bool transpose = false;
   String parse = 'Tile';
   String type = 'Auto';
+  String url = '';
 
   @override
   Widget build(BuildContext context) {
@@ -23,16 +24,51 @@ class _ImportDialogState extends State<ImportDialog> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ElevatedButton.icon(
-              onPressed: () {
-                onImport(context, parse, type, transpose, compressedRLE);
-              },
-              icon: const Icon(Icons.file_open),
-              label: const Text('File'),
+            Row(
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    onImport(context, parse, type, transpose, compressedRLE);
+                  },
+                  icon: const Icon(Icons.file_open),
+                  label: const Text('File'),
+                ),
+                const Divider(),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext alertDialogContext) =>
+                            AlertDialog(
+                                content: Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                      decoration: const InputDecoration(
+                                          labelText: 'URL'),
+                                      onChanged: (text) => setState(() {
+                                            url = text;
+                                          })),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    onImportHttp(context, parse, type, transpose, compressedRLE, url);
+                                  },
+                                  icon: const Icon(Icons.download),
+                                  label: const Text('Load'),
+                                )
+                              ],
+                            )));
+                  },
+                  icon: const Icon(Icons.http),
+                  label: const Text('URL'),
+                ),
+              ],
             ),
             Row(
               children: [
-                const Expanded(child: Padding(
+                const Expanded(
+                    child: Padding(
                   padding: EdgeInsets.all(15.0),
                   child: Text("Data type"),
                 )),
@@ -42,7 +78,6 @@ class _ImportDialogState extends State<ImportDialog> {
                     setState(() {
                       type = value!;
                     });
-
                   },
                   items: <String>['Auto', 'Source code', 'Binary']
                       .map<DropdownMenuItem<String>>((String value) {
@@ -56,7 +91,8 @@ class _ImportDialogState extends State<ImportDialog> {
             ),
             Row(
               children: [
-                const Expanded(child: Padding(
+                const Expanded(
+                    child: Padding(
                   padding: EdgeInsets.all(15.0),
                   child: Text("Parse as"),
                 )),
@@ -66,7 +102,6 @@ class _ImportDialogState extends State<ImportDialog> {
                     setState(() {
                       parse = value!;
                     });
-
                   },
                   items: <String>['Tile', 'Background']
                       .map<DropdownMenuItem<String>>((String value) {
