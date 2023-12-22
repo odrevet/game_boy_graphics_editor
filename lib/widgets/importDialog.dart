@@ -26,47 +26,6 @@ class _ImportDialogState extends State<ImportDialog> {
           children: [
             Row(
               children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    onImport(context, parse, type, transpose, compressedRLE);
-                  },
-                  icon: const Icon(Icons.file_open),
-                  label: const Text('File'),
-                ),
-                const Divider(),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext alertDialogContext) =>
-                            AlertDialog(
-                                content: Row(
-                              children: [
-                                Expanded(
-                                  child: TextFormField(
-                                      decoration: const InputDecoration(
-                                          labelText: 'URL'),
-                                      onChanged: (text) => setState(() {
-                                            url = text;
-                                          })),
-                                ),
-                                ElevatedButton.icon(
-                                  onPressed: () {
-                                    onImportHttp(context, parse, type, transpose, compressedRLE, url);
-                                  },
-                                  icon: const Icon(Icons.download),
-                                  label: const Text('Load'),
-                                )
-                              ],
-                            )));
-                  },
-                  icon: const Icon(Icons.http),
-                  label: const Text('URL'),
-                ),
-              ],
-            ),
-            Row(
-              children: [
                 const Expanded(
                     child: Padding(
                   padding: EdgeInsets.all(15.0),
@@ -130,6 +89,49 @@ class _ImportDialogState extends State<ImportDialog> {
                   transpose = value!;
                 });
               },
+            ),
+            Row(
+              children: [
+                const Text("Load from "),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    onImport(context, parse, type, transpose, compressedRLE);
+                  },
+                  icon: const Icon(Icons.file_open),
+                  label: const Text('File'),
+                ),
+                const Text(" - or - "),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext alertDialogContext) =>
+                            AlertDialog(
+                                content: Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                      decoration: const InputDecoration(
+                                          labelText: 'URL'),
+                                      onChanged: (text) => setState(() {
+                                            url = text;
+                                          })),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    onImportHttp(context, parse, type,
+                                        transpose, compressedRLE, url);
+                                  },
+                                  icon: const Icon(Icons.download),
+                                  label: const Text('Load'),
+                                )
+                              ],
+                            )));
+                  },
+                  icon: const Icon(Icons.http),
+                  label: const Text('URL'),
+                ),
+              ],
             )
           ],
         ),
