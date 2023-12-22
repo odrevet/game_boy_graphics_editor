@@ -1,14 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/import.dart';
-
-import '../../cubits/app_state_cubit.dart';
-import '../../cubits/meta_tile_cubit.dart';
-
-import '../../models/sourceConverters/gbdk_tile_converter.dart';
-import '../../models/sourceConverters/source_converter.dart';
-import '../models/sourceConverters/gbdk_background_converter.dart';
 
 class ImportDialog extends StatefulWidget {
   const ImportDialog({super.key});
@@ -21,7 +12,7 @@ class _ImportDialogState extends State<ImportDialog> {
   bool compressedRLE = false;
   bool transpose = false;
   bool tile = true;
-  String type = 'Source code';
+  String type = 'Auto';
 
   @override
   Widget build(BuildContext context) {
@@ -39,21 +30,29 @@ class _ImportDialogState extends State<ImportDialog> {
               icon: const Icon(Icons.file_open),
               label: const Text('File'),
             ),
-            DropdownButton<String>(
-              value: type,
-              onChanged: (String? value) {
-                setState(() {
-                  type = value!;
-                });
+            Row(
+              children: [
+                const Expanded(child: Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Text("Type"),
+                )),
+                DropdownButton<String>(
+                  value: type,
+                  onChanged: (String? value) {
+                    setState(() {
+                      type = value!;
+                    });
 
-              },
-              items: <String>['Source code', 'Binary']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+                  },
+                  items: <String>['Auto', 'Source code', 'Binary']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
             CheckboxListTile(
               title: const Text("Tile"),

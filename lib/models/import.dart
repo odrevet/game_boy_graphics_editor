@@ -14,11 +14,24 @@ import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
+import 'package:path/path.dart' as p;
 
 onImport(BuildContext context, bool tile, String type, bool transpose,
     bool decompress) {
   selectFile(['*']).then((result) {
     if (result != null) {
+      if(type == 'Auto'){
+        String inputPath = result.files.single.name;
+        String extension = p.extension(inputPath);
+        print(extension);
+        if(extension == '.c' || extension == '.h'){
+          type = 'Source code';
+        }
+        else{
+          type = 'Binary';
+        }
+      }
+
       if (type == 'Binary') {
         if (decompress) {
           String inputPath = result.files.single.path!;
