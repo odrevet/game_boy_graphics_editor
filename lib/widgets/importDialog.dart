@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 import 'package:flutter/material.dart';
 import 'package:game_boy_graphics_editor/models/import.dart';
 
@@ -73,6 +75,7 @@ class _ImportDialogState extends State<ImportDialog> {
             CheckboxListTile(
               title: const Text("RLE decompress"),
               value: compressedRLE,
+              enabled: !kIsWeb,   //TODO and if gbdk path is valid
               onChanged: (bool? value) {
                 setState(() {
                   compressedRLE = value!;
@@ -82,6 +85,7 @@ class _ImportDialogState extends State<ImportDialog> {
             CheckboxListTile(
               title: const Text("Transpose"),
               value: transpose,
+              enabled: parse == 'Background',
               onChanged: (bool? value) {
                 setState(() {
                   transpose = value!;
