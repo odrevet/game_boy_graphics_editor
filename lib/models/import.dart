@@ -17,17 +17,22 @@ import '../models/sourceConverters/source_converter.dart';
 import 'package:path/path.dart' as p;
 import 'package:http/http.dart' as http;
 
-// WIP, only handle uncompressed binary content at the moment
 onImportHttp(BuildContext context, String parse, String type, bool transpose,
     bool decompress, String url) {
   bool tile = parse == 'Tile';
+  Uri uriObject = Uri.parse(url);
+
+  if(type == 'Auto'){
+    type = resolveType(uriObject.path);
+  }
+
   if (type == 'Binary') {
-    http.readBytes(Uri.parse(url)).then((content) {
+    http.readBytes(uriObject).then((content) {
       loadBin(content, tile, transpose, context);
     });
   }
   else{
-    http.read(Uri.parse(url)).then((source) {
+    http.read(uriObject).then((source) {
       if (tile) {
         _setTilesFromSource(source, context);
       } else {
@@ -43,14 +48,7 @@ onImport(BuildContext context, String parse, String type, bool transpose,
   selectFile(['*']).then((result) {
     if (result != null) {
       if(type == 'Auto'){
-        String inputPath = result.files.single.name;
-        String extension = p.extension(inputPath);
-        if(extension == '.c' || extension == '.h'){
-          type = 'Source code';
-        }
-        else{
-          type = 'Binary';
-        }
+        type = resolveType(result.files.single.name);
       }
 
       if (type == 'Binary') {
@@ -76,6 +74,16 @@ onImport(BuildContext context, String parse, String type, bool transpose,
       }
     }
   });
+}
+
+String resolveType(String path){
+  String extension = p.extension(path);
+  if(extension == '.c' || extension == '.h'){
+    return 'Source code';
+  }
+  else{
+    return 'Binary';
+  }
 }
 
 void loadBin(List<int> content, bool tile, bool transpose, BuildContext context){
