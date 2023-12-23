@@ -21,9 +21,20 @@ import 'package:http/http.dart' as http;
 onImportHttp(BuildContext context, String parse, String type, bool transpose,
     bool decompress, String url) {
   bool tile = parse == 'Tile';
-  http.readBytes(Uri.parse(url)).then((content) {
-    loadBin(content, tile, transpose, context);
-  });
+  if (type == 'Binary') {
+    http.readBytes(Uri.parse(url)).then((content) {
+      loadBin(content, tile, transpose, context);
+    });
+  }
+  else{
+    http.read(Uri.parse(url)).then((source) {
+      if (tile) {
+        _setTilesFromSource(source, context);
+      } else {
+        _setBackgroundFromSource(source, context);
+      }
+    });
+  }
 }
 
 onImport(BuildContext context, String parse, String type, bool transpose,
