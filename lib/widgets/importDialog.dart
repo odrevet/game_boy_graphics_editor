@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/import.dart';
+
+import '../cubits/app_state_cubit.dart';
 
 class ImportDialog extends StatefulWidget {
   const ImportDialog({super.key});
@@ -75,7 +78,7 @@ class _ImportDialogState extends State<ImportDialog> {
             CheckboxListTile(
               title: const Text("RLE decompress"),
               value: compressedRLE,
-              enabled: !kIsWeb,   //TODO and if gbdk path is valid
+              enabled: !kIsWeb && context.read<AppStateCubit>().state.gbdkPathValid,
               onChanged: (bool? value) {
                 setState(() {
                   compressedRLE = value!;

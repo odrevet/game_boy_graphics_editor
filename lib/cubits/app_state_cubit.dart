@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/colors.dart';
 
@@ -27,6 +29,19 @@ class AppStateCubit extends Cubit<AppState> {
 
   void setGbdkPath(gbdkPath) =>
       emit(state.copyWith(gbdkPath: gbdkPath));
+
+  void setGbdkPathValid() {
+    bool isValid;
+    try {
+      var result = Process.runSync('${state.gbdkPath}/gbcompress', []);
+      emit(state.copyWith(gbdkPathValid: result.exitCode > 0));
+      isValid = result.exitCode > 0;
+    } catch (e) {
+      isValid = false;
+    }
+
+    emit(state.copyWith(gbdkPathValid: isValid));
+  }
 
   void toggleTileMode() => emit(state.copyWith(tileMode: !state.tileMode));
 

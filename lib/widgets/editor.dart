@@ -15,7 +15,8 @@ Future<void> _initPreferences(BuildContext context) async {
   SharedPreferences.getInstance().then((prefs) {
     String? storedString = prefs.getString('gbdkPath');
     if(storedString != null) {
-      context.read<AppStateCubit>().state.gbdkPath = storedString;
+      context.read<AppStateCubit>().setGbdkPath(storedString);
+      context.read<AppStateCubit>().setGbdkPathValid();
     }
   });
 }

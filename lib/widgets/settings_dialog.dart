@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +22,7 @@ class SettingsDialog extends StatelessWidget {
             TextButton(
                 onPressed: () => context.read<AppStateCubit>().toggleColorSet(),
                 child: const Text("DMG / Pocket")),
+            const Divider(),
             const Text("Display"),
             TextButton(
                 onPressed: () => context
@@ -29,15 +34,37 @@ class SettingsDialog extends StatelessWidget {
                     .read<AppStateCubit>()
                     .toggleDisplayExportPreviewBackground(),
                 child: const Text("Display Background source preview")),
-            TextFormField(
-                decoration: const InputDecoration(labelText: 'GBDK Path'),
-                key: Key(context.read<AppStateCubit>().state.tileName),
-                initialValue: context.read<AppStateCubit>().state.gbdkPath,
-                onChanged: (text)
-                async {context.read<AppStateCubit>().setGbdkPath(text);
-                final SharedPreferences prefs = await SharedPreferences.getInstance();
-                await prefs.setString('gbdkPath', text);
-                }),
+            const Divider(),
+            const Text('GBDK bin Path'),
+            const Text('Set GBDK Path to enable load RLE compressed files'),
+            Text(context.read<AppStateCubit>().state.gbdkPathValid ? 'OK' : 'Invalid path'),
+            Row(
+              children: [
+                Expanded(
+                    child: TextFormField(
+                  decoration: const InputDecoration(labelText: 'GBDK Path'),
+                  key: Key(context.read<AppStateCubit>().state.tileName),
+                  initialValue: context.read<AppStateCubit>().state.gbdkPath,
+                  readOnly: true,
+                )),
+                ElevatedButton.icon(
+                  onPressed: kIsWeb ? null : () {
+                    FilePicker.platform.getDirectoryPath().then((dir) async {
+                      if (dir != null) {
+                        context.read<AppStateCubit>().setGbdkPath(dir);
+                        context.read<AppStateCubit>().setGbdkPathValid();
+
+                        final SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                        await prefs.setString('gbdkPath', dir);
+                      }
+                    });
+                  },
+                  icon: const Icon(Icons.folder),
+                  label: const Text('Set'),
+                ),
+              ],
+            ),
           ],
         ),
       ),
