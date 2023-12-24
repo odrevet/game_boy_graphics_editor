@@ -91,7 +91,7 @@ class _ExportDialogState extends State<ExportDialog> {
               onPressed: () {
                 if (parse == 'Tile') {
                   if (type == 'Source code') {
-                    onFileSaveAsSourceCode(context);  //WIP
+                    onFileSaveAsSourceCode(context, parse);
                   } else if (type == 'Binary') {
                     onFileSaveAsBinTile(context);
                   } else if (type == 'PNG') {
@@ -99,7 +99,7 @@ class _ExportDialogState extends State<ExportDialog> {
                   }
                 } else {
                   if (type == 'Source code') {
-                    onFileSaveAsSourceCode(context);  // WIP
+                    onFileSaveAsSourceCode(context, parse);
                   } else if (type == 'Binary') {
                     onFileSaveAsBinBackground(context);
                   } else if (type == 'PNG') {

@@ -76,8 +76,8 @@ Future<String?> saveBinToDirectoryBackground(
   return selectedDirectory;
 }
 
-onFileSaveAsSourceCode(BuildContext context) {
-  if (context.read<AppStateCubit>().state.tileMode) {
+onFileSaveAsSourceCode(BuildContext context, String parse) {
+  if (parse == 'Tile') {
     if (kIsWeb) {
       download(
           GBDKTileConverter().toHeader(context.read<MetaTileCubit>().state,
@@ -95,10 +95,22 @@ onFileSaveAsSourceCode(BuildContext context) {
           context);
     }
   } else {
-    saveSourceToDirectory(
-        context.read<BackgroundCubit>().state,
-        context.read<AppStateCubit>().state.backgroundName,
-        GBDKBackgroundConverter());
+    if (kIsWeb) {
+      download(
+          GBDKBackgroundConverter().toHeader(context.read<BackgroundCubit>().state,
+              context.read<AppStateCubit>().state.backgroundName),
+          '${context.read<AppStateCubit>().state.backgroundName}.h');
+      download(
+          GBDKBackgroundConverter().toSource(context.read<BackgroundCubit>().state,
+              context.read<AppStateCubit>().state.backgroundName),
+          '${context.read<AppStateCubit>().state.backgroundName}.c');
+    } else {
+      _saveGraphics(
+          context.read<BackgroundCubit>().state,
+          context.read<AppStateCubit>().state.backgroundName,
+          GBDKBackgroundConverter(),
+          context);
+    }
   }
 }
 
