@@ -14,7 +14,7 @@ class ImportDialog extends StatefulWidget {
 }
 
 class _ImportDialogState extends State<ImportDialog> {
-  bool compressedRLE = false;
+  String compression = 'none';
   bool transpose = false;
   String parse = 'Tile';
   String type = 'Auto';
@@ -75,15 +75,32 @@ class _ImportDialogState extends State<ImportDialog> {
                 ),
               ],
             ),
-            CheckboxListTile(
-              title: const Text("RLE decompress"),
-              value: compressedRLE,
-              enabled: !kIsWeb && context.read<AppStateCubit>().state.gbdkPathValid,
-              onChanged: (bool? value) {
-                setState(() {
-                  compressedRLE = value!;
-                });
-              },
+            Row(
+              children: [
+                const Expanded(
+                    child: Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Text("Compression"),
+                )),
+                DropdownButton<String>(
+                  value: compression,
+                  onChanged: kIsWeb ||
+                          !context.read<AppStateCubit>().state.gbdkPathValid
+                      ? null
+                      : (String? value) {
+                          setState(() {
+                            compression = value!;
+                          });
+                        },
+                  items: <String>['none', 'rle', 'gb']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
             CheckboxListTile(
               title: const Text("Transpose"),
@@ -97,15 +114,14 @@ class _ImportDialogState extends State<ImportDialog> {
             ),
             Row(
               children: [
-                const Text("Load from "),
                 ElevatedButton.icon(
                   onPressed: () {
-                    onImport(context, parse, type, transpose, compressedRLE);
+                    onImport(context, parse, type, transpose, compression);
                   },
                   icon: const Icon(Icons.file_open),
                   label: const Text('File'),
                 ),
-                const Text(" - or - "),
+                const Text(" | "),
                 ElevatedButton.icon(
                   onPressed: () {
                     showDialog(
@@ -126,8 +142,8 @@ class _ImportDialogState extends State<ImportDialog> {
                                   ),
                                   ElevatedButton.icon(
                                     onPressed: () {
-                                      onImportHttp(context, parse, type,
-                                          transpose, compressedRLE, url);
+                                      onImportHttp(
+                                          context, parse, type, transpose, url);
                                     },
                                     icon: const Icon(Icons.download),
                                     label: const Text('Load'),

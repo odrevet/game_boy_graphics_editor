@@ -17,8 +17,7 @@ import '../models/sourceConverters/source_converter.dart';
 import 'package:path/path.dart' as p;
 import 'package:http/http.dart' as http;
 
-onImportHttp(BuildContext context, String parse, String type, bool transpose,
-    bool decompress, String url) {
+onImportHttp(BuildContext context, String parse, String type, bool transpose, String url) {
   bool tile = parse == 'Tile';
   Uri uriObject = Uri.parse(url);
 
@@ -43,7 +42,7 @@ onImportHttp(BuildContext context, String parse, String type, bool transpose,
 }
 
 onImport(BuildContext context, String parse, String type, bool transpose,
-    bool decompress) {
+    String compression) {
   bool tile = parse == 'Tile';
   selectFile(['*']).then((result) {
     if (result != null) {
@@ -52,9 +51,9 @@ onImport(BuildContext context, String parse, String type, bool transpose,
       }
 
       if (type == 'Binary') {
-        if (decompress) {
+        if (compression != 'none') {
           String inputPath = result.files.single.path!;
-          List<int> content = _decompress(inputPath, context);
+          List<int> content = _decompress(inputPath, compression, context);
           if (content.isNotEmpty) {
             loadBin(content, tile, transpose, context);
           }
@@ -147,14 +146,14 @@ void _setBackgroundFromSource(String source, BuildContext context) {
   }
 }
 
-List<int> _decompress(String inputPath, BuildContext context) {
+List<int> _decompress(String inputPath, String compression, BuildContext context) {
   var content = <int>[];
   // decompress to a temp file
   var systemTempDir = Directory.systemTemp;
   String outputPath = "${systemTempDir.path}/decompressed.bin";
 
   Process.runSync('${context.read<AppStateCubit>().state.gbdkPath}/gbcompress',
-      ['-d', '--alg=rle', inputPath, outputPath]);
+      ['-d', '--alg=$compression', inputPath, outputPath]);
 
   // read decompressed data and tmp delete file
   File decompressed = File(outputPath);
