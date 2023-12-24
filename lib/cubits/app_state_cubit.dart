@@ -6,12 +6,13 @@ import 'package:game_boy_graphics_editor/models/colors.dart';
 import '../models/app_state.dart';
 
 class AppStateCubit extends Cubit<AppState> {
-  AppStateCubit()
+  AppStateCubit({bool tileMode = true})
       : super(AppState(
             intensity: 3,
             tileIndexTile: 0,
             showExportPreviewTile: true,
-            showExportPreviewBackground: true));
+            showExportPreviewBackground: true,
+            tileMode: tileMode));
 
   void setIntensity(int intensity) =>
       emit(state.copyWith(intensity: intensity));
@@ -27,8 +28,7 @@ class AppStateCubit extends Cubit<AppState> {
   void setTileBuffer(tileBuffer) =>
       emit(state.copyWith(tileBuffer: tileBuffer));
 
-  void setGbdkPath(gbdkPath) =>
-      emit(state.copyWith(gbdkPath: gbdkPath));
+  void setGbdkPath(gbdkPath) => emit(state.copyWith(gbdkPath: gbdkPath));
 
   void setGbdkPathValid() {
     bool isValid;

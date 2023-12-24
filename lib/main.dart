@@ -8,16 +8,20 @@ import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/widgets/editor.dart';
 
 void main() {
-  runApp(const MyApp());
+  // web build params
+  String? view = Uri.base.queryParameters["view"];
+  runApp(MyApp(initialMode: view ?? 'tile'));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialMode;
+
+  const MyApp({this.initialMode = 'tile', super.key});
 
   @override
   Widget build(BuildContext context) => MultiBlocProvider(
           providers: [
-            BlocProvider(create: (_) => AppStateCubit()),
+            BlocProvider(create: (_) => AppStateCubit(tileMode: initialMode == 'tile')),
             BlocProvider(create: (_) => MetaTileCubit()),
             BlocProvider(create: (_) => BackgroundCubit())
           ],
