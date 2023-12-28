@@ -10,6 +10,7 @@ class AppStateCubit extends Cubit<AppState> {
       : super(AppState(
             intensity: 3,
             tileIndexTile: 0,
+            zoomTile: 0.6,
             showExportPreviewTile: true,
             showExportPreviewBackground: true,
             tileMode: tileMode));
@@ -68,5 +69,13 @@ class AppStateCubit extends Cubit<AppState> {
 
   toggleDisplayExportPreviewTile() {
     emit(state.copyWith(showExportPreviewTile: !state.showExportPreviewTile));
+  }
+
+  void increaseZoomTile(){
+    emit(state.copyWith(zoomTile: state.zoomTile + 0.2));
+  }
+
+  void decreaseZoomTile(){
+    emit(state.copyWith(zoomTile: state.zoomTile - 0.2));
   }
 }

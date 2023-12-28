@@ -126,8 +126,9 @@ class _TilesEditorState extends State<TilesEditor> {
           ),
           // ignore: prefer_const_constructors
           AspectRatio(
-            aspectRatio: context.read<MetaTileCubit>().state.width /
-                context.read<MetaTileCubit>().state.height,
+            aspectRatio: (context.read<MetaTileCubit>().state.width /
+                    context.read<MetaTileCubit>().state.height) *
+                context.read<AppStateCubit>().state.zoomTile,
             child: const MetaTileCanvas(),
           ),
           Expanded(
