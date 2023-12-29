@@ -107,15 +107,15 @@ class MetaTileToolbar extends StatelessWidget {
         const TileDimensionDropdown(),
         const VerticalDivider(),
         IconButton(
+            onPressed: context.read<AppStateCubit>().state.zoomTile >= 0.4
+                ? context.read<AppStateCubit>().decreaseZoomTile
+                : null,
+            icon: const Icon(Icons.zoom_out)),
+        IconButton(
             onPressed: context.read<AppStateCubit>().state.zoomTile <= 0.8
                 ? context.read<AppStateCubit>().increaseZoomTile
                 : null,
             icon: const Icon(Icons.zoom_in)),
-    IconButton(
-    onPressed: context.read<AppStateCubit>().state.zoomTile >= 0.4
-    ? context.read<AppStateCubit>().decreaseZoomTile
-        : null,
-    icon: const Icon(Icons.zoom_out)),
       ],
     );
   }
