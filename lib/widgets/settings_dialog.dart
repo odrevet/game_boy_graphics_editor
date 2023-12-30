@@ -26,21 +26,8 @@ class SettingsDialog extends StatelessWidget {
                       context.read<AppStateCubit>().toggleColorSet(),
                   child: const Text("DMG / Pocket")),
               const Divider(),
-              const Text("Display"),
-              TextButton(
-                  onPressed: () => context
-                      .read<AppStateCubit>()
-                      .toggleDisplayExportPreviewTile(),
-                  child: const Text("Display Tile Export source preview")),
-              TextButton(
-                  onPressed: () => context
-                      .read<AppStateCubit>()
-                      .toggleDisplayExportPreviewBackground(),
-                  child: const Text("Display Background source preview")),
-              const Divider(),
               const Text('GBDK bin Path'),
-              const Text('Set GBDK Path to enable RLE compressed files load'),
-              Text(appState.gbdkPathValid ? 'OK' : 'Invalid path'),
+              Text(appState.gbdkPathValid ? 'OK' : 'Set GBDK Path to enable RLE compressed files load'),
               Row(
                 children: [
                   Expanded(

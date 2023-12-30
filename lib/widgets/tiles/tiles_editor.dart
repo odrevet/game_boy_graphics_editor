@@ -124,49 +124,26 @@ class _TilesEditorState extends State<TilesEditor> {
               ],
             ),
           ),
-          // ignore: prefer_const_constructors
-          SizedBox(
-            width: (MediaQuery.of(context).size.width ~/3) * context.read<AppStateCubit>().state.zoomTile,
-            height: (MediaQuery.of(context).size.width ~/ 3) * context.read<AppStateCubit>().state.zoomTile,
-            child: const MetaTileCanvas(),
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 200,
-                  height: 200,
-                  child: BackgroundGrid(
-                    background: Background(
-                        width: 4, height: 4, fill: appState.tileIndexTile),
-                    metaTile: metaTile,
-                  ),
+          const VerticalDivider(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              SizedBox(
+                width: (MediaQuery.of(context).size.width ~/3) * context.read<AppStateCubit>().state.zoomTile,
+                height: (MediaQuery.of(context).size.width ~/ 3) * context.read<AppStateCubit>().state.zoomTile,
+                child: const MetaTileCanvas(),
+              ),
+              SizedBox(
+                width: 200,
+                height: 200,
+                child: BackgroundGrid(
+                  background: Background(
+                      width: 4, height: 4, fill: appState.tileIndexTile),
+                  metaTile: metaTile,
                 ),
-                context.read<AppStateCubit>().state.showExportPreviewTile
-                    ? Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              SourceDisplay(
-                                source: GBDKTileConverter()
-                                    .toHeader(metaTile, appState.tileName),
-                                name: appState.tileName, extension: '.h',
-                                //graphics: metaTile,
-                              ),
-                              SourceDisplay(
-                                source: GBDKTileConverter()
-                                    .toSource(metaTile, appState.tileName),
-                                name: appState.tileName, extension: '.c',
-                                //graphics: metaTile,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    : Container()
-              ],
-            ),
-          )
+              )
+            ],
+          ),
         ]),
       );
     });

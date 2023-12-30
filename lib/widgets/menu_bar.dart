@@ -55,6 +55,17 @@ class ApplicationMenuBar extends StatelessWidget {
               SubmenuButton(
                 menuChildren: <Widget>[
                   MenuItemButton(
+                    onPressed: () =>
+                        context.read<AppStateCubit>().setMode(true),
+                    child: const MenuAcceleratorLabel('Tile'),
+                  ),
+                  MenuItemButton(
+                    onPressed: () =>
+                        context.read<AppStateCubit>().setMode(false),
+                    child: const MenuAcceleratorLabel('Background'),
+                  ),
+                  const Divider(),
+                  MenuItemButton(
                     onPressed: () => context
                             .read<AppStateCubit>()
                             .state
@@ -65,23 +76,6 @@ class ApplicationMenuBar extends StatelessWidget {
                   ),
                 ],
                 child: const MenuAcceleratorLabel('&View'),
-              ),
-
-              // Mode
-              SubmenuButton(
-                menuChildren: <Widget>[
-                  MenuItemButton(
-                    onPressed: () =>
-                        context.read<AppStateCubit>().setMode(true),
-                    child: const MenuAcceleratorLabel('Tile'),
-                  ),
-                  MenuItemButton(
-                    onPressed: () =>
-                        context.read<AppStateCubit>().setMode(false),
-                    child: const MenuAcceleratorLabel('Background'),
-                  ),
-                ],
-                child: const MenuAcceleratorLabel('&Mode'),
               ),
 
               // Edit

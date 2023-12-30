@@ -169,47 +169,6 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                 ),
               ),
             ),
-            context.read<AppStateCubit>().state.showExportPreviewBackground
-                ? Flexible(
-                    child: Column(
-                      children: [
-                        Expanded(
-                            child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              SourceDisplay(
-                                source: GBDKBackgroundConverter().toHeader(
-                                    background,
-                                    context
-                                        .read<AppStateCubit>()
-                                        .state
-                                        .backgroundName),
-                                name: context
-                                    .read<AppStateCubit>()
-                                    .state
-                                    .backgroundName,
-                                extension: '.h',
-                              ),
-                              SourceDisplay(
-                                source: GBDKBackgroundConverter().toSource(
-                                    background,
-                                    context
-                                        .read<AppStateCubit>()
-                                        .state
-                                        .backgroundName),
-                                name: context
-                                    .read<AppStateCubit>()
-                                    .state
-                                    .backgroundName,
-                                extension: '.c',
-                              )
-                            ],
-                          ),
-                        )),
-                      ],
-                    ),
-                  )
-                : Container()
           ]);
     });
   }
