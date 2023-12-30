@@ -126,7 +126,7 @@ class _TilesEditorState extends State<TilesEditor> {
           ),
           const VerticalDivider(),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(
                 width: (MediaQuery.of(context).size.width ~/3) * context.read<AppStateCubit>().state.zoomTile,
