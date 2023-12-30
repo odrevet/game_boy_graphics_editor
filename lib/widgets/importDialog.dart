@@ -123,7 +123,7 @@ class _ImportDialogState extends State<ImportDialog> {
                 ),
                 const Text(" | "),
                 ElevatedButton.icon(
-                  onPressed: () {
+                  onPressed: kIsWeb ? null :  () {
                     showDialog(
                         context: context,
                         builder: (BuildContext alertDialogContext) =>
