@@ -16,6 +16,7 @@ class BackgroundGrid extends StatefulWidget {
   final Function? onTap;
   final Function? onHover;
   final bool showGrid;
+  final double cellSize;
 
   BackgroundGrid({
     super.key,
@@ -24,6 +25,7 @@ class BackgroundGrid extends StatefulWidget {
     this.onTap,
     this.onHover,
     this.showGrid = false,
+    this.cellSize = 40,
   });
 
   @override
@@ -36,11 +38,9 @@ class _BackgroundGridState extends State<BackgroundGrid> {
 
   int currentRow = 0;
   int currentCol = 0;
-  late double cellSize;
 
   @override
   Widget build(BuildContext context) {
-    cellSize = 40 * context.read<AppStateCubit>().state.zoomBackground;
     return Scrollbar(
       thumbVisibility: true,
       controller: _horizontalController,
@@ -93,7 +93,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
 
     return TableSpan(
         foregroundDecoration: widget.showGrid ? decoration : null,
-        extent: FixedTableSpanExtent(cellSize),
+        extent: FixedTableSpanExtent(widget.cellSize),
         onEnter: (_) => setState(() {
               currentCol = index;
               if(widget.onHover != null){
@@ -111,7 +111,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
 
     return TableSpan(
       foregroundDecoration: widget.showGrid ? decoration : null,
-      extent: FixedTableSpanExtent(cellSize),
+      extent: FixedTableSpanExtent(widget.cellSize),
         onEnter: (_) => setState(() {
           currentRow = index;
           if(widget.onHover != null){

@@ -110,6 +110,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                           background: context.read<BackgroundCubit>().state,
                           showGrid: widget.showGrid,
                           metaTile: widget.tiles,
+                          cellSize: 40 * context.read<AppStateCubit>().state.zoomBackground,
                           onTap: (index) => context
                               .read<BackgroundCubit>()
                               .setTileIndex(
