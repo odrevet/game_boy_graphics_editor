@@ -8,6 +8,7 @@ class AppState {
   int tileIndexBackground;
   bool tileMode; // edit tile or background
   double zoomTile;
+  double zoomBackground;
   bool showGridTile;
   bool floodMode;
   bool showGridBackground;
@@ -26,6 +27,7 @@ class AppState {
     this.tileIndexBackground = 0,
     this.tileMode = true,
     this.zoomTile = 0.6,
+    this.zoomBackground = 0.6,
     this.showGridTile = true,
     this.tileName = "Tile",
     this.backgroundName = "Background",
@@ -45,6 +47,7 @@ class AppState {
           int? tileIndexBackground,
           bool? tileMode,
           double? zoomTile,
+          double? zoomBackground,
           bool? showGridTile,
           String? tileName,
           String? backgroundName,
@@ -62,6 +65,7 @@ class AppState {
         tileIndexBackground: tileIndexBackground ?? this.tileIndexBackground,
         tileMode: tileMode ?? this.tileMode,
         zoomTile: zoomTile ?? this.zoomTile,
+        zoomBackground: zoomBackground ?? this.zoomBackground,
         showGridTile: showGridTile ?? this.showGridTile,
         gbdkPath: gbdkPath ?? this.gbdkPath,
         gbdkPathValid: gbdkPathValid ?? this.gbdkPathValid,

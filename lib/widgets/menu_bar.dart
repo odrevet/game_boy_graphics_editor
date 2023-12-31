@@ -7,6 +7,7 @@ import 'package:game_boy_graphics_editor/widgets/tiles/tile_settings.dart';
 import '../cubits/app_state_cubit.dart';
 import '../models/export.dart';
 import 'background/background_settings.dart';
+import 'background/background_toolbar.dart';
 import 'exportDialog.dart';
 
 
@@ -121,7 +122,7 @@ class ApplicationMenuBar extends StatelessWidget {
               ),
 
               // ignore: prefer_const_constructors
-              context.read<AppStateCubit>().state.tileMode ? MetaTileToolbar() : Container(),
+              context.read<AppStateCubit>().state.tileMode ? MetaTileToolbar() : BackgroundToolbar(),
             ],
           ),
         ),

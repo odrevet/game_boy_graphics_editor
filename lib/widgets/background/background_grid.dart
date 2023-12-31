@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
@@ -35,10 +36,11 @@ class _BackgroundGridState extends State<BackgroundGrid> {
 
   int currentRow = 0;
   int currentCol = 0;
-  final int cellSize = 50;
+  late double cellSize;
 
   @override
   Widget build(BuildContext context) {
+    cellSize = 40 * context.read<AppStateCubit>().state.zoomBackground;
     return Scrollbar(
       thumbVisibility: true,
       controller: _horizontalController,
@@ -91,7 +93,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
 
     return TableSpan(
         foregroundDecoration: widget.showGrid ? decoration : null,
-        extent: const FixedTableSpanExtent(40),
+        extent: FixedTableSpanExtent(cellSize),
         onEnter: (_) => setState(() {
               currentCol = index;
               if(widget.onHover != null){
@@ -109,7 +111,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
 
     return TableSpan(
       foregroundDecoration: widget.showGrid ? decoration : null,
-      extent: const FixedTableSpanExtent(40),
+      extent: FixedTableSpanExtent(cellSize),
         onEnter: (_) => setState(() {
           currentRow = index;
           if(widget.onHover != null){
