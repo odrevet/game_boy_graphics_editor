@@ -21,7 +21,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MultiBlocProvider(
           providers: [
-            BlocProvider(create: (_) => AppStateCubit(tileMode: initialMode == 'tile')),
+            BlocProvider(
+                create: (_) => AppStateCubit(tileMode: initialMode == 'tile')),
             BlocProvider(create: (_) => MetaTileCubit()),
             BlocProvider(create: (_) => BackgroundCubit())
           ],

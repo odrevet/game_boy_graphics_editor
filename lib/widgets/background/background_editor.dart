@@ -2,16 +2,12 @@ import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
-import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
-import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_background_converter.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_grid.dart';
-import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_display.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../cubits/app_state_cubit.dart';
 import '../../models/graphics/meta_tile.dart';
-import '../source_display.dart';
 
 class BackgroundEditor extends StatefulWidget {
   final MetaTile tiles;
@@ -110,7 +106,11 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                           background: context.read<BackgroundCubit>().state,
                           showGrid: widget.showGrid,
                           metaTile: widget.tiles,
-                          cellSize: 40 * context.read<AppStateCubit>().state.zoomBackground,
+                          cellSize: 40 *
+                              context
+                                  .read<AppStateCubit>()
+                                  .state
+                                  .zoomBackground,
                           onTap: (index) => context
                               .read<BackgroundCubit>()
                               .setTileIndex(
@@ -127,7 +127,8 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                         ),
                       ),
                       Row(
-                        children: [/*
+                        children: [
+                          /*
                           SizedBox(
                               height: 20,
                               width: 20,

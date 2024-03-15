@@ -44,11 +44,11 @@ class Background extends Graphics {
     }
   }
 
-  int getDataAt(int x, int y){
+  int getDataAt(int x, int y) {
     return data[(y * width) + x];
   }
 
-  void setDataAt(int x, int y, int value){
+  void setDataAt(int x, int y, int value) {
     data[(y * width) + x] = value;
   }
 }

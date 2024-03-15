@@ -4,12 +4,11 @@ import 'package:game_boy_graphics_editor/widgets/importDialog.dart';
 import 'package:game_boy_graphics_editor/widgets/settings_dialog.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_toolbar.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tile_settings.dart';
+
 import '../cubits/app_state_cubit.dart';
-import '../models/export.dart';
 import 'background/background_settings.dart';
 import 'background/background_toolbar.dart';
 import 'exportDialog.dart';
-
 
 class ApplicationMenuBar extends StatelessWidget {
   const ApplicationMenuBar({super.key});
@@ -30,9 +29,8 @@ class ApplicationMenuBar extends StatelessWidget {
                           context: context,
                           builder: (BuildContext alertDialogContext) =>
                               const AlertDialog(
-                                title: Text('Import'),
-                                content: ImportDialog()
-                              ));
+                                  title: Text('Import'),
+                                  content: ImportDialog()));
                     },
                     child: const MenuAcceleratorLabel('&Import'),
                   ),
@@ -41,10 +39,9 @@ class ApplicationMenuBar extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (BuildContext alertDialogContext) =>
-                          const AlertDialog(
-                              title: Text('Export'),
-                              content: ExportDialog()
-                          ));
+                              const AlertDialog(
+                                  title: Text('Export'),
+                                  content: ExportDialog()));
                     },
                     child: const MenuAcceleratorLabel('&Export'),
                   )
@@ -90,9 +87,9 @@ class ApplicationMenuBar extends StatelessWidget {
                               AlertDialog(
                                 title: const Text('Properties'),
                                 content:
-                                context.read<AppStateCubit>().state.tileMode
-                                    ? const TileSettings()
-                                    : const BackgroundSettings(),
+                                    context.read<AppStateCubit>().state.tileMode
+                                        ? const TileSettings()
+                                        : const BackgroundSettings(),
                               ));
                     },
                     child: const MenuAcceleratorLabel('Properties'),
@@ -122,7 +119,9 @@ class ApplicationMenuBar extends StatelessWidget {
               ),
 
               // ignore: prefer_const_constructors
-              context.read<AppStateCubit>().state.tileMode ? MetaTileToolbar() : BackgroundToolbar(),
+              context.read<AppStateCubit>().state.tileMode
+                  ? MetaTileToolbar()
+                  : BackgroundToolbar(),
             ],
           ),
         ),

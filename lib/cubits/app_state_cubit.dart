@@ -72,19 +72,19 @@ class AppStateCubit extends Cubit<AppState> {
     emit(state.copyWith(showExportPreviewTile: !state.showExportPreviewTile));
   }
 
-  void increaseZoomTile(){
+  void increaseZoomTile() {
     emit(state.copyWith(zoomTile: state.zoomTile + 0.1));
   }
 
-  void decreaseZoomTile(){
+  void decreaseZoomTile() {
     emit(state.copyWith(zoomTile: state.zoomTile - 0.1));
   }
 
-  void increaseZoomBackground(){
+  void increaseZoomBackground() {
     emit(state.copyWith(zoomBackground: state.zoomBackground + 0.2));
   }
 
-  void decreaseZoomBackground(){
+  void decreaseZoomBackground() {
     emit(state.copyWith(zoomBackground: state.zoomBackground - 0.2));
   }
 }

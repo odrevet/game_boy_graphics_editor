@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_canvas.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tile_dimensions_dropdown.dart';
 
 import '../../cubits/app_state_cubit.dart';

@@ -27,9 +27,11 @@ class MetaTileListView extends StatelessWidget {
       shrinkWrap: true,
       itemCount: context.read<MetaTileCubit>().count(),
       itemBuilder: (context, index) {
-        String title = "${index.toString()} ${decimalToHex(index, prefix: true)}";
-        if(tileOrigin > 0 && !context.read<AppStateCubit>().state.tileMode){
-          title += "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
+        String title =
+            "${index.toString()} ${decimalToHex(index, prefix: true)}";
+        if (tileOrigin > 0 && !context.read<AppStateCubit>().state.tileMode) {
+          title +=
+              "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
         }
         return ListTile(
           leading: SizedBox(
@@ -40,8 +42,7 @@ class MetaTileListView extends StatelessWidget {
               tileData: metaTile.getTileAtIndex(index),
             ),
           ),
-          title: Text(
-              title,
+          title: Text(title,
               style: selectedTile == index
                   ? const TextStyle(
                       color: Colors.blue, fontWeight: FontWeight.bold)

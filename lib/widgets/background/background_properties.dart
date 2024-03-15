@@ -30,9 +30,11 @@ class BackgroundProperties extends StatelessWidget {
                     ],
                     decoration: const InputDecoration(labelText: 'Width'),
                     key: Key(context.read<AppStateCubit>().state.tileName),
-                    initialValue: context.read<BackgroundCubit>().state.width.toString(),
-                    onChanged: (text) =>
-                        context.read<BackgroundCubit>().setWidth(int.parse(text))),
+                    initialValue:
+                        context.read<BackgroundCubit>().state.width.toString(),
+                    onChanged: (text) => context
+                        .read<BackgroundCubit>()
+                        .setWidth(int.parse(text))),
               ),
               /*IconButton(
                   icon: const Icon(Icons.add),
@@ -56,9 +58,11 @@ class BackgroundProperties extends StatelessWidget {
                     ],
                     decoration: const InputDecoration(labelText: 'Height'),
                     key: Key(context.read<AppStateCubit>().state.tileName),
-                    initialValue: context.read<BackgroundCubit>().state.height.toString(),
-                    onChanged: (text) =>
-                        context.read<BackgroundCubit>().setHeight(int.parse(text))),
+                    initialValue:
+                        context.read<BackgroundCubit>().state.height.toString(),
+                    onChanged: (text) => context
+                        .read<BackgroundCubit>()
+                        .setHeight(int.parse(text))),
               ),
               /*IconButton(
                   icon: const Icon(Icons.add),

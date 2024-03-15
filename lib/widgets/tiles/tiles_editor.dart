@@ -3,16 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
-import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_tile_converter.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
 import '../../models/app_state.dart';
 import '../background/background_grid.dart';
-import '../source_display.dart';
 import 'meta_tile_canvas.dart';
-import 'meta_tile_toolbar.dart';
 
 class TilesEditor extends StatefulWidget {
   const TilesEditor({
@@ -129,8 +126,10 @@ class _TilesEditorState extends State<TilesEditor> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(
-                width: (MediaQuery.of(context).size.width ~/3) * context.read<AppStateCubit>().state.zoomTile,
-                height: (MediaQuery.of(context).size.width ~/ 3) * context.read<AppStateCubit>().state.zoomTile,
+                width: (MediaQuery.of(context).size.width ~/ 3) *
+                    context.read<AppStateCubit>().state.zoomTile,
+                height: (MediaQuery.of(context).size.width ~/ 3) *
+                    context.read<AppStateCubit>().state.zoomTile,
                 child: const MetaTileCanvas(),
               ),
               SizedBox(

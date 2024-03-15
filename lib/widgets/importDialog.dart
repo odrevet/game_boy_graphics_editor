@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/import.dart';
@@ -123,35 +122,37 @@ class _ImportDialogState extends State<ImportDialog> {
                 ),
                 const Text(" | "),
                 ElevatedButton.icon(
-                  onPressed: kIsWeb ? null :  () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext alertDialogContext) =>
-                            AlertDialog(
-                                content: SizedBox(
-                              width: 500,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: TextFormField(
-                                        decoration: const InputDecoration(
-                                            labelText: 'URL'),
-                                        onChanged: (text) => setState(() {
-                                              url = text;
-                                            })),
-                                  ),
-                                  ElevatedButton.icon(
-                                    onPressed: () {
-                                      onImportHttp(
-                                          context, parse, type, transpose, url);
-                                    },
-                                    icon: const Icon(Icons.download),
-                                    label: const Text('Load'),
-                                  )
-                                ],
-                              ),
-                            )));
-                  },
+                  onPressed: kIsWeb
+                      ? null
+                      : () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext alertDialogContext) =>
+                                  AlertDialog(
+                                      content: SizedBox(
+                                    width: 500,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextFormField(
+                                              decoration: const InputDecoration(
+                                                  labelText: 'URL'),
+                                              onChanged: (text) => setState(() {
+                                                    url = text;
+                                                  })),
+                                        ),
+                                        ElevatedButton.icon(
+                                          onPressed: () {
+                                            onImportHttp(context, parse, type,
+                                                transpose, url);
+                                          },
+                                          icon: const Icon(Icons.download),
+                                          label: const Text('Load'),
+                                        )
+                                      ],
+                                    ),
+                                  )));
+                        },
                   icon: const Icon(Icons.http),
                   label: const Text('URL'),
                 ),

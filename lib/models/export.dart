@@ -1,14 +1,15 @@
 import 'dart:io';
-import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
-import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_background_converter.dart';
-import 'package:image/image.dart' as img;
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
+import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_background_converter.dart';
+import 'package:image/image.dart' as img;
 
 import '../../models/download_stub.dart'
-if (dart.library.html) '../../models/download.dart';
+    if (dart.library.html) '../../models/download.dart';
 import '../cubits/app_state_cubit.dart';
 import '../cubits/background_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
@@ -16,7 +17,6 @@ import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
-
 
 Future<void> saveFile(String content, allowedExtensions, [filename]) async {
   String? fileName = await FilePicker.platform
@@ -97,11 +97,13 @@ onFileSaveAsSourceCode(BuildContext context, String parse) {
   } else {
     if (kIsWeb) {
       download(
-          GBDKBackgroundConverter().toHeader(context.read<BackgroundCubit>().state,
+          GBDKBackgroundConverter().toHeader(
+              context.read<BackgroundCubit>().state,
               context.read<AppStateCubit>().state.backgroundName),
           '${context.read<AppStateCubit>().state.backgroundName}.h');
       download(
-          GBDKBackgroundConverter().toSource(context.read<BackgroundCubit>().state,
+          GBDKBackgroundConverter().toSource(
+              context.read<BackgroundCubit>().state,
               context.read<AppStateCubit>().state.backgroundName),
           '${context.read<AppStateCubit>().state.backgroundName}.c');
     } else {
@@ -133,12 +135,12 @@ onFileTilesSaveAsPNG(BuildContext context) async {
       int count = context.read<MetaTileCubit>().count();
 
       final image =
-      img.Image(width: metaTile.width * count, height: metaTile.height);
+          img.Image(width: metaTile.width * count, height: metaTile.height);
       for (int tileIndex = 0; tileIndex < count; tileIndex++) {
         var tile = metaTile.getTileAtIndex(tileIndex);
         for (int pixelIndex = 0;
-        pixelIndex < metaTile.width * metaTile.height;
-        pixelIndex++) {
+            pixelIndex < metaTile.width * metaTile.height;
+            pixelIndex++) {
           //get color in source tile
           var color = colorSet[tile[pixelIndex]];
 
@@ -169,13 +171,13 @@ onFileBackgroundSaveAsPNG(BuildContext context) async {
           width: background.width * metaTile.width,
           height: background.height * metaTile.height);
       for (int backgroundIndex = 0;
-      backgroundIndex < background.width * background.height;
-      backgroundIndex++) {
+          backgroundIndex < background.width * background.height;
+          backgroundIndex++) {
         var tile = metaTile.getTileAtIndex(background.data[backgroundIndex]);
 
         for (int pixelIndex = 0;
-        pixelIndex < metaTile.width * metaTile.height;
-        pixelIndex++) {
+            pixelIndex < metaTile.width * metaTile.height;
+            pixelIndex++) {
           //get color in source tile
           var color = colorSet[tile[pixelIndex]];
 

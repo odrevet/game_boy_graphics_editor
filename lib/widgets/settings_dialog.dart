@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../cubits/app_state_cubit.dart';
 import '../models/app_state.dart';
 
@@ -27,7 +26,9 @@ class SettingsDialog extends StatelessWidget {
                   child: const Text("DMG / Pocket")),
               const Divider(),
               const Text('GBDK bin Path'),
-              Text(appState.gbdkPathValid ? 'OK' : 'Set GBDK Path to enable RLE compressed files load'),
+              Text(appState.gbdkPathValid
+                  ? 'OK'
+                  : 'Set GBDK Path to enable RLE compressed files load'),
               Row(
                 children: [
                   Expanded(

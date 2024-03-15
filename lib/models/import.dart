@@ -1,11 +1,12 @@
 import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as p;
 
-import '../../models/download_stub.dart'
-    if (dart.library.html) '../../models/download.dart';
 import '../cubits/app_state_cubit.dart';
 import '../cubits/background_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
@@ -14,14 +15,13 @@ import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
-import 'package:path/path.dart' as p;
-import 'package:http/http.dart' as http;
 
-onImportHttp(BuildContext context, String parse, String type, bool transpose, String url) {
+onImportHttp(BuildContext context, String parse, String type, bool transpose,
+    String url) {
   bool tile = parse == 'Tile';
   Uri uriObject = Uri.parse(url);
 
-  if(type == 'Auto'){
+  if (type == 'Auto') {
     type = resolveType(uriObject.path);
   }
 
@@ -29,8 +29,7 @@ onImportHttp(BuildContext context, String parse, String type, bool transpose, St
     http.readBytes(uriObject).then((content) {
       loadBin(content, tile, transpose, context);
     });
-  }
-  else{
+  } else {
     http.read(uriObject).then((source) {
       if (tile) {
         _setTilesFromSource(source, context);
@@ -46,7 +45,7 @@ onImport(BuildContext context, String parse, String type, bool transpose,
   bool tile = parse == 'Tile';
   selectFile(['*']).then((result) {
     if (result != null) {
-      if(type == 'Auto'){
+      if (type == 'Auto') {
         type = resolveType(result.files.single.name);
       }
 
@@ -75,17 +74,17 @@ onImport(BuildContext context, String parse, String type, bool transpose,
   });
 }
 
-String resolveType(String path){
+String resolveType(String path) {
   String extension = p.extension(path);
-  if(extension == '.c' || extension == '.h'){
+  if (extension == '.c' || extension == '.h') {
     return 'Source code';
-  }
-  else{
+  } else {
     return 'Binary';
   }
 }
 
-void loadBin(List<int> content, bool tile, bool transpose, BuildContext context){
+void loadBin(
+    List<int> content, bool tile, bool transpose, BuildContext context) {
   if (tile) {
     List<int> data = GBDKTileConverter().combine(content);
     data = GBDKTileConverter().reorderFromSourceToCanvas(
@@ -101,8 +100,7 @@ void loadBin(List<int> content, bool tile, bool transpose, BuildContext context)
     }
     var data = <int>[];
     for (var index = 0; index < values.length; index += 2) {
-      data.add(int.parse("${values[index]}${values[index + 1]}",
-          radix: 16));
+      data.add(int.parse("${values[index]}${values[index + 1]}", radix: 16));
     }
     if (transpose) {
       _setBackgroundFromBinTransposed(data, context);
@@ -110,7 +108,6 @@ void loadBin(List<int> content, bool tile, bool transpose, BuildContext context)
       _setBackgroundFromBin(data, context);
     }
   }
-
 }
 
 void _setTilesFromSource(String source, BuildContext context) {
@@ -120,7 +117,7 @@ void _setTilesFromSource(String source, BuildContext context) {
   _setPropertiesFromDefines(defines, context);
 
   var graphicsElements =
-      GBDKTileConverter().readGraphicElementsFromSource(source);
+  GBDKTileConverter().readGraphicElementsFromSource(source);
   if (graphicsElements.length > 1) {
     _showGraphicElementChooseDialog(context, graphicsElements, _setMetaTile);
   } else if (graphicsElements.length == 1) {
@@ -132,11 +129,11 @@ void _setBackgroundFromSource(String source, BuildContext context) {
   source = GBDKBackgroundConverter().formatSource(source);
 
   Map<String, int> defines =
-      GBDKBackgroundConverter().readDefinesFromSource(source);
+  GBDKBackgroundConverter().readDefinesFromSource(source);
   _setPropertiesFromDefines(defines, context);
 
   var graphicsElements =
-      GBDKBackgroundConverter().readGraphicElementsFromSource(source);
+  GBDKBackgroundConverter().readGraphicElementsFromSource(source);
   if (graphicsElements.length > 1) {
     _showGraphicElementChooseDialog(
         context, graphicsElements, _setBackgroundFromGraphicElement);
@@ -146,7 +143,8 @@ void _setBackgroundFromSource(String source, BuildContext context) {
   }
 }
 
-List<int> _decompress(String inputPath, String compression, BuildContext context) {
+List<int> _decompress(
+    String inputPath, String compression, BuildContext context) {
   var content = <int>[];
   // decompress to a temp file
   var systemTempDir = Directory.systemTemp;
@@ -202,7 +200,7 @@ void _setPropertiesFromDefines(Map<String, int> defines, BuildContext context) {
 bool _setBackgroundFromGraphicElement(
     GraphicElement graphicElement, BuildContext context) {
   Background background =
-      GBDKBackgroundConverter().fromGraphicElement(graphicElement);
+  GBDKBackgroundConverter().fromGraphicElement(graphicElement);
   context.read<BackgroundCubit>().setData(background.data);
   return true;
 }
@@ -214,25 +212,25 @@ _showGraphicElementChooseDialog(BuildContext context,
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) => AlertDialog(
-            title: const Text('Graphic element selection'),
-            content: SizedBox(
-              height: 200.0,
-              width: 150.0,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: graphicsElements.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    onTap: () {
-                      onTap(graphicsElements[index], context);
-                      Navigator.pop(context);
-                    },
-                    title: Text(graphicsElements[index].name),
-                  );
+        title: const Text('Graphic element selection'),
+        content: SizedBox(
+          height: 200.0,
+          width: 150.0,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: graphicsElements.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                onTap: () {
+                  onTap(graphicsElements[index], context);
+                  Navigator.pop(context);
                 },
-              ),
-            ),
-          ));
+                title: Text(graphicsElements[index].name),
+              );
+            },
+          ),
+        ),
+      ));
 
   return hasLoaded;
 }

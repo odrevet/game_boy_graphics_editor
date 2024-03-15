@@ -132,9 +132,10 @@ extern unsigned char $name[];""";
 
   @override
   String toSource(Graphics graphics, String name) {
-    List<String> dataOrdered = getRawTileInt(reorderFromCanvasToSource(graphics))
-        .map((e) => decimalToHex(e, prefix: true))
-        .toList();
+    List<String> dataOrdered =
+        getRawTileInt(reorderFromCanvasToSource(graphics))
+            .map((e) => decimalToHex(e, prefix: true))
+            .toList();
     return "unsigned char $name[] =\n{${formatOutput(dataOrdered)}\n};";
   }
 
