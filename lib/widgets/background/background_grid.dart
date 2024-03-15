@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
@@ -46,7 +45,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
       controller: _horizontalController,
       child: Scrollbar(
         thumbVisibility: true,
-          controller: _verticalController,
+        controller: _verticalController,
         child: TableView.builder(
           verticalDetails:
               ScrollableDetails.vertical(controller: _verticalController),
@@ -62,27 +61,27 @@ class _BackgroundGridState extends State<BackgroundGrid> {
     );
   }
 
-  Widget _buildCell(BuildContext context, vicinity) {
+  TableViewCell _buildCell(BuildContext context, TableVicinity vicinity) {
     int index = vicinity.yIndex * widget.background.width + vicinity.xIndex;
-    if (widget.background.data[index] >=
+    bool invalid = (widget.background.data[index] >=
         (context.read<MetaTileCubit>().state.data.length ~/
                 (context.read<MetaTileCubit>().state.height *
                     context.read<MetaTileCubit>().state.width)) +
-            context.read<BackgroundCubit>().state.tileOrigin) {
-      return Container(
-        alignment: Alignment.center,
-        child: Text(
-          "${widget.background.data[index]}",
-          style: const TextStyle(color: Colors.red),
-          textAlign: TextAlign.center,
-        ),
-      );
-    } else {
-      return MetaTileDisplay(
-        tileData: widget.metaTile.getTileAtIndex(widget.background.data[index] -
-            context.read<BackgroundCubit>().state.tileOrigin),
-      );
-    }
+            context.read<BackgroundCubit>().state.tileOrigin);
+
+    return TableViewCell(
+      child: invalid
+          ? Text(
+              "${widget.background.data[index]}",
+              style: const TextStyle(color: Colors.red),
+              textAlign: TextAlign.center,
+            )
+          : MetaTileDisplay(
+              tileData: widget.metaTile.getTileAtIndex(
+                  widget.background.data[index] -
+                      context.read<BackgroundCubit>().state.tileOrigin),
+            ),
+    );
   }
 
   TableSpan _buildColumnSpan(int index) {
@@ -96,7 +95,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         extent: FixedTableSpanExtent(widget.cellSize),
         onEnter: (_) => setState(() {
               currentCol = index;
-              if(widget.onHover != null){
+              if (widget.onHover != null) {
                 widget.onHover!(currentCol, currentRow);
               }
             }));
@@ -112,18 +111,18 @@ class _BackgroundGridState extends State<BackgroundGrid> {
     return TableSpan(
       foregroundDecoration: widget.showGrid ? decoration : null,
       extent: FixedTableSpanExtent(widget.cellSize),
-        onEnter: (_) => setState(() {
-          currentRow = index;
-          if(widget.onHover != null){
-            widget.onHover!(currentCol, currentRow);
-          }
-        }),
+      onEnter: (_) => setState(() {
+        currentRow = index;
+        if (widget.onHover != null) {
+          widget.onHover!(currentCol, currentRow);
+        }
+      }),
       recognizerFactories: <Type, GestureRecognizerFactory>{
         TapGestureRecognizer:
             GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
           () => TapGestureRecognizer(),
-          (TapGestureRecognizer t) => t.onTap =
-              () => widget.onTap!(currentRow * widget.background.width + currentCol),
+          (TapGestureRecognizer t) => t.onTap = () =>
+              widget.onTap!(currentRow * widget.background.width + currentCol),
         ),
       },
     );
