@@ -152,7 +152,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                                           context
                                               .read<BackgroundCubit>()
                                               .state
-                                              .origin)
+                                              .tileOrigin)
                                   ? const Text('?')
                                   : MetaTileDisplay(
                                       tileData: context
@@ -163,7 +163,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                                               .state
                                               .data[hoverTileIndex]))),*/
                           Text(
-                              " $hoverTileIndexX/${context.read<BackgroundCubit>().state.width}:$hoverTileIndexY/${context.read<BackgroundCubit>().state.height}"),
+                              " $hoverTileIndexX/${context.read<BackgroundCubit>().state.width-1}:$hoverTileIndexY/${context.read<BackgroundCubit>().state.height-1}"),
                         ],
                       )
                     ],

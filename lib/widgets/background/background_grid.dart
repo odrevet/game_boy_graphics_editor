@@ -62,25 +62,31 @@ class _BackgroundGridState extends State<BackgroundGrid> {
   }
 
   TableViewCell _buildCell(BuildContext context, TableVicinity vicinity) {
-    int index = vicinity.yIndex * widget.background.width + vicinity.xIndex;
-    bool invalid = (widget.background.data[index] >=
-        (context.read<MetaTileCubit>().state.data.length ~/
-                (context.read<MetaTileCubit>().state.height *
-                    context.read<MetaTileCubit>().state.width)) +
-            context.read<BackgroundCubit>().state.tileOrigin);
+    int tileOrigin = context.read<BackgroundCubit>().state.tileOrigin;
+    int mapIndex = vicinity.yIndex * widget.background.width + vicinity.xIndex;
+    int tileIndex = widget.background.data[mapIndex];
+    int maxTileIndex = (context.read<MetaTileCubit>().state.data.length ~/
+            (context.read<MetaTileCubit>().state.height *
+                context.read<MetaTileCubit>().state.width));
+    int maxTileIndexWithOrigin = maxTileIndex + tileOrigin;
+    bool valid = tileIndex < maxTileIndexWithOrigin &&
+        widget.background.data[mapIndex] - tileOrigin >= 0;
 
     return TableViewCell(
-      child: invalid
-          ? Text(
-              "${widget.background.data[index]}",
-              style: const TextStyle(color: Colors.red),
-              textAlign: TextAlign.center,
-            )
-          : MetaTileDisplay(
+      child: valid
+          ? MetaTileDisplay(
               tileData: widget.metaTile.getTileAtIndex(
-                  widget.background.data[index] -
-                      context.read<BackgroundCubit>().state.tileOrigin),
-            ),
+                  widget.background.data[mapIndex] - tileOrigin),
+            )
+          : FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          "${widget.background.data[mapIndex]}+$tileOrigin\n<=$maxTileIndex",
+          style: const TextStyle(color: Colors.red),
+          textAlign: TextAlign.center,
+        ),
+      )
+      ,
     );
   }
 
