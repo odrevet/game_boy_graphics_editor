@@ -65,10 +65,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
     int tileOrigin = context.read<BackgroundCubit>().state.tileOrigin;
     int mapIndex = vicinity.yIndex * widget.background.width + vicinity.xIndex;
     int tileIndex = widget.background.data[mapIndex];
-    int maxTileIndex = (context.read<MetaTileCubit>().state.data.length ~/
-            (context.read<MetaTileCubit>().state.height *
-                context.read<MetaTileCubit>().state.width));
-    int maxTileIndexWithOrigin = maxTileIndex + tileOrigin;
+    int maxTileIndexWithOrigin = context.read<MetaTileCubit>().maxTileIndex() + tileOrigin;
     bool valid = tileIndex < maxTileIndexWithOrigin &&
         widget.background.data[mapIndex] - tileOrigin >= 0;
 
@@ -81,7 +78,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
           : FittedBox(
         fit: BoxFit.scaleDown,
         child: Text(
-          "${widget.background.data[mapIndex]}+$tileOrigin\n<=$maxTileIndex",
+          "${widget.background.data[mapIndex]}+$tileOrigin\n<=${context.read<MetaTileCubit>().state.maxTileIndex}",
           style: const TextStyle(color: Colors.red),
           textAlign: TextAlign.center,
         ),

@@ -30,9 +30,9 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
 
   @override
   Widget build(BuildContext context) {
-    int hoverTileIndex =
-        hoverTileIndexY * context.read<BackgroundCubit>().state.width +
-            hoverTileIndexX;
+    //int hoverTileIndex =
+    //    hoverTileIndexY * context.read<BackgroundCubit>().state.width +
+    //        hoverTileIndexX;
     return BlocBuilder<BackgroundCubit, Background>(
         builder: (context, background) {
       return Row(

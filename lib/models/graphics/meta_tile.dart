@@ -7,7 +7,9 @@ class MetaTile extends Graphics {
       : super(
             data: data ?? List.filled(width * height, 0, growable: true),
             width: width,
-            height: height);
+            height: height){
+    calcMaxTileIndex();
+  }
 
   copyWith({List<int>? data, int? width, int? height}) => MetaTile(
         data: data ?? [...this.data],
@@ -17,6 +19,8 @@ class MetaTile extends Graphics {
 
   static int tileSize = 8;
   static int nbPixelPerTile = tileSize * tileSize;
+  int maxTileIndex = 0;
+  void calcMaxTileIndex() => maxTileIndex =  data.length ~/ (height * width);
 
   int get nbTilePerRow => (width ~/ tileSize);
 

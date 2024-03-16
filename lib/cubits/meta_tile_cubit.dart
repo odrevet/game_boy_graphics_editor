@@ -154,4 +154,6 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   }
 
   int count() => state.data.length ~/ (state.height * state.width);
+
+  int maxTileIndex() => state.data.length ~/ (state.height * state.width);
 }
