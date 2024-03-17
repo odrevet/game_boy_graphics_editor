@@ -1,19 +1,20 @@
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 class Background extends Graphics {
-  Background({height = 18, width = 20, name = "", fill, data})
+  Background({height = 18, width = 20, name = "", this.tileOrigin = 0, fill, data})
       : super(
             width: width,
             height: height,
             data:
                 data ?? List.filled(width * height, fill ?? 0, growable: true));
 
-  int tileOrigin = 0;
+  int tileOrigin;
 
-  copyWith({List<int>? data, int? width, int? height}) => Background(
+  copyWith({List<int>? data, int? width, int? height, int? tileOrigin}) => Background(
         data: data ?? [...this.data],
         width: width ?? this.width,
         height: height ?? this.height,
+        tileOrigin: tileOrigin ?? this.tileOrigin,
       );
 
   void insertCol(int at, int fill) {

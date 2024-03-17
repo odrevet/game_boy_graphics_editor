@@ -99,7 +99,7 @@ class ApplicationMenuBar extends StatelessWidget {
                       child: const Row(
                         children: [
                           Icon(Icons.grid_on),
-                          SizedBox(width: 5), 
+                          SizedBox(width: 5),
                           MenuAcceleratorLabel('Toggle &grid'),
                         ],
                       )
