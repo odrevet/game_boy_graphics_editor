@@ -30,9 +30,9 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
 
   @override
   Widget build(BuildContext context) {
-    //int hoverTileIndex =
-    //    hoverTileIndexY * context.read<BackgroundCubit>().state.width +
-    //        hoverTileIndexX;
+    int hoverTileIndex =
+        hoverTileIndexY * context.read<BackgroundCubit>().state.width +
+            hoverTileIndexX;
     return BlocBuilder<BackgroundCubit, Background>(
         builder: (context, background) {
       return Row(
@@ -104,7 +104,8 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                       Expanded(
                         child: BackgroundGrid(
                           background: context.read<BackgroundCubit>().state,
-                          tileOrigin: context.read<BackgroundCubit>().state.tileOrigin,
+                          tileOrigin:
+                              context.read<BackgroundCubit>().state.tileOrigin,
                           showGrid: widget.showGrid,
                           metaTile: widget.tiles,
                           cellSize: 40 *
@@ -118,9 +119,13 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                                   index % background.width,
                                   index ~/ background.width,
                                   context
-                                      .read<AppStateCubit>()
-                                      .state
-                                      .tileIndexBackground),
+                                          .read<AppStateCubit>()
+                                          .state
+                                          .tileIndexBackground +
+                                      context
+                                          .read<BackgroundCubit>()
+                                          .state
+                                          .tileOrigin),
                           onHover: (x, y) => setState(() {
                             hoverTileIndexX = x;
                             hoverTileIndexY = y;
@@ -164,7 +169,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                                               .state
                                               .data[hoverTileIndex]))),*/
                           Text(
-                              " $hoverTileIndexX/${context.read<BackgroundCubit>().state.width-1}:$hoverTileIndexY/${context.read<BackgroundCubit>().state.height-1}"),
+                              " $hoverTileIndexX/${context.read<BackgroundCubit>().state.width - 1}:$hoverTileIndexY/${context.read<BackgroundCubit>().state.height - 1}"),
                         ],
                       )
                     ],
