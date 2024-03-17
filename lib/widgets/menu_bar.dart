@@ -26,24 +26,39 @@ class ApplicationMenuBar extends StatelessWidget {
                   MenuItemButton(
                     onPressed: () {
                       showDialog(
-                          context: context,
-                          builder: (BuildContext alertDialogContext) =>
-                              const AlertDialog(
-                                  title: Text('Import'),
-                                  content: ImportDialog()));
+                        context: context,
+                        builder: (BuildContext alertDialogContext) => const AlertDialog(
+                          title: Text('Import'),
+                          content: ImportDialog(),
+                        ),
+                      );
                     },
-                    child: const MenuAcceleratorLabel('&Import'),
-                  ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.upload), // Replace 'someIcon' with the icon you want
+                        SizedBox(width: 5), // Adjust the spacing between icon and text as needed
+                        MenuAcceleratorLabel('&Import'),
+                      ],
+                    ),
+                  )
+,
                   MenuItemButton(
                     onPressed: () {
                       showDialog(
-                          context: context,
-                          builder: (BuildContext alertDialogContext) =>
-                              const AlertDialog(
-                                  title: Text('Export'),
-                                  content: ExportDialog()));
+                        context: context,
+                        builder: (BuildContext alertDialogContext) => const AlertDialog(
+                          title: Text('Export'),
+                          content: ExportDialog(),
+                        ),
+                      );
                     },
-                    child: const MenuAcceleratorLabel('&Export'),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.download),
+                        SizedBox(width: 5),
+                        MenuAcceleratorLabel('&Export'),
+                      ],
+                    ),
                   )
                 ],
                 child: const MenuAcceleratorLabel('&File'),
@@ -53,15 +68,26 @@ class ApplicationMenuBar extends StatelessWidget {
               SubmenuButton(
                 menuChildren: <Widget>[
                   MenuItemButton(
-                    onPressed: () =>
-                        context.read<AppStateCubit>().setMode(true),
-                    child: const MenuAcceleratorLabel('Tile'),
+                    onPressed: () => context.read<AppStateCubit>().setMode(true),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.image),
+                        SizedBox(width: 5),
+                        MenuAcceleratorLabel('Tile'),
+                      ],
+                    ),
                   ),
                   MenuItemButton(
-                    onPressed: () =>
-                        context.read<AppStateCubit>().setMode(false),
-                    child: const MenuAcceleratorLabel('Background'),
+                    onPressed: () => context.read<AppStateCubit>().setMode(false),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.grid_4x4),
+                        SizedBox(width: 5),
+                        MenuAcceleratorLabel('Background'),
+                      ],
+                    ),
                   ),
+
                   const Divider(),
                   MenuItemButton(
                     onPressed: () => context
@@ -70,7 +96,13 @@ class ApplicationMenuBar extends StatelessWidget {
                             .tileMode
                         ? context.read<AppStateCubit>().toggleGridTile()
                         : context.read<AppStateCubit>().toggleGridBackground(),
-                    child: const MenuAcceleratorLabel('Toggle &grid'),
+                      child: const Row(
+                        children: [
+                          Icon(Icons.grid_on),
+                          SizedBox(width: 5), 
+                          MenuAcceleratorLabel('Toggle &grid'),
+                        ],
+                      )
                   ),
                 ],
                 child: const MenuAcceleratorLabel('&View'),
