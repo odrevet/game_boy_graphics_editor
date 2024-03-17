@@ -16,6 +16,7 @@ class BackgroundGrid extends StatefulWidget {
   final Function? onHover;
   final bool showGrid;
   final double cellSize;
+  final int tileOrigin;
 
   BackgroundGrid({
     super.key,
@@ -25,6 +26,7 @@ class BackgroundGrid extends StatefulWidget {
     this.onHover,
     this.showGrid = false,
     this.cellSize = 40,
+    this.tileOrigin = 0,
   });
 
   @override
@@ -62,23 +64,22 @@ class _BackgroundGridState extends State<BackgroundGrid> {
   }
 
   TableViewCell _buildCell(BuildContext context, TableVicinity vicinity) {
-    int tileOrigin = context.read<BackgroundCubit>().state.tileOrigin;
     int mapIndex = vicinity.yIndex * widget.background.width + vicinity.xIndex;
     int tileIndex = widget.background.data[mapIndex];
-    int maxTileIndexWithOrigin = context.read<MetaTileCubit>().maxTileIndex() + tileOrigin;
+    int maxTileIndexWithOrigin = context.read<MetaTileCubit>().maxTileIndex() + widget.tileOrigin;
     bool valid = tileIndex < maxTileIndexWithOrigin &&
-        widget.background.data[mapIndex] - tileOrigin >= 0;
+        widget.background.data[mapIndex] - widget.tileOrigin >= 0;
 
     return TableViewCell(
       child: valid
           ? MetaTileDisplay(
               tileData: widget.metaTile.getTileAtIndex(
-                  widget.background.data[mapIndex] - tileOrigin),
+                  widget.background.data[mapIndex] - widget.tileOrigin),
             )
           : FittedBox(
         fit: BoxFit.scaleDown,
         child: Text(
-          "${widget.background.data[mapIndex]}+$tileOrigin\n<=${context.read<MetaTileCubit>().state.maxTileIndex}",
+          "${widget.background.data[mapIndex]}+${widget.tileOrigin}\n<=${context.read<MetaTileCubit>().state.maxTileIndex}",
           style: const TextStyle(color: Colors.red),
           textAlign: TextAlign.center,
         ),

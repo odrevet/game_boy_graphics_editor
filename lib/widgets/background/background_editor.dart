@@ -104,6 +104,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                       Expanded(
                         child: BackgroundGrid(
                           background: context.read<BackgroundCubit>().state,
+                          tileOrigin: context.read<BackgroundCubit>().state.tileOrigin,
                           showGrid: widget.showGrid,
                           metaTile: widget.tiles,
                           cellSize: 40 *
