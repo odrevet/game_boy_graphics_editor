@@ -66,9 +66,23 @@ class _ImportDialogState extends State<ImportDialog> {
                   },
                   items: <String>['Tile', 'Background']
                       .map<DropdownMenuItem<String>>((String value) {
+                    IconData icon = Icons.error;
+                    if (value == 'Tile') {
+                      icon = Icons.image; // Choose appropriate icon for 'Tile'
+                    } else if (value == 'Background') {
+                      icon = Icons
+                          .grid_4x4; // Choose appropriate icon for 'Background'
+                    }
+
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value),
+                      child: Row(
+                        children: [
+                          Icon(icon), // Icon widget
+                          const SizedBox(width: 8),
+                          Text(value),
+                        ],
+                      ),
                     );
                   }).toList(),
                 ),
