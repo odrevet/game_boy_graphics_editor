@@ -17,6 +17,8 @@ class BackgroundGrid extends StatefulWidget {
   final bool showGrid;
   final double cellSize;
   final int tileOrigin;
+  int? hoverTileIndexX;
+  int? hoverTileIndexY;
 
   BackgroundGrid({
     super.key,
@@ -27,6 +29,8 @@ class BackgroundGrid extends StatefulWidget {
     this.showGrid = false,
     this.cellSize = 40,
     this.tileOrigin = 0,
+    this.hoverTileIndexX,
+    this.hoverTileIndexY,
   });
 
   @override
@@ -43,7 +47,10 @@ class _BackgroundGridState extends State<BackgroundGrid> {
 
   @override
   Widget build(BuildContext context) {
-    bool lock = context.read<AppStateCubit>().state.lockScrollBackground;
+    bool lock = context
+        .read<AppStateCubit>()
+        .state
+        .lockScrollBackground;
     return Scrollbar(
       thumbVisibility: true,
       controller: _horizontalController,
@@ -51,8 +58,14 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         thumbVisibility: true,
         controller: _verticalController,
         child: TableView.builder(
-          verticalDetails: lock ? ScrollableDetails.vertical(controller: _verticalController, physics: NeverScrollableScrollPhysics()) : ScrollableDetails.vertical(controller: _verticalController),
-          horizontalDetails: lock ? ScrollableDetails.horizontal(controller: _horizontalController, physics: NeverScrollableScrollPhysics()) : ScrollableDetails.horizontal(controller: _horizontalController),
+          verticalDetails: lock ? ScrollableDetails.vertical(
+              controller: _verticalController,
+              physics: NeverScrollableScrollPhysics()) : ScrollableDetails
+              .vertical(controller: _verticalController),
+          horizontalDetails: lock ? ScrollableDetails.horizontal(
+              controller: _horizontalController,
+              physics: NeverScrollableScrollPhysics()) : ScrollableDetails
+              .horizontal(controller: _horizontalController),
           cellBuilder: _buildCell,
           columnCount: widget.background.width,
           columnBuilder: _buildColumnSpan,
@@ -72,22 +85,41 @@ class _BackgroundGridState extends State<BackgroundGrid> {
     bool valid = tileIndex < maxTileIndexWithOrigin &&
         widget.background.data[mapIndex] - widget.tileOrigin >= 0;
 
+    bool showBorder = widget.hoverTileIndexX == vicinity.xIndex &&
+        widget.hoverTileIndexY == vicinity.yIndex;
+
+
     return TableViewCell(
       child: valid
-          ? MetaTileDisplay(
-              tileData: widget.metaTile.getTileAtIndex(
-                  widget.background.data[mapIndex] - widget.tileOrigin),
-            )
+          ? Container(
+        decoration: showBorder
+            ? BoxDecoration(
+          border: Border.all(
+            color: Colors.red,
+            width: 2.0,
+          ),
+        )
+            : null,
+        child: MetaTileDisplay(
+          tileData: widget.metaTile.getTileAtIndex(
+              widget.background.data[mapIndex] - widget.tileOrigin),
+        ),
+      )
           : FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                tileIndex < maxTileIndexWithOrigin
-                    ? "${widget.background.data[mapIndex]}+${widget.tileOrigin}\n<=${context.read<MetaTileCubit>().state.maxTileIndex}"
-                    : "${widget.background.data[mapIndex]} - ${widget.tileOrigin} < 0",
-                style: const TextStyle(color: Colors.red),
-                textAlign: TextAlign.center,
-              ),
-            ),
+        fit: BoxFit.scaleDown,
+        child: Text(
+          tileIndex < maxTileIndexWithOrigin
+              ? "${widget.background.data[mapIndex]}+${widget
+              .tileOrigin}\n<=${context
+              .read<MetaTileCubit>()
+              .state
+              .maxTileIndex}"
+              : "${widget.background.data[mapIndex]} - ${widget
+              .tileOrigin} < 0",
+          style: const TextStyle(color: Colors.red),
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 
@@ -100,7 +132,8 @@ class _BackgroundGridState extends State<BackgroundGrid> {
     return TableSpan(
         foregroundDecoration: widget.showGrid ? decoration : null,
         extent: FixedTableSpanExtent(widget.cellSize),
-        onEnter: (_) => setState(() {
+        onEnter: (_) =>
+            setState(() {
               currentCol = index;
               if (widget.onHover != null) {
                 widget.onHover!(currentCol, currentRow);
@@ -118,17 +151,19 @@ class _BackgroundGridState extends State<BackgroundGrid> {
     return TableSpan(
       foregroundDecoration: widget.showGrid ? decoration : null,
       extent: FixedTableSpanExtent(widget.cellSize),
-      onEnter: (_) => setState(() {
-        currentRow = index;
-        if (widget.onHover != null) {
-          widget.onHover!(currentCol, currentRow);
-        }
-      }),
+      onEnter: (_) =>
+          setState(() {
+            currentRow = index;
+            if (widget.onHover != null) {
+              widget.onHover!(currentCol, currentRow);
+            }
+          }),
       recognizerFactories: <Type, GestureRecognizerFactory>{
         TapGestureRecognizer:
-            GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
-          () => TapGestureRecognizer(),
-          (TapGestureRecognizer t) => t.onTap = () =>
+        GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
+              () => TapGestureRecognizer(),
+              (TapGestureRecognizer t) =>
+          t.onTap = () =>
               widget.onTap!(currentRow * widget.background.width + currentCol),
         ),
       },

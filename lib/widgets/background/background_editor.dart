@@ -103,6 +103,8 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                     children: [
                       Expanded(
                         child: BackgroundGrid(
+                          hoverTileIndexX: hoverTileIndexX,
+                          hoverTileIndexY: hoverTileIndexY,
                           background: context.read<BackgroundCubit>().state,
                           tileOrigin:
                               context.read<BackgroundCubit>().state.tileOrigin,
