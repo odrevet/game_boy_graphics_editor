@@ -87,4 +87,8 @@ class AppStateCubit extends Cubit<AppState> {
   void decreaseZoomBackground() {
     emit(state.copyWith(zoomBackground: state.zoomBackground - 0.2));
   }
+
+  void toggleLockScrollBackground() {
+    emit(state.copyWith(lockScrollBackground: !state.lockScrollBackground));
+  }
 }

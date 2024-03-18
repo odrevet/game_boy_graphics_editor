@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
+import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
@@ -40,8 +40,10 @@ class _BackgroundGridState extends State<BackgroundGrid> {
   int currentRow = 0;
   int currentCol = 0;
 
+
   @override
   Widget build(BuildContext context) {
+    bool lock = context.read<AppStateCubit>().state.lockScrollBackground;
     return Scrollbar(
       thumbVisibility: true,
       controller: _horizontalController,
@@ -49,10 +51,8 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         thumbVisibility: true,
         controller: _verticalController,
         child: TableView.builder(
-          verticalDetails:
-              ScrollableDetails.vertical(controller: _verticalController),
-          horizontalDetails:
-              ScrollableDetails.horizontal(controller: _horizontalController),
+          verticalDetails: lock ? ScrollableDetails.vertical(controller: _verticalController, physics: NeverScrollableScrollPhysics()) : ScrollableDetails.vertical(controller: _verticalController),
+          horizontalDetails: lock ? ScrollableDetails.horizontal(controller: _horizontalController, physics: NeverScrollableScrollPhysics()) : ScrollableDetails.horizontal(controller: _horizontalController),
           cellBuilder: _buildCell,
           columnCount: widget.background.width,
           columnBuilder: _buildColumnSpan,
@@ -63,10 +63,12 @@ class _BackgroundGridState extends State<BackgroundGrid> {
     );
   }
 
+
   TableViewCell _buildCell(BuildContext context, TableVicinity vicinity) {
     int mapIndex = vicinity.yIndex * widget.background.width + vicinity.xIndex;
     int tileIndex = widget.background.data[mapIndex];
-    int maxTileIndexWithOrigin = context.read<MetaTileCubit>().maxTileIndex() + widget.tileOrigin;
+    int maxTileIndexWithOrigin =
+        context.read<MetaTileCubit>().maxTileIndex() + widget.tileOrigin;
     bool valid = tileIndex < maxTileIndexWithOrigin &&
         widget.background.data[mapIndex] - widget.tileOrigin >= 0;
 
@@ -77,14 +79,15 @@ class _BackgroundGridState extends State<BackgroundGrid> {
                   widget.background.data[mapIndex] - widget.tileOrigin),
             )
           : FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Text(
-          "${widget.background.data[mapIndex]}+${widget.tileOrigin}\n<=${context.read<MetaTileCubit>().state.maxTileIndex}",
-          style: const TextStyle(color: Colors.red),
-          textAlign: TextAlign.center,
-        ),
-      )
-      ,
+              fit: BoxFit.scaleDown,
+              child: Text(
+                tileIndex < maxTileIndexWithOrigin
+                    ? "${widget.background.data[mapIndex]}+${widget.tileOrigin}\n<=${context.read<MetaTileCubit>().state.maxTileIndex}"
+                    : "${widget.background.data[mapIndex]} - ${widget.tileOrigin} < 0",
+                style: const TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+            ),
     );
   }
 
