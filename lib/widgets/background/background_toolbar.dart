@@ -48,6 +48,15 @@ class BackgroundToolbar extends StatelessWidget {
                         .read<AppStateCubit>()
                         .toggleLockScrollBackground,
                     icon: Icon(context.read<AppStateCubit>().state.lockScrollBackground ? Icons.lock : Icons.lock_open)),
+                IconButton(
+                  icon: Icon(context.read<AppStateCubit>().state.floodModeBackground
+                      ? Icons.waves
+                      : Icons.edit),
+                  tooltip: context.read<AppStateCubit>().state.floodModeBackground
+                      ? 'Flood fill'
+                      : 'Draw',
+                  onPressed: () => context.read<AppStateCubit>().toggleFloodModeBackground(),
+                ),
               ],
             ));
   }

@@ -12,6 +12,7 @@ class AppState {
   bool lockScrollBackground;
   bool showGridTile;
   bool floodMode;
+  bool floodModeBackground;
   bool showGridBackground;
   bool showExportPreviewBackground;
   bool showExportPreviewTile;
@@ -34,6 +35,7 @@ class AppState {
     this.tileName = "Tile",
     this.backgroundName = "Background",
     this.floodMode = false,
+    this.floodModeBackground = false,
     this.showGridBackground = true,
     this.showExportPreviewBackground = false,
     this.showExportPreviewTile = false,
@@ -57,6 +59,7 @@ class AppState {
           String? gbdkPath,
           bool? gbdkPathValid,
           bool? floodMode,
+          bool? floodModeBackground,
           bool? showGridBackground,
           bool? showExportPreviewBackground,
           bool? showExportPreviewTile,
@@ -76,6 +79,7 @@ class AppState {
         tileName: tileName ?? this.tileName,
         backgroundName: backgroundName ?? this.backgroundName,
         floodMode: floodMode ?? this.floodMode,
+        floodModeBackground: floodModeBackground ?? this.floodModeBackground,
         showGridBackground: showGridBackground ?? this.showGridBackground,
         showExportPreviewBackground:
             showExportPreviewBackground ?? this.showExportPreviewBackground,

@@ -115,19 +115,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                                   .read<AppStateCubit>()
                                   .state
                                   .zoomBackground,
-                          onTap: (index) => context
-                              .read<BackgroundCubit>()
-                              .setTileIndex(
-                                  index % background.width,
-                                  index ~/ background.width,
-                                  context
-                                          .read<AppStateCubit>()
-                                          .state
-                                          .tileIndexBackground +
-                                      context
-                                          .read<BackgroundCubit>()
-                                          .state
-                                          .tileOrigin),
+                          onTap: (index) => draw(context, index, background),
                           onHover: (x, y) => setState(() {
                             hoverTileIndexX = x;
                             hoverTileIndexY = y;
@@ -181,5 +169,18 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
             ),
           ]);
     });
+  }
+
+  draw(BuildContext context, index, background) {
+    int tileOrigin = context.read<BackgroundCubit>().state.tileOrigin;
+    int tileIndex = context.read<AppStateCubit>().state.tileIndexBackground;
+    int x = index % background.width;
+    int y =  index ~/ background.width;
+
+    if (context.read<AppStateCubit>().state.floodModeBackground == true) {
+      context.read<BackgroundCubit>().state.flood(1, x, y, 0);
+    } else {
+      context.read<BackgroundCubit>().setTileIndex(x, y, tileIndex + tileOrigin);
+    }
   }
 }

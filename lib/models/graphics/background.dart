@@ -52,4 +52,26 @@ class Background extends Graphics {
   void setDataAt(int x, int y, int value) {
     data[(y * width) + x] = value;
   }
+
+  flood(int intensity, int rowIndex, int colIndex,
+      int targetColor) {
+    if (getDataAt(rowIndex, colIndex) == targetColor) {
+      setDataAt(rowIndex, colIndex, intensity);
+      if (inbound(rowIndex, colIndex - 1)) {
+        flood(intensity, rowIndex, colIndex - 1, targetColor);
+      }
+      if (inbound(rowIndex, colIndex + 1)) {
+        flood(intensity, rowIndex, colIndex + 1, targetColor);
+      }
+      if (inbound(rowIndex - 1, colIndex)) {
+        flood(intensity, rowIndex - 1, colIndex, targetColor);
+      }
+      if (inbound(rowIndex + 1, colIndex)) {
+        flood(intensity, rowIndex + 1, colIndex, targetColor);
+      }
+    }
+  }
+
+  inbound(int rowIndex, int colIndex) =>
+      rowIndex >= 0 && rowIndex < height && colIndex >= 0 && colIndex < width;
 }
