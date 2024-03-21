@@ -178,7 +178,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
     int y =  index ~/ background.width;
 
     if (context.read<AppStateCubit>().state.floodModeBackground == true) {
-      context.read<BackgroundCubit>().state.flood(1, x, y, 0);
+      context.read<BackgroundCubit>().state.flood(tileIndex + tileOrigin, x, y, background.getDataAt(x, y));
     } else {
       context.read<BackgroundCubit>().setTileIndex(x, y, tileIndex + tileOrigin);
     }
