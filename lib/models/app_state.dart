@@ -2,20 +2,35 @@ import 'dart:ui';
 
 import 'colors.dart';
 
+enum DrawMode {
+  single,
+  flood,
+  line,
+  rectangle
+}
+
 class AppState {
+  bool tileMode; // edit tile or background
   int intensity;
+
   int tileIndexTile;
   int tileIndexBackground;
-  bool tileMode; // edit tile or background
+
   double zoomTile;
   double zoomBackground;
+
   bool lockScrollBackground;
+
   bool showGridTile;
-  bool floodMode;
-  bool floodModeBackground;
   bool showGridBackground;
+
+  DrawMode drawModeTile;
+  DrawMode drawModeBackground;
+
+
   bool showExportPreviewBackground;
   bool showExportPreviewTile;
+
   List<int> tileBuffer; // copy / past tiles buffer
   List<Color> colorSet;
   String tileName;
@@ -34,8 +49,8 @@ class AppState {
     this.showGridTile = true,
     this.tileName = "Tile",
     this.backgroundName = "Background",
-    this.floodMode = false,
-    this.floodModeBackground = false,
+    this.drawModeTile = DrawMode.single,
+    this.drawModeBackground = DrawMode.single,
     this.showGridBackground = true,
     this.showExportPreviewBackground = false,
     this.showExportPreviewTile = false,
@@ -58,8 +73,8 @@ class AppState {
           String? backgroundName,
           String? gbdkPath,
           bool? gbdkPathValid,
-          bool? floodMode,
-          bool? floodModeBackground,
+          DrawMode? drawModeTile,
+          DrawMode? drawModeBackground,
           bool? showGridBackground,
           bool? showExportPreviewBackground,
           bool? showExportPreviewTile,
@@ -78,8 +93,8 @@ class AppState {
         gbdkPathValid: gbdkPathValid ?? this.gbdkPathValid,
         tileName: tileName ?? this.tileName,
         backgroundName: backgroundName ?? this.backgroundName,
-        floodMode: floodMode ?? this.floodMode,
-        floodModeBackground: floodModeBackground ?? this.floodModeBackground,
+        drawModeTile: drawModeTile ?? this.drawModeTile,
+        drawModeBackground: drawModeBackground ?? this.drawModeBackground,
         showGridBackground: showGridBackground ?? this.showGridBackground,
         showExportPreviewBackground:
             showExportPreviewBackground ?? this.showExportPreviewBackground,

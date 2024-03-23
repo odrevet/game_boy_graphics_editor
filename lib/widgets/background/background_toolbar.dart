@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/background_cubit.dart';
+import '../../models/app_state.dart' show DrawMode;
 import '../../models/graphics/background.dart';
 
 class BackgroundToolbar extends StatelessWidget {
@@ -48,16 +49,34 @@ class BackgroundToolbar extends StatelessWidget {
                         .read<AppStateCubit>()
                         .toggleLockScrollBackground,
                     icon: Icon(context.read<AppStateCubit>().state.lockScrollBackground ? Icons.lock : Icons.lock_open)),
-                IconButton(
-                  icon: Icon(context.read<AppStateCubit>().state.floodModeBackground
-                      ? Icons.waves
-                      : Icons.edit),
-                  tooltip: context.read<AppStateCubit>().state.floodModeBackground
-                      ? 'Flood fill'
-                      : 'Draw',
-                  onPressed: () => context.read<AppStateCubit>().toggleFloodModeBackground(),
-                ),
+                DrawModeDropdown()
               ],
             ));
+  }
+}
+
+
+class DrawModeDropdown extends StatelessWidget {
+  const DrawModeDropdown({super.key});
+
+  final DrawMode _selectedMode = DrawMode.single;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<DrawMode>(
+      value: _selectedMode,
+      onChanged: (DrawMode? drawMode) {
+        context.read<AppStateCubit>().setDrawModeBackground(drawMode!);
+      },
+      items: DrawMode.values.map((DrawMode mode) {
+        return DropdownMenuItem<DrawMode>(
+          value: mode,
+          child: Text(mode
+              .toString()
+              .split('.')
+              .last),
+        );
+      }).toList(),
+    );
   }
 }

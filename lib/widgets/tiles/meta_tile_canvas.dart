@@ -31,15 +31,15 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
             }),
             child: GestureDetector(
               onPanUpdate: (DragUpdateDetails details) {
-                if (isHover && appState.floodMode == false) {
+                if (isHover && appState.drawModeTile == DrawMode.single) {
                   draw(details, constraints, appState.intensity,
-                      appState.floodMode);
+                      appState.drawModeTile);
                 }
               },
               onTapDown: (TapDownDetails details) {
                 if (isHover) {
                   draw(details, constraints, appState.intensity,
-                      appState.floodMode);
+                      appState.drawModeTile);
                 }
               },
               onSecondaryTapDown: (TapDownDetails details) {
@@ -59,7 +59,7 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
   }
 
   draw(dynamic details, BoxConstraints constraints, int intensity,
-      bool floodMode) {
+      DrawMode drawMode) {
     var localPosition = details.localPosition;
     final pixelSize =
         constraints.maxWidth / context.read<MetaTileCubit>().state.width;
@@ -68,31 +68,42 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
     int targetColor = context.read<MetaTileCubit>().state.getPixel(
         rowIndex, colIndex, context.read<AppStateCubit>().state.tileIndexTile);
 
-    if (floodMode) {
-      if (targetColor != context.read<AppStateCubit>().state.intensity) {
-        context.read<MetaTileCubit>().flood(
-            rowIndex,
-            colIndex,
-            context.read<AppStateCubit>().state.tileIndexTile,
-            intensity,
-            targetColor);
-      }
-    } else if (targetColor != intensity) {
-      context.read<MetaTileCubit>().setPixel(
-          rowIndex,
-          colIndex,
-          context.read<AppStateCubit>().state.tileIndexTile,
-          context.read<AppStateCubit>().state.intensity);
+    switch (context.read<AppStateCubit>().state.drawModeBackground) {
+      case DrawMode.single:
+        if (targetColor != intensity) {
+          context.read<MetaTileCubit>().setPixel(
+              rowIndex,
+              colIndex,
+              context.read<AppStateCubit>().state.tileIndexTile,
+              context.read<AppStateCubit>().state.intensity);
+        }
+        break;
+      case DrawMode.flood:
+        if (targetColor != context.read<AppStateCubit>().state.intensity) {
+          context.read<MetaTileCubit>().flood(
+              rowIndex,
+              colIndex,
+              context.read<AppStateCubit>().state.tileIndexTile,
+              intensity,
+              targetColor);
+        }
+        break;
+      case DrawMode.line:
+        print('TODO Draw Line');
+        break;
+      case DrawMode.rectangle:
+        print('TODO Draw Rectangle');
+        break;
     }
   }
 
   pickColorAtCursor(dynamic details, BoxConstraints constraints) {
+    var metaTile = context.read<MetaTileCubit>().state;
     var localPosition = details.localPosition;
-    final pixelSize =
-        constraints.maxWidth / context.read<MetaTileCubit>().state.width;
+    final pixelSize = constraints.maxWidth / metaTile.width;
     final rowIndex = (localPosition.dx / pixelSize).floor();
     final colIndex = (localPosition.dy / pixelSize).floor();
-    int intensityAtCursor = context.read<MetaTileCubit>().state.getPixel(
+    int intensityAtCursor = metaTile.getPixel(
         rowIndex, colIndex, context.read<AppStateCubit>().state.tileIndexTile);
     context.read<AppStateCubit>().setIntensity(intensityAtCursor);
   }

@@ -4,6 +4,7 @@ import 'package:game_boy_graphics_editor/widgets/tiles/tile_dimensions_dropdown.
 
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
+import '../../models/app_state.dart' show DrawMode;
 import 'intensity_button.dart';
 
 class MetaTileToolbar extends StatelessWidget {
@@ -93,15 +94,7 @@ class MetaTileToolbar extends StatelessWidget {
                 : null,
             icon: const Icon(Icons.redo)),
         const VerticalDivider(),
-        IconButton(
-          icon: Icon(context.read<AppStateCubit>().state.floodMode
-              ? Icons.waves
-              : Icons.edit),
-          tooltip: context.read<AppStateCubit>().state.floodMode
-              ? 'Flood fill'
-              : 'Draw',
-          onPressed: () => context.read<AppStateCubit>().toggleFloodMode(),
-        ),
+        DrawModeDropdown(),
         const VerticalDivider(),
         const TileDimensionDropdown(),
         const VerticalDivider(),
@@ -116,6 +109,29 @@ class MetaTileToolbar extends StatelessWidget {
                 : null,
             icon: const Icon(Icons.zoom_in)),
       ],
+    );
+  }
+}
+
+class DrawModeDropdown extends StatelessWidget {
+  const DrawModeDropdown({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<DrawMode>(
+      value: context.read<AppStateCubit>().state.drawModeTile,
+      onChanged: (DrawMode? drawMode) {
+        context.read<AppStateCubit>().setDrawModeBackground(drawMode!);
+      },
+      items: DrawMode.values.map((DrawMode mode) {
+        return DropdownMenuItem<DrawMode>(
+          value: mode,
+          child: Text(mode
+              .toString()
+              .split('.')
+              .last),
+        );
+      }).toList(),
     );
   }
 }

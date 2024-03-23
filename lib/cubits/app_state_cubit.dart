@@ -49,8 +49,8 @@ class AppStateCubit extends Cubit<AppState> {
 
   void setMode(bool isTile) => emit(state.copyWith(tileMode: isTile));
 
-  void toggleFloodMode() => emit(state.copyWith(floodMode: !state.floodMode));
-  void toggleFloodModeBackground() => emit(state.copyWith(floodModeBackground: !state.floodModeBackground));
+  void setDrawModeTile(DrawMode drawMode) => emit(state.copyWith(drawModeTile: drawMode));
+  void setDrawModeBackground(DrawMode drawMode) => emit(state.copyWith(drawModeBackground: drawMode));
 
   void setTileIndexBackground(index) =>
       emit(state.copyWith(tileIndexBackground: index));

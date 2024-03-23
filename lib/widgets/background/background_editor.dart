@@ -7,6 +7,7 @@ import 'package:game_boy_graphics_editor/widgets/background/background_grid.dart
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../cubits/app_state_cubit.dart';
+import '../../models/app_state.dart' show DrawMode;
 import '../../models/graphics/meta_tile.dart';
 
 class BackgroundEditor extends StatefulWidget {
@@ -177,10 +178,20 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
     int x = index % background.width;
     int y =  index ~/ background.width;
 
-    if (context.read<AppStateCubit>().state.floodModeBackground == true) {
-      context.read<BackgroundCubit>().state.flood(tileIndex + tileOrigin, x, y, background.getDataAt(x, y));
-    } else {
-      context.read<BackgroundCubit>().setTileIndex(x, y, tileIndex + tileOrigin);
+    switch (context.read<AppStateCubit>().state.drawModeBackground) {
+      case DrawMode.single:
+        context.read<BackgroundCubit>().setTileIndex(x, y, tileIndex + tileOrigin);
+        break;
+      case DrawMode.flood:
+        context.read<BackgroundCubit>().state.flood(tileIndex + tileOrigin, x, y, background.getDataAt(x, y));
+        break;
+      case DrawMode.line:
+        print('TODO');
+        break;
+      case DrawMode.rectangle:
+        print('TODO');
+        break;
     }
+
   }
 }
