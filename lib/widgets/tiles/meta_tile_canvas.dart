@@ -68,7 +68,7 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
     int targetColor = context.read<MetaTileCubit>().state.getPixel(
         rowIndex, colIndex, context.read<AppStateCubit>().state.tileIndexTile);
 
-    switch (context.read<AppStateCubit>().state.drawModeBackground) {
+    switch (context.read<AppStateCubit>().state.drawModeTile) {
       case DrawMode.single:
         if (targetColor != intensity) {
           context.read<MetaTileCubit>().setPixel(

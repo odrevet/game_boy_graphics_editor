@@ -121,7 +121,7 @@ class DrawModeDropdown extends StatelessWidget {
     return DropdownButton<DrawMode>(
       value: context.read<AppStateCubit>().state.drawModeTile,
       onChanged: (DrawMode? drawMode) {
-        context.read<AppStateCubit>().setDrawModeBackground(drawMode!);
+        context.read<AppStateCubit>().setDrawModeTile(drawMode!);
       },
       items: DrawMode.values.map((DrawMode mode) {
         return DropdownMenuItem<DrawMode>(

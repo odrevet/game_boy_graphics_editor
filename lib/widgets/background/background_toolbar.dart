@@ -59,12 +59,10 @@ class BackgroundToolbar extends StatelessWidget {
 class DrawModeDropdown extends StatelessWidget {
   const DrawModeDropdown({super.key});
 
-  final DrawMode _selectedMode = DrawMode.single;
-
   @override
   Widget build(BuildContext context) {
     return DropdownButton<DrawMode>(
-      value: _selectedMode,
+      value: context.read<AppStateCubit>().state.drawModeBackground,
       onChanged: (DrawMode? drawMode) {
         context.read<AppStateCubit>().setDrawModeBackground(drawMode!);
       },
