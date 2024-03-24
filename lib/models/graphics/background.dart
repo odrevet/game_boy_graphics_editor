@@ -74,4 +74,12 @@ class Background extends Graphics {
 
   inbound(int rowIndex, int colIndex) =>
       rowIndex >= 0 && rowIndex < height && colIndex >= 0 && colIndex < width;
+
+  void line(int i, int xFrom, int yFrom, int x, int y) {
+    print("Draw a line from $xFrom:$yFrom to $x:$y");
+  }
+
+  void rectangle(int i, int xFrom, int yFrom, int x, int y) {
+    print("Draw a rectangle from $xFrom:$yFrom to $x:$y");
+  }
 }
