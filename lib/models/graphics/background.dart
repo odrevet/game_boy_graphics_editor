@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 class Background extends Graphics {
-  Background({height = 18, width = 20, name = "", this.tileOrigin = 0, fill, data})
+  Background(
+      {height = 18, width = 20, name = "", this.tileOrigin = 0, fill, data})
       : super(
             width: width,
             height: height,
@@ -10,7 +13,8 @@ class Background extends Graphics {
 
   int tileOrigin;
 
-  copyWith({List<int>? data, int? width, int? height, int? tileOrigin}) => Background(
+  copyWith({List<int>? data, int? width, int? height, int? tileOrigin}) =>
+      Background(
         data: data ?? [...this.data],
         width: width ?? this.width,
         height: height ?? this.height,
@@ -53,8 +57,7 @@ class Background extends Graphics {
     data[(y * width) + x] = value;
   }
 
-  flood(int intensity, int rowIndex, int colIndex,
-      int targetColor) {
+  flood(int intensity, int rowIndex, int colIndex, int targetColor) {
     if (getDataAt(rowIndex, colIndex) == targetColor) {
       setDataAt(rowIndex, colIndex, intensity);
       if (inbound(rowIndex, colIndex - 1)) {
@@ -75,11 +78,39 @@ class Background extends Graphics {
   inbound(int rowIndex, int colIndex) =>
       rowIndex >= 0 && rowIndex < height && colIndex >= 0 && colIndex < width;
 
-  void line(int i, int xFrom, int yFrom, int x, int y) {
-    print("Draw a line from $xFrom:$yFrom to $x:$y");
+  void line(int i, int xFrom, int yFrom, int xTo, int yTo) {
+    int dx = (xTo - xFrom).abs(), sx = xFrom < xTo ? 1 : -1;
+    int dy = (yTo - yFrom).abs(), sy = yFrom < yTo ? 1 : -1;
+    double err = ((dx > dy ? dx : -dy) / 2);
+    double e2;
+
+    for (;;) {
+      setDataAt(xFrom, yFrom, i);
+      if (xFrom == xTo && yFrom == yTo) break;
+      e2 = err;
+      if (e2 > -dx) {
+        err -= dy;
+        xFrom += sx;
+      }
+      if (e2 < dy) {
+        err += dx;
+        yFrom += sy;
+      }
+    }
   }
 
-  void rectangle(int i, int xFrom, int yFrom, int x, int y) {
-    print("Draw a rectangle from $xFrom:$yFrom to $x:$y");
+  void rectangleBorder(int i, int xFrom, int yFrom, int xTo, int yTo) {
+    for (int x = xFrom; x <= xTo; x++) {
+      setDataAt(x, yFrom, i);
+      setDataAt(x, yTo, i);
+    }
+    for (int y = yFrom; y <= yTo; y++) {
+      setDataAt(xFrom, y, i);
+      setDataAt(xTo, y, i);
+    }
+  }
+
+  void rectangle(int i, int xFrom, int yFrom, int xTo, int yTo) {
+    //TODO
   }
 }

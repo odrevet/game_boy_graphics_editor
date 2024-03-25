@@ -176,35 +176,54 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
     int tileOrigin = context.read<BackgroundCubit>().state.tileOrigin;
     int tileIndex = context.read<AppStateCubit>().state.tileIndexBackground;
     int x = index % background.width;
-    int y =  index ~/ background.width;
+    int y = index ~/ background.width;
 
     switch (context.read<AppStateCubit>().state.drawModeBackground) {
       case DrawMode.single:
-        context.read<BackgroundCubit>().setTileIndex(x, y, tileIndex + tileOrigin);
+        context
+            .read<BackgroundCubit>()
+            .setTileIndex(x, y, tileIndex + tileOrigin);
         break;
       case DrawMode.flood:
-        context.read<BackgroundCubit>().state.flood(tileIndex + tileOrigin, x, y, background.getDataAt(x, y));
+        context
+            .read<BackgroundCubit>()
+            .state
+            .flood(tileIndex + tileOrigin, x, y, background.getDataAt(x, y));
         break;
       case DrawMode.line:
-        if(context.read<AppStateCubit>().state.drawFromBackground == null){
+        if (context.read<AppStateCubit>().state.drawFromBackground == null) {
           context.read<AppStateCubit>().state.drawFromBackground = index;
-        }
-        else{
-          int xFrom = (context.read<AppStateCubit>().state.drawFromBackground! % background.width).toInt();
-          int yFrom =  context.read<AppStateCubit>().state.drawFromBackground! ~/ background.width;
+        } else {
+          int xFrom = (context.read<AppStateCubit>().state.drawFromBackground! %
+                  background.width)
+              .toInt();
+          int yFrom = context.read<AppStateCubit>().state.drawFromBackground! ~/
+              background.width;
 
-          context.read<BackgroundCubit>().state.line(tileIndex + tileOrigin, xFrom, yFrom, x, y);
+          context
+              .read<BackgroundCubit>()
+              .state
+              .line(tileIndex + tileOrigin, xFrom, yFrom, x, y);
           context.read<AppStateCubit>().state.drawFromBackground = null;
         }
         break;
       case DrawMode.rectangle:
-        int xFrom = (context.read<AppStateCubit>().state.drawFromBackground! % background.width).toInt();
-        int yFrom =  context.read<AppStateCubit>().state.drawFromBackground! ~/ background.width;
+        if (context.read<AppStateCubit>().state.drawFromBackground == null) {
+          context.read<AppStateCubit>().state.drawFromBackground = index;
+        } else {
+          int xFrom = (context.read<AppStateCubit>().state.drawFromBackground! %
+                  background.width)
+              .toInt();
+          int yFrom = context.read<AppStateCubit>().state.drawFromBackground! ~/
+              background.width;
 
-        context.read<BackgroundCubit>().state.rectangle(tileIndex + tileOrigin, xFrom, yFrom, x, y);
-        context.read<AppStateCubit>().state.drawFromBackground = null;
+          context
+              .read<BackgroundCubit>()
+              .state
+              .rectangle(tileIndex + tileOrigin, xFrom, yFrom, x, y);
+          context.read<AppStateCubit>().state.drawFromBackground = null;
+        }
         break;
     }
-
   }
 }
