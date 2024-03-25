@@ -6,8 +6,24 @@ import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 
 import '../../cubits/app_state_cubit.dart';
 
-class BackgroundProperties extends StatelessWidget {
-  const BackgroundProperties({super.key});
+class BackgroundProperties extends StatefulWidget {
+  BackgroundProperties({super.key});
+
+  @override
+  State<BackgroundProperties> createState() => _BackgroundPropertiesState();
+}
+
+class _BackgroundPropertiesState extends State<BackgroundProperties> {
+  final TextEditingController _controllerHeight = TextEditingController();
+
+  final TextEditingController _controllerWidth = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerWidth.text = context.read<BackgroundCubit>().state.width.toString();
+    _controllerHeight.text = context.read<BackgroundCubit>().state.height.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,23 +46,15 @@ class BackgroundProperties extends StatelessWidget {
                     ],
                     decoration: const InputDecoration(labelText: 'Width'),
                     key: Key(context.read<AppStateCubit>().state.tileName),
-                    initialValue:
-                        context.read<BackgroundCubit>().state.width.toString(),
-                    onChanged: (text) => context
-                        .read<BackgroundCubit>()
-                        .setWidth(int.parse(text))),
+                    controller: _controllerWidth),
               ),
-              /*IconButton(
-                  icon: const Icon(Icons.add),
-                  tooltip: 'Add Column',
-                  onPressed: () =>
-                      context.read<BackgroundCubit>().insertCol(0, 0)),
-              IconButton(
-                  icon: const Icon(Icons.remove),
-                  tooltip: 'Remove Column',
-                  onPressed: () => background.width > 1
-                      ? context.read<BackgroundCubit>().deleteCol(0)
-                      : null),*/
+              ElevatedButton(
+                  onPressed: () {
+                    context
+                        .read<BackgroundCubit>()
+                        .setWidth(int.parse(_controllerWidth.text));
+                  },
+                  child: const Text('Set Width'))
             ],
           ),
           Row(
@@ -58,23 +66,15 @@ class BackgroundProperties extends StatelessWidget {
                     ],
                     decoration: const InputDecoration(labelText: 'Height'),
                     key: Key(context.read<AppStateCubit>().state.tileName),
-                    initialValue:
-                        context.read<BackgroundCubit>().state.height.toString(),
-                    onChanged: (text) => context
-                        .read<BackgroundCubit>()
-                        .setHeight(int.parse(text))),
+                    controller: _controllerHeight),
               ),
-              /*IconButton(
-                  icon: const Icon(Icons.add),
-                  tooltip: 'Add Row',
-                  onPressed: () =>
-                      context.read<BackgroundCubit>().insertRow(0, 0)),
-              IconButton(
-                  icon: const Icon(Icons.remove),
-                  tooltip: 'Remove Row',
-                  onPressed: () => background.height > 1
-                      ? context.read<BackgroundCubit>().deleteRow(0)
-                      : null),*/
+              ElevatedButton(
+                  onPressed: () {
+                    context
+                        .read<BackgroundCubit>()
+                        .setHeight(int.parse(_controllerHeight.text));
+                  },
+                  child: const Text('Set Height'))
             ],
           ),
           TextFormField(

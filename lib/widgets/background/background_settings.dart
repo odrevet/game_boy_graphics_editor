@@ -15,7 +15,7 @@ class BackgroundSettings extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const BackgroundProperties(),
+            BackgroundProperties(),
             ElevatedButton(
                 onPressed: () {
                   context.read<BackgroundCubit>().transpose();
