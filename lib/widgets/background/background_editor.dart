@@ -185,10 +185,10 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
             .setTileIndex(x, y, tileIndex + tileOrigin);
         break;
       case DrawMode.flood:
-        context
+        /*context
             .read<BackgroundCubit>()
             .state
-            .flood(tileIndex + tileOrigin, x, y, background.getDataAt(x, y));
+            .flood(tileIndex + tileOrigin, x, y, background.getDataAt(x, y));*/
         break;
       case DrawMode.line:
         int? from = context.read<AppStateCubit>().state.drawFromBackground;
@@ -216,7 +216,6 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
 
           context
               .read<BackgroundCubit>()
-              .state
               .rectangle(tileIndex + tileOrigin, xFrom, yFrom, x, y);
           context.read<AppStateCubit>().state.drawFromBackground = null;
         }

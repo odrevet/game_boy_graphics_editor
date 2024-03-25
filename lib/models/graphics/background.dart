@@ -57,7 +57,7 @@ class Background extends Graphics {
     data[(y * width) + x] = value;
   }
 
-  flood(int intensity, int rowIndex, int colIndex, int targetColor) {
+  /*flood(int intensity, int rowIndex, int colIndex, int targetColor) {
     if (getDataAt(rowIndex, colIndex) == targetColor) {
       setDataAt(rowIndex, colIndex, intensity);
       if (inbound(rowIndex, colIndex - 1)) {
@@ -73,7 +73,7 @@ class Background extends Graphics {
         flood(intensity, rowIndex + 1, colIndex, targetColor);
       }
     }
-  }
+  }*/
 
   inbound(int rowIndex, int colIndex) =>
       rowIndex >= 0 && rowIndex < height && colIndex >= 0 && colIndex < width;
@@ -111,6 +111,11 @@ class Background extends Graphics {
   }
 
   void rectangle(int i, int xFrom, int yFrom, int xTo, int yTo) {
-    //TODO
+    for (int y = yFrom; y <= yTo; y++) {
+      for (int x = xFrom; x <= xTo; x++) {
+        setDataAt(x, y, i);
+      }
+    }
   }
+
 }

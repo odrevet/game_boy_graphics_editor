@@ -33,6 +33,12 @@ class BackgroundCubit extends ReplayCubit<Background> {
     emit(background);
   }
 
+  void rectangle(int i, int xFrom, int yFrom, int xTo, int yTo) {
+    Background background = state.copyWith();
+    background.rectangle(i, xFrom, yFrom, xTo, yTo);
+    emit(background);
+  }
+  
   void insertCol(int at, int fill) {
     Background background = state.copyWith();
     background.insertCol(at, fill);
