@@ -23,7 +23,7 @@ class BackgroundCubit extends ReplayCubit<Background> {
 
   void setTileIndex(int rowIndex, int colIndex, int tileIndex) {
     Background background = state.copyWith();
-    background.setDataAt(colIndex, rowIndex, tileIndex);
+    background.setDataAt(rowIndex, colIndex, tileIndex);
     emit(background);
   }
 
