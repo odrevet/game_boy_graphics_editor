@@ -57,7 +57,7 @@ class BackgroundToolbar extends StatelessWidget {
 
 
 class DrawModeDropdown extends StatelessWidget {
-  const DrawModeDropdown({super.key});
+  const DrawModeDropdown({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,12 +69,35 @@ class DrawModeDropdown extends StatelessWidget {
       items: DrawMode.values.map((DrawMode mode) {
         return DropdownMenuItem<DrawMode>(
           value: mode,
-          child: Text(mode
-              .toString()
-              .split('.')
-              .last),
+          child: Row(
+            children: [
+              _getIconForDrawMode(mode), // Adding icon here
+              const SizedBox(width: 8), // Adjust the spacing between icon and text
+              Text(mode.toString().split('.').last),
+            ],
+          ),
         );
       }).toList(),
     );
   }
+
+  Icon _getIconForDrawMode(DrawMode mode) {
+    IconData iconData;
+    switch (mode) {
+      case DrawMode.single:
+        iconData = Icons.brush;
+        break;
+      case DrawMode.fill:
+        iconData = Icons.format_paint;
+        break;
+      case DrawMode.line:
+        iconData = Icons.line_style;
+        break;
+      case DrawMode.rectangle:
+        iconData = Icons.rectangle;
+        break;
+    }
+    return Icon(iconData);
+  }
 }
+

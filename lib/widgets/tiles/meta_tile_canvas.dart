@@ -78,9 +78,9 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
               context.read<AppStateCubit>().state.intensity);
         }
         break;
-      case DrawMode.flood:
+      case DrawMode.fill:
         if (targetColor != context.read<AppStateCubit>().state.intensity) {
-          context.read<MetaTileCubit>().flood(
+          context.read<MetaTileCubit>().fill(
               rowIndex,
               colIndex,
               context.read<AppStateCubit>().state.tileIndexTile,

@@ -184,11 +184,10 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
             .read<BackgroundCubit>()
             .setTileIndex(x, y, tileIndex + tileOrigin);
         break;
-      case DrawMode.flood:
-        /*context
+      case DrawMode.fill:
+        context
             .read<BackgroundCubit>()
-            .state
-            .flood(tileIndex + tileOrigin, x, y, background.getDataAt(x, y));*/
+            .fill(tileIndex + tileOrigin, x, y, background.getDataAt(x, y));
         break;
       case DrawMode.line:
         int? from = context.read<AppStateCubit>().state.drawFromBackground;

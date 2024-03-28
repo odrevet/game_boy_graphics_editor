@@ -4,7 +4,7 @@ import 'colors.dart';
 
 enum DrawMode {
   single,
-  flood,
+  fill,
   line,
   rectangle
 }

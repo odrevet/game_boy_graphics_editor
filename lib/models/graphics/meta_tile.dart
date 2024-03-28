@@ -46,21 +46,21 @@ class MetaTile extends Graphics {
     }
   }
 
-  flood(int metaTileIndex, int intensity, int rowIndex, int colIndex,
+  fill(int metaTileIndex, int intensity, int rowIndex, int colIndex,
       int targetColor) {
     if (getPixel(rowIndex, colIndex, metaTileIndex) == targetColor) {
       setPixel(rowIndex, colIndex, metaTileIndex, intensity);
       if (inbound(rowIndex, colIndex - 1)) {
-        flood(metaTileIndex, intensity, rowIndex, colIndex - 1, targetColor);
+        fill(metaTileIndex, intensity, rowIndex, colIndex - 1, targetColor);
       }
       if (inbound(rowIndex, colIndex + 1)) {
-        flood(metaTileIndex, intensity, rowIndex, colIndex + 1, targetColor);
+        fill(metaTileIndex, intensity, rowIndex, colIndex + 1, targetColor);
       }
       if (inbound(rowIndex - 1, colIndex)) {
-        flood(metaTileIndex, intensity, rowIndex - 1, colIndex, targetColor);
+        fill(metaTileIndex, intensity, rowIndex - 1, colIndex, targetColor);
       }
       if (inbound(rowIndex + 1, colIndex)) {
-        flood(metaTileIndex, intensity, rowIndex + 1, colIndex, targetColor);
+        fill(metaTileIndex, intensity, rowIndex + 1, colIndex, targetColor);
       }
     }
   }

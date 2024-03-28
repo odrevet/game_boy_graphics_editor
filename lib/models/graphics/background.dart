@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 class Background extends Graphics {
@@ -57,26 +55,30 @@ class Background extends Graphics {
     data[(y * width) + x] = value;
   }
 
-  /*flood(int intensity, int rowIndex, int colIndex, int targetColor) {
+  fill(int intensity, int rowIndex, int colIndex, int targetColor) {
     if (getDataAt(rowIndex, colIndex) == targetColor) {
       setDataAt(rowIndex, colIndex, intensity);
       if (inbound(rowIndex, colIndex - 1)) {
-        flood(intensity, rowIndex, colIndex - 1, targetColor);
+        fill(intensity, rowIndex, colIndex - 1, targetColor);
       }
       if (inbound(rowIndex, colIndex + 1)) {
-        flood(intensity, rowIndex, colIndex + 1, targetColor);
+        fill(intensity, rowIndex, colIndex + 1, targetColor);
       }
       if (inbound(rowIndex - 1, colIndex)) {
-        flood(intensity, rowIndex - 1, colIndex, targetColor);
+        fill(intensity, rowIndex - 1, colIndex, targetColor);
       }
       if (inbound(rowIndex + 1, colIndex)) {
-        flood(intensity, rowIndex + 1, colIndex, targetColor);
+        fill(intensity, rowIndex + 1, colIndex, targetColor);
       }
     }
-  }*/
+  }
 
-  inbound(int rowIndex, int colIndex) =>
-      rowIndex >= 0 && rowIndex < height && colIndex >= 0 && colIndex < width;
+  inbound(int rowIndex, int colIndex) {
+    return rowIndex > 0 &&
+        rowIndex < height &&
+        colIndex > 0 &&
+        colIndex < width;
+  }
 
   void line(int i, int xFrom, int yFrom, int xTo, int yTo) {
     int dx = (xTo - xFrom).abs(), sx = xFrom < xTo ? 1 : -1;
@@ -122,5 +124,4 @@ class Background extends Graphics {
       }
     }
   }
-
 }
