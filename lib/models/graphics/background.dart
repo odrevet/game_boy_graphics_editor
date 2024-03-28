@@ -111,8 +111,13 @@ class Background extends Graphics {
   }
 
   void rectangle(int i, int xFrom, int yFrom, int xTo, int yTo) {
-    for (int y = yFrom; y <= yTo; y++) {
-      for (int x = xFrom; x <= xTo; x++) {
+    int startX = xFrom < xTo ? xFrom : xTo;
+    int endX = xFrom < xTo ? xTo : xFrom;
+    int startY = yFrom < yTo ? yFrom : yTo;
+    int endY = yFrom < yTo ? yTo : yFrom;
+
+    for (int y = startY; y <= endY; y++) {
+      for (int x = startX; x <= endX; x++) {
         setDataAt(x, y, i);
       }
     }
