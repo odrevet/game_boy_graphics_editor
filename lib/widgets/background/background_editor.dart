@@ -2,6 +2,7 @@ import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
+import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_grid.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
@@ -11,15 +12,10 @@ import '../../models/app_state.dart' show DrawMode;
 import '../../models/graphics/meta_tile.dart';
 
 class BackgroundEditor extends StatefulWidget {
-  final MetaTile tiles;
   final Function? onTapTileListView;
-  final bool showGrid;
 
   const BackgroundEditor(
-      {super.key,
-      required this.tiles,
-      this.onTapTileListView,
-      this.showGrid = false});
+      {super.key, this.onTapTileListView});
 
   @override
   State<BackgroundEditor> createState() => _BackgroundEditorState();
@@ -109,8 +105,8 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                           background: context.read<BackgroundCubit>().state,
                           tileOrigin:
                               context.read<BackgroundCubit>().state.tileOrigin,
-                          showGrid: widget.showGrid,
-                          metaTile: widget.tiles,
+                          showGrid: context.read<AppStateCubit>().state.showGridBackground,
+                          metaTile: context.read<MetaTileCubit>().state,
                           cellSize: 40 *
                               context
                                   .read<AppStateCubit>()
@@ -125,40 +121,6 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                       ),
                       Row(
                         children: [
-                          /*
-                          SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: (context
-                                          .read<BackgroundCubit>()
-                                          .state
-                                          .data[hoverTileIndex] >=
-                                      (context
-                                                  .read<MetaTileCubit>()
-                                                  .state
-                                                  .data
-                                                  .length ~/
-                                              (context
-                                                      .read<MetaTileCubit>()
-                                                      .state
-                                                      .height *
-                                                  context
-                                                      .read<MetaTileCubit>()
-                                                      .state
-                                                      .width)) +
-                                          context
-                                              .read<BackgroundCubit>()
-                                              .state
-                                              .tileOrigin)
-                                  ? const Text('?')
-                                  : MetaTileDisplay(
-                                      tileData: context
-                                          .read<MetaTileCubit>()
-                                          .state
-                                          .getTileAtIndex(context
-                                              .read<BackgroundCubit>()
-                                              .state
-                                              .data[hoverTileIndex]))),*/
                           Text(
                               " $hoverTileIndexX/${context.read<BackgroundCubit>().state.width - 1}:$hoverTileIndexY/${context.read<BackgroundCubit>().state.height - 1}"),
                         ],

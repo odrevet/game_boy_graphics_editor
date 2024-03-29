@@ -39,26 +39,22 @@ class _EditorState extends State<Editor> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppStateCubit, AppState>(
-      builder: (context, appState) => BlocBuilder<MetaTileCubit, MetaTile>(
-        builder: (context, metaTile) {
-          dynamic editor = appState.tileMode
-              ? const TilesEditor()
-              : BackgroundEditor(
-                  tiles: metaTile,
-                  onTapTileListView: (index) => context
-                      .read<AppStateCubit>()
-                      .setTileIndexBackground(index),
-                  showGrid: appState.showGridBackground,
-                );
+      builder: (context, appState) {
+        dynamic editor = appState.tileMode
+            ? const TilesEditor()
+            : BackgroundEditor(
+          onTapTileListView: (index) => context
+              .read<AppStateCubit>()
+              .setTileIndexBackground(index),
+        );
 
-          return Scaffold(
-              body: SafeArea(
-            child: Column(
-              children: [ApplicationMenuBar(), Expanded(child: editor)],
-            ),
-          ));
-        },
-      ),
+        return Scaffold(
+            body: SafeArea(
+              child: Column(
+                children: [ApplicationMenuBar(), Expanded(child: editor)],
+              ),
+            ));
+      }
     );
   }
 }
