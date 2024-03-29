@@ -12,19 +12,32 @@ class BackgroundCubit extends ReplayCubit<Background> {
   setWidth(int width) {
     Background background = state.copyWith();
 
-    if(width > state.width){
-      background.insertCol(background.data.length % background.width, 0);
-    }
-    else{
-      background.deleteCol(background.data.length % background.width);
+    if (background.width < width) {
+      while (background.width < width) {
+        background.insertCol(background.data.length % background.width, 0);
+      }
+    } else {
+      while (background.width > width) {
+        background.deleteCol(background.data.length % background.width);
+      }
     }
 
     emit(background);
   }
 
   setHeight(int height) {
-    Background background = state.copyWith(
-        height: height, data: List.filled(height * state.width, 0));
+    Background background = state.copyWith();
+
+    if (background.height < height) {
+      while (background.height < height) {
+        background.insertRow(background.data.length % background.height, 0);
+      }
+    } else {
+      while (background.height > height) {
+        background.deleteRow(background.data.length % background.height);
+      }
+    }
+
     emit(background);
   }
 
