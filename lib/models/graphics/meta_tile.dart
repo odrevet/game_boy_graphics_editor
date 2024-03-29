@@ -7,7 +7,7 @@ class MetaTile extends Graphics {
       : super(
             data: data ?? List.filled(width * height, 0, growable: true),
             width: width,
-            height: height){
+            height: height) {
     calcMaxTileIndex();
   }
 
@@ -20,7 +20,8 @@ class MetaTile extends Graphics {
   static int tileSize = 8;
   static int nbPixelPerTile = tileSize * tileSize;
   int maxTileIndex = 0;
-  void calcMaxTileIndex() => maxTileIndex =  data.length ~/ (height * width);
+
+  void calcMaxTileIndex() => maxTileIndex = data.length ~/ (height * width);
 
   int get nbTilePerRow => (width ~/ tileSize);
 
@@ -67,4 +68,38 @@ class MetaTile extends Graphics {
 
   inbound(int rowIndex, int colIndex) =>
       rowIndex >= 0 && rowIndex < height && colIndex >= 0 && colIndex < width;
+
+  void line(int metaTileIndex, int intensity, int xFrom, int yFrom, xTo, yTo) {
+    int dx = (xTo - xFrom).abs(), sx = xFrom < xTo ? 1 : -1;
+    int dy = (yTo - yFrom).abs(), sy = yFrom < yTo ? 1 : -1;
+    double err = ((dx > dy ? dx : -dy) / 2);
+    double e2;
+
+    for (;;) {
+      setPixel(yFrom, xFrom, metaTileIndex, intensity);
+      if (xFrom == xTo && yFrom == yTo) break;
+      e2 = err;
+      if (e2 > -dx) {
+        err -= dy;
+        xFrom += sx;
+      }
+      if (e2 < dy) {
+        err += dx;
+        yFrom += sy;
+      }
+    }
+  }
+
+  void rectangle(int metaTileIndex, int intensity, int xFrom, int yFrom, int xTo, int yTo) {
+    int startX = xFrom < xTo ? xFrom : xTo;
+    int endX = xFrom < xTo ? xTo : xFrom;
+    int startY = yFrom < yTo ? yFrom : yTo;
+    int endY = yFrom < yTo ? yTo : yFrom;
+
+    for (int y = startY; y <= endY; y++) {
+      for (int x = startX; x <= endX; x++) {
+        setPixel(y, x, metaTileIndex, intensity);
+      }
+    }
+  }
 }

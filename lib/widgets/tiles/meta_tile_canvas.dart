@@ -89,10 +89,32 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
         }
         break;
       case DrawMode.line:
-        print('TODO Draw Line');
+        int? from = context.read<AppStateCubit>().state.drawFromTile;
+        if (from == null) {
+          context.read<AppStateCubit>().state.drawFromTile = (context.read<MetaTileCubit>().state.width * rowIndex + colIndex) as int?;
+        } else {
+          int xFrom = (from % context.read<MetaTileCubit>().state.width).toInt();
+          int yFrom = from ~/ context.read<MetaTileCubit>().state.width;
+
+          context
+              .read<MetaTileCubit>()
+              .line(context.read<AppStateCubit>().state.tileIndexTile, intensity, xFrom, yFrom, colIndex, rowIndex);
+          context.read<AppStateCubit>().state.drawFromTile = null;
+        }
         break;
       case DrawMode.rectangle:
-        print('TODO Draw Rectangle');
+        int? from = context.read<AppStateCubit>().state.drawFromTile;
+        if (from == null) {
+          context.read<AppStateCubit>().state.drawFromTile = (context.read<MetaTileCubit>().state.width * rowIndex + colIndex) as int?;
+        } else {
+          int xFrom = (from % context.read<MetaTileCubit>().state.width).toInt();
+          int yFrom = from ~/ context.read<MetaTileCubit>().state.width;
+
+          context
+              .read<MetaTileCubit>()
+              .rectangle(context.read<AppStateCubit>().state.tileIndexTile, intensity, xFrom, yFrom, colIndex, rowIndex);
+          context.read<AppStateCubit>().state.drawFromTile = null;
+        }
         break;
     }
   }

@@ -27,8 +27,8 @@ class AppState {
   DrawMode drawModeTile;
   DrawMode drawModeBackground;
 
+  int? drawFromTile;
   int? drawFromBackground;
-
 
   bool showExportPreviewBackground;
   bool showExportPreviewTile;
@@ -53,6 +53,7 @@ class AppState {
     this.backgroundName = "Background",
     this.drawModeTile = DrawMode.single,
     this.drawModeBackground = DrawMode.single,
+    this.drawFromTile,
     this.drawFromBackground,
     this.showGridBackground = true,
     this.showExportPreviewBackground = false,

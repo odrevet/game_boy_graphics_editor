@@ -156,4 +156,16 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   int count() => state.data.length ~/ (state.height * state.width);
 
   int maxTileIndex() => state.data.length ~/ (state.height * state.width);
+
+  void line(int metaTileIndex, int intensity, int xFrom, int yFrom, xTo, yTo) {
+    MetaTile metaTile = state.copyWith();
+    metaTile.line(metaTileIndex, intensity, xFrom, yFrom, xTo, yTo);
+    emit(metaTile);
+  }
+
+  void rectangle(int metaTileIndex, int intensity, int xFrom, int yFrom, int xTo, int yTo) {
+    MetaTile metaTile = state.copyWith();
+    metaTile.rectangle(metaTileIndex, intensity, xFrom, yFrom, xTo, yTo);
+    emit(metaTile);
+  }
 }
