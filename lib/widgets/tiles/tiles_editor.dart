@@ -126,7 +126,7 @@ class _TilesEditorState extends State<TilesEditor> {
           ),
           const VerticalDivider(),
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               MetaTileToolbar(),
               SizedBox(

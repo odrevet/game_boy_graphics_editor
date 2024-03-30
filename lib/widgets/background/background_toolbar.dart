@@ -44,12 +44,12 @@ class BackgroundToolbar extends StatelessWidget {
                         ? context.read<AppStateCubit>().increaseZoomBackground
                         : null,
                     icon: const Icon(Icons.zoom_in)),
+                DrawModeDropdown(),
                 IconButton(
                     onPressed: context
                         .read<AppStateCubit>()
                         .toggleLockScrollBackground,
                     icon: Icon(context.read<AppStateCubit>().state.lockScrollBackground ? Icons.lock : Icons.lock_open)),
-                DrawModeDropdown()
               ],
             ));
   }

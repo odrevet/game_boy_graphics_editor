@@ -6,11 +6,9 @@ import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_grid.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_toolbar.dart';
-import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../cubits/app_state_cubit.dart';
 import '../../models/app_state.dart' show DrawMode;
-import '../../models/graphics/meta_tile.dart';
 
 class BackgroundEditor extends StatefulWidget {
   final Function? onTapTileListView;
@@ -31,6 +29,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
     return BlocBuilder<BackgroundCubit, Background>(
         builder: (context, background) {
       return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           BackgroundToolbar(),
           Expanded(
