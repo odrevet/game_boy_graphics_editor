@@ -1,4 +1,5 @@
 import 'package:contextmenu/contextmenu.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
@@ -8,8 +9,10 @@ import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart'
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
 import '../../models/app_state.dart';
+import '../background/background_editor.dart';
 import '../background/background_grid.dart';
 import 'meta_tile_canvas.dart';
+import 'meta_tile_toolbar.dart';
 
 class TilesEditor extends StatefulWidget {
   const TilesEditor({
@@ -125,6 +128,7 @@ class _TilesEditorState extends State<TilesEditor> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              MetaTileToolbar(),
               SizedBox(
                 width: (MediaQuery.of(context).size.width ~/ 3) *
                     context.read<AppStateCubit>().state.zoomTile,
@@ -142,6 +146,13 @@ class _TilesEditorState extends State<TilesEditor> {
                 ),
               )
             ],
+          ),
+          Expanded(
+            child: BackgroundEditor(
+              onTapTileListView: (index) => context
+                  .read<AppStateCubit>()
+                  .setSelectedTileIndex(index),
+            ),
           ),
         ]),
       );

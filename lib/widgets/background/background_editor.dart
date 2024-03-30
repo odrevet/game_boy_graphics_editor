@@ -5,6 +5,7 @@ import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_grid.dart';
+import 'package:game_boy_graphics_editor/widgets/background/background_toolbar.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
 import '../../cubits/app_state_cubit.dart';
@@ -27,116 +28,46 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
 
   @override
   Widget build(BuildContext context) {
-    int hoverTileIndex =
-        hoverTileIndexY * context.read<BackgroundCubit>().state.width +
-            hoverTileIndexX;
     return BlocBuilder<BackgroundCubit, Background>(
         builder: (context, background) {
-      return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 200,
-              child: MetaTileListView(
-                  selectedTile:
-                      context.read<AppStateCubit>().state.tileIndexBackground,
-                  onTap: (index) => widget.onTapTileListView != null
-                      ? widget.onTapTileListView!(index)
-                      : null),
+      return Column(
+        children: [
+          BackgroundToolbar(),
+          Expanded(
+            child: BackgroundGrid(
+              hoverTileIndexX: hoverTileIndexX,
+              hoverTileIndexY: hoverTileIndexY,
+              background: context.read<BackgroundCubit>().state,
+              tileOrigin:
+              context.read<BackgroundCubit>().state.tileOrigin,
+              showGrid: context.read<AppStateCubit>().state.showGridBackground,
+              metaTile: context.read<MetaTileCubit>().state,
+              cellSize: 40 *
+                  context
+                      .read<AppStateCubit>()
+                      .state
+                      .zoomBackground,
+              onTap: (index) => draw(context, index, background),
+              onHover: (x, y) => setState(() {
+                hoverTileIndexX = x;
+                hoverTileIndexY = y;
+              }),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ContextMenuArea(
-                  builder: (contextMenuArea) => [
-                    /*ListTile(
-                      title: const Text('Insert column before'),
-                      onTap: () {
-                        context.read<BackgroundCubit>().insertCol(
-                            hoverTileIndex,
-                            context
-                                .read<AppStateCubit>()
-                                .state
-                                .tileIndexBackground);
-                        Navigator.of(contextMenuArea).pop();
-                      },
-                    ),
-                    ListTile(
-                      title: const Text('Delete column'),
-                      onTap: () {
-                        context
-                            .read<BackgroundCubit>()
-                            .deleteCol(hoverTileIndex);
-                        Navigator.of(contextMenuArea).pop();
-                      },
-                    ),
-                    ListTile(
-                      title: const Text('Insert row before'),
-                      onTap: () {
-                        context.read<BackgroundCubit>().insertRow(
-                            hoverTileIndex,
-                            context
-                                .read<AppStateCubit>()
-                                .state
-                                .tileIndexBackground);
-                        Navigator.of(contextMenuArea).pop();
-                      },
-                    ),
-                    ListTile(
-                      title: const Text('Remove row'),
-                      onTap: () {
-                        context.read<BackgroundCubit>().insertRow(
-                            hoverTileIndex,
-                            context
-                                .read<AppStateCubit>()
-                                .state
-                                .tileIndexBackground);
-                        Navigator.of(contextMenuArea).pop();
-                      },
-                    )*/
-                  ],
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: BackgroundGrid(
-                          hoverTileIndexX: hoverTileIndexX,
-                          hoverTileIndexY: hoverTileIndexY,
-                          background: context.read<BackgroundCubit>().state,
-                          tileOrigin:
-                              context.read<BackgroundCubit>().state.tileOrigin,
-                          showGrid: context.read<AppStateCubit>().state.showGridBackground,
-                          metaTile: context.read<MetaTileCubit>().state,
-                          cellSize: 40 *
-                              context
-                                  .read<AppStateCubit>()
-                                  .state
-                                  .zoomBackground,
-                          onTap: (index) => draw(context, index, background),
-                          onHover: (x, y) => setState(() {
-                            hoverTileIndexX = x;
-                            hoverTileIndexY = y;
-                          }),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                              " $hoverTileIndexX/${context.read<BackgroundCubit>().state.width - 1}:$hoverTileIndexY/${context.read<BackgroundCubit>().state.height - 1}"),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ]);
+          ),
+          Row(
+            children: [
+              Text(
+                  " $hoverTileIndexX/${context.read<BackgroundCubit>().state.width - 1}:$hoverTileIndexY/${context.read<BackgroundCubit>().state.height - 1}"),
+            ],
+          )
+        ],
+      );
     });
   }
 
   draw(BuildContext context, index, background) {
     int tileOrigin = context.read<BackgroundCubit>().state.tileOrigin;
-    int tileIndex = context.read<AppStateCubit>().state.tileIndexBackground;
+    int tileIndex = context.read<AppStateCubit>().state.tileIndexTile;
     int x = index % background.width;
     int y = index ~/ background.width;
 

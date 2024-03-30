@@ -149,11 +149,6 @@ class ApplicationMenuBar extends StatelessWidget {
                 },
                 child: const MenuAcceleratorLabel('&About'),
               ),
-
-              // ignore: prefer_const_constructors
-              context.read<AppStateCubit>().state.tileMode
-                  ? MetaTileToolbar()
-                  : BackgroundToolbar(),
             ],
           ),
         ),

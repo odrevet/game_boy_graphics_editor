@@ -14,7 +14,6 @@ class AppState {
   int intensity;
 
   int tileIndexTile;
-  int tileIndexBackground;
 
   double zoomTile;
   double zoomBackground;
@@ -43,10 +42,9 @@ class AppState {
   AppState({
     this.intensity = 3,
     this.tileIndexTile = 0,
-    this.tileIndexBackground = 0,
     this.tileMode = true,
-    this.zoomTile = 0.6,
-    this.zoomBackground = 0.6,
+    this.zoomTile = 0.4,
+    this.zoomBackground = 0.4,
     this.lockScrollBackground = false,
     this.showGridTile = true,
     this.tileName = "Tile",
@@ -67,7 +65,6 @@ class AppState {
   copyWith(
           {int? intensity,
           int? tileIndexTile,
-          int? tileIndexBackground,
           bool? tileMode,
           double? zoomTile,
           double? zoomBackground,
@@ -87,7 +84,6 @@ class AppState {
       AppState(
         intensity: intensity ?? this.intensity,
         tileIndexTile: tileIndexTile ?? this.tileIndexTile,
-        tileIndexBackground: tileIndexBackground ?? this.tileIndexBackground,
         tileMode: tileMode ?? this.tileMode,
         zoomTile: zoomTile ?? this.zoomTile,
         zoomBackground: zoomBackground ?? this.zoomBackground,

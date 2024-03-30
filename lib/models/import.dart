@@ -138,7 +138,7 @@ void _setBackgroundFromSource(String source, BuildContext context) {
     _showGraphicElementChooseDialog(
         context, graphicsElements, _setBackgroundFromGraphicElement);
   } else if (graphicsElements.length == 1) {
-    context.read<AppStateCubit>().setTileIndexBackground(0);
+    context.read<AppStateCubit>().setSelectedTileIndex(0);
     _setBackgroundFromGraphicElement(graphicsElements.first, context);
   }
 }
