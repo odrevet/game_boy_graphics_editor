@@ -18,7 +18,6 @@ class TileSettings extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const Text("Properties"),
             TextFormField(
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp('^[a-zA-Z0-9_]*')),

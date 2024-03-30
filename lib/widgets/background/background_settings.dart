@@ -10,8 +10,8 @@ class BackgroundSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
-      width: 300,
+      height: 400,
+      width: 500,
       child: SingleChildScrollView(
         child: Column(
           children: [
