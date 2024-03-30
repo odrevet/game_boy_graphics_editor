@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) => MultiBlocProvider(
           providers: [
             BlocProvider(
-                create: (_) => AppStateCubit(tileMode: initialMode == 'tile')),
+                create: (_) => AppStateCubit()),
             BlocProvider(create: (_) => MetaTileCubit()),
             BlocProvider(create: (_) => BackgroundCubit())
           ],

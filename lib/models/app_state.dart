@@ -10,7 +10,6 @@ enum DrawMode {
 }
 
 class AppState {
-  bool tileMode; // edit tile or background
   int intensity;
 
   int tileIndexTile;
@@ -42,7 +41,6 @@ class AppState {
   AppState({
     this.intensity = 3,
     this.tileIndexTile = 0,
-    this.tileMode = true,
     this.zoomTile = 0.4,
     this.zoomBackground = 0.4,
     this.lockScrollBackground = false,
@@ -65,7 +63,6 @@ class AppState {
   copyWith(
           {int? intensity,
           int? tileIndexTile,
-          bool? tileMode,
           double? zoomTile,
           double? zoomBackground,
           bool? lockScrollBackground,
@@ -84,7 +81,6 @@ class AppState {
       AppState(
         intensity: intensity ?? this.intensity,
         tileIndexTile: tileIndexTile ?? this.tileIndexTile,
-        tileMode: tileMode ?? this.tileMode,
         zoomTile: zoomTile ?? this.zoomTile,
         zoomBackground: zoomBackground ?? this.zoomBackground,
         lockScrollBackground: lockScrollBackground ?? this.lockScrollBackground,

@@ -29,7 +29,7 @@ class MetaTileListView extends StatelessWidget {
       itemBuilder: (context, index) {
         String title =
             "${index.toString()} ${decimalToHex(index, prefix: true)}";
-        if (tileOrigin > 0 && !context.read<AppStateCubit>().state.tileMode) {
+        if (tileOrigin > 0) {
           title +=
               "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
         }

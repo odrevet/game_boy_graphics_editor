@@ -65,50 +65,6 @@ class ApplicationMenuBar extends StatelessWidget {
                 child: const MenuAcceleratorLabel('&File'),
               ),
 
-              // View
-              SubmenuButton(
-                menuChildren: <Widget>[
-                  MenuItemButton(
-                    onPressed: () =>
-                        context.read<AppStateCubit>().setMode(true),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.image),
-                        SizedBox(width: 5),
-                        MenuAcceleratorLabel('Tile'),
-                      ],
-                    ),
-                  ),
-                  MenuItemButton(
-                    onPressed: () =>
-                        context.read<AppStateCubit>().setMode(false),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.grid_4x4),
-                        SizedBox(width: 5),
-                        MenuAcceleratorLabel('Background'),
-                      ],
-                    ),
-                  ),
-                  const Divider(),
-                  MenuItemButton(
-                      onPressed: () =>
-                          context.read<AppStateCubit>().state.tileMode
-                              ? context.read<AppStateCubit>().toggleGridTile()
-                              : context
-                                  .read<AppStateCubit>()
-                                  .toggleGridBackground(),
-                      child: const Row(
-                        children: [
-                          Icon(Icons.grid_on),
-                          SizedBox(width: 5),
-                          MenuAcceleratorLabel('Toggle &grid'),
-                        ],
-                      )),
-                ],
-                child: const MenuAcceleratorLabel('&View'),
-              ),
-
               // Edit
               SubmenuButton(
                 menuChildren: <Widget>[
