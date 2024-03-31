@@ -117,8 +117,16 @@ onFileSaveAsSourceCode(BuildContext context, String parse) {
 }
 
 onFileSaveAsBinTile(BuildContext context) async {
-  saveBinToDirectoryTile(context.read<MetaTileCubit>().state,
-      context.read<AppStateCubit>().state.tileName);
+  if (kIsWeb) {
+    List<int> bytes = GBDKTileConverter().getRawTileInt(GBDKTileConverter()
+        .reorderFromCanvasToSource(context.read<MetaTileCubit>().state));
+
+    download(
+        bytes.toString(), '${context.read<AppStateCubit>().state.tileName}.h');
+  } else {
+    saveBinToDirectoryTile(context.read<MetaTileCubit>().state,
+        context.read<AppStateCubit>().state.tileName);
+  }
 }
 
 onFileSaveAsBinBackground(BuildContext context) async {
