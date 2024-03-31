@@ -122,7 +122,7 @@ onFileSaveAsBinTile(BuildContext context) async {
         .reorderFromCanvasToSource(context.read<MetaTileCubit>().state));
 
     download(
-        bytes.toString(), '${context.read<AppStateCubit>().state.tileName}.h');
+        bytes.join(), '${context.read<AppStateCubit>().state.tileName}.bin');
   } else {
     saveBinToDirectoryTile(context.read<MetaTileCubit>().state,
         context.read<AppStateCubit>().state.tileName);
