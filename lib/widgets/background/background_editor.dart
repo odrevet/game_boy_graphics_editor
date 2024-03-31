@@ -46,7 +46,8 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                       .read<AppStateCubit>()
                       .state
                       .zoomBackground,
-              onTap: (index) => draw(context, index, background),
+              onTap: (index) {
+                draw(context, index, background);},
               onHover: (x, y) => setState(() {
                 hoverTileIndexX = x;
                 hoverTileIndexY = y;

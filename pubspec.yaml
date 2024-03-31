@@ -15,7 +15,7 @@ dependencies:
   image: ^4.1.0
   flutter_bloc: ^8.1.0
   replay_bloc: ^0.2.0
-  two_dimensional_scrollables: ^0.1.2
+  two_dimensional_scrollables: ^0.2.0
   shared_preferences: ^2.2.0
   path: ^1.8.3
   http: ^1.2.1

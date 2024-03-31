@@ -163,8 +163,9 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
               () => TapGestureRecognizer(),
               (TapGestureRecognizer t) =>
-          t.onTap = () =>
-              widget.onTap!(currentRow * widget.background.width + currentCol),
+          t.onTapDown = (TapDownDetails details) {
+            widget.onTap!(currentRow * widget.background.width + currentCol);
+          },
         ),
       },
     );
