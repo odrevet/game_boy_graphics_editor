@@ -11,7 +11,7 @@ class AppStateCubit extends Cubit<AppState> {
             intensity: 3,
             tileIndexTile: 0,
             zoomTile: 0.6,
-            zoomBackground: 1.0,
+            zoomBackground: 0.6,
             showExportPreviewTile: true,
             showExportPreviewBackground: true));
 
