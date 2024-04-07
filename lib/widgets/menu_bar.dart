@@ -100,7 +100,7 @@ class ApplicationMenuBar extends StatelessWidget {
                   showAboutDialog(
                     context: context,
                     applicationName: 'GameBoy Graphics Editor',
-                    applicationVersion: '1.0.2',
+                    applicationVersion: '1.0.3',
                   );
                 },
                 child: const MenuAcceleratorLabel('&About'),
