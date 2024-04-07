@@ -91959,7 +91959,7 @@ A.a1K.prototype={
 $1(a){return B.AR},
 $S:62}
 A.a1S.prototype={
-$0(){A.aX3("GameBoy Graphics Editor","1.0.2",this.a)},
+$0(){A.aX3("GameBoy Graphics Editor","1.0.3",this.a)},
 $S:0}
 A.Q2.prototype={
 D(a){return A.my(new A.ag7(),t.i,t.Tz)}}
