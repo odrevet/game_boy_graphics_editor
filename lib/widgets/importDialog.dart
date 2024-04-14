@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_boy_graphics_editor/models/import.dart';
+import 'package:game_boy_graphics_editor/models/import_callbacks.dart';
 
 import '../cubits/app_state_cubit.dart';
 

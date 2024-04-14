@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
-import 'package:game_boy_graphics_editor/models/export.dart';
+import 'package:game_boy_graphics_editor/models/export_callbacks.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_background_converter.dart';
 import 'package:game_boy_graphics_editor/widgets/source_display.dart';
 
