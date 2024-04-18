@@ -79,12 +79,19 @@ void onFileSaveAsBinTile(BuildContext context) async {
 void onFileSaveAsBinBackground(BuildContext context) async {
   Graphics graphics = context.read<BackgroundCubit>().state;
   String name = context.read<AppStateCubit>().state.backgroundName;
-  String? directory = await FilePicker.platform.getDirectoryPath();
+  List<int> bytes = graphics.data;
 
-  if (directory != null) {
-    List<int> bytes = graphics.data;
-    File("$directory/$name.bin").writeAsBytesSync(bytes);
+  if (kIsWeb) {
+    download(
+        bytes.join(), '$name.bin');
   }
+  else {
+    String? directory = await FilePicker.platform.getDirectoryPath();
+    if (directory != null) {
+      File("$directory/$name.bin").writeAsBytesSync(bytes);
+    }
+  }
+
 }
 
 void onFileTilesSaveAsPNG(BuildContext context) async {
