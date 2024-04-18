@@ -82,16 +82,13 @@ void onFileSaveAsBinBackground(BuildContext context) async {
   List<int> bytes = graphics.data;
 
   if (kIsWeb) {
-    download(
-        bytes.join(), '$name.bin');
-  }
-  else {
+    download(bytes.join(), '$name.bin');
+  } else {
     String? directory = await FilePicker.platform.getDirectoryPath();
     if (directory != null) {
       File("$directory/$name.bin").writeAsBytesSync(bytes);
     }
   }
-
 }
 
 void onFileTilesSaveAsPNG(BuildContext context) async {
