@@ -44,8 +44,11 @@ class AppStateCubit extends Cubit<AppState> {
     emit(state.copyWith(gbdkPathValid: isValid));
   }
 
-  void setDrawModeTile(DrawMode drawMode) => emit(state.copyWith(drawModeTile: drawMode));
-  void setDrawModeBackground(DrawMode drawMode) => emit(state.copyWith(drawModeBackground: drawMode));
+  void setDrawModeTile(DrawMode drawMode) =>
+      emit(state.copyWith(drawModeTile: drawMode));
+
+  void setDrawModeBackground(DrawMode drawMode) =>
+      emit(state.copyWith(drawModeBackground: drawMode));
 
   void toggleGridTile() =>
       emit(state.copyWith(showGridTile: !state.showGridTile));

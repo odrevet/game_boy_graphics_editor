@@ -1,11 +1,6 @@
 import 'colors.dart';
 
-enum DrawMode {
-  single,
-  fill,
-  line,
-  rectangle
-}
+enum DrawMode { single, fill, line, rectangle }
 
 class AppState {
   int intensity;

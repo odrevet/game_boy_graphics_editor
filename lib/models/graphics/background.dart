@@ -2,10 +2,13 @@ import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 class Background extends Graphics {
   Background(
-      {height = 18, width = 20, name = "", this.tileOrigin = 0, fill, data})
+      {super.height = 18,
+      super.width = 20,
+      name = "",
+      this.tileOrigin = 0,
+      fill,
+      data})
       : super(
-            width: width,
-            height: height,
             data:
                 data ?? List.filled(width * height, fill ?? 0, growable: true));
 

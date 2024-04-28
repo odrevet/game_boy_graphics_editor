@@ -36,9 +36,9 @@ class _EditorState extends State<Editor> {
   Widget build(BuildContext context) {
     return const Scaffold(
         body: SafeArea(
-          child: Column(
-            children: [ApplicationMenuBar(), Expanded(child: TilesEditor())],
-          ),
-        ));
+      child: Column(
+        children: [ApplicationMenuBar(), Expanded(child: TilesEditor())],
+      ),
+    ));
   }
 }

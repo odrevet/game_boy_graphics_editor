@@ -3,11 +3,8 @@ import 'dart:core';
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 class MetaTile extends Graphics {
-  MetaTile({data, required height, required width})
-      : super(
-            data: data ?? List.filled(width * height, 0, growable: true),
-            width: width,
-            height: height) {
+  MetaTile({data, required super.height, required super.width})
+      : super(data: data ?? List.filled(width * height, 0, growable: true)) {
     calcMaxTileIndex();
   }
 
@@ -90,7 +87,8 @@ class MetaTile extends Graphics {
     }
   }
 
-  void rectangle(int metaTileIndex, int intensity, int xFrom, int yFrom, int xTo, int yTo) {
+  void rectangle(int metaTileIndex, int intensity, int xFrom, int yFrom,
+      int xTo, int yTo) {
     int startX = xFrom < xTo ? xFrom : xTo;
     int endX = xFrom < xTo ? xTo : xFrom;
     int startY = yFrom < yTo ? yFrom : yTo;

@@ -50,12 +50,14 @@ class BackgroundToolbar extends StatelessWidget {
                     onPressed: context
                         .read<AppStateCubit>()
                         .toggleLockScrollBackground,
-                    icon: Icon(context.read<AppStateCubit>().state.lockScrollBackground ? Icons.lock : Icons.lock_open)),
+                    icon: Icon(
+                        context.read<AppStateCubit>().state.lockScrollBackground
+                            ? Icons.lock
+                            : Icons.lock_open)),
               ],
             ));
   }
 }
-
 
 class DrawModeDropdown extends StatelessWidget {
   const DrawModeDropdown({super.key});
@@ -67,13 +69,17 @@ class DrawModeDropdown extends StatelessWidget {
       onChanged: (DrawMode? drawMode) {
         context.read<AppStateCubit>().setDrawModeBackground(drawMode!);
       },
-      items: DrawMode.values.where((mode) => mode != DrawMode.fill).map((DrawMode mode) {
+      items: DrawMode.values
+          .where((mode) => mode != DrawMode.fill)
+          .map((DrawMode mode) {
         return DropdownMenuItem<DrawMode>(
           value: mode,
           child: Row(
             children: [
-              _getIconForDrawMode(mode), // Adding icon here
-              const SizedBox(width: 8), // Adjust the spacing between icon and text
+              _getIconForDrawMode(mode),
+              // Adding icon here
+              const SizedBox(width: 8),
+              // Adjust the spacing between icon and text
               Text(mode.toString().split('.').last),
             ],
           ),
@@ -101,4 +107,3 @@ class DrawModeDropdown extends StatelessWidget {
     return Icon(iconData);
   }
 }
-

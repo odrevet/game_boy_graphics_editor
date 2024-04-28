@@ -21,8 +21,10 @@ class _BackgroundPropertiesState extends State<BackgroundProperties> {
   @override
   void initState() {
     super.initState();
-    _controllerWidth.text = context.read<BackgroundCubit>().state.width.toString();
-    _controllerHeight.text = context.read<BackgroundCubit>().state.height.toString();
+    _controllerWidth.text =
+        context.read<BackgroundCubit>().state.width.toString();
+    _controllerHeight.text =
+        context.read<BackgroundCubit>().state.height.toString();
   }
 
   @override

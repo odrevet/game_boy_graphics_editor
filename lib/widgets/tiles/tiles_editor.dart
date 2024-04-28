@@ -149,9 +149,8 @@ class _TilesEditorState extends State<TilesEditor> {
           ),
           Expanded(
             child: BackgroundEditor(
-              onTapTileListView: (index) => context
-                  .read<AppStateCubit>()
-                  .setSelectedTileIndex(index),
+              onTapTileListView: (index) =>
+                  context.read<AppStateCubit>().setSelectedTileIndex(index),
             ),
           ),
         ]),

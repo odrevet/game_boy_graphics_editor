@@ -12,8 +12,7 @@ import '../../models/app_state.dart' show DrawMode;
 class BackgroundEditor extends StatefulWidget {
   final Function? onTapTileListView;
 
-  const BackgroundEditor(
-      {super.key, this.onTapTileListView});
+  const BackgroundEditor({super.key, this.onTapTileListView});
 
   @override
   State<BackgroundEditor> createState() => _BackgroundEditorState();
@@ -37,17 +36,13 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
               hoverTileIndexX: hoverTileIndexX,
               hoverTileIndexY: hoverTileIndexY,
               background: context.read<BackgroundCubit>().state,
-              tileOrigin:
-              context.read<BackgroundCubit>().state.tileOrigin,
+              tileOrigin: context.read<BackgroundCubit>().state.tileOrigin,
               showGrid: context.read<AppStateCubit>().state.showGridBackground,
               metaTile: context.read<MetaTileCubit>().state,
-              cellSize: 40 *
-                  context
-                      .read<AppStateCubit>()
-                      .state
-                      .zoomBackground,
+              cellSize: 40 * context.read<AppStateCubit>().state.zoomBackground,
               onTap: (index) {
-                draw(context, index, background);},
+                draw(context, index, background);
+              },
               onHover: (x, y) => setState(() {
                 hoverTileIndexX = x;
                 hoverTileIndexY = y;
