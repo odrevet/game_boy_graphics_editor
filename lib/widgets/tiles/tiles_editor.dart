@@ -127,6 +127,7 @@ class _TilesEditorState extends State<TilesEditor> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // ignore: prefer_const_constructors
               MetaTileToolbar(),
               SizedBox(
                 width: (MediaQuery.of(context).size.width ~/ 3) *

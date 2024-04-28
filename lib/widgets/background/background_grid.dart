@@ -17,10 +17,10 @@ class BackgroundGrid extends StatefulWidget {
   final bool showGrid;
   final double cellSize;
   final int tileOrigin;
-  int? hoverTileIndexX;
-  int? hoverTileIndexY;
+  final int? hoverTileIndexX;
+  final int? hoverTileIndexY;
 
-  BackgroundGrid({
+  const BackgroundGrid({
     super.key,
     required this.background,
     required this.metaTile,
@@ -60,11 +60,11 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         child: TableView.builder(
           verticalDetails: lock ? ScrollableDetails.vertical(
               controller: _verticalController,
-              physics: NeverScrollableScrollPhysics()) : ScrollableDetails
+              physics: const NeverScrollableScrollPhysics()) : ScrollableDetails
               .vertical(controller: _verticalController),
           horizontalDetails: lock ? ScrollableDetails.horizontal(
               controller: _horizontalController,
-              physics: NeverScrollableScrollPhysics()) : ScrollableDetails
+              physics: const NeverScrollableScrollPhysics()) : ScrollableDetails
               .horizontal(controller: _horizontalController),
           cellBuilder: _buildCell,
           columnCount: widget.background.width,

@@ -136,10 +136,10 @@ class _ExportDialogState extends State<ExportDialog> {
 }
 
 class ExportPreview extends StatelessWidget {
-  String type;
-  String parse;
+  final String type;
+  final String parse;
 
-  ExportPreview(this.type, this.parse, {super.key});
+  const ExportPreview(this.type, this.parse, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -178,6 +178,6 @@ class ExportPreview extends StatelessWidget {
       );
     }
 
-    return Text("no preview");
+    return const Text("no preview");
   }
 }

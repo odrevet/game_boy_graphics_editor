@@ -44,6 +44,7 @@ class BackgroundToolbar extends StatelessWidget {
                         ? context.read<AppStateCubit>().increaseZoomBackground
                         : null,
                     icon: const Icon(Icons.zoom_in)),
+                // ignore: prefer_const_constructors
                 DrawModeDropdown(),
                 IconButton(
                     onPressed: context

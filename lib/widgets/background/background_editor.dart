@@ -30,6 +30,7 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // ignore: prefer_const_constructors
           BackgroundToolbar(),
           Expanded(
             child: BackgroundGrid(
