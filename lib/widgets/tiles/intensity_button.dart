@@ -5,7 +5,7 @@ import '../../cubits/app_state_cubit.dart';
 
 class IntensityButton extends StatelessWidget {
   final int intensity;
-  final List<Color> colorSet;
+  final List<int> colorSet;
 
   const IntensityButton(
       {super.key, required this.intensity, required this.colorSet});
@@ -20,7 +20,7 @@ class IntensityButton extends StatelessWidget {
             height: 25,
             child: Container(
                 decoration: BoxDecoration(
-              color: colorSet[intensity],
+              color: Color(colorSet[intensity]),
               border: intensity == context.read<AppStateCubit>().state.intensity
                   ? Border.all(color: Colors.blue, width: 2)
                   : Border.all(color: Colors.black, width: 1),

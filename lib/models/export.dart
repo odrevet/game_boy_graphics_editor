@@ -8,7 +8,7 @@ import 'package:image/image.dart' as img;
 import 'graphics/background.dart';
 import 'graphics/graphics.dart';
 
-void tilesSaveToPNG(MetaTile metaTile, List<Color> colorSet, String tileName,
+void tilesSaveToPNG(MetaTile metaTile, List<int> colorSet, String tileName,
     int count, String directory) {
   final image =
       img.Image(width: metaTile.width * count, height: metaTile.height);
@@ -24,7 +24,12 @@ void tilesSaveToPNG(MetaTile metaTile, List<Color> colorSet, String tileName,
       int x = pixelIndex % metaTile.width + tileIndex * metaTile.width;
       int y = pixelIndex ~/ metaTile.width;
       var pixel = image.getPixel(x, y);
-      pixel.setRgb(color.red, color.green, color.blue);
+
+      int red = (color >> 16) & 0xFF;
+      int green = (color >> 8) & 0xFF;
+      int blue = color & 0xFF;
+
+      pixel.setRgb(red, green, blue);
     }
   }
 
@@ -37,7 +42,7 @@ void saveBin(List<int> bytes, String directory, String name) {
 }
 
 void backgroundSaveToPNG(Background background, MetaTile metaTile,
-    List<Color> colorSet, String backgroundName, String directory) {
+    List<int> colorSet, String backgroundName, String directory) {
   final image = img.Image(
       width: background.width * metaTile.width,
       height: background.height * metaTile.height);
@@ -58,7 +63,11 @@ void backgroundSaveToPNG(Background background, MetaTile metaTile,
           (backgroundIndex ~/ background.width) * (metaTile.height - 1);
       var pixel = image.getPixel(x, y);
 
-      pixel.setRgb(color.red, color.green, color.blue);
+      int red = (color >> 16) & 0xFF;
+      int green = (color >> 8) & 0xFF;
+      int blue = color & 0xFF;
+
+      pixel.setRgb(red, green, blue);
     }
   }
 

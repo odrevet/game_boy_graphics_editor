@@ -95,7 +95,7 @@ void onFileTilesSaveAsPNG(BuildContext context) async {
   FilePicker.platform.getDirectoryPath().then((directory) {
     if (directory != null) {
       MetaTile metaTile = context.read<MetaTileCubit>().state;
-      List<Color> colorSet = context.read<AppStateCubit>().state.colorSet;
+      List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
       String tileName = context.read<AppStateCubit>().state.tileName;
       int count = context.read<MetaTileCubit>().count();
 
@@ -109,7 +109,7 @@ void onFileBackgroundSaveAsPNG(BuildContext context) async {
     if (directory != null) {
       MetaTile metaTile = context.read<MetaTileCubit>().state;
       Background background = context.read<BackgroundCubit>().state;
-      List<Color> colorSet = context.read<AppStateCubit>().state.colorSet;
+      List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
       String backgroundName =
           context.read<AppStateCubit>().state.backgroundName;
 

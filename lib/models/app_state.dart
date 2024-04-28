@@ -32,7 +32,7 @@ class AppState {
   bool showExportPreviewTile;
 
   List<int> tileBuffer; // copy / past tiles buffer
-  List<Color> colorSet;
+  List<int> colorSet;
   String tileName;
   String backgroundName;
   String gbdkPath;
@@ -77,7 +77,7 @@ class AppState {
           bool? showExportPreviewBackground,
           bool? showExportPreviewTile,
           List<int>? tileBuffer,
-          List<Color>? colorSet}) =>
+          List<int>? colorSet}) =>
       AppState(
         intensity: intensity ?? this.intensity,
         tileIndexTile: tileIndexTile ?? this.tileIndexTile,

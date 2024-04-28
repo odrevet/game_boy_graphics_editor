@@ -14,7 +14,7 @@ class MetaTileDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DotMatrix(
       pixels: tileData
-          .map((e) => context.read<AppStateCubit>().state.colorSet[e])
+          .map((e) => Color(context.read<AppStateCubit>().state.colorSet[e]))
           .toList(),
       showGrid: showGrid,
       width: context.read<MetaTileCubit>().state.width,
