@@ -15,6 +15,7 @@ import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
+import 'import.dart';
 
 onImportHttp(BuildContext context, String parse, String type, bool transpose,
     String url) {
@@ -93,15 +94,7 @@ void loadBin(
         context.read<MetaTileCubit>().state.height);
     context.read<MetaTileCubit>().setData(data);
   } else {
-    String values = "";
-    for (int byte in content) {
-      // Convert each byte to a hexadecimal string
-      values += byte.toRadixString(16).padLeft(2, '0');
-    }
-    var data = <int>[];
-    for (var index = 0; index < values.length; index += 2) {
-      data.add(int.parse("${values[index]}${values[index + 1]}", radix: 16));
-    }
+    List<int> data = convertBytesToDecimals(content);
     if (transpose) {
       _setBackgroundFromBinTransposed(data, context);
     } else {
