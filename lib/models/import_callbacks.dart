@@ -110,7 +110,7 @@ void _setTilesFromSource(String source, BuildContext context) {
   _setPropertiesFromDefines(defines, context);
 
   var graphicsElements =
-  GBDKTileConverter().readGraphicElementsFromSource(source);
+      GBDKTileConverter().readGraphicElementsFromSource(source);
   if (graphicsElements.length > 1) {
     _showGraphicElementChooseDialog(context, graphicsElements, _setMetaTile);
   } else if (graphicsElements.length == 1) {
@@ -122,11 +122,11 @@ void _setBackgroundFromSource(String source, BuildContext context) {
   source = GBDKBackgroundConverter().formatSource(source);
 
   Map<String, int> defines =
-  GBDKBackgroundConverter().readDefinesFromSource(source);
+      GBDKBackgroundConverter().readDefinesFromSource(source);
   _setPropertiesFromDefines(defines, context);
 
   var graphicsElements =
-  GBDKBackgroundConverter().readGraphicElementsFromSource(source);
+      GBDKBackgroundConverter().readGraphicElementsFromSource(source);
   if (graphicsElements.length > 1) {
     _showGraphicElementChooseDialog(
         context, graphicsElements, _setBackgroundFromGraphicElement);
@@ -193,7 +193,7 @@ void _setPropertiesFromDefines(Map<String, int> defines, BuildContext context) {
 bool _setBackgroundFromGraphicElement(
     GraphicElement graphicElement, BuildContext context) {
   Background background =
-  GBDKBackgroundConverter().fromGraphicElement(graphicElement);
+      GBDKBackgroundConverter().fromGraphicElement(graphicElement);
   context.read<BackgroundCubit>().setData(background.data);
   return true;
 }
@@ -205,25 +205,25 @@ _showGraphicElementChooseDialog(BuildContext context,
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text('Graphic element selection'),
-        content: SizedBox(
-          height: 200.0,
-          width: 150.0,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: graphicsElements.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                onTap: () {
-                  onTap(graphicsElements[index], context);
-                  Navigator.pop(context);
+            title: const Text('Graphic element selection'),
+            content: SizedBox(
+              height: 200.0,
+              width: 150.0,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: graphicsElements.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    onTap: () {
+                      onTap(graphicsElements[index], context);
+                      Navigator.pop(context);
+                    },
+                    title: Text(graphicsElements[index].name),
+                  );
                 },
-                title: Text(graphicsElements[index].name),
-              );
-            },
-          ),
-        ),
-      ));
+              ),
+            ),
+          ));
 
   return hasLoaded;
 }
@@ -235,27 +235,9 @@ void _setBackgroundFromBin(List<int> raw, BuildContext context) {
 }
 
 void _setBackgroundFromBinTransposed(List<int> raw, BuildContext context) {
-  Background background = Background(
-      data: List.filled(raw.length, 0),
-      height: context.read<BackgroundCubit>().state.height,
-      width: context.read<BackgroundCubit>().state.width);
-
-  int x = 0;
-  int y = 0;
-  for (int index = 0; index < raw.length; index++) {
-    int value = raw[index];
-
-    background.setDataAt(x, y, value);
-
-    y++;
-    if (y >= background.height) {
-      y = 0;
-      x++;
-    }
-  }
-
-  context.read<BackgroundCubit>().setData(background.data);
-  context.read<AppStateCubit>().setBackgroundName("data");
+  raw = transpose(raw, context.read<BackgroundCubit>().state.height,
+      context.read<BackgroundCubit>().state.width);
+  _setBackgroundFromBin(raw, context);
 }
 
 //// File picker helpers ////
