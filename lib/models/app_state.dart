@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'colors.dart';
 
 enum DrawMode {

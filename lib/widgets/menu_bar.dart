@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_boy_graphics_editor/widgets/importDialog.dart';
+import 'package:game_boy_graphics_editor/widgets/import_dialog.dart';
 import 'package:game_boy_graphics_editor/widgets/settings_dialog.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tile_settings.dart';
 
-import '../cubits/app_state_cubit.dart';
 import 'background/background_settings.dart';
-import 'exportDialog.dart';
+import 'export_dialog.dart';
 
 class ApplicationMenuBar extends StatelessWidget {
   const ApplicationMenuBar({super.key});

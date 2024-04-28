@@ -124,7 +124,6 @@ extern unsigned char $name[];""";
     return reorderedData;
   }
 
-  @override
   String toBin(Graphics graphics) =>
       getRawTileInt(reorderFromCanvasToSource(graphics))
           .map((e) => decimalToHex(e, prefix: false))

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/source_converter.dart';
 import 'package:image/image.dart' as img;

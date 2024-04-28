@@ -27,7 +27,7 @@ class _EditorState extends State<Editor> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _initPreferences(context);
     });
   }

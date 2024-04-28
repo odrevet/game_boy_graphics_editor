@@ -121,7 +121,7 @@ class MetaTileToolbar extends StatelessWidget {
 }
 
 class DrawModeDropdown extends StatelessWidget {
-  const DrawModeDropdown({Key? key}) : super(key: key);
+  const DrawModeDropdown({super.key});
 
   @override
   Widget build(BuildContext context) {
