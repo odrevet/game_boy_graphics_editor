@@ -3,19 +3,21 @@ description: Edit GBDK graphics source files
 
 version: 1.0.3+4
 
+publish_to: 'none'
+
 environment:
-  sdk: '>=3.2.0 <4.0.0'
+  sdk: ^3.9.0
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.0
-  file_picker: ^8.0.0
+  file_picker: ^10.3.0
   contextmenu: ^3.0.0
   image: ^4.1.0
-  flutter_bloc: ^8.1.0
-  replay_bloc: ^0.2.0
-  two_dimensional_scrollables: ^0.2.1
+  flutter_bloc: ^9.1.0
+  replay_bloc: ^0.3.0
+  two_dimensional_scrollables: ^0.3.0
   shared_preferences: ^2.2.0
   path: ^1.8.3
   http: ^1.2.1
@@ -23,11 +25,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
 
 flutter:
   uses-material-design: true
-  fonts:
-    - family: RobotoMono
-      fonts:
-        - asset: fonts/RobotoMono-Variable.ttf
+

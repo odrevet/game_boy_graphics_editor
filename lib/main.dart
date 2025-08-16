@@ -35,8 +35,8 @@ class MyApp extends StatelessWidget {
                     seedColor: Colors.grey,
                   ),
                   scrollbarTheme: const ScrollbarThemeData().copyWith(
-                    thumbColor: MaterialStateProperty.all(Colors.blue[500]),
-                    thickness: MaterialStateProperty.all(4.0),
+                    thumbColor: WidgetStateProperty.all(Colors.blue[500]),
+                    thickness: WidgetStateProperty.all(4.0),
                   )),
               scrollBehavior: const MaterialScrollBehavior().copyWith(
                 dragDevices: PointerDeviceKind.values.toSet(),

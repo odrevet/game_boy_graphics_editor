@@ -47,7 +47,7 @@ class MetaTileToolbar extends StatelessWidget {
         ),
         Row(
           children: [
-            ButtonBar(
+            OverflowBar(
               children: [
                 IntensityButton(
                   intensity: 0,
