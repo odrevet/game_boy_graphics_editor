@@ -1,16 +1,52 @@
-# game_boy_graphics_editor
+This is a graphic editor for [GBDK](https://github.com/gbdk-2020/gbdk-2020) inspired by 
+[`GameBoyTileDesigner (GBTD)` and `GameBoyMapBuilder (GBMB)`](https://github.com/gbdk-2020/GBTD_GBMB).
 
-A new Flutter project.
+# Online version
 
-## Getting Started
+game_boy_graphics_editor can run in a browser !
 
-This project is a starting point for a Flutter application.
+https://odrevet.github.io/game_boy_graphics_editor
 
-A few resources to get you started if this is your first Flutter project:
+# Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+* game_boy_graphics_editor aims to be compatible with .c exported from `GBTD and GBMB`, there are no 'project file', you
+  import / export data directly from your source code.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* Save to C source file.
+
+* Flood file
+
+* Shift / rotate / flip tiles
+
+* Load background data from C source file (exported from gbmb).
+
+* All in one Tile and Map Editor.
+
+* Made with Flutter : modern interface and can be build for Linux / Windows and Web !
+
+* Free software under the GNU GENERAL PUBLIC LICENSE
+
+# Compatibility with GBTD
+
+game_boy_graphics_editor has less options (no palette, no compression, no bin/z80 export)
+
+the only mode available are these equivalants of these GBTD settings:
+
+```
+Form                 : All tiles as one unit.
+Format               : Gameboy 4 color.
+Compression          : None.
+Palette colors       : None.
+SGB Palette          : None.
+CGB Palette          : None.
+
+Convert to metatiles : No.
+```
+
+# Screenshot
+
+![linda](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/linda.png)
+
+# References
+
+[laroldsjubilantjunkyard.com](https://laroldsjubilantjunkyard.com/tutorials/how-to-make-a-gameboy-game/sprites-and-backgrounds/)
