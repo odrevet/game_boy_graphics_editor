@@ -4,15 +4,18 @@ import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 class MetaTile extends Graphics {
   MetaTile({data, required super.height, required super.width})
-      : super(data: data ?? List.filled(width * height, 0, growable: true)) {
+    : super(
+        name: "",
+        data: data ?? List.filled(width * height, 0, growable: true),
+      ) {
     calcMaxTileIndex();
   }
 
   copyWith({List<int>? data, int? width, int? height}) => MetaTile(
-        data: data ?? [...this.data],
-        width: width ?? this.width,
-        height: height ?? this.height,
-      );
+    data: data ?? [...this.data],
+    width: width ?? this.width,
+    height: height ?? this.height,
+  );
 
   static int tileSize = 8;
   static int nbPixelPerTile = tileSize * tileSize;
@@ -35,8 +38,9 @@ class MetaTile extends Graphics {
       data[(colIndex * width + rowIndex) + nbPixel * tileIndex] = intensity;
 
   List<int> getRow(int tileIndex, int rowIndex) => data.sublist(
-      tileIndex * nbPixel + rowIndex * width,
-      tileIndex * nbPixel + rowIndex * height + width);
+    tileIndex * nbPixel + rowIndex * width,
+    tileIndex * nbPixel + rowIndex * height + width,
+  );
 
   void setRow(int tileIndex, int rowIndex, List<int> row) {
     for (int dotIndex = 0; dotIndex < width; dotIndex++) {
@@ -44,8 +48,13 @@ class MetaTile extends Graphics {
     }
   }
 
-  fill(int metaTileIndex, int intensity, int rowIndex, int colIndex,
-      int targetColor) {
+  fill(
+    int metaTileIndex,
+    int intensity,
+    int rowIndex,
+    int colIndex,
+    int targetColor,
+  ) {
     if (getPixel(rowIndex, colIndex, metaTileIndex) == targetColor) {
       setPixel(rowIndex, colIndex, metaTileIndex, intensity);
       if (inbound(rowIndex, colIndex - 1)) {
@@ -87,8 +96,14 @@ class MetaTile extends Graphics {
     }
   }
 
-  void rectangle(int metaTileIndex, int intensity, int xFrom, int yFrom,
-      int xTo, int yTo) {
+  void rectangle(
+    int metaTileIndex,
+    int intensity,
+    int xFrom,
+    int yFrom,
+    int xTo,
+    int yTo,
+  ) {
     int startX = xFrom < xTo ? xFrom : xTo;
     int endX = xFrom < xTo ? xTo : xFrom;
     int startY = yFrom < yTo ? yFrom : yTo;

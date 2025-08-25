@@ -41,11 +41,15 @@ class MetaTileListView extends StatelessWidget {
               tileData: metaTile.getTileAtIndex(index),
             ),
           ),
-          title: Text(title,
-              style: selectedTile == index
-                  ? const TextStyle(
-                      color: Colors.blue, fontWeight: FontWeight.bold)
-                  : null),
+          title: Text(
+            title,
+            style: selectedTile == index
+                ? const TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold,
+                  )
+                : null,
+          ),
           onTap: () => onTap(index),
         );
       },

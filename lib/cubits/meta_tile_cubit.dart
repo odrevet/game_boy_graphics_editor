@@ -9,8 +9,11 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   }
 
   setDataAtIndex(int at, List<int> data) {
-    emit(state.copyWith(
-        data: [...state.data]..setAll(at * state.width * state.height, data)));
+    emit(
+      state.copyWith(
+        data: [...state.data]..setAll(at * state.width * state.height, data),
+      ),
+    );
   }
 
   List<int> _shift(List<int> list, int v) {
@@ -18,10 +21,16 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     return list.sublist(i)..addAll(list.sublist(0, i));
   }
 
-  fill(int rowIndex, int colIndex, int metaTileIndex, int intensity,
-          int targetColor) =>
-      emit(state.copyWith()
-        ..fill(metaTileIndex, intensity, rowIndex, colIndex, targetColor));
+  fill(
+    int rowIndex,
+    int colIndex,
+    int metaTileIndex,
+    int intensity,
+    int targetColor,
+  ) => emit(
+    state.copyWith()
+      ..fill(metaTileIndex, intensity, rowIndex, colIndex, targetColor),
+  );
 
   void setPixel(int rowIndex, int colIndex, int tileIndex, int intensity) {
     List<int> tileData = [...state.data];
@@ -43,7 +52,9 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   void removeTile(int tileIndex) {
     List<int> tileData = [...state.data];
     tileData.removeRange(
-        (tileIndex) * state.nbPixel, tileIndex * state.nbPixel + state.nbPixel);
+      (tileIndex) * state.nbPixel,
+      tileIndex * state.nbPixel + state.nbPixel,
+    );
     emit(state.copyWith(data: tileData));
   }
 
@@ -102,8 +113,11 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
-        int intensity =
-            state.getPixel(rowIndex, state.width - 1 - colIndex, tileIndex);
+        int intensity = state.getPixel(
+          rowIndex,
+          state.width - 1 - colIndex,
+          tileIndex,
+        );
         metaTile.setPixel(rowIndex, colIndex, tileIndex, intensity);
       }
     }
@@ -116,8 +130,11 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
-        int intensity =
-            state.getPixel(state.width - 1 - colIndex, rowIndex, tileIndex);
+        int intensity = state.getPixel(
+          state.width - 1 - colIndex,
+          rowIndex,
+          tileIndex,
+        );
         metaTile.setPixel(colIndex, rowIndex, tileIndex, intensity);
       }
     }
@@ -130,8 +147,11 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
-        int intensity =
-            state.getPixel(rowIndex, state.width - 1 - colIndex, tileIndex);
+        int intensity = state.getPixel(
+          rowIndex,
+          state.width - 1 - colIndex,
+          tileIndex,
+        );
         metaTile.setPixel(colIndex, rowIndex, tileIndex, intensity);
       }
     }
@@ -144,8 +164,11 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
     for (int rowIndex = 0; rowIndex < state.height; rowIndex++) {
       for (int colIndex = 0; colIndex < state.width; colIndex++) {
-        int intensity =
-            state.getPixel(state.width - 1 - colIndex, rowIndex, tileIndex);
+        int intensity = state.getPixel(
+          state.width - 1 - colIndex,
+          rowIndex,
+          tileIndex,
+        );
         metaTile.setPixel(rowIndex, colIndex, tileIndex, intensity);
       }
     }
@@ -163,8 +186,14 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     emit(metaTile);
   }
 
-  void rectangle(int metaTileIndex, int intensity, int xFrom, int yFrom,
-      int xTo, int yTo) {
+  void rectangle(
+    int metaTileIndex,
+    int intensity,
+    int xFrom,
+    int yFrom,
+    int xTo,
+    int yTo,
+  ) {
     MetaTile metaTile = state.copyWith();
     metaTile.rectangle(metaTileIndex, intensity, xFrom, yFrom, xTo, yTo);
     emit(metaTile);

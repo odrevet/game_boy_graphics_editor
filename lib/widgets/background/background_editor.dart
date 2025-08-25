@@ -7,7 +7,7 @@ import 'package:game_boy_graphics_editor/widgets/background/background_grid.dart
 import 'package:game_boy_graphics_editor/widgets/background/background_toolbar.dart';
 
 import '../../cubits/app_state_cubit.dart';
-import '../../models/app_state.dart' show DrawMode;
+import '../../models/states/app_state.dart' show DrawMode;
 
 class BackgroundEditor extends StatefulWidget {
   final Function? onTapTileListView;
@@ -25,39 +25,45 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BackgroundCubit, Background>(
-        builder: (context, background) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // ignore: prefer_const_constructors
-          BackgroundToolbar(),
-          Expanded(
-            child: BackgroundGrid(
-              hoverTileIndexX: hoverTileIndexX,
-              hoverTileIndexY: hoverTileIndexY,
-              background: context.read<BackgroundCubit>().state,
-              tileOrigin: context.read<BackgroundCubit>().state.tileOrigin,
-              showGrid: context.read<AppStateCubit>().state.showGridBackground,
-              metaTile: context.read<MetaTileCubit>().state,
-              cellSize: 40 * context.read<AppStateCubit>().state.zoomBackground,
-              onTap: (index) {
-                draw(context, index, background);
-              },
-              onHover: (x, y) => setState(() {
-                hoverTileIndexX = x;
-                hoverTileIndexY = y;
-              }),
+      builder: (context, background) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // ignore: prefer_const_constructors
+            BackgroundToolbar(),
+            Expanded(
+              child: BackgroundGrid(
+                hoverTileIndexX: hoverTileIndexX,
+                hoverTileIndexY: hoverTileIndexY,
+                background: context.read<BackgroundCubit>().state,
+                tileOrigin: context.read<BackgroundCubit>().state.tileOrigin,
+                showGrid: context
+                    .read<AppStateCubit>()
+                    .state
+                    .showGridBackground,
+                metaTile: context.read<MetaTileCubit>().state,
+                cellSize:
+                    40 * context.read<AppStateCubit>().state.zoomBackground,
+                onTap: (index) {
+                  draw(context, index, background);
+                },
+                onHover: (x, y) => setState(() {
+                  hoverTileIndexX = x;
+                  hoverTileIndexY = y;
+                }),
+              ),
             ),
-          ),
-          Row(
-            children: [
-              Text(
-                  " $hoverTileIndexX/${context.read<BackgroundCubit>().state.width - 1}:$hoverTileIndexY/${context.read<BackgroundCubit>().state.height - 1}"),
-            ],
-          )
-        ],
-      );
-    });
+            Row(
+              children: [
+                Text(
+                  " $hoverTileIndexX/${context.read<BackgroundCubit>().state.width - 1}:$hoverTileIndexY/${context.read<BackgroundCubit>().state.height - 1}",
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
 
   draw(BuildContext context, index, background) {
@@ -68,14 +74,19 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
 
     switch (context.read<AppStateCubit>().state.drawModeBackground) {
       case DrawMode.single:
-        context
-            .read<BackgroundCubit>()
-            .setTileIndex(x, y, tileIndex + tileOrigin);
+        context.read<BackgroundCubit>().setTileIndex(
+          x,
+          y,
+          tileIndex + tileOrigin,
+        );
         break;
       case DrawMode.fill:
-        context
-            .read<BackgroundCubit>()
-            .fill(tileIndex + tileOrigin, x, y, background.getDataAt(x, y));
+        context.read<BackgroundCubit>().fill(
+          tileIndex + tileOrigin,
+          x,
+          y,
+          background.getDataAt(x, y),
+        );
         break;
       case DrawMode.line:
         int? from = context.read<AppStateCubit>().state.drawFromBackground;
@@ -85,9 +96,13 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
           int xFrom = (from % background.width).toInt();
           int yFrom = from ~/ background.width;
 
-          context
-              .read<BackgroundCubit>()
-              .line(tileIndex + tileOrigin, xFrom, yFrom, x, y);
+          context.read<BackgroundCubit>().line(
+            tileIndex + tileOrigin,
+            xFrom,
+            yFrom,
+            x,
+            y,
+          );
           context.read<AppStateCubit>().state.drawFromBackground = null;
         }
         break;
@@ -95,15 +110,21 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
         if (context.read<AppStateCubit>().state.drawFromBackground == null) {
           context.read<AppStateCubit>().state.drawFromBackground = index;
         } else {
-          int xFrom = (context.read<AppStateCubit>().state.drawFromBackground! %
-                  background.width)
-              .toInt();
-          int yFrom = context.read<AppStateCubit>().state.drawFromBackground! ~/
+          int xFrom =
+              (context.read<AppStateCubit>().state.drawFromBackground! %
+                      background.width)
+                  .toInt();
+          int yFrom =
+              context.read<AppStateCubit>().state.drawFromBackground! ~/
               background.width;
 
-          context
-              .read<BackgroundCubit>()
-              .rectangle(tileIndex + tileOrigin, xFrom, yFrom, x, y);
+          context.read<BackgroundCubit>().rectangle(
+            tileIndex + tileOrigin,
+            xFrom,
+            yFrom,
+            x,
+            y,
+          );
           context.read<AppStateCubit>().state.drawFromBackground = null;
         }
         break;

@@ -43,21 +43,17 @@ String formatHexPairs(String hexString) {
       .replaceAll(' ', ', ');
 }
 
-// Elements read from source
-class GraphicElement {
-  String name;
-  List<int> values;
-
-  GraphicElement({required this.name, required this.values});
-}
-
 abstract class SourceConverter {
   String formatOutput(input) {
-    return input.asMap().entries.map((entry) {
-      int idx = entry.key;
-      String val = entry.value;
-      return idx % 8 == 0 ? "\n  $val" : val;
-    }).join(", ");
+    return input
+        .asMap()
+        .entries
+        .map((entry) {
+          int idx = entry.key;
+          String val = entry.value;
+          return idx % 8 == 0 ? "\n  $val" : val;
+        })
+        .join(", ");
   }
 
   String toHeader(Graphics graphics, String name);
@@ -70,21 +66,23 @@ abstract class SourceConverter {
     return lines.join();
   }
 
-  List<GraphicElement> readGraphicElementsFromSource(String source) {
-    var arrayElements = <GraphicElement>[];
+  List<Graphics> readGraphicsFromSource(String source) {
+    var graphics = <Graphics>[];
 
     RegExp regExp = RegExp(
-        r"(?:unsigned\s+char|uint8_t|UINT8)\s+(\w+)\[(?:\d+)?\]\s*=\s*\{(.*?)};");
+      r"(?:unsigned\s+char|uint8_t|UINT8)\s+(\w+)\[(?:\d+)?\]\s*=\s*\{(.*?)};",
+    );
     for (Match match in regExp.allMatches(source)) {
       // remove trailing comma if any
       String matchedValues = match.group(2)!.replaceFirst(RegExp(r',\s*$'), '');
 
       List<int> values = List<int>.from(
-          matchedValues.split(',').map((value) => int.parse(value)).toList());
-      arrayElements.add(GraphicElement(name: match.group(1)!, values: values));
+        matchedValues.split(',').map((value) => int.parse(value)).toList(),
+      );
+      graphics.add(Graphics(name: match.group(1)!, data: values));
     }
 
-    return arrayElements;
+    return graphics;
   }
 
   Map<String, int> readDefinesFromSource(String source) {

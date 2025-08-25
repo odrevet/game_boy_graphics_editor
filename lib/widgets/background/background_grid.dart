@@ -57,12 +57,14 @@ class _BackgroundGridState extends State<BackgroundGrid> {
           verticalDetails: lock
               ? ScrollableDetails.vertical(
                   controller: _verticalController,
-                  physics: const NeverScrollableScrollPhysics())
+                  physics: const NeverScrollableScrollPhysics(),
+                )
               : ScrollableDetails.vertical(controller: _verticalController),
           horizontalDetails: lock
               ? ScrollableDetails.horizontal(
                   controller: _horizontalController,
-                  physics: const NeverScrollableScrollPhysics())
+                  physics: const NeverScrollableScrollPhysics(),
+                )
               : ScrollableDetails.horizontal(controller: _horizontalController),
           cellBuilder: _buildCell,
           columnCount: widget.background.width,
@@ -79,10 +81,12 @@ class _BackgroundGridState extends State<BackgroundGrid> {
     int tileIndex = widget.background.data[mapIndex];
     int maxTileIndexWithOrigin =
         context.read<MetaTileCubit>().maxTileIndex() + widget.tileOrigin;
-    bool valid = tileIndex < maxTileIndexWithOrigin &&
+    bool valid =
+        tileIndex < maxTileIndexWithOrigin &&
         widget.background.data[mapIndex] - widget.tileOrigin >= 0;
 
-    bool showBorder = widget.hoverTileIndexX == vicinity.xIndex &&
+    bool showBorder =
+        widget.hoverTileIndexX == vicinity.xIndex &&
         widget.hoverTileIndexY == vicinity.yIndex;
 
     return TableViewCell(
@@ -90,15 +94,13 @@ class _BackgroundGridState extends State<BackgroundGrid> {
           ? Container(
               decoration: showBorder
                   ? BoxDecoration(
-                      border: Border.all(
-                        color: Colors.red,
-                        width: 2.0,
-                      ),
+                      border: Border.all(color: Colors.red, width: 2.0),
                     )
                   : null,
               child: MetaTileDisplay(
                 tileData: widget.metaTile.getTileAtIndex(
-                    widget.background.data[mapIndex] - widget.tileOrigin),
+                  widget.background.data[mapIndex] - widget.tileOrigin,
+                ),
               ),
             )
           : FittedBox(
@@ -117,18 +119,20 @@ class _BackgroundGridState extends State<BackgroundGrid> {
   TableSpan _buildColumnSpan(int index) {
     const TableSpanDecoration decoration = TableSpanDecoration(
       border: TableSpanBorder(
-          trailing: BorderSide(width: 1, color: Colors.lightBlue)),
+        trailing: BorderSide(width: 1, color: Colors.lightBlue),
+      ),
     );
 
     return TableSpan(
-        foregroundDecoration: widget.showGrid ? decoration : null,
-        extent: FixedTableSpanExtent(widget.cellSize),
-        onEnter: (_) => setState(() {
-              currentCol = index;
-              if (widget.onHover != null) {
-                widget.onHover!(currentCol, currentRow);
-              }
-            }));
+      foregroundDecoration: widget.showGrid ? decoration : null,
+      extent: FixedTableSpanExtent(widget.cellSize),
+      onEnter: (_) => setState(() {
+        currentCol = index;
+        if (widget.onHover != null) {
+          widget.onHover!(currentCol, currentRow);
+        }
+      }),
+    );
   }
 
   TableSpan _buildRowSpan(int index) {
@@ -150,11 +154,14 @@ class _BackgroundGridState extends State<BackgroundGrid> {
       recognizerFactories: <Type, GestureRecognizerFactory>{
         TapGestureRecognizer:
             GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
-          () => TapGestureRecognizer(),
-          (TapGestureRecognizer t) => t.onTapDown = (TapDownDetails details) {
-            widget.onTap!(currentRow * widget.background.width + currentCol);
-          },
-        ),
+              () => TapGestureRecognizer(),
+              (TapGestureRecognizer t) =>
+                  t.onTapDown = (TapDownDetails details) {
+                    widget.onTap!(
+                      currentRow * widget.background.width + currentCol,
+                    );
+                  },
+            ),
       },
     );
   }

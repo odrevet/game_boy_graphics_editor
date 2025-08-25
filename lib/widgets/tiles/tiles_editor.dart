@@ -7,16 +7,14 @@ import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart'
 
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/meta_tile_cubit.dart';
-import '../../models/app_state.dart';
+import '../../models/states/app_state.dart';
 import '../background/background_editor.dart';
 import '../background/background_grid.dart';
 import 'meta_tile_canvas.dart';
 import 'meta_tile_toolbar.dart';
 
 class TilesEditor extends StatefulWidget {
-  const TilesEditor({
-    super.key,
-  });
+  const TilesEditor({super.key});
 
   @override
   State<TilesEditor> createState() => _TilesEditorState();
@@ -27,134 +25,155 @@ class _TilesEditorState extends State<TilesEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MetaTileCubit, MetaTile>(builder: (context, metaTile) {
-      return BlocBuilder<AppStateCubit, AppState>(
-        builder: (context, appState) => Row(children: [
-          ContextMenuArea(
-            builder: (BuildContext contextMenuAreaContext) => [
-              ListTile(
-                leading: const Icon(Icons.add),
-                title: const Text("Insert"),
-                onTap: () {
-                  {
-                    context.read<MetaTileCubit>().addTile(hoverTileIndex);
-                    context
-                        .read<AppStateCubit>()
-                        .setSelectedTileIndex(++hoverTileIndex);
-                    Navigator.pop(contextMenuAreaContext);
-                  }
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.remove),
-                title: const Text("Delete"),
-                onTap: () {
-                  context.read<MetaTileCubit>().removeTile(hoverTileIndex);
-                  context
-                      .read<AppStateCubit>()
-                      .setSelectedTileIndex(--hoverTileIndex);
-                  Navigator.pop(contextMenuAreaContext);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.copy),
-                title: const Text("Copy"),
-                onTap: () {
-                  var tileData = metaTile.getTileAtIndex(hoverTileIndex);
-                  context.read<AppStateCubit>().setTileBuffer(tileData);
-                  Navigator.pop(contextMenuAreaContext);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.paste),
-                title: const Text("Paste"),
-                onTap: () {
-                  context
-                      .read<MetaTileCubit>()
-                      .setDataAtIndex(hoverTileIndex, appState.tileBuffer);
-                  Navigator.pop(contextMenuAreaContext);
-                },
-              ),
-            ],
-            child: Column(
-              children: [
-                Row(
+    return BlocBuilder<MetaTileCubit, MetaTile>(
+      builder: (context, metaTile) {
+        return BlocBuilder<AppStateCubit, AppState>(
+          builder: (context, appState) => Row(
+            children: [
+              ContextMenuArea(
+                builder: (BuildContext contextMenuAreaContext) => [
+                  ListTile(
+                    leading: const Icon(Icons.add),
+                    title: const Text("Insert"),
+                    onTap: () {
+                      {
+                        context.read<MetaTileCubit>().addTile(hoverTileIndex);
+                        context.read<AppStateCubit>().setSelectedTileIndex(
+                          ++hoverTileIndex,
+                        );
+                        Navigator.pop(contextMenuAreaContext);
+                      }
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.remove),
+                    title: const Text("Delete"),
+                    onTap: () {
+                      context.read<MetaTileCubit>().removeTile(hoverTileIndex);
+                      context.read<AppStateCubit>().setSelectedTileIndex(
+                        --hoverTileIndex,
+                      );
+                      Navigator.pop(contextMenuAreaContext);
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.copy),
+                    title: const Text("Copy"),
+                    onTap: () {
+                      var tileData = metaTile.getTileAtIndex(hoverTileIndex);
+                      context.read<AppStateCubit>().setTileBuffer(tileData);
+                      Navigator.pop(contextMenuAreaContext);
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.paste),
+                    title: const Text("Paste"),
+                    onTap: () {
+                      context.read<MetaTileCubit>().setDataAtIndex(
+                        hoverTileIndex,
+                        appState.tileBuffer,
+                      );
+                      Navigator.pop(contextMenuAreaContext);
+                    },
+                  ),
+                ],
+                child: Column(
                   children: [
-                    IconButton(
-                        icon: const Icon(Icons.add),
-                        tooltip: 'Add tile',
-                        onPressed: () {
-                          int tileIndex =
-                              context.read<AppStateCubit>().state.tileIndexTile;
-                          context.read<MetaTileCubit>().addTile(tileIndex);
-                          context
-                              .read<AppStateCubit>()
-                              .setSelectedTileIndex(++tileIndex);
-                        }),
-                    IconButton(
-                        icon: const Icon(Icons.remove),
-                        tooltip: 'Remove tile',
-                        onPressed: () {
-                          int tileIndex =
-                              context.read<AppStateCubit>().state.tileIndexTile;
-                          if (tileIndex > 0) {
-                            context.read<MetaTileCubit>().removeTile(tileIndex);
-                            context
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.add),
+                          tooltip: 'Add tile',
+                          onPressed: () {
+                            int tileIndex = context
                                 .read<AppStateCubit>()
-                                .setSelectedTileIndex(--tileIndex);
-                          }
-                        }),
+                                .state
+                                .tileIndexTile;
+                            context.read<MetaTileCubit>().addTile(tileIndex);
+                            context.read<AppStateCubit>().setSelectedTileIndex(
+                              ++tileIndex,
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.remove),
+                          tooltip: 'Remove tile',
+                          onPressed: () {
+                            int tileIndex = context
+                                .read<AppStateCubit>()
+                                .state
+                                .tileIndexTile;
+                            if (tileIndex > 0) {
+                              context.read<MetaTileCubit>().removeTile(
+                                tileIndex,
+                              );
+                              context
+                                  .read<AppStateCubit>()
+                                  .setSelectedTileIndex(--tileIndex);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: SizedBox(
+                        width: 200,
+                        child: MetaTileListView(
+                          selectedTile: context
+                              .read<AppStateCubit>()
+                              .state
+                              .tileIndexTile,
+                          onHover: (index) => setState(() {
+                            hoverTileIndex = index;
+                          }),
+                          onTap: (index) => context
+                              .read<AppStateCubit>()
+                              .setSelectedTileIndex(index),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-                Expanded(
-                  child: SizedBox(
-                    width: 200,
-                    child: MetaTileListView(
-                        selectedTile:
-                            context.read<AppStateCubit>().state.tileIndexTile,
-                        onHover: (index) => setState(() {
-                              hoverTileIndex = index;
-                            }),
-                        onTap: (index) => context
-                            .read<AppStateCubit>()
-                            .setSelectedTileIndex(index)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const VerticalDivider(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // ignore: prefer_const_constructors
-              MetaTileToolbar(),
-              SizedBox(
-                width: (MediaQuery.of(context).size.width ~/ 3) *
-                    context.read<AppStateCubit>().state.zoomTile,
-                height: (MediaQuery.of(context).size.width ~/ 3) *
-                    context.read<AppStateCubit>().state.zoomTile,
-                child: const MetaTileCanvas(),
               ),
-              SizedBox(
-                width: 200,
-                height: 200,
-                child: BackgroundGrid(
-                  background: Background(
-                      width: 4, height: 4, fill: appState.tileIndexTile),
-                  metaTile: metaTile,
+              const VerticalDivider(),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // ignore: prefer_const_constructors
+                  MetaTileToolbar(),
+                  SizedBox(
+                    width:
+                        (MediaQuery.of(context).size.width ~/ 3) *
+                        context.read<AppStateCubit>().state.zoomTile,
+                    height:
+                        (MediaQuery.of(context).size.width ~/ 3) *
+                        context.read<AppStateCubit>().state.zoomTile,
+                    child: const MetaTileCanvas(),
+                  ),
+                  SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: BackgroundGrid(
+                      background: Background(
+                        width: 4,
+                        height: 4,
+                        fill: appState.tileIndexTile,
+                      ),
+                      metaTile: metaTile,
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: BackgroundEditor(
+                  onTapTileListView: (index) =>
+                      context.read<AppStateCubit>().setSelectedTileIndex(index),
                 ),
-              )
+              ),
             ],
           ),
-          Expanded(
-            child: BackgroundEditor(
-              onTapTileListView: (index) =>
-                  context.read<AppStateCubit>().setSelectedTileIndex(index),
-            ),
-          ),
-        ]),
-      );
-    });
+        );
+      },
+    );
   }
 }

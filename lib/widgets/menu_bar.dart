@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/widgets/import_dialog.dart';
-import 'package:game_boy_graphics_editor/widgets/settings_dialog.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tile_settings.dart';
 
 import 'background/background_settings.dart';
@@ -25,17 +26,15 @@ class ApplicationMenuBar extends StatelessWidget {
                         context: context,
                         builder: (BuildContext alertDialogContext) =>
                             const AlertDialog(
-                          title: Text('Import'),
-                          content: ImportDialog(),
-                        ),
+                              title: Text('Import'),
+                              content: ImportDialog(),
+                            ),
                       );
                     },
                     child: const Row(
                       children: [
                         Icon(Icons.upload),
-                        // Replace 'someIcon' with the icon you want
                         SizedBox(width: 5),
-                        // Adjust the spacing between icon and text as needed
                         MenuAcceleratorLabel('&Import'),
                       ],
                     ),
@@ -46,9 +45,9 @@ class ApplicationMenuBar extends StatelessWidget {
                         context: context,
                         builder: (BuildContext alertDialogContext) =>
                             const AlertDialog(
-                          title: Text('Export'),
-                          content: ExportDialog(),
-                        ),
+                              title: Text('Export'),
+                              content: ExportDialog(),
+                            ),
                       );
                     },
                     child: const Row(
@@ -58,41 +57,86 @@ class ApplicationMenuBar extends StatelessWidget {
                         MenuAcceleratorLabel('&Export'),
                       ],
                     ),
-                  )
+                  ),
                 ],
                 child: const MenuAcceleratorLabel('&File'),
               ),
 
-              // Edit
+              // View Menu - NEW
+              SubmenuButton(
+                menuChildren: <Widget>[
+                  MenuItemButton(
+                    onPressed: () {
+                      context.read<AppStateCubit>().navigateToEditor();
+                    },
+                    child: const Row(
+                      children: [
+                        Icon(Icons.edit),
+                        SizedBox(width: 5),
+                        MenuAcceleratorLabel('&Editor'),
+                      ],
+                    ),
+                  ),
+                  MenuItemButton(
+                    onPressed: () {
+                      context.read<AppStateCubit>().navigateToMemoryManager();
+                    },
+                    child: const Row(
+                      children: [
+                        Icon(Icons.storage),
+                        SizedBox(width: 5),
+                        MenuAcceleratorLabel('&Memory Manager'),
+                      ],
+                    ),
+                  ),
+                ],
+                child: const MenuAcceleratorLabel('&View'),
+              ),
+
+              // Edit Menu
               SubmenuButton(
                 menuChildren: <Widget>[
                   MenuItemButton(
                     onPressed: () {
                       showDialog(
-                          context: context,
-                          builder: (BuildContext alertDialogContext) =>
-                              const AlertDialog(
-                                  title: Text('Properties'),
-                                  content: Row(children: [
-                                    TileSettings(),
-                                    BackgroundSettings()
-                                  ])));
+                        context: context,
+                        builder: (BuildContext alertDialogContext) =>
+                            const AlertDialog(
+                              title: Text('Properties'),
+                              content: Row(
+                                children: [
+                                  TileSettings(),
+                                  BackgroundSettings(),
+                                ],
+                              ),
+                            ),
+                      );
                     },
-                    child: const MenuAcceleratorLabel('Properties'),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.tune),
+                        SizedBox(width: 5),
+                        MenuAcceleratorLabel('&Properties'),
+                      ],
+                    ),
                   ),
                   MenuItemButton(
                     onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext alertDialogContext) =>
-                              const AlertDialog(content: SettingsDialog()));
+                      context.read<AppStateCubit>().navigateToSettings();
                     },
-                    child: const MenuAcceleratorLabel('Settings'),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.settings),
+                        SizedBox(width: 5),
+                        MenuAcceleratorLabel('&Settings'),
+                      ],
+                    ),
                   ),
                 ],
                 child: const MenuAcceleratorLabel('&Edit'),
               ),
 
+              // About Menu
               MenuItemButton(
                 onPressed: () {
                   showAboutDialog(

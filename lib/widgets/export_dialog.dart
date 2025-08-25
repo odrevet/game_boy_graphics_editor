@@ -36,10 +36,11 @@ class _ExportDialogState extends State<ExportDialog> {
                   Row(
                     children: [
                       const Expanded(
-                          child: Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: Text("Data type"),
-                      )),
+                        child: Padding(
+                          padding: EdgeInsets.all(15.0),
+                          child: Text("Data type"),
+                        ),
+                      ),
                       DropdownButton<String>(
                         value: type,
                         onChanged: (String? value) {
@@ -49,21 +50,23 @@ class _ExportDialogState extends State<ExportDialog> {
                         },
                         items: <String>['Source code', 'Binary', 'PNG']
                             .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            })
+                            .toList(),
                       ),
                     ],
                   ),
                   Row(
                     children: [
                       const Expanded(
-                          child: Padding(
-                        padding: EdgeInsets.all(15.0),
-                        child: Text("From"),
-                      )),
+                        child: Padding(
+                          padding: EdgeInsets.all(15.0),
+                          child: Text("From"),
+                        ),
+                      ),
                       DropdownButton<String>(
                         value: parse,
                         onChanged: (String? value) {
@@ -73,11 +76,12 @@ class _ExportDialogState extends State<ExportDialog> {
                         },
                         items: <String>['Tile', 'Background']
                             .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            })
+                            .toList(),
                       ),
                     ],
                   ),
@@ -127,7 +131,7 @@ class _ExportDialogState extends State<ExportDialog> {
             ),
             const VerticalDivider(),
             // Preview
-            ExportPreview(type, parse)
+            ExportPreview(type, parse),
           ],
         ),
       ),
@@ -149,29 +153,35 @@ class ExportPreview extends StatelessWidget {
       var source = '';
 
       if (parse == 'Tile') {
-        header = GBDKTileConverter()
-            .toHeader(context.read<MetaTileCubit>().state, name);
-        source = GBDKTileConverter()
-            .toSource(context.read<MetaTileCubit>().state, name);
+        header = GBDKTileConverter().toHeader(
+          context.read<MetaTileCubit>().state,
+          name,
+        );
+        source = GBDKTileConverter().toSource(
+          context.read<MetaTileCubit>().state,
+          name,
+        );
         name = context.read<AppStateCubit>().state.tileName;
       } else if (parse == 'Background') {
-        header = GBDKBackgroundConverter()
-            .toHeader(context.read<BackgroundCubit>().state, name);
-        source = GBDKBackgroundConverter()
-            .toSource(context.read<BackgroundCubit>().state, name);
+        header = GBDKBackgroundConverter().toHeader(
+          context.read<BackgroundCubit>().state,
+          name,
+        );
+        source = GBDKBackgroundConverter().toSource(
+          context.read<BackgroundCubit>().state,
+          name,
+        );
         name = context.read<AppStateCubit>().state.backgroundName;
       }
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SourceDisplay(source: header, name: name, extension: '.h'),
           SourceDisplay(
-            source: header,
+            source: source,
             name: name,
-            extension: '.h',
-          ),
-          SourceDisplay(
-            source: source, name: name, extension: '.c',
+            extension: '.c',
             //graphics: metaTile,
           ),
         ],

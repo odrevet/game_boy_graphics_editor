@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,11 +13,16 @@ import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
-import '../models/sourceConverters/source_converter.dart';
-import 'import.dart';
+import 'file_picker_utils.dart';
+import 'import_utils.dart';
 
-onImportHttp(BuildContext context, String parse, String type, bool transpose,
-    String url) {
+onImportHttp(
+  BuildContext context,
+  String parse,
+  String type,
+  bool transpose,
+  String url,
+) {
   bool tile = parse == 'Tile';
   Uri uriObject = Uri.parse(url);
 
@@ -41,38 +45,72 @@ onImportHttp(BuildContext context, String parse, String type, bool transpose,
   }
 }
 
-onImport(BuildContext context, String parse, String type, bool transpose,
-    String compression) {
-  bool tile = parse == 'Tile';
+/*onImport(
+  BuildContext context,
+  String type,
+  bool transpose,
+  String compression,
+) {
+
   selectFile(['*']).then((result) {
     if (result != null) {
       if (type == 'Auto') {
         type = resolveType(result.files.single.name);
       }
 
-      if (type == 'Binary') {
-        if (compression != 'none') {
-          String inputPath = result.files.single.path!;
-          List<int> content = _decompress(inputPath, compression, context);
-          if (content.isNotEmpty) {
-            loadBin(content, tile, transpose, context);
-          }
-        } else {
-          readBin(result).then((List<int> content) {
-            loadBin(content, tile, transpose, context);
-          });
-        }
-      } else {
-        readString(result).then((String source) {
-          if (tile) {
-            _setTilesFromSource(source, context);
-          } else {
-            _setBackgroundFromSource(source, context);
-          }
-        });
-      }
+      // WIP
+//      if (type == 'Binary') {
+//        if (compression != 'none') {
+//          String inputPath = result.files.single.path!;
+//          List<int> content = _decompress(inputPath, compression, context);
+//          if (content.isNotEmpty) {
+//            loadBin(content, tile, transpose, context);
+//          }
+//        } else {
+//          readBin(result).then((List<int> content) {
+//            loadBin(content, tile, transpose, context);
+//          });
+//        }
+//      } else {
+//        readString(result).then((String source) {
+//          if (tile) {
+//            _setTilesFromSource(source, context);
+//          } else {
+//            _setBackgroundFromSource(source, context);
+//          }
+//        });
+//      }
+
+      readString(result).then((String source) {
+        source = GBDKTileConverter().formatSource(source);
+        List<Graphics> graphicsElements = GBDKTileConverter()
+            .readGraphicsFromSource(source);
+        context.read<GraphicsCubit>().addGraphics(graphicsElements);
+      });
     }
   });
+}*/
+
+Future<List<Graphics>?> onImport(
+  BuildContext context,
+  String type,
+  bool transpose,
+  String compression,
+) async {
+  final result = await selectFile(['*']);
+  if (result == null) return null;
+
+  if (type == 'Auto') {
+    type = resolveType(result.files.single.name);
+  }
+
+  final source = await readString(result);
+  final formattedSource = GBDKTileConverter().formatSource(source);
+  final graphicsElements = GBDKTileConverter().readGraphicsFromSource(
+    formattedSource,
+  );
+
+  return graphicsElements;
 }
 
 String resolveType(String path) {
@@ -85,13 +123,18 @@ String resolveType(String path) {
 }
 
 void loadBin(
-    List<int> content, bool tile, bool transpose, BuildContext context) {
+  List<int> content,
+  bool tile,
+  bool transpose,
+  BuildContext context,
+) {
   if (tile) {
     List<int> data = GBDKTileConverter().combine(content);
     data = GBDKTileConverter().reorderFromSourceToCanvas(
-        data,
-        context.read<MetaTileCubit>().state.width,
-        context.read<MetaTileCubit>().state.height);
+      data,
+      context.read<MetaTileCubit>().state.width,
+      context.read<MetaTileCubit>().state.height,
+    );
     context.read<MetaTileCubit>().setData(data);
   } else {
     List<int> data = convertBytesToDecimals(content);
@@ -109,10 +152,9 @@ void _setTilesFromSource(String source, BuildContext context) {
   Map<String, int> defines = GBDKTileConverter().readDefinesFromSource(source);
   _setPropertiesFromDefines(defines, context);
 
-  var graphicsElements =
-      GBDKTileConverter().readGraphicElementsFromSource(source);
+  var graphicsElements = GBDKTileConverter().readGraphicsFromSource(source);
   if (graphicsElements.length > 1) {
-    _showGraphicElementChooseDialog(context, graphicsElements, _setMetaTile);
+    _showGraphicsChooseDialog(context, graphicsElements, _setMetaTile);
   } else if (graphicsElements.length == 1) {
     _setMetaTile(graphicsElements.first, context);
   }
@@ -121,30 +163,40 @@ void _setTilesFromSource(String source, BuildContext context) {
 void _setBackgroundFromSource(String source, BuildContext context) {
   source = GBDKBackgroundConverter().formatSource(source);
 
-  Map<String, int> defines =
-      GBDKBackgroundConverter().readDefinesFromSource(source);
+  Map<String, int> defines = GBDKBackgroundConverter().readDefinesFromSource(
+    source,
+  );
   _setPropertiesFromDefines(defines, context);
 
-  var graphicsElements =
-      GBDKBackgroundConverter().readGraphicElementsFromSource(source);
+  var graphicsElements = GBDKBackgroundConverter().readGraphicsFromSource(
+    source,
+  );
   if (graphicsElements.length > 1) {
-    _showGraphicElementChooseDialog(
-        context, graphicsElements, _setBackgroundFromGraphicElement);
+    _showGraphicsChooseDialog(
+      context,
+      graphicsElements,
+      _setBackgroundFromGraphics,
+    );
   } else if (graphicsElements.length == 1) {
     context.read<AppStateCubit>().setSelectedTileIndex(0);
-    _setBackgroundFromGraphicElement(graphicsElements.first, context);
+    _setBackgroundFromGraphics(graphicsElements.first, context);
   }
 }
 
 List<int> _decompress(
-    String inputPath, String compression, BuildContext context) {
+  String inputPath,
+  String compression,
+  BuildContext context,
+) {
   var content = <int>[];
   // decompress to a temp file
   var systemTempDir = Directory.systemTemp;
   String outputPath = "${systemTempDir.path}/decompressed.bin";
 
-  Process.runSync('${context.read<AppStateCubit>().state.gbdkPath}/gbcompress',
-      ['-d', '--alg=$compression', inputPath, outputPath]);
+  Process.runSync(
+    '${context.read<AppStateCubit>().state.gbdkPath}/gbcompress',
+    ['-d', '--alg=$compression', inputPath, outputPath],
+  );
 
   // read decompressed data and tmp delete file
   File decompressed = File(outputPath);
@@ -156,15 +208,16 @@ List<int> _decompress(
   return content;
 }
 
-bool _setMetaTile(GraphicElement graphicElement, BuildContext context) {
+bool _setMetaTile(Graphics Graphics, BuildContext context) {
   bool hasLoaded = true;
   try {
-    context.read<AppStateCubit>().setTileName(graphicElement.name);
-    var data = GBDKTileConverter().combine(graphicElement.values);
+    context.read<AppStateCubit>().setTileName(Graphics.name);
+    var data = GBDKTileConverter().combine(Graphics.data);
     data = GBDKTileConverter().reorderFromSourceToCanvas(
-        data,
-        context.read<MetaTileCubit>().state.width,
-        context.read<MetaTileCubit>().state.height);
+      data,
+      context.read<MetaTileCubit>().state.width,
+      context.read<MetaTileCubit>().state.height,
+    );
     context.read<MetaTileCubit>().setData(data);
   } catch (e) {
     if (kDebugMode) {
@@ -190,40 +243,42 @@ void _setPropertiesFromDefines(Map<String, int> defines, BuildContext context) {
   });
 }
 
-bool _setBackgroundFromGraphicElement(
-    GraphicElement graphicElement, BuildContext context) {
-  Background background =
-      GBDKBackgroundConverter().fromGraphicElement(graphicElement);
+bool _setBackgroundFromGraphics(Graphics Graphics, BuildContext context) {
+  Background background = GBDKBackgroundConverter().fromGraphics(Graphics);
   context.read<BackgroundCubit>().setData(background.data);
   return true;
 }
 
-_showGraphicElementChooseDialog(BuildContext context,
-    List<GraphicElement> graphicsElements, Function onTap) {
+_showGraphicsChooseDialog(
+  BuildContext context,
+  List<Graphics> graphicsElements,
+  Function onTap,
+) {
   bool hasLoaded = false;
   showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) => AlertDialog(
-            title: const Text('Graphic element selection'),
-            content: SizedBox(
-              height: 200.0,
-              width: 150.0,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: graphicsElements.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    onTap: () {
-                      onTap(graphicsElements[index], context);
-                      Navigator.pop(context);
-                    },
-                    title: Text(graphicsElements[index].name),
-                  );
-                },
-              ),
-            ),
-          ));
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('Graphic element selection'),
+      content: SizedBox(
+        height: 200.0,
+        width: 150.0,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: graphicsElements.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              onTap: () {
+                onTap(graphicsElements[index], context);
+                Navigator.pop(context);
+              },
+              title: Text(graphicsElements[index].name),
+            );
+          },
+        ),
+      ),
+    ),
+  );
 
   return hasLoaded;
 }
@@ -235,34 +290,10 @@ void _setBackgroundFromBin(List<int> raw, BuildContext context) {
 }
 
 void _setBackgroundFromBinTransposed(List<int> raw, BuildContext context) {
-  raw = transpose(raw, context.read<BackgroundCubit>().state.height,
-      context.read<BackgroundCubit>().state.width);
+  raw = transpose(
+    raw,
+    context.read<BackgroundCubit>().state.height,
+    context.read<BackgroundCubit>().state.width,
+  );
   _setBackgroundFromBin(raw, context);
-}
-
-//// File picker helpers ////
-
-Future<FilePickerResult?> selectFile(List<String> allowedExtensions) async =>
-    await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: allowedExtensions,
-    );
-
-Future<String> readString(FilePickerResult filePickerResult) async {
-  if (kIsWeb) {
-    Uint8List? bytes = filePickerResult.files.single.bytes;
-    return String.fromCharCodes(bytes!);
-  } else {
-    File file = File(filePickerResult.files.single.path!);
-    return await file.readAsString();
-  }
-}
-
-Future<List<int>> readBin(FilePickerResult filePickerResult) async {
-  if (kIsWeb) {
-    return filePickerResult.files.single.bytes!;
-  } else {
-    File file = File(filePickerResult.files.single.path!);
-    return await file.readAsBytes();
-  }
 }

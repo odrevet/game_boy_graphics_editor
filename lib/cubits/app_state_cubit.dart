@@ -3,18 +3,52 @@ import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/colors.dart';
 
-import '../models/app_state.dart';
+import '../models/states/app_state.dart';
 
 class AppStateCubit extends Cubit<AppState> {
   AppStateCubit()
-      : super(AppState(
-            intensity: 3,
-            tileIndexTile: 0,
-            zoomTile: 0.6,
-            zoomBackground: 0.6,
-            showExportPreviewTile: true,
-            showExportPreviewBackground: true));
+    : super(
+        AppState(
+          intensity: 3,
+          tileIndexTile: 0,
+          zoomTile: 0.6,
+          zoomBackground: 0.6,
+          showExportPreviewTile: true,
+          showExportPreviewBackground: true,
+          currentView: ViewType.editor,
+        ),
+      );
 
+  // View Management Methods
+  void setCurrentView(ViewType newView) {
+    emit(state.copyWith(currentView: newView));
+  }
+
+  void navigateToEditor() => setCurrentView(ViewType.editor);
+
+  void navigateToMemoryManager() => setCurrentView(ViewType.memoryManager);
+
+  void navigateToSettings() => setCurrentView(ViewType.settings);
+
+  // View State Helpers
+  bool get isEditorView => state.currentView == ViewType.editor;
+
+  bool get isMemoryManagerView => state.currentView == ViewType.memoryManager;
+
+  bool get isSettingsView => state.currentView == ViewType.settings;
+
+  String get currentViewTitle {
+    switch (state.currentView) {
+      case ViewType.editor:
+        return 'Graphics Editor';
+      case ViewType.memoryManager:
+        return 'Memory Manager';
+      case ViewType.settings:
+        return 'Settings';
+    }
+  }
+
+  // Original methods
   void setIntensity(int intensity) =>
       emit(state.copyWith(intensity: intensity));
 
@@ -53,15 +87,21 @@ class AppStateCubit extends Cubit<AppState> {
   void toggleGridTile() =>
       emit(state.copyWith(showGridTile: !state.showGridTile));
 
-  void toggleColorSet() => emit(state.copyWith(
-      colorSet: state.colorSet == colorsPocket ? colorsDMG : colorsPocket));
+  void toggleColorSet() => emit(
+    state.copyWith(
+      colorSet: state.colorSet == colorsPocket ? colorsDMG : colorsPocket,
+    ),
+  );
 
   void toggleGridBackground() =>
       emit(state.copyWith(showGridBackground: !state.showGridBackground));
 
   toggleDisplayExportPreviewBackground() {
-    emit(state.copyWith(
-        showExportPreviewBackground: !state.showExportPreviewBackground));
+    emit(
+      state.copyWith(
+        showExportPreviewBackground: !state.showExportPreviewBackground,
+      ),
+    );
   }
 
   toggleDisplayExportPreviewTile() {

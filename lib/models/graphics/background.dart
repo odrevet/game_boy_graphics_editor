@@ -1,18 +1,16 @@
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 class Background extends Graphics {
-  Background(
-      {super.height = 18,
-      super.width = 20,
-      name = "",
-      this.tileOrigin = 0,
-      fill,
-      data})
-      : super(
-            data:
-                data ?? List.filled(width * height, fill ?? 0, growable: true));
-
-  int tileOrigin;
+  Background({
+    super.height = 18,
+    super.width = 20,
+    super.name = "",
+    super.tileOrigin = 0,
+    fill,
+    data,
+  }) : super(
+         data: data ?? List.filled(width * height, fill ?? 0, growable: true),
+       );
 
   copyWith({List<int>? data, int? width, int? height, int? tileOrigin}) =>
       Background(

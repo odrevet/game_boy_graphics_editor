@@ -19,32 +19,36 @@ class TileSettings extends StatelessWidget {
         child: Column(
           children: [
             TextFormField(
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp('^[a-zA-Z0-9_]*')),
-                ],
-                decoration: const InputDecoration(labelText: 'Name'),
-                key: Key(context.read<AppStateCubit>().state.tileName),
-                initialValue: context.read<AppStateCubit>().state.tileName,
-                onChanged: (text) =>
-                    context.read<AppStateCubit>().setTileName(text)),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp('^[a-zA-Z0-9_]*')),
+              ],
+              decoration: const InputDecoration(labelText: 'Name'),
+              key: Key(context.read<AppStateCubit>().state.tileName),
+              initialValue: context.read<AppStateCubit>().state.tileName,
+              onChanged: (text) =>
+                  context.read<AppStateCubit>().setTileName(text),
+            ),
             TextFormField(
-                maxLines: null,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp('^[a-fA-F0-9_]*')),
-                ],
-                decoration: const InputDecoration(labelText: 'Values'),
-                key: const Key('values'),
-                initialValue: GBDKTileConverter()
-                    .toBin(context.read<MetaTileCubit>().state),
-                onChanged: (text) {
-                  var values = hexToIntList(text);
-                  var data = GBDKTileConverter().combine(values);
-                  data = GBDKTileConverter().reorderFromSourceToCanvas(
-                      data,
-                      context.read<MetaTileCubit>().state.width,
-                      context.read<MetaTileCubit>().state.height);
-                  context.read<MetaTileCubit>().setData(data);
-                }),
+              maxLines: null,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp('^[a-fA-F0-9_]*')),
+              ],
+              decoration: const InputDecoration(labelText: 'Values'),
+              key: const Key('values'),
+              initialValue: GBDKTileConverter().toBin(
+                context.read<MetaTileCubit>().state,
+              ),
+              onChanged: (text) {
+                var values = hexToIntList(text);
+                var data = GBDKTileConverter().combine(values);
+                data = GBDKTileConverter().reorderFromSourceToCanvas(
+                  data,
+                  context.read<MetaTileCubit>().state.width,
+                  context.read<MetaTileCubit>().state.height,
+                );
+                context.read<MetaTileCubit>().setData(data);
+              },
+            ),
           ],
         ),
       ),

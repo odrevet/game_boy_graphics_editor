@@ -17,10 +17,11 @@ class BackgroundSettings extends StatelessWidget {
           children: [
             const BackgroundProperties(),
             ElevatedButton(
-                onPressed: () {
-                  context.read<BackgroundCubit>().transpose();
-                },
-                child: const Text("Transpose rows and columns"))
+              onPressed: () {
+                context.read<BackgroundCubit>().transpose();
+              },
+              child: const Text("Transpose rows and columns"),
+            ),
           ],
         ),
       ),

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
+import 'package:game_boy_graphics_editor/widgets/graphic_list_widget.dart';
+import 'package:game_boy_graphics_editor/widgets/settings_widget.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tiles_editor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/states/app_state.dart';
 import 'menu_bar.dart';
 
 Future<void> _initPreferences(BuildContext context) async {
@@ -34,11 +37,28 @@ class _EditorState extends State<Editor> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-        body: SafeArea(
-      child: Column(
-        children: [ApplicationMenuBar(), Expanded(child: TilesEditor())],
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            const ApplicationMenuBar(),
+            Expanded(
+              child: BlocBuilder<AppStateCubit, AppState>(
+                builder: (context, state) {
+                  switch (state.currentView) {
+                    case ViewType.editor:
+                      return const TilesEditor();
+                    case ViewType.memoryManager:
+                      return const GraphicsListWidget();
+                    case ViewType.settings:
+                      return const SettingsWidget();
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 }
