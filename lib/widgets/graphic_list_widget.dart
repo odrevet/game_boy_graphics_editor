@@ -290,17 +290,25 @@ class _GraphicListTile extends StatelessWidget {
     required this.onDelete,
   }) : super(key: key);
 
-  bool _setMetaTile(Graphics Graphics, BuildContext context) {
+  bool _addMetaTile(Graphics graphics, BuildContext context, int tileOrigin) {
     bool hasLoaded = true;
     try {
-      context.read<AppStateCubit>().setTileName(Graphics.name);
-      var data = GBDKTileConverter().combine(Graphics.data);
+      var data = GBDKTileConverter().combine(graphics.data);
       data = GBDKTileConverter().reorderFromSourceToCanvas(
         data,
         context.read<MetaTileCubit>().state.width,
         context.read<MetaTileCubit>().state.height,
       );
-      context.read<MetaTileCubit>().setData(data);
+
+      // Add tile to the collection with the specified origin
+      context.read<MetaTileCubit>().addTileAtOrigin(
+          data,
+          graphics.name,
+          tileOrigin
+      );
+
+      // Set the tile name for the app state
+      context.read<AppStateCubit>().setTileName(graphics.name);
     } catch (e) {
       if (kDebugMode) {
         print("ERROR $e");
@@ -308,7 +316,10 @@ class _GraphicListTile extends StatelessWidget {
       hasLoaded = false;
     }
 
-    if (hasLoaded) context.read<AppStateCubit>().setSelectedTileIndex(0);
+    if (hasLoaded) {
+      // Set selected tile to the first tile of the newly added graphic
+      context.read<AppStateCubit>().setSelectedTileIndex(tileOrigin);
+    }
 
     return hasLoaded;
   }
@@ -322,6 +333,7 @@ class _GraphicListTile extends StatelessWidget {
       context.read<MetaTileCubit>().state.height,
     );
     var preview = MetaTile(height: 8, width: 8, data: data);
+    final tileCount = preview.data.length ~/ (preview.height * preview.width);
 
     showDialog(
       context: context,
@@ -341,11 +353,21 @@ class _GraphicListTile extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.only(bottom: 8),
                 child: TextFormField(
                   controller: controller,
                   decoration: const InputDecoration(labelText: "Tile Origin"),
                   keyboardType: TextInputType.number,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Text(
+                  "This will add $tileCount tiles starting from the origin",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
                 ),
               ),
               const Padding(
@@ -361,14 +383,22 @@ class _GraphicListTile extends StatelessWidget {
                     spacing: 8,
                     runSpacing: 8,
                     children: List.generate(
-                      preview.data.length ~/ (preview.height * preview.width),
-                      (index) => SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: MetaTileDisplay(
-                          showGrid: false,
-                          tileData: preview.getTileAtIndex(index),
-                        ),
+                      tileCount,
+                          (index) => Column(
+                        children: [
+                          SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: MetaTileDisplay(
+                              showGrid: false,
+                              tileData: preview.getTileAtIndex(index),
+                            ),
+                          ),
+                          Text(
+                            "#$index",
+                            style: const TextStyle(fontSize: 10),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -387,9 +417,9 @@ class _GraphicListTile extends StatelessWidget {
               final origin = int.tryParse(controller.text) ?? 0;
               Navigator.of(dialogContext).pop();
               print("Load '${graphic.name}' as Tile with origin $origin");
-              _setMetaTile(graphic, context);
+              _addMetaTile(graphic, context, origin);
             },
-            child: const Text("OK"),
+            child: const Text("Add Tiles"),
           ),
         ],
       ),
@@ -489,7 +519,7 @@ class _GraphicListTile extends StatelessWidget {
                   value: 'tile',
                   child: ListTile(
                     leading: Icon(Icons.image),
-                    title: Text("Load as Tile"),
+                    title: Text("Add as Tiles"),
                   ),
                 ),
                 const PopupMenuItem(
@@ -517,7 +547,6 @@ class _GraphicListTile extends StatelessWidget {
     );
   }
 }
-
 class _GraphicFormDialog extends StatefulWidget {
   final String title;
   final String? initialName;

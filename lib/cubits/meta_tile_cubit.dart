@@ -1,10 +1,36 @@
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
+class TileInfo {
+  final String? sourceName;
+  final int? sourceIndex;
+  final int origin;
+
+  TileInfo({
+    this.sourceName,
+    this.sourceIndex,
+    required this.origin,
+  });
+
+  TileInfo copyWith({
+    String? sourceName,
+    int? sourceIndex,
+    int? origin,
+  }) {
+    return TileInfo(
+      sourceName: sourceName ?? this.sourceName,
+      sourceIndex: sourceIndex ?? this.sourceIndex,
+      origin: origin ?? this.origin,
+    );
+  }
+}
+
 class MetaTileCubit extends ReplayCubit<MetaTile> {
   MetaTileCubit() : super(MetaTile(height: 8, width: 8));
+  List<TileInfo> _tileInfoList = [];
 
   setData(List<int> data) {
+    _tileInfoList.clear();
     emit(state.copyWith(data: data));
   }
 
@@ -46,6 +72,10 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     List<int> tileData = [...state.data];
     var newTile = List.generate(state.width * state.height, (index) => 0);
     tileData.insertAll((index + 1) * state.nbPixel, newTile);
+
+    // Update tile info list
+    _tileInfoList.insert(index + 1, TileInfo(origin: index + 1));
+
     emit(state.copyWith(data: tileData));
   }
 
@@ -55,6 +85,12 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
       (tileIndex) * state.nbPixel,
       tileIndex * state.nbPixel + state.nbPixel,
     );
+
+    // Update tile info list
+    if (tileIndex < _tileInfoList.length) {
+      _tileInfoList.removeAt(tileIndex);
+    }
+
     emit(state.copyWith(data: tileData));
   }
 
@@ -197,5 +233,125 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     MetaTile metaTile = state.copyWith();
     metaTile.rectangle(metaTileIndex, intensity, xFrom, yFrom, xTo, yTo);
     emit(metaTile);
+  }
+
+  /// Add tiles from graphics data at specified origin
+  void addTileAtOrigin(List<int> data, String sourceName, int tileOrigin) {
+    final currentState = state;
+    final tileSize = currentState.height * currentState.width;
+    final numTiles = data.length ~/ tileSize;
+
+    // Ensure our tile info list is large enough
+    while (_tileInfoList.length < currentState.data.length ~/ tileSize) {
+      _tileInfoList.add(TileInfo(origin: _tileInfoList.length));
+    }
+
+    // Extend data if necessary to accommodate new tiles
+    List<int> newData = List.from(currentState.data);
+    final requiredSize = (tileOrigin + numTiles) * tileSize;
+
+    while (newData.length < requiredSize) {
+      // Add empty tiles (filled with 0s)
+      newData.addAll(List.filled(tileSize, 0));
+      _tileInfoList.add(TileInfo(origin: _tileInfoList.length));
+    }
+
+    // Copy the new tile data starting at the specified origin
+    for (int i = 0; i < numTiles; i++) {
+      final tileIndex = tileOrigin + i;
+      final dataStartIndex = tileIndex * tileSize;
+      final sourceStartIndex = i * tileSize;
+
+      // Copy tile data
+      for (int j = 0; j < tileSize; j++) {
+        if (dataStartIndex + j < newData.length &&
+            sourceStartIndex + j < data.length) {
+          newData[dataStartIndex + j] = data[sourceStartIndex + j];
+        }
+      }
+
+      // Update tile info (overwrite existing info)
+      _tileInfoList[tileIndex] = TileInfo(
+        sourceName: sourceName,
+        sourceIndex: i,
+        origin: tileOrigin,
+      );
+    }
+
+    emit(
+      MetaTile(
+        height: currentState.height,
+        width: currentState.width,
+        data: newData,
+      ),
+    );
+  }
+
+  /// Get tile information list
+  List<TileInfo> getTileInfoList() {
+    final tileSize = state.height * state.width;
+    final totalTiles = state.data.length ~/ tileSize;
+
+    // Ensure info list matches current tile count
+    while (_tileInfoList.length < totalTiles) {
+      _tileInfoList.add(TileInfo(origin: _tileInfoList.length));
+    }
+
+    return List.from(_tileInfoList);
+  }
+
+  /// Remove tile at specific index (clear tile data)
+  void removeTileAt(int index) {
+    final currentState = state;
+    final tileSize = currentState.height * currentState.width;
+    final totalTiles = currentState.data.length ~/ tileSize;
+
+    if (index >= 0 && index < totalTiles) {
+      // Clear tile data (fill with zeros)
+      List<int> newData = List.from(currentState.data);
+      final startIndex = index * tileSize;
+
+      for (int i = 0; i < tileSize; i++) {
+        if (startIndex + i < newData.length) {
+          newData[startIndex + i] = 0;
+        }
+      }
+
+      // Update tile info
+      if (index < _tileInfoList.length) {
+        _tileInfoList[index] = TileInfo(origin: index);
+      }
+
+      emit(
+        MetaTile(
+          height: currentState.height,
+          width: currentState.width,
+          data: newData,
+        ),
+      );
+    }
+  }
+
+  /// Get tiles loaded at specific origin
+  List<int> getTilesAtOrigin(int origin) {
+    return _tileInfoList
+        .asMap()
+        .entries
+        .where(
+          (entry) =>
+              entry.value.origin == origin && entry.value.sourceName != null,
+        )
+        .map((entry) => entry.key)
+        .toList();
+  }
+
+  /// Get all unique origins
+  List<int> getUniqueOrigins() {
+    return _tileInfoList
+        .where((info) => info.sourceName != null)
+        .map((info) => info.origin)
+        .toSet()
+        .toList()
+      ..sort();
   }
 }

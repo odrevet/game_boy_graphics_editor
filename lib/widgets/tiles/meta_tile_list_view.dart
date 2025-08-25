@@ -18,41 +18,134 @@ class MetaTileListView extends StatelessWidget {
     required this.selectedTile,
   });
 
+  Widget _buildTileListItem(
+      BuildContext context,
+      int index,
+      TileInfo tileInfo,
+      int tileOrigin,
+      var metaTile,
+      ) {
+    String title = "${index.toString()} ${decimalToHex(index, prefix: true)}";
+    if (tileOrigin > 0) {
+      title +=
+      "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
+    }
+
+    return ListTile(
+      leading: SizedBox(
+        width: 40, // * (metaTile.width / metaTile.height),
+        height: 40,
+        child: MetaTileDisplay(
+          showGrid: false,
+          tileData: metaTile.getTileAtIndex(index),
+        ),
+      ),
+      title: Text(
+        title,
+        style: selectedTile == index
+            ? const TextStyle(
+          color: Colors.blue,
+          fontWeight: FontWeight.bold,
+        )
+            : null,
+      ),
+      onTap: () => onTap(index),
+      onLongPress: () => _showTileInfo(context, index, tileInfo),
+    );
+  }
+
+  void _showTileInfo(BuildContext context, int index, TileInfo tileInfo) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text("Tile $index Info"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Index: $index"),
+            Text("Hex: ${decimalToHex(index, prefix: true)}"),
+            if (tileInfo.sourceName != null)
+              Text("Source: ${tileInfo.sourceName}"),
+            if (tileInfo.sourceIndex != null)
+              Text("Source Index: ${tileInfo.sourceIndex}"),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text("OK"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              context.read<MetaTileCubit>().removeTileAt(index);
+            },
+            child: const Text("Clear", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildListItems(
+      BuildContext context,
+      List<TileInfo> tileInfoList,
+      int tileOrigin,
+      var metaTile,
+      ) {
+    List<Widget> items = [];
+    String? currentSource;
+    int? currentOrigin;
+
+    for (int index = 0; index < tileInfoList.length; index++) {
+      TileInfo tileInfo = tileInfoList[index];
+
+      // Add separator when source changes
+      if (tileInfo.sourceName != currentSource || tileInfo.origin != currentOrigin) {
+        if (tileInfo.sourceName != null && tileInfo.sourceName!.isNotEmpty) {
+          items.add(
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  const SizedBox(width: 8),
+                  Text(
+                    tileInfo.sourceName!,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                      fontSize: 12,
+                    ),
+                  ),
+                  const Expanded(child: Divider(indent: 8)),
+                ],
+              ),
+            ),
+          );
+        }
+        currentSource = tileInfo.sourceName;
+        currentOrigin = tileInfo.origin;
+      }
+
+      // Add the tile item
+      items.add(
+        _buildTileListItem(context, index, tileInfo, tileOrigin, metaTile),
+      );
+    }
+
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
     int tileOrigin = context.read<BackgroundCubit>().state.tileOrigin;
     var metaTile = context.read<MetaTileCubit>().state;
-    return ListView.builder(
+    var tileInfoList = context.read<MetaTileCubit>().getTileInfoList();
+
+    return ListView(
       shrinkWrap: true,
-      itemCount: context.read<MetaTileCubit>().count(),
-      itemBuilder: (context, index) {
-        String title =
-            "${index.toString()} ${decimalToHex(index, prefix: true)}";
-        if (tileOrigin > 0) {
-          title +=
-              "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
-        }
-        return ListTile(
-          leading: SizedBox(
-            width: 40 * (metaTile.width / metaTile.height),
-            height: 40,
-            child: MetaTileDisplay(
-              showGrid: false,
-              tileData: metaTile.getTileAtIndex(index),
-            ),
-          ),
-          title: Text(
-            title,
-            style: selectedTile == index
-                ? const TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                  )
-                : null,
-          ),
-          onTap: () => onTap(index),
-        );
-      },
+      children: _buildListItems(context, tileInfoList, tileOrigin, metaTile),
     );
   }
 }
