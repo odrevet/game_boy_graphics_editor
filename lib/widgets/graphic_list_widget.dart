@@ -8,6 +8,7 @@ import '../cubits/app_state_cubit.dart';
 import '../cubits/background_cubit.dart';
 import '../cubits/graphics_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
+import '../models/file_picker_utils.dart';
 import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_background_converter.dart';
@@ -653,6 +654,15 @@ class _GraphicFormDialogState extends State<_GraphicFormDialog> {
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () => _readPropertiesFromHeader(),
+                  icon: const Icon(Icons.article),
+                  label: const Text('set Properties from source header'),
+                ),
+              ),
             ],
           ),
         ),
@@ -678,6 +688,24 @@ class _GraphicFormDialogState extends State<_GraphicFormDialog> {
         ),
       ],
     );
+  }
+
+  _readPropertiesFromHeader() async {
+    final result = await selectFile(['*']);
+    if (result == null) return null;
+
+    final source = await readString(result);
+    Map<String, int> defines = GBDKTileConverter().readDefinesFromSource(source);
+
+    defines.forEach((key, value) {
+      if (key.endsWith('TILE_ORIGIN')) {
+        _tileOriginController.text = value.toString();
+      } else if (key.endsWith('WIDTH')) {
+        _widthController.text = value.toString();
+      } else if (key.endsWith('HEIGHT')) {
+        _heightController.text = value.toString();
+      }
+    });
   }
 
   @override
