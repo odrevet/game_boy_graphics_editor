@@ -57,10 +57,6 @@ class GraphicsListWidget extends StatelessWidget {
                           style: TextStyle(color: Colors.red.shade700),
                         ),
                       ),
-                      /*IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () => context.read<GraphicsCubit>().clearError(),
-                      ),*/
                     ],
                   ),
                 ),
@@ -118,52 +114,52 @@ class GraphicsListWidget extends StatelessWidget {
               Expanded(
                 child: state.graphics.isEmpty
                     ? const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.image_not_supported,
-                              size: 64,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(height: 16),
-                            Text(
-                              'No graphics added yet',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Import or create graphic',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      )
-                    : ReorderableListView.builder(
-                        itemCount: state.graphics.length,
-                        onReorder: (oldIndex, newIndex) {
-                          if (newIndex > oldIndex) newIndex--;
-                          context.read<GraphicsCubit>().reorderGraphics(
-                            oldIndex,
-                            newIndex,
-                          );
-                        },
-                        itemBuilder: (context, index) {
-                          final graphic = state.graphics[index];
-                          return _GraphicListTile(
-                            key: ValueKey('graphic_$index'),
-                            graphic: graphic,
-                            index: index,
-                            onEdit: () =>
-                                _showEditGraphicDialog(context, index, graphic),
-                            onDelete: () =>
-                                _showDeleteConfirmationDialog(context, index),
-                          );
-                        },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.image_not_supported,
+                        size: 64,
+                        color: Colors.grey,
                       ),
+                      SizedBox(height: 16),
+                      Text(
+                        'No graphics added yet',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Import or create graphic',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                )
+                    : ReorderableListView.builder(
+                  itemCount: state.graphics.length,
+                  onReorder: (oldIndex, newIndex) {
+                    if (newIndex > oldIndex) newIndex--;
+                    context.read<GraphicsCubit>().reorderGraphics(
+                      oldIndex,
+                      newIndex,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    final graphic = state.graphics[index];
+                    return _GraphicListTile(
+                      key: ValueKey('graphic_$index'),
+                      graphic: graphic,
+                      index: index,
+                      onEdit: () =>
+                          _showEditGraphicDialog(context, index, graphic),
+                      onDelete: () =>
+                          _showDeleteConfirmationDialog(context, index),
+                    );
+                  },
+                ),
               ),
             ],
           );
@@ -177,13 +173,15 @@ class GraphicsListWidget extends StatelessWidget {
       context: context,
       builder: (dialogContext) => _GraphicFormDialog(
         title: 'Add New Graphic',
-        onSubmit: (name, width, height, dataLength) {
+        onSubmit: (name, width, height, tileOrigin) {
+          final dataLength = width * height; // Calculate data length based on dimensions
           final data = List.generate(dataLength, (index) => index % 256);
           final graphic = Graphics(
             name: name,
             data: data,
             width: width,
             height: height,
+            tileOrigin: tileOrigin,
           );
           context.read<GraphicsCubit>().addGraphic(graphic);
         },
@@ -192,10 +190,10 @@ class GraphicsListWidget extends StatelessWidget {
   }
 
   void _showEditGraphicDialog(
-    BuildContext context,
-    int index,
-    Graphics graphic,
-  ) {
+      BuildContext context,
+      int index,
+      Graphics graphic,
+      ) {
     showDialog(
       context: context,
       builder: (dialogContext) => _GraphicFormDialog(
@@ -203,20 +201,21 @@ class GraphicsListWidget extends StatelessWidget {
         initialName: graphic.name,
         initialWidth: graphic.width,
         initialHeight: graphic.height,
-        initialDataLength: graphic.data.length,
-        initialTileOrigin: 0,
-        onSubmit: (name, width, height, dataLength) {
+        initialTileOrigin: graphic.tileOrigin,
+        onSubmit: (name, width, height, tileOrigin) {
+          // Calculate new data length based on dimensions
+          final dataLength = width * height;
           // Create updated graphic with new dimensions but preserve some original data
           final data = List.generate(
             dataLength,
-            (i) => i < graphic.data.length ? graphic.data[i] : 0,
+                (i) => i < graphic.data.length ? graphic.data[i] : 0,
           );
           final updatedGraphic = Graphics(
             name: name,
             data: data,
             width: width,
             height: height,
-            tileOrigin: 0, //WIP
+            tileOrigin: tileOrigin,
           );
           context.read<GraphicsCubit>().updateGraphicAt(index, updatedGraphic);
         },
@@ -325,7 +324,7 @@ class _GraphicListTile extends StatelessWidget {
   }
 
   void _showTilePreviewDialog(BuildContext context, graphic) {
-    final controller = TextEditingController();
+    final controller = TextEditingController(text: graphic.tileOrigin.toString());
     var data = GBDKTileConverter().combine(graphic.data);
     data = GBDKTileConverter().reorderFromSourceToCanvas(
       data,
@@ -547,14 +546,14 @@ class _GraphicListTile extends StatelessWidget {
     );
   }
 }
+
 class _GraphicFormDialog extends StatefulWidget {
   final String title;
   final String? initialName;
   final int? initialWidth;
   final int? initialHeight;
-  final int? initialDataLength;
   final int? initialTileOrigin;
-  final Function(String name, int width, int height, int dataLength) onSubmit;
+  final Function(String name, int width, int height, int tileOrigin) onSubmit;
 
   const _GraphicFormDialog({
     Key? key,
@@ -563,7 +562,6 @@ class _GraphicFormDialog extends StatefulWidget {
     this.initialName,
     this.initialWidth,
     this.initialHeight,
-    this.initialDataLength,
     this.initialTileOrigin,
   }) : super(key: key);
 
@@ -575,7 +573,6 @@ class _GraphicFormDialogState extends State<_GraphicFormDialog> {
   late TextEditingController _nameController;
   late TextEditingController _widthController;
   late TextEditingController _heightController;
-  late TextEditingController _dataLengthController;
   late TextEditingController _tileOriginController;
   final _formKey = GlobalKey<FormState>();
 
@@ -589,8 +586,9 @@ class _GraphicFormDialogState extends State<_GraphicFormDialog> {
     _heightController = TextEditingController(
       text: widget.initialHeight?.toString() ?? '8',
     );
-    _dataLengthController = TextEditingController(text: '0');
-    _tileOriginController = TextEditingController(text: '0');
+    _tileOriginController = TextEditingController(
+      text: widget.initialTileOrigin?.toString() ?? '0',
+    );
   }
 
   @override
@@ -641,7 +639,7 @@ class _GraphicFormDialogState extends State<_GraphicFormDialog> {
                   return null;
                 },
               ),
-              /*const SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _tileOriginController,
                 decoration: const InputDecoration(labelText: 'Tile Origin'),
@@ -654,7 +652,7 @@ class _GraphicFormDialogState extends State<_GraphicFormDialog> {
                     return 'Please enter a valid non-negative number';
                   return null;
                 },
-              ),*/
+              ),
             ],
           ),
         ),
