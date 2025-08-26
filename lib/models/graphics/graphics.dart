@@ -1,10 +1,18 @@
+enum GraphicsType {
+  undefined,
+  tile,
+  map,
+  sprite,
+}
+
 class Graphics {
   String name;
   List<int> data;
   int height;
   int width;
-  String? filepath;
   int tileOrigin;
+  String? filepath;
+  GraphicsType type;
 
   Graphics({
     required this.name,
@@ -13,5 +21,6 @@ class Graphics {
     this.height = 0,
     this.filepath,
     this.tileOrigin = 0,
+    this.type = GraphicsType.undefined,
   });
 }

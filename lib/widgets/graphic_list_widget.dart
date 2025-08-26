@@ -177,19 +177,28 @@ class GraphicsListWidget extends StatelessWidget {
         onSubmit: (name, width, height, tileOrigin) {
           final dataLength = width * height; // Calculate data length based on dimensions
           final data = List.generate(dataLength, (index) => index % 256);
+
+          // Determine type based on name
+          GraphicsType type = GraphicsType.undefined;
+          if (name.toLowerCase().endsWith('tiles')) {
+            type = GraphicsType.tile;
+          } else if (name.toLowerCase().endsWith('map')) {
+            type = GraphicsType.map;
+          }
+
           final graphic = Graphics(
             name: name,
             data: data,
             width: width,
             height: height,
             tileOrigin: tileOrigin,
+            type: type,
           );
           context.read<GraphicsCubit>().addGraphic(graphic);
         },
       ),
     );
   }
-
   void _showEditGraphicDialog(
       BuildContext context,
       int index,
