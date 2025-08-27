@@ -434,18 +434,12 @@ class _GraphicListTile extends StatelessWidget {
   }
 
   void _loadAsBackground(Graphics graphics, BuildContext context) {
-    print("Load '${graphic.name}' as Background");
     Background background = GBDKBackgroundConverter().fromGraphics(graphics);
     context.read<BackgroundCubit>().setData(background.data);
   }
 
   void _showBackgroundPreviewDialog(BuildContext context, graphic) {
-    var preview = Background(
-      height: graphic.height,
-      width: graphic.width,
-      data: graphic.data,
-      tileOrigin: graphic.tileOrigin,
-    );
+    Background preview = GBDKBackgroundConverter().fromGraphics(graphic);
     showDialog(
       context: context,
       barrierDismissible: true,
