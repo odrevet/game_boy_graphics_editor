@@ -444,45 +444,41 @@ class _GraphicListTile extends StatelessWidget {
       context: context,
       barrierDismissible: true,
       builder: (ctx) {
-        return Dialog(
+        return AlertDialog(
           insetPadding: const EdgeInsets.all(20),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          child: SizedBox(
+          title: Text(
+            "Load ${graphic.name} as Background",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          content: SizedBox(
             width: MediaQuery.of(ctx).size.width * 0.8,
-            height: MediaQuery.of(ctx).size.height * 0.8,
-            child: Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Text(
-                    "Preview",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Expanded(
-                  child: BackgroundGrid(
-                    background: preview,
-                    tileOrigin: 0, //preview.tileOrigin,
-                    metaTile: context.read<MetaTileCubit>().state,
-                    showGrid: true,
-                    cellSize: 32,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(ctx).pop();
-                      _loadAsBackground(graphic, context);
-                    },
-                    child: const Text("Load"),
-                  ),
-                ),
-              ],
+            height: MediaQuery.of(ctx).size.height * 0.6, // Reduced height for actions
+            child: BackgroundGrid(
+              background: preview,
+              tileOrigin: 0, //preview.tileOrigin,
+              metaTile: context.read<MetaTileCubit>().state,
+              showGrid: true,
+              cellSize: 32,
             ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                _loadAsBackground(graphic, context);
+              },
+              child: const Text("Load"),
+            ),
+          ],
         );
       },
     );
@@ -523,7 +519,7 @@ class _GraphicListTile extends StatelessWidget {
                   value: 'tile',
                   child: ListTile(
                     leading: Icon(Icons.image),
-                    title: Text("Add as Tiles"),
+                    title: Text("Load as Tiles"),
                   ),
                 ),
                 const PopupMenuItem(
