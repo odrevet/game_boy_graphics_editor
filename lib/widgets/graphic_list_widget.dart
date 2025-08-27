@@ -115,52 +115,52 @@ class GraphicsListWidget extends StatelessWidget {
               Expanded(
                 child: state.graphics.isEmpty
                     ? const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.image_not_supported,
-                        size: 64,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        'No graphics added yet',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.image_not_supported,
+                              size: 64,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              'No graphics added yet',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Import or create graphic',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Import or create graphic',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                )
+                      )
                     : ReorderableListView.builder(
-                  itemCount: state.graphics.length,
-                  onReorder: (oldIndex, newIndex) {
-                    if (newIndex > oldIndex) newIndex--;
-                    context.read<GraphicsCubit>().reorderGraphics(
-                      oldIndex,
-                      newIndex,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    final graphic = state.graphics[index];
-                    return _GraphicListTile(
-                      key: ValueKey('graphic_$index'),
-                      graphic: graphic,
-                      index: index,
-                      onEdit: () =>
-                          _showEditGraphicDialog(context, index, graphic),
-                      onDelete: () =>
-                          _showDeleteConfirmationDialog(context, index),
-                    );
-                  },
-                ),
+                        itemCount: state.graphics.length,
+                        onReorder: (oldIndex, newIndex) {
+                          if (newIndex > oldIndex) newIndex--;
+                          context.read<GraphicsCubit>().reorderGraphics(
+                            oldIndex,
+                            newIndex,
+                          );
+                        },
+                        itemBuilder: (context, index) {
+                          final graphic = state.graphics[index];
+                          return _GraphicListTile(
+                            key: ValueKey('graphic_$index'),
+                            graphic: graphic,
+                            index: index,
+                            onEdit: () =>
+                                _showEditGraphicDialog(context, index, graphic),
+                            onDelete: () =>
+                                _showDeleteConfirmationDialog(context, index),
+                          );
+                        },
+                      ),
               ),
             ],
           );
@@ -175,7 +175,8 @@ class GraphicsListWidget extends StatelessWidget {
       builder: (dialogContext) => GraphicForm(
         title: 'Add New Graphic',
         onSubmit: (name, width, height, tileOrigin) {
-          final dataLength = width * height; // Calculate data length based on dimensions
+          final dataLength =
+              width * height; // Calculate data length based on dimensions
           final data = List.generate(dataLength, (index) => index % 256);
 
           // Determine type based on name
@@ -199,11 +200,12 @@ class GraphicsListWidget extends StatelessWidget {
       ),
     );
   }
+
   void _showEditGraphicDialog(
-      BuildContext context,
-      int index,
-      Graphics graphic,
-      ) {
+    BuildContext context,
+    int index,
+    Graphics graphic,
+  ) {
     showDialog(
       context: context,
       builder: (dialogContext) => GraphicForm(
@@ -218,7 +220,7 @@ class GraphicsListWidget extends StatelessWidget {
           // Create updated graphic with new dimensions but preserve some original data
           final data = List.generate(
             dataLength,
-                (i) => i < graphic.data.length ? graphic.data[i] : 0,
+            (i) => i < graphic.data.length ? graphic.data[i] : 0,
           );
           final updatedGraphic = Graphics(
             name: name,
@@ -311,9 +313,9 @@ class _GraphicListTile extends StatelessWidget {
 
       // Add tile to the collection with the specified origin
       context.read<MetaTileCubit>().addTileAtOrigin(
-          data,
-          graphics.name,
-          tileOrigin
+        data,
+        graphics.name,
+        tileOrigin,
       );
 
       // Set the tile name for the app state
@@ -334,7 +336,9 @@ class _GraphicListTile extends StatelessWidget {
   }
 
   void _showTilePreviewDialog(BuildContext context, graphic) {
-    final controller = TextEditingController(text: graphic.tileOrigin.toString());
+    final controller = TextEditingController(
+      text: graphic.tileOrigin.toString(),
+    );
     var data = GBDKTileConverter().combine(graphic.data);
     data = GBDKTileConverter().reorderFromSourceToCanvas(
       data,
@@ -373,10 +377,7 @@ class _GraphicListTile extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 16),
                 child: Text(
                   "This will add $tileCount tiles starting from the origin",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                 ),
               ),
               const Padding(
@@ -393,7 +394,7 @@ class _GraphicListTile extends StatelessWidget {
                     runSpacing: 8,
                     children: List.generate(
                       tileCount,
-                          (index) => Column(
+                      (index) => Column(
                         children: [
                           SizedBox(
                             width: 40,
@@ -403,10 +404,7 @@ class _GraphicListTile extends StatelessWidget {
                               tileData: preview.getTileAtIndex(index),
                             ),
                           ),
-                          Text(
-                            "#$index",
-                            style: const TextStyle(fontSize: 10),
-                          ),
+                          Text("#$index", style: const TextStyle(fontSize: 10)),
                         ],
                       ),
                     ),
@@ -442,6 +440,12 @@ class _GraphicListTile extends StatelessWidget {
   }
 
   void _showBackgroundPreviewDialog(BuildContext context, graphic) {
+    var preview = Background(
+      height: graphic.height,
+      width: graphic.width,
+      data: graphic.data,
+      tileOrigin: graphic.tileOrigin,
+    );
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -465,11 +469,8 @@ class _GraphicListTile extends StatelessWidget {
                 ),
                 Expanded(
                   child: BackgroundGrid(
-                    background: context.read<BackgroundCubit>().state,
-                    tileOrigin: context
-                        .read<BackgroundCubit>()
-                        .state
-                        .tileOrigin,
+                    background: preview,
+                    tileOrigin: 0, //preview.tileOrigin,
                     metaTile: context.read<MetaTileCubit>().state,
                     showGrid: true,
                     cellSize: 32,
