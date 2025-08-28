@@ -26,224 +26,327 @@ class _ImportDialogState extends State<ImportDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Data type
-            Row(
-              children: [
-                const Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Text("Data type"),
+    return Container(
+      width: 600,
+      height: 700,
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Settings Section
+          Card(
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Import Settings',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                DropdownButton<String>(
-                  value: type,
-                  onChanged: (String? value) {
-                    setState(() {
-                      type = value!;
-                    });
-                  },
-                  items: <String>['Auto', 'Source code', 'Binary']
-                      .map((v) => DropdownMenuItem(value: v, child: Text(v)))
-                      .toList(),
-                ),
-              ],
-            ),
-            // Preview as
-            /*Row(
-              children: [
-                const Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Text("Parse as"),
-                  ),
-                ),
-                DropdownButton<String>(
-                  value: previewAs,
-                  onChanged: (String? value) {
-                    setState(() {
-                      previewAs = value!;
-                    });
-                  },
-                  items: <String>['Tile', 'Background'].map((v) {
-                    IconData icon = v == 'Tile' ? Icons.image : Icons.grid_4x4;
-                    return DropdownMenuItem<String>(
-                      value: v,
-                      child: Row(
-                        children: [
-                          Icon(icon),
-                          const SizedBox(width: 8),
-                          Text(v),
-                        ],
+                  const SizedBox(height: 16),
+
+                  // Data type
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 120,
+                        child: Text(
+                          "Data type:",
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
                       ),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),*/
-            // Compression
-            Row(
-              children: [
-                const Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Text("Compression"),
-                  ),
-                ),
-                DropdownButton<String>(
-                  value: compression,
-                  onChanged:
-                      kIsWeb ||
-                          !context.read<AppStateCubit>().state.gbdkPathValid
-                      ? null
-                      : (String? value) {
-                          setState(() {
-                            compression = value!;
-                          });
-                        },
-                  items: <String>['none', 'rle', 'gb']
-                      .map(
-                        (v) =>
-                            DropdownMenuItem<String>(value: v, child: Text(v)),
-                      )
-                      .toList(),
-                ),
-              ],
-            ),
-            // Transpose
-            CheckboxListTile(
-              title: const Text("Transpose"),
-              value: transpose,
-              enabled: previewAs == 'Background',
-              onChanged: (bool? value) {
-                setState(() {
-                  transpose = value!;
-                });
-              },
-            ),
-            // File & URL buttons
-            Row(
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () async {
-                    final elements = await onImport(
-                      context,
-                      type,
-                      transpose,
-                      compression,
-                    );
-                    if (elements != null) {
-                      setState(() {
-                        graphicsPreview = elements;
-                      });
-                    }
-                  },
-                  icon: const Icon(Icons.file_open),
-                  label: const Text('File'),
-                ),
-                const Text(" | "),
-                ElevatedButton.icon(
-                  onPressed: kIsWeb
-                      ? null
-                      : () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext alertDialogContext) =>
-                                AlertDialog(
-                                  content: SizedBox(
-                                    width: 500,
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: TextFormField(
-                                            decoration: const InputDecoration(
-                                              labelText: 'URL',
-                                            ),
-                                            onChanged: (text) => setState(() {
-                                              url = text;
-                                            }),
-                                          ),
-                                        ),
-                                        ElevatedButton.icon(
-                                          onPressed: () {
-                                            onImportHttp(
-                                              context,
-                                              previewAs,
-                                              type,
-                                              transpose,
-                                              url,
-                                            );
-                                          },
-                                          icon: const Icon(Icons.download),
-                                          label: const Text('Load'),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                          );
-                        },
-                  icon: const Icon(Icons.http),
-                  label: const Text('URL'),
-                ),
-              ],
-            ),
-            // Graphics preview as selectable list
-            if (graphicsPreview.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ...graphicsPreview.map((graphic) {
-                      bool isSelected = selectedGraphics.contains(graphic);
-                      return ListTile(
-                        title: Text(graphic.name),
-                        leading: Checkbox(
-                          value: isSelected,
-                          onChanged: (bool? value) {
+                      Expanded(
+                        child: DropdownButtonFormField<String>(
+                          value: type,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                          ),
+                          onChanged: (String? value) {
                             setState(() {
-                              if (value == true) {
-                                selectedGraphics.add(graphic);
-                              } else {
-                                selectedGraphics.remove(graphic);
-                              }
+                              type = value!;
                             });
                           },
+                          items: <String>['Auto', 'Source code', 'Binary']
+                              .map((v) => DropdownMenuItem(
+                              value: v,
+                              child: Text(v)
+                          ))
+                              .toList(),
                         ),
-                        onTap: () {
-                          setState(() {
-                            if (isSelected) {
-                              selectedGraphics.remove(graphic);
-                            } else {
-                              selectedGraphics.add(graphic);
-                            }
-                          });
-                        },
-                      );
-                    }),
-                    ElevatedButton.icon(
-                      onPressed: selectedGraphics.isEmpty
-                          ? null
-                          : () {
-                              context.read<GraphicsCubit>().addGraphics(
-                                selectedGraphics,
-                              );
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 20),
+
+          // Import Source Section
+          Card(
+            elevation: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Import Source',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // File & URL buttons
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () async {
+                            final elements = await onImport(
+                              context,
+                              type,
+                              transpose,
+                              compression,
+                            );
+                            if (elements != null) {
                               setState(() {
-                                selectedGraphics.clear();
+                                graphicsPreview = elements;
+                                // Auto-select all imported graphics
+                                selectedGraphics = List.from(elements);
+                              });
+                            }
+                          },
+                          icon: const Icon(Icons.file_open),
+                          label: const Text('Import from File'),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: kIsWeb
+                              ? null
+                              : () {
+                            _showUrlImportDialog(context);
+                          },
+                          icon: const Icon(Icons.http),
+                          label: const Text('Import from URL'),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 20),
+
+          // Graphics preview section
+          if (graphicsPreview.isNotEmpty) ...[
+            Row(
+              children: [
+                Text(
+                  'Preview (${graphicsPreview.length} items)',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const Spacer(),
+                TextButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      if (selectedGraphics.length == graphicsPreview.length) {
+                        selectedGraphics.clear();
+                      } else {
+                        selectedGraphics = List.from(graphicsPreview);
+                      }
+                    });
+                  },
+                  icon: Icon(
+                    selectedGraphics.length == graphicsPreview.length
+                        ? Icons.deselect
+                        : Icons.select_all,
+                  ),
+                  label: Text(
+                    selectedGraphics.length == graphicsPreview.length
+                        ? 'Deselect All'
+                        : 'Select All',
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+
+            // Scrollable graphics list
+            Expanded(
+              child: Card(
+                elevation: 2,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceVariant,
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(8),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            '${selectedGraphics.length} of ${graphicsPreview.length} selected',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: graphicsPreview.length,
+                        itemBuilder: (context, index) {
+                          final graphic = graphicsPreview[index];
+                          final isSelected = selectedGraphics.contains(graphic);
+
+                          return ListTile(
+                            dense: true,
+                            title: Text(
+                              graphic.name,
+                              style: TextStyle(
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
+                              ),
+                            ),
+                            leading: Checkbox(
+                              value: isSelected,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  if (value == true) {
+                                    selectedGraphics.add(graphic);
+                                  } else {
+                                    selectedGraphics.remove(graphic);
+                                  }
+                                });
+                              },
+                            ),
+                            onTap: () {
+                              setState(() {
+                                if (isSelected) {
+                                  selectedGraphics.remove(graphic);
+                                } else {
+                                  selectedGraphics.add(graphic);
+                                }
                               });
                             },
-                      icon: const Icon(Icons.add),
-                      label: const Text('Import Selected'),
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
               ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Import action
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: selectedGraphics.isEmpty
+                    ? null
+                    : () {
+                  context.read<GraphicsCubit>().addGraphics(
+                    selectedGraphics,
+                  );
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(Icons.add),
+                label: Text(
+                  selectedGraphics.isEmpty
+                      ? 'Select graphics to import'
+                      : 'Import ${selectedGraphics.length} Selected Graphics',
+                ),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+              ),
+            ),
           ],
+        ],
+      ),
+    );
+  }
+
+  void _showUrlImportDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext alertDialogContext) => AlertDialog(
+        title: const Text('Import from URL'),
+        content: SizedBox(
+          width: 400,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Enter URL',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.link),
+                ),
+                onChanged: (text) => setState(() {
+                  url = text;
+                }),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: url.isEmpty
+                      ? null
+                      : () async {
+                    Navigator.of(alertDialogContext).pop();
+                    final elements = await onImportHttp(
+                      context,
+                      previewAs,
+                      type,
+                      transpose,
+                      url,
+                    );
+                    if (elements != null) {
+                      setState(() {
+                        graphicsPreview = elements;
+                        // Auto-select all imported graphics
+                        selectedGraphics = List.from(elements);
+                      });
+                    }
+                  },
+                  icon: const Icon(Icons.download),
+                  label: const Text('Load from URL'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -52,7 +52,16 @@ class GraphicFormState extends State<GraphicForm> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(widget.title),
+      title: Row(
+        children: [
+          Expanded(child: Text(widget.title)),
+          IconButton(
+            onPressed: () => _readPropertiesFromHeader(),
+            icon: const Icon(Icons.article),
+            tooltip: 'Set Properties from Source Header',
+          ),
+        ],
+      ),
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -110,15 +119,6 @@ class GraphicFormState extends State<GraphicForm> {
                     return 'Please enter a valid non-negative number';
                   return null;
                 },
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: () => _readPropertiesFromHeader(),
-                  icon: const Icon(Icons.article),
-                  label: const Text('set Properties from source header'),
-                ),
               ),
             ],
           ),

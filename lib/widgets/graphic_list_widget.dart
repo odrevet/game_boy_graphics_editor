@@ -25,7 +25,7 @@ class GraphicsListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Graphics Manager'),
+        title: const Text('Memory Manager'),
         actions: [
           IconButton(
             icon: const Icon(Icons.clear_all),
@@ -115,52 +115,52 @@ class GraphicsListWidget extends StatelessWidget {
               Expanded(
                 child: state.graphics.isEmpty
                     ? const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.image_not_supported,
-                              size: 64,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(height: 16),
-                            Text(
-                              'No graphics added yet',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Import or create graphic',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      )
-                    : ReorderableListView.builder(
-                        itemCount: state.graphics.length,
-                        onReorder: (oldIndex, newIndex) {
-                          if (newIndex > oldIndex) newIndex--;
-                          context.read<GraphicsCubit>().reorderGraphics(
-                            oldIndex,
-                            newIndex,
-                          );
-                        },
-                        itemBuilder: (context, index) {
-                          final graphic = state.graphics[index];
-                          return _GraphicListTile(
-                            key: ValueKey('graphic_$index'),
-                            graphic: graphic,
-                            index: index,
-                            onEdit: () =>
-                                _showEditGraphicDialog(context, index, graphic),
-                            onDelete: () =>
-                                _showDeleteConfirmationDialog(context, index),
-                          );
-                        },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.image_not_supported,
+                        size: 64,
+                        color: Colors.grey,
                       ),
+                      SizedBox(height: 16),
+                      Text(
+                        'No graphics added yet',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Import or create graphic',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                )
+                    : ReorderableListView.builder(
+                  itemCount: state.graphics.length,
+                  onReorder: (oldIndex, newIndex) {
+                    if (newIndex > oldIndex) newIndex--;
+                    context.read<GraphicsCubit>().reorderGraphics(
+                      oldIndex,
+                      newIndex,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    final graphic = state.graphics[index];
+                    return _GraphicListTile(
+                      key: ValueKey('graphic_$index'),
+                      graphic: graphic,
+                      index: index,
+                      onEdit: () =>
+                          _showEditGraphicDialog(context, index, graphic),
+                      onDelete: () =>
+                          _showDeleteConfirmationDialog(context, index),
+                    );
+                  },
+                ),
               ),
             ],
           );
@@ -202,29 +202,29 @@ class GraphicsListWidget extends StatelessWidget {
   }
 
   void _showEditGraphicDialog(
-    BuildContext context,
-    int index,
-    Graphics graphic,
-  ) {
+      BuildContext context,
+      int index,
+      Graphics graphic,
+      ) {
     showDialog(
       context: context,
       builder: (dialogContext) => GraphicForm(
-        title: 'Edit Graphic',
+        title: 'Properties',
         initialName: graphic.name,
         initialWidth: graphic.width,
         initialHeight: graphic.height,
         initialTileOrigin: graphic.tileOrigin,
         onSubmit: (name, width, height, tileOrigin) {
           // Calculate new data length based on dimensions
-          final dataLength = width * height;
+          //final dataLength = width * height;
           // Create updated graphic with new dimensions but preserve some original data
-          final data = List.generate(
-            dataLength,
-            (i) => i < graphic.data.length ? graphic.data[i] : 0,
-          );
+          //final data = List.generate(
+          //  dataLength,
+          //  (i) => i < graphic.data.length ? graphic.data[i] : 0,
+          //);
           final updatedGraphic = Graphics(
             name: name,
-            data: data,
+            data: graphic.data,
             width: width,
             height: height,
             tileOrigin: tileOrigin,
@@ -320,11 +320,30 @@ class _GraphicListTile extends StatelessWidget {
 
       // Set the tile name for the app state
       context.read<AppStateCubit>().setTileName(graphics.name);
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Successfully loaded "${graphics.name}" as tiles'),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
     } catch (e) {
       if (kDebugMode) {
+        // Keep debug print for development
         print("ERROR $e");
       }
       hasLoaded = false;
+
+      // Show error message to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to load "${graphics.name}" as tiles: ${e.toString()}'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 4),
+        ),
+      );
     }
 
     if (hasLoaded) {
@@ -346,7 +365,7 @@ class _GraphicListTile extends StatelessWidget {
       context.read<MetaTileCubit>().state.height,
     );
     var preview = MetaTile(height: 8, width: 8, data: data);
-    final tileCount = preview.data.length ~/ (preview.height * preview.width);
+    final tileCount = preview.data.length ~/ 64; //(preview.height * preview.width);
 
     showDialog(
       context: context,
@@ -394,7 +413,7 @@ class _GraphicListTile extends StatelessWidget {
                     runSpacing: 8,
                     children: List.generate(
                       tileCount,
-                      (index) => Column(
+                          (index) => Column(
                         children: [
                           SizedBox(
                             width: 40,
@@ -423,7 +442,15 @@ class _GraphicListTile extends StatelessWidget {
             onPressed: () {
               final origin = int.tryParse(controller.text) ?? 0;
               Navigator.of(dialogContext).pop();
-              print("Load '${graphic.name}' as Tile with origin $origin");
+
+              // Show loading message
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Loading "${graphic.name}" as tiles with origin $origin...'),
+                  duration: const Duration(seconds: 1),
+                ),
+              );
+
               _addMetaTile(graphic, context, origin);
             },
             child: const Text("Add Tiles"),
@@ -434,8 +461,30 @@ class _GraphicListTile extends StatelessWidget {
   }
 
   void _loadAsBackground(Graphics graphics, BuildContext context) {
-    Background background = GBDKBackgroundConverter().fromGraphics(graphics);
-    context.read<BackgroundCubit>().setData(background.data);
+    try {
+      Background background = GBDKBackgroundConverter().fromGraphics(graphics);
+      context.read<BackgroundCubit>().setWidth(background.width);
+      context.read<BackgroundCubit>().setHeight(background.height);
+      context.read<BackgroundCubit>().setData(background.data);
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Successfully loaded "${graphics.name}" as background'),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    } catch (e) {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to load "${graphics.name}" as background: ${e.toString()}'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 4),
+        ),
+      );
+    }
   }
 
   void _showBackgroundPreviewDialog(BuildContext context, graphic) {
@@ -506,7 +555,7 @@ class _GraphicListTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             PopupMenuButton<String>(
-              icon: const Icon(Icons.memory),
+              icon: const Icon(Icons.arrow_circle_left),
               onSelected: (value) {
                 if (value == 'tile') {
                   _showTilePreviewDialog(context, graphic);
@@ -534,7 +583,7 @@ class _GraphicListTile extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.edit),
               onPressed: onEdit,
-              tooltip: 'Edit Graphic',
+              tooltip: 'Edit properties',
             ),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
