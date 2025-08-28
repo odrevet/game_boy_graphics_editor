@@ -83,36 +83,48 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         context.read<MetaTileCubit>().maxTileIndex() + widget.tileOrigin;
     bool valid =
         tileIndex < maxTileIndexWithOrigin &&
-        widget.background.data[mapIndex] - widget.tileOrigin >= 0;
+            widget.background.data[mapIndex] - widget.tileOrigin >= 0;
 
     bool showBorder =
         widget.hoverTileIndexX == vicinity.xIndex &&
-        widget.hoverTileIndexY == vicinity.yIndex;
+            widget.hoverTileIndexY == vicinity.yIndex;
+
+    // Generate a unique color for each invalid index
+    Color getErrorColor(int index) {
+      // Use HSL color space to generate distinct colors
+      final hue = (widget.background.data[mapIndex] * 137.5) % 360; // Golden angle for good distribution
+      return HSLColor.fromAHSL(1.0, hue, 0.7, 0.8).toColor();
+    }
+
+    String getErrorMessage() {
+      return tileIndex < maxTileIndexWithOrigin
+          ? "${widget.background.data[mapIndex]}+${widget.tileOrigin}\n<=${context.read<MetaTileCubit>().state.maxTileIndex}"
+          : "${widget.background.data[mapIndex]} - ${widget.tileOrigin} < 0";
+    }
 
     return TableViewCell(
       child: valid
           ? Container(
-              decoration: showBorder
-                  ? BoxDecoration(
-                      border: Border.all(color: Colors.red, width: 2.0),
-                    )
-                  : null,
-              child: MetaTileDisplay(
-                tileData: widget.metaTile.getTileAtIndex(
-                  widget.background.data[mapIndex] - widget.tileOrigin,
-                ),
-              ),
-            )
-          : FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                tileIndex < maxTileIndexWithOrigin
-                    ? "${widget.background.data[mapIndex]}+${widget.tileOrigin}\n<=${context.read<MetaTileCubit>().state.maxTileIndex}"
-                    : "${widget.background.data[mapIndex]} - ${widget.tileOrigin} < 0",
-                style: const TextStyle(color: Colors.red),
-                textAlign: TextAlign.center,
-              ),
-            ),
+        decoration: showBorder
+            ? BoxDecoration(
+          border: Border.all(color: Colors.red, width: 2.0),
+        )
+            : null,
+        child: MetaTileDisplay(
+          tileData: widget.metaTile.getTileAtIndex(
+            widget.background.data[mapIndex] - widget.tileOrigin,
+          ),
+        ),
+      )
+          : Tooltip(
+        message: getErrorMessage(),
+        child: Container(
+          decoration: BoxDecoration(
+            color: getErrorColor(mapIndex),
+            border: Border.all(color: Colors.red, width: 2.0),
+          ),
+        ),
+      ),
     );
   }
 
