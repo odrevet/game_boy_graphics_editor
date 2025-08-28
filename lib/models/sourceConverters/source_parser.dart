@@ -1,8 +1,9 @@
-import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 import 'package:petitparser/petitparser.dart';
 
+import '../graphics/graphics.dart';
+
 class SourceParser {
-  late Parser<Graphics> _parser;
+  late Parser _parser;
 
   SourceParser() {
     _buildParser();
@@ -16,13 +17,40 @@ class SourceParser {
     final comment = lineComment | blockComment;
     final ws = (whitespace | comment).star();
 
-    // Integer type patterns - create individual parsers and combine them
+    // Integer type patterns
     final integerType =
-        string('unsigned char') | string('uint8_t') | string('UINT8');
+    string('unsigned char') |
+    string('signed char') |
+    string('unsigned short') |
+    string('signed short') |
+    string('unsigned int') |
+    string('signed int') |
+    string('unsigned long') |
+    string('signed long') |
+    string('uint8_t') |
+    string('uint16_t') |
+    string('uint32_t') |
+    string('uint64_t') |
+    string('int8_t') |
+    string('int16_t') |
+    string('int32_t') |
+    string('int64_t') |
+    string('UINT8') |
+    string('UINT16') |
+    string('UINT32') |
+    string('UINT64') |
+    string('INT8') |
+    string('INT16') |
+    string('INT32') |
+    string('INT64') |
+    string('char') |
+    string('short') |
+    string('int') |
+    string('long');
 
     // Identifier (array name)
     final identifier =
-        (letter() | char('_')) & (letter() | digit() | char('_')).star();
+    (letter() | char('_')) & (letter() | digit() | char('_')).star();
     final arrayName = identifier.flatten();
 
     // Array size (optional)
@@ -31,83 +59,60 @@ class SourceParser {
 
     // Hexadecimal number
     final hexDigit = pattern('0-9A-Fa-f');
-    final hexNumber =
-        string('0x') &
-        hexDigit.plus().flatten().map((hex) => int.parse(hex, radix: 16));
+    final hexNumber = (string('0x') & hexDigit.plus().flatten()).map(
+          (parts) => int.parse(parts[1], radix: 16),
+    );
 
     // Decimal number
     final decimalNumber = digit().plus().flatten().map(int.parse);
 
-    // Integer value (hex or decimal)
+    // Integer value
     final integerValue = hexNumber | decimalNumber;
 
-    // Array element with optional comma
+    // Array element
     final arrayElement = ws & integerValue & ws & char(',').optional();
 
-    // Array content - collect all integer values
-    final arrayContent =
-        char('{') &
-        ws &
-        arrayElement.star().map<List<int>>((elements) {
-          final values = <int>[];
-          for (final element in elements) {
-            if (element is List && element.length >= 2) {
-              final value = element[1];
-              if (value is int) {
-                values.add(value);
-              }
-            }
-          }
-          return values;
-        }) &
-        ws &
-        char('}');
+    // Array content
+    final arrayContent = char('{') & ws & arrayElement.star() & ws & char('}');
 
     // Complete array definition
     final arrayDefinition =
-        string('const').optional() &
-        ws &
-        integerType &
-        ws &
-        arrayName &
-        ws &
-        arraySize.optional() &
-        ws &
-        char('=') &
-        ws &
-        arrayContent &
-        char(';').optional();
+    string('const').optional() &
+    ws &
+    integerType &
+    ws &
+    arrayName &
+    ws &
+    arraySize.optional() &
+    ws &
+    char('=') &
+    ws &
+    arrayContent &
+    char(';').optional();
 
-    _parser = arrayDefinition.map((result) {
-      final parts = result as List;
+    // Use `token()` so we get offset information
+    _parser = arrayDefinition.token().map((token) {
+      final parts = token.value as List;
 
-      // Extract type (skip const and whitespace)
-      String type;
-      int typeIndex = 2; // Start after const and ws
-      type = parts[typeIndex] as String;
+      String type = parts[2] as String;
+      String name = parts[4] as String;
+      final sizeInfo = parts[6];
+      final arrayContentResult = parts[10] as List;
 
-      // Extract name (skip type and whitespace)
-      int nameIndex = typeIndex + 2; // Skip type and ws
-      final name = parts[nameIndex] as String;
+      final elementsResult = arrayContentResult[2] as List;
+      final values = <int>[];
 
-      // Extract size info (skip name and whitespace)
-      int sizeIndex = nameIndex + 2; // Skip name and ws
-      final sizeInfo = parts[sizeIndex];
+      for (final element in elementsResult) {
+        if (element is List && element.length >= 2) {
+          final value = element[1];
+          if (value is int) values.add(value);
+        }
+      }
 
-      // Extract array content (skip size, ws, =, ws)
-      int contentIndex = sizeIndex + 4; // Skip size, ws, =, ws
-      final arrayContentResult = parts[contentIndex] as List;
-
-      // Extract values from array content ['{', ws, values, ws, '}']
-      final values = arrayContentResult[2] as List<int>;
-
-      // Extract size from size info
       int? size;
       if (sizeInfo != null && sizeInfo is List && sizeInfo.length >= 3) {
         final sizeValue = sizeInfo[2];
-        if (sizeValue is int) {
-          size = sizeValue;
-        }
+        if (sizeValue is int) size = sizeValue;
       }
 
       return Graphics(
@@ -115,72 +120,118 @@ class SourceParser {
         name: name,
         //size: size,
         data: values,
+        //startOffset: token.start,
+        //endOffset: token.stop,
       );
     });
   }
 
-  /// Parse a single integer array definition
   Graphics? parseArray(String input) {
     try {
       final result = _parser.parse(input);
       return result.value;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   }
 
-  /// Scan through the source line by line to find arrays
   List<Graphics> parseAllArrays(String cSource) {
     final arrays = <Graphics>[];
     final lines = cSource.split('\n');
 
-    // Look for array declarations that might span multiple lines
     String currentBlock = '';
     bool inArrayDefinition = false;
     int braceCount = 0;
+    int blockStartOffset = 0;
+    int offset = 0;
 
     for (String line in lines) {
       final trimmedLine = line.trim();
 
-      // Skip empty lines and comments
       if (trimmedLine.isEmpty ||
           trimmedLine.startsWith('//') ||
           trimmedLine.startsWith('/*')) {
+        offset += line.length + 1; // +1 for newline
         continue;
       }
 
-      // Check if this line starts an array definition
       if (!inArrayDefinition && _looksLikeArrayStart(trimmedLine)) {
         inArrayDefinition = true;
         currentBlock = line;
+        blockStartOffset = offset;
         braceCount = '{'.allMatches(line).length - '}'.allMatches(line).length;
       } else if (inArrayDefinition) {
-        currentBlock += ' $line';
+        currentBlock += '\n$line';
         braceCount += '{'.allMatches(line).length - '}'.allMatches(line).length;
       }
 
-      // If we've closed all braces, try to parse the block
       if (inArrayDefinition && braceCount <= 0) {
         final parsed = parseArray(currentBlock);
         if (parsed != null) {
-          arrays.add(parsed);
+          arrays.add(
+            Graphics(
+              name: parsed.name,
+              //size: parsed.size,
+              data: parsed.data,
+              //startOffset: blockStartOffset,
+              //endOffset: offset + line.length,
+            ),
+          );
         }
         inArrayDefinition = false;
         currentBlock = '';
         braceCount = 0;
       }
+
+      offset += line.length + 1;
     }
 
     return arrays;
   }
 
   bool _looksLikeArrayStart(String line) {
-    final intTypes = ['unsigned char', 'uint8_t', 'UINT8'];
+    final intTypes = [
+      'uint8_t',
+      'char',
+    ];
 
     return intTypes.any(
           (type) => line.toLowerCase().contains(type.toLowerCase()),
-        ) &&
+    ) &&
         line.contains('[') &&
         (line.contains('=') || line.contains('{'));
   }
 }
+
+
+/// Replace the array contents in the source with new values
+/*String updateArrayValues(
+    String source,
+    Graphics array,
+    List<int> newValues,
+    ) {
+  // Format the new array content
+  final buffer = StringBuffer();
+  buffer.writeln('{');
+
+  for (int i = 0; i < newValues.length; i++) {
+    final v = newValues[i];
+    buffer.write('  0x${v.toRadixString(16).padLeft(2, '0')}');
+    if (i != newValues.length - 1) buffer.write(',');
+    if ((i + 1) % 8 == 0) buffer.writeln();
+  }
+
+  buffer.writeln();
+  buffer.write('}');
+
+  // Always recalc the size to match newValues.length
+  final updatedSize = newValues.length;
+
+  // Construct replacement string
+  final declaration =
+      '${array.type} ${array.name}[$updatedSize] = ${buffer.toString()};';
+
+  // Replace in source
+  return source.replaceRange(array.startOffset, array.endOffset, declaration);
+}*/
+

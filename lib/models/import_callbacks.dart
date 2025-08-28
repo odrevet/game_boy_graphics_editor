@@ -108,14 +108,14 @@ Future<List<Graphics>?> onImport(
   final source = await readString(result);
 
   // using source converter (regexp based)
-  final formattedSource = GBDKTileConverter().formatSource(source);
-  final graphicsElements = GBDKTileConverter().readGraphicsFromSource(
-    formattedSource,
-  );
+  //final formattedSource = GBDKTileConverter().formatSource(source);
+  //final graphicsElements = GBDKTileConverter().readGraphicsFromSource(
+  //  formattedSource,
+  //);
 
   // using source parser (petitparser based)
-  //final parser = SourceParser();
-  //final graphicsElements = parser.parseAllArrays(source);
+  final parser = SourceParser();
+  final graphicsElements = parser.parseAllArrays(source);
 
   return graphicsElements;
 }

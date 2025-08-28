@@ -35,5 +35,9 @@ extern const unsigned char $name[];
   String toSource(Graphics graphics, String name) =>
       """const unsigned char $name[] = {${formatOutput(graphics.data.map((e) => decimalToHex(e, prefix: true)).toList())}};""";
 
-  Background fromGraphics(Graphics Graphics) => Background(data: Graphics.data);
+  Background fromGraphics(Graphics graphics) => Background(
+    data: graphics.data,
+    width: graphics.width ~/ 8,
+    height: graphics.height ~/ 8,
+  );
 }
