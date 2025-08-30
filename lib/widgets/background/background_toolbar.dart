@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/cubits/graphics_cubit.dart';
 
 import '../../cubits/app_state_cubit.dart';
 import '../../cubits/background_cubit.dart';
@@ -49,6 +50,13 @@ class BackgroundToolbar extends StatelessWidget {
                   ? Icons.lock
                   : Icons.lock_open,
             ),
+          ),
+          IconButton(
+            onPressed: () =>
+                context.read<GraphicsCubit>().commitBackgroundToGraphics(
+                  context.read<BackgroundCubit>().state,
+                ),
+            icon: Icon(Icons.arrow_circle_right),
           ),
         ],
       ),

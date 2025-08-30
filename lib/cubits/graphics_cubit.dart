@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 import '../models/states/graphics_state.dart';
 
@@ -50,6 +51,39 @@ class GraphicsCubit extends Cubit<GraphicsState> {
     emit(state.copyWith(graphics: updatedGraphics, error: null));
   }
 
+  // Commit background data to graphics - this is the key synchronization method
+  // TODO find the original source graphic using equatable
+  void commitBackgroundToGraphics(Background background, {int? targetIndex}) {
+    final graphicsFromBackground = Graphics(
+      height: background.height,
+      width: background.width,
+      data: List<int>.from(background.data),
+      tileOrigin: background.tileOrigin,
+      name: background.name,
+    );
+
+    if (targetIndex != null) {
+      // Update existing graphic at specified index
+      updateGraphicAt(targetIndex, graphicsFromBackground);
+    } else {
+      // Add as new graphic
+      addGraphic(graphicsFromBackground);
+    }
+  }
+
+  // Load background data from graphics for editing
+  Background? getBackgroundFromGraphics(int graphicsIndex) {
+    final graphic = getGraphicAt(graphicsIndex);
+    if (graphic == null || graphic.data == null) return null;
+
+    return Background(
+      height: graphic.height ?? 18,
+      width: graphic.width ?? 20,
+      data: List<int>.from(graphic.data!),
+      tileOrigin: graphic.tileOrigin ?? 0,
+    );
+  }
+
   // Clear all graphics
   void clearGraphics() {
     emit(state.copyWith(graphics: [], error: null));
@@ -85,5 +119,20 @@ class GraphicsCubit extends Cubit<GraphicsState> {
     updatedGraphics.insert(newIndex, graphic);
 
     emit(state.copyWith(graphics: updatedGraphics, error: null));
+  }
+
+  // Find graphics that match background criteria (helper method)
+  List<int> findBackgroundGraphics() {
+    List<int> indices = [];
+    for (int i = 0; i < state.graphics.length; i++) {
+      final graphic = state.graphics[i];
+      // Add logic here to identify which graphics are backgrounds
+      // This could be based on naming convention, type property, etc.
+      if (graphic is Background == true) {
+        // Assuming you have this property
+        indices.add(i);
+      }
+    }
+    return indices;
   }
 }

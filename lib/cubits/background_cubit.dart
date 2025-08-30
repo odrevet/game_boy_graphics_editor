@@ -1,9 +1,32 @@
 import 'package:replay_bloc/replay_bloc.dart';
-
 import '../models/graphics/background.dart';
+import '../models/graphics/graphics.dart';
 
 class BackgroundCubit extends ReplayCubit<Background> {
   BackgroundCubit() : super(Background(height: 18, width: 20));
+
+  // Load background data from a Graphics object
+  void loadFromGraphics(Graphics graphics) {
+    if (graphics.data != null) {
+      emit(Background(
+        height: graphics.height ?? state.height,
+        width: graphics.width ?? state.width,
+        data: List<int>.from(graphics.data!),
+        tileOrigin: graphics.tileOrigin ?? state.tileOrigin,
+      ));
+    }
+  }
+
+  // Convert current background to Graphics format for committing back
+  Graphics toGraphics() {
+    return Graphics(
+      height: state.height,
+      width: state.width,
+      data: List<int>.from(state.data),
+      tileOrigin: state.tileOrigin, name: '',
+      // Add other Graphics-specific properties as needed
+    );
+  }
 
   setData(List<int> data) {
     emit(state.copyWith(data: data));
