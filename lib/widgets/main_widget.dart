@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/widgets/graphic_list_widget.dart';
 import 'package:game_boy_graphics_editor/widgets/settings_widget.dart';
-import 'package:game_boy_graphics_editor/widgets/tiles/tiles_editor.dart';
+import 'package:game_boy_graphics_editor/widgets/editor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/states/app_state.dart';
@@ -47,7 +47,7 @@ class _MainWidgetState extends State<MainWidget> {
                 builder: (context, state) {
                   switch (state.currentView) {
                     case ViewType.editor:
-                      return const TilesEditor();
+                      return const Editor();
                     case ViewType.memoryManager:
                       return const GraphicsListWidget();
                     case ViewType.settings:

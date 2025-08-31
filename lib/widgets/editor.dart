@@ -5,22 +5,22 @@ import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_list_view.dart';
 
-import '../../cubits/app_state_cubit.dart';
-import '../../cubits/meta_tile_cubit.dart';
-import '../../models/states/app_state.dart';
-import '../background/background_editor.dart';
-import '../background/background_grid.dart';
-import 'meta_tile_canvas.dart';
-import 'meta_tile_toolbar.dart';
+import '../cubits/app_state_cubit.dart';
+import '../cubits/meta_tile_cubit.dart';
+import '../models/states/app_state.dart';
+import 'background/background_editor.dart';
+import 'background/background_grid.dart';
+import 'tiles/meta_tile_canvas.dart';
+import 'tiles/meta_tile_toolbar.dart';
 
-class TilesEditor extends StatefulWidget {
-  const TilesEditor({super.key});
+class Editor extends StatefulWidget {
+  const Editor({super.key});
 
   @override
-  State<TilesEditor> createState() => _TilesEditorState();
+  State<Editor> createState() => _EditorState();
 }
 
-class _TilesEditorState extends State<TilesEditor> {
+class _EditorState extends State<Editor> {
   int hoverTileIndex = 0;
 
   @override
