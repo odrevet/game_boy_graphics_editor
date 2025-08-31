@@ -4,6 +4,7 @@ import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 
 import '../../cubits/graphics_cubit.dart';
+import '../../models/graphics/meta_tile.dart';
 import '../../models/sourceConverters/source_converter.dart';
 import 'meta_tile_display.dart';
 
@@ -128,18 +129,17 @@ class MetaTileListView extends StatelessWidget {
                             tileInfo.origin,
                           );
 
-                      //var data = GBDKTileConverter().reorderFromCanvasToSource(metaTile);
                       //var data = metaTile.data;
                       //var data = metaTileCubit.state.data;
-                      var metaTile = metaTileCubit.state;
+                      //var metaTile = metaTileCubit.state;
 
-                      /*MetaTile(
-                        height: 8, // WIP metaTile.height,
-                        width: 8,// WIP metaTile.width,
-                        data: data,
+                      var metaTile = MetaTile(
+                        height: 8, // metaTile.height,
+                        width: 8,// metaTile.width,
+                        data: sourceTileData, //metaTileCubit.state.data,
                         //tileOrigin: tileInfo.origin,
                         name: tileInfo.sourceName,
-                        )*/
+                        );
 
                       // Commit with the extracted source-specific data
                       context.read<GraphicsCubit>().commitMetaTileToGraphics(

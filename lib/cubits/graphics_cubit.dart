@@ -74,14 +74,14 @@ class GraphicsCubit extends Cubit<GraphicsState> {
   }
 
   // Commit background data to graphics - this is the key synchronization method
-  void commitMetaTileToGraphics(MetaTile metaTile, String sourceName, int tileOrigin) {
-    List<int> data = metaTile.data;// WIP GBDKTileConverter().reorderFromCanvasToSource(metaTile);
-    // WIP final sourceTileData = metaTile.extractSourceTileData(sourceName, tileOrigin);
+  void commitMetaTileToGraphics(Graphics metaTile, String sourceName, int tileOrigin) {
+    print("--> ${metaTile.width} x ${metaTile.height}");
+    List<int> data = GBDKTileConverter().getRawTileInt(GBDKTileConverter().reorderFromCanvasToSource(metaTile));
     int? targetIndex = null;//WIP findGraphicByNameAndOrigin(sourceName, tileOrigin);
 
     final graphics = Graphics(
-      height: metaTile.height,
-      width: metaTile.width,
+      height: 8, //metaTile.height,
+      width: 8, //metaTile.width,
       data: data,
       tileOrigin: metaTile.tileOrigin,
       name: metaTile.name,
