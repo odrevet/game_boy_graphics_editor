@@ -6,7 +6,7 @@ import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/graphics_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
-import 'package:game_boy_graphics_editor/widgets/editor.dart';
+import 'package:game_boy_graphics_editor/widgets/main_widget.dart';
 
 void main() {
   // web build params
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
       scrollBehavior: const MaterialScrollBehavior().copyWith(
         dragDevices: PointerDeviceKind.values.toSet(),
       ),
-      home: const Editor(),
+      home: const MainWidget(),
     ),
   );
 }

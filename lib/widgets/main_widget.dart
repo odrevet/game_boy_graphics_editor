@@ -19,14 +19,14 @@ Future<void> _initPreferences(BuildContext context) async {
   });
 }
 
-class Editor extends StatefulWidget {
-  const Editor({super.key});
+class MainWidget extends StatefulWidget {
+  const MainWidget({super.key});
 
   @override
-  State<Editor> createState() => _EditorState();
+  State<MainWidget> createState() => _MainWidgetState();
 }
 
-class _EditorState extends State<Editor> {
+class _MainWidgetState extends State<MainWidget> {
   @override
   void initState() {
     super.initState();
