@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 
+import '../../cubits/graphics_cubit.dart';
 import '../../models/sourceConverters/source_converter.dart';
 import 'meta_tile_display.dart';
 
@@ -19,16 +20,16 @@ class MetaTileListView extends StatelessWidget {
   });
 
   Widget _buildTileListItem(
-      BuildContext context,
-      int index,
-      TileInfo tileInfo,
-      int tileOrigin,
-      var metaTile,
-      ) {
+    BuildContext context,
+    int index,
+    TileInfo tileInfo,
+    int tileOrigin,
+    var metaTile,
+  ) {
     String title = "${index.toString()} ${decimalToHex(index, prefix: true)}";
     if (tileOrigin > 0) {
       title +=
-      "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
+          "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
     }
 
     return ListTile(
@@ -43,10 +44,7 @@ class MetaTileListView extends StatelessWidget {
       title: Text(
         title,
         style: selectedTile == index
-            ? const TextStyle(
-          color: Colors.blue,
-          fontWeight: FontWeight.bold,
-        )
+            ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
             : null,
       ),
       onTap: () => onTap(index),
@@ -89,11 +87,11 @@ class MetaTileListView extends StatelessWidget {
   }
 
   List<Widget> _buildListItems(
-      BuildContext context,
-      List<TileInfo> tileInfoList,
-      int tileOrigin,
-      var metaTile,
-      ) {
+    BuildContext context,
+    List<TileInfo> tileInfoList,
+    int tileOrigin,
+    var metaTile,
+  ) {
     List<Widget> items = [];
     String? currentSource;
     int? currentOrigin;
@@ -102,7 +100,8 @@ class MetaTileListView extends StatelessWidget {
       TileInfo tileInfo = tileInfoList[index];
 
       // Add separator when source changes
-      if (tileInfo.sourceName != currentSource || tileInfo.origin != currentOrigin) {
+      if (tileInfo.sourceName != currentSource ||
+          tileInfo.origin != currentOrigin) {
         if (tileInfo.sourceName != null && tileInfo.sourceName!.isNotEmpty) {
           items.add(
             Container(
@@ -119,6 +118,38 @@ class MetaTileListView extends StatelessWidget {
                     ),
                   ),
                   const Expanded(child: Divider(indent: 8)),
+                  IconButton(
+                    onPressed: () {
+                      // Use the MetaTileCubit to extract the correct source data
+                      final metaTileCubit = context.read<MetaTileCubit>();
+                      final sourceTileData = metaTileCubit
+                          .extractSourceTileData(
+                            tileInfo.sourceName!,
+                            tileInfo.origin,
+                          );
+
+                      //var data = GBDKTileConverter().reorderFromCanvasToSource(metaTile);
+                      //var data = metaTile.data;
+                      //var data = metaTileCubit.state.data;
+                      var metaTile = metaTileCubit.state;
+
+                      /*MetaTile(
+                        height: 8, // WIP metaTile.height,
+                        width: 8,// WIP metaTile.width,
+                        data: data,
+                        //tileOrigin: tileInfo.origin,
+                        name: tileInfo.sourceName,
+                        )*/
+
+                      // Commit with the extracted source-specific data
+                      context.read<GraphicsCubit>().commitMetaTileToGraphics(
+                        metaTile,
+                        tileInfo.sourceName!,
+                        tileInfo.origin,
+                      );
+                    },
+                    icon: Icon(Icons.arrow_circle_right),
+                  ),
                 ],
               ),
             ),

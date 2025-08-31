@@ -3,11 +3,15 @@ import 'dart:core';
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 class MetaTile extends Graphics {
-  MetaTile({data, required super.height, required super.width})
-    : super(
-        name: "",
-        data: data ?? List.filled(width * height, 0, growable: true),
-      ) {
+  MetaTile({
+    String? name,
+    List<int>? data,
+    required super.height,
+    required super.width,
+  }) : super(
+    name: name ?? "",
+    data: data ?? List.filled(width * height, 0, growable: true),
+  ) {
     calcMaxTileIndex();
   }
 

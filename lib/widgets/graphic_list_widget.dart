@@ -36,32 +36,8 @@ class GraphicsListWidget extends StatelessWidget {
       ),
       body: BlocBuilder<GraphicsCubit, GraphicsState>(
         builder: (context, state) {
-          if (state.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
           return Column(
             children: [
-              // Error banner
-              if (state.error != null)
-                Container(
-                  width: double.infinity,
-                  color: Colors.red.shade100,
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Icon(Icons.error, color: Colors.red.shade700),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          state.error!,
-                          style: TextStyle(color: Colors.red.shade700),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
               // Stats bar
               Container(
                 padding: const EdgeInsets.all(16.0),

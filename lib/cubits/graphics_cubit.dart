@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 
 import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
+import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/states/graphics_state.dart';
 
 class GraphicsCubit extends Cubit<GraphicsState> {
@@ -52,7 +54,7 @@ class GraphicsCubit extends Cubit<GraphicsState> {
   }
 
   // Commit background data to graphics - this is the key synchronization method
-  // TODO find the original source graphic using equatable
+  // TODO find and update the original source graphic (using equatable ?)
   void commitBackgroundToGraphics(Background background, {int? targetIndex}) {
     final graphicsFromBackground = Graphics(
       height: background.height,
@@ -68,6 +70,29 @@ class GraphicsCubit extends Cubit<GraphicsState> {
     } else {
       // Add as new graphic
       addGraphic(graphicsFromBackground);
+    }
+  }
+
+  // Commit background data to graphics - this is the key synchronization method
+  void commitMetaTileToGraphics(MetaTile metaTile, String sourceName, int tileOrigin) {
+    List<int> data = metaTile.data;// WIP GBDKTileConverter().reorderFromCanvasToSource(metaTile);
+    // WIP final sourceTileData = metaTile.extractSourceTileData(sourceName, tileOrigin);
+    int? targetIndex = null;//WIP findGraphicByNameAndOrigin(sourceName, tileOrigin);
+
+    final graphics = Graphics(
+      height: metaTile.height,
+      width: metaTile.width,
+      data: data,
+      tileOrigin: metaTile.tileOrigin,
+      name: metaTile.name,
+    );
+
+    if (targetIndex != null) {
+      // Update existing graphic at specified index
+      updateGraphicAt(targetIndex, graphics);
+    } else {
+      // Add as new graphic
+      addGraphic(graphics);
     }
   }
 

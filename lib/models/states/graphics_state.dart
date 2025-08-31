@@ -4,13 +4,9 @@ import '../graphics/graphics.dart';
 
 class GraphicsState extends Equatable {
   final List<Graphics> graphics;
-  final bool isLoading;
-  final String? error;
 
   const GraphicsState({
-    this.graphics = const [],
-    this.isLoading = false,
-    this.error,
+    this.graphics = const []
   });
 
   GraphicsState copyWith({
@@ -20,11 +16,9 @@ class GraphicsState extends Equatable {
   }) {
     return GraphicsState(
       graphics: graphics ?? this.graphics,
-      isLoading: isLoading ?? this.isLoading,
-      error: error,
     );
   }
 
   @override
-  List<Object?> get props => [graphics, isLoading, error];
+  List<Object?> get props => [graphics];
 }

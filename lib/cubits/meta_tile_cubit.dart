@@ -1,6 +1,8 @@
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
+import '../models/sourceConverters/gbdk_tile_converter.dart';
+
 class TileInfo {
   final String? sourceName;
   final int? sourceIndex;
@@ -287,7 +289,36 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     );
   }
 
-  /// Get tile information list
+  // Extract tiles for a specific source to commit back to graphics
+  List<int> extractSourceTileData(String sourceName, int tileOrigin) {
+    final tileSize = state.height * state.width;
+    List<int> sourceTiles = [];
+
+    // Find all tiles that belong to this source
+    for (int i = 0; i < _tileInfoList.length; i++) {
+      final tileInfo = _tileInfoList[i];
+      if (tileInfo.sourceName == sourceName && tileInfo.origin == tileOrigin) {
+        final startIndex = i * tileSize;
+        final endIndex = startIndex + tileSize;
+
+        if (endIndex <= state.data.length) {
+          sourceTiles.addAll(state.data.sublist(startIndex, endIndex));
+        }
+      }
+    }
+
+    // Convert back to source format
+    return GBDKTileConverter().reorderFromCanvasToSource(
+        MetaTile(
+          height: state.height,
+          width: state.width,
+          data: sourceTiles,
+        )
+    );
+  }
+
+
+    /// Get tile information list
   List<TileInfo> getTileInfoList() {
     final tileSize = state.height * state.width;
     final totalTiles = state.data.length ~/ tileSize;
