@@ -73,11 +73,22 @@ class GraphicsCubit extends Cubit<GraphicsState> {
     }
   }
 
+  int? findGraphicByNameAndOrigin(String name, int tileOrigin) {
+    for (int i = 0; i < state.graphics.length; i++) {
+      final g = state.graphics[i];
+      if (g.name == name && g.tileOrigin == tileOrigin) {
+        return i;
+      }
+    }
+    return null;
+  }
+
+
   // Commit background data to graphics - this is the key synchronization method
   void commitMetaTileToGraphics(Graphics metaTile, String sourceName, int tileOrigin) {
     List<int> data = GBDKTileConverter().toSourceData(metaTile);
     // this is a WIP, currently add a new graphic
-    int? targetIndex = null;//WIP findGraphicByNameAndOrigin(sourceName, tileOrigin);
+    int? targetIndex = findGraphicByNameAndOrigin(sourceName, tileOrigin);
 
     final graphics = Graphics(
       height: 8, //metaTile.height,
