@@ -75,8 +75,8 @@ class GraphicsCubit extends Cubit<GraphicsState> {
 
   // Commit background data to graphics - this is the key synchronization method
   void commitMetaTileToGraphics(Graphics metaTile, String sourceName, int tileOrigin) {
-    print("--> ${metaTile.width} x ${metaTile.height}");
-    List<int> data = GBDKTileConverter().getRawTileInt(GBDKTileConverter().reorderFromCanvasToSource(metaTile));
+    List<int> data = GBDKTileConverter().toSourceData(metaTile);
+    // this is a WIP, currently add a new graphic
     int? targetIndex = null;//WIP findGraphicByNameAndOrigin(sourceName, tileOrigin);
 
     final graphics = Graphics(

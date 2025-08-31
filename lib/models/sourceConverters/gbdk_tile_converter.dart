@@ -140,14 +140,16 @@ extern unsigned char $name[];""";
     return reorderedData;
   }
 
-  String toBin(Graphics graphics) => getRawTileInt(
-    reorderFromCanvasToSource(graphics),
-  ).map((e) => decimalToHex(e, prefix: false)).join();
+  List<int> toSourceData(Graphics graphics) =>
+      getRawTileInt(reorderFromCanvasToSource(graphics));
+
+  String toBin(Graphics graphics) =>
+      toSourceData(graphics).map((e) => decimalToHex(e, prefix: false)).join();
 
   @override
   String toSource(Graphics graphics, String name) {
-    List<String> dataOrdered = getRawTileInt(
-      reorderFromCanvasToSource(graphics),
+    List<String> dataOrdered = toSourceData(
+      graphics,
     ).map((e) => decimalToHex(e, prefix: true)).toList();
     return "unsigned char $name[] =\n{${formatOutput(dataOrdered)}\n};";
   }
