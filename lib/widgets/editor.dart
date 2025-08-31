@@ -136,40 +136,33 @@ class _EditorState extends State<Editor> {
                 ),
               ),
               const VerticalDivider(),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const MetaTileToolbar(),
-                    Expanded(
-                      child: Center(
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Transform.scale(
-                            scale: context
-                                .read<AppStateCubit>()
-                                .state
-                                .zoomTile
-                                .toDouble(),
-                            child: const MetaTileCanvas(),
-                          ),
-                        ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // ignore: prefer_const_constructors
+                  MetaTileToolbar(),
+                  SizedBox(
+                    width:
+                        (MediaQuery.of(context).size.width ~/ 3) *
+                        context.read<AppStateCubit>().state.zoomTile,
+                    height:
+                        (MediaQuery.of(context).size.width ~/ 3) *
+                        context.read<AppStateCubit>().state.zoomTile,
+                    child: const MetaTileCanvas(),
+                  ),
+                  SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: BackgroundGrid(
+                      background: Background(
+                        width: 4,
+                        height: 4,
+                        fill: appState.tileIndexTile,
                       ),
+                      metaTile: metaTile,
                     ),
-                    SizedBox(
-                      width: 200,
-                      height: 200,
-                      child: BackgroundGrid(
-                        background: Background(
-                          width: 4,
-                          height: 4,
-                          fill: appState.tileIndexTile,
-                        ),
-                        metaTile: metaTile,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               Expanded(
                 child: BackgroundEditor(
