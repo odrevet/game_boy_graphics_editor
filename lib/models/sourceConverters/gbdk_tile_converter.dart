@@ -64,7 +64,7 @@ class GBDKTileConverter extends SourceConverter {
 
   String toHeader(Graphics graphics, String name) {
     // Read template file
-    String template = File('${Directory.current.path}/lib/models/sourceConverters/templates/background.h.tpl').readAsStringSync();
+    String template = File('${Directory.current.path}/lib/models/sourceConverters/templates/tile.h.tpl').readAsStringSync();
 
     // Replace placeholders
     return template
@@ -87,9 +87,8 @@ class GBDKTileConverter extends SourceConverter {
     );
 
     // Determine bank
-    int bank = 255; // implement this method
+    int bank = 255;
 
-    // Replace placeholders
     return template
         .replaceAll('{{bank}}', bank.toString())
         .replaceAll('{{name}}', name)
