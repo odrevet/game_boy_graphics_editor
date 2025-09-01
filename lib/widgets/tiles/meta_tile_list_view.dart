@@ -22,21 +22,21 @@ class MetaTileListView extends StatelessWidget {
   });
 
   Widget _buildTileListItem(
-    BuildContext context,
-    int index,
-    TileInfo tileInfo,
-    int tileOrigin,
-    var metaTile,
-  ) {
+      BuildContext context,
+      int index,
+      TileInfo tileInfo,
+      int tileOrigin,
+      var metaTile,
+      ) {
     String title = "${index.toString()} ${decimalToHex(index, prefix: true)}";
     if (tileOrigin > 0) {
       title +=
-          "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
+      "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
     }
 
     return ListTile(
       leading: SizedBox(
-        width: 40, // * (metaTile.width / metaTile.height),
+        width: 40,
         height: 40,
         child: MetaTileDisplay(
           showGrid: false,
@@ -88,23 +88,77 @@ class MetaTileListView extends StatelessWidget {
     );
   }
 
+  Widget _buildUnmappedHeader(BuildContext context, var metaTile) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          const SizedBox(width: 8),
+          const Text(
+            "Unmapped",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+              fontSize: 12,
+            ),
+          ),
+          const Expanded(child: Divider(indent: 8)),
+          IconButton(
+            onPressed: () {
+              // Create a MetaTile with all unmapped tiles
+              final metaTileCubit = context.read<MetaTileCubit>();
+              final currentMetaTile = metaTileCubit.state;
+
+              var unmappedMetaTile = MetaTile(
+                height: currentMetaTile.height,
+                width: currentMetaTile.width,
+                data: currentMetaTile.data,
+                name: "Unmapped",
+              );
+
+              // Commit unmapped tiles to graphics
+              context.read<GraphicsCubit>().commitMetaTileToGraphics(
+                unmappedMetaTile,
+                "Unmapped Graphics",
+                0, // Default origin for unmapped tiles
+              );
+            },
+            icon: const Icon(Icons.arrow_circle_right),
+          ),
+        ],
+      ),
+    );
+  }
+
   List<Widget> _buildListItems(
-    BuildContext context,
-    List<TileInfo> tileInfoList,
-    int tileOrigin,
-    var metaTile,
-  ) {
+      BuildContext context,
+      List<TileInfo> tileInfoList,
+      int tileOrigin,
+      var metaTile,
+      ) {
     List<Widget> items = [];
     String? currentSource;
     int? currentOrigin;
+    bool hasAddedUnmappedHeader = false;
 
     for (int index = 0; index < tileInfoList.length; index++) {
       TileInfo tileInfo = tileInfoList[index];
 
-      // Add separator when source changes
-      if (tileInfo.sourceName != currentSource ||
-          tileInfo.origin != currentOrigin) {
-        if (tileInfo.sourceName != null && tileInfo.sourceName!.isNotEmpty) {
+      // Check if this is an unmapped tile (no source name or empty source name)
+      bool isUnmappedTile = tileInfo.sourceName == null || tileInfo.sourceName!.isEmpty;
+
+      if (isUnmappedTile) {
+        // Add unmapped header only once and only if we haven't added it yet
+        if (!hasAddedUnmappedHeader) {
+          items.add(_buildUnmappedHeader(context, metaTile));
+          hasAddedUnmappedHeader = true;
+          currentSource = null; // Reset current source for unmapped section
+          currentOrigin = null;
+        }
+      } else {
+        // Add separator when source changes (for mapped tiles)
+        if (tileInfo.sourceName != currentSource ||
+            tileInfo.origin != currentOrigin) {
           items.add(
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -126,38 +180,33 @@ class MetaTileListView extends StatelessWidget {
                       final metaTileCubit = context.read<MetaTileCubit>();
                       final sourceTileData = metaTileCubit
                           .extractSourceTileData(
-                            tileInfo.sourceName!,
-                            tileInfo.origin,
-                          );
+                        tileInfo.sourceName!,
+                        tileInfo.origin,
+                      );
 
-                      //var data = metaTile.data;
-                      //var data = metaTileCubit.state.data;
-                      //var metaTile = metaTileCubit.state;
-
-                      var metaTile = MetaTile(
+                      var sourceMetaTile = MetaTile(
                         height: 8, // metaTile.height,
                         width: 8,// metaTile.width,
-                        data: sourceTileData, //metaTileCubit.state.data,
-                        //tileOrigin: tileInfo.origin,
+                        data: sourceTileData,
                         name: tileInfo.sourceName,
-                        );
+                      );
 
                       // Commit with the extracted source-specific data
                       context.read<GraphicsCubit>().commitMetaTileToGraphics(
-                        metaTile,
+                        sourceMetaTile,
                         tileInfo.sourceName!,
                         tileInfo.origin,
                       );
                     },
-                    icon: Icon(Icons.arrow_circle_right),
+                    icon: const Icon(Icons.arrow_circle_right),
                   ),
                 ],
               ),
             ),
           );
+          currentSource = tileInfo.sourceName;
+          currentOrigin = tileInfo.origin;
         }
-        currentSource = tileInfo.sourceName;
-        currentOrigin = tileInfo.origin;
       }
 
       // Add the tile item
