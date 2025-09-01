@@ -19,34 +19,10 @@ class SourceParser {
 
     // Integer type patterns
     final integerType =
-    string('unsigned char') |
-    string('signed char') |
-    string('unsigned short') |
-    string('signed short') |
-    string('unsigned int') |
-    string('signed int') |
-    string('unsigned long') |
-    string('signed long') |
-    string('uint8_t') |
-    string('uint16_t') |
-    string('uint32_t') |
-    string('uint64_t') |
-    string('int8_t') |
-    string('int16_t') |
-    string('int32_t') |
-    string('int64_t') |
-    string('UINT8') |
-    string('UINT16') |
-    string('UINT32') |
-    string('UINT64') |
-    string('INT8') |
-    string('INT16') |
-    string('INT32') |
-    string('INT64') |
     string('char') |
-    string('short') |
-    string('int') |
-    string('long');
+    string('unsigned char') |
+    string('uint8_t') |
+    string('UINT8');
 
     // Identifier (array name)
     final identifier =
@@ -193,6 +169,7 @@ class SourceParser {
     final intTypes = [
       'uint8_t',
       'char',
+      'UINT8'
     ];
 
     return intTypes.any(
