@@ -8,6 +8,8 @@ class MetaTile extends Graphics {
     List<int>? data,
     required super.height,
     required super.width,
+    metaTileWidth = 8,
+    metaTileHeight = 8,
   }) : super(
     name: name ?? "",
     data: data ?? List.filled(width * height, 0, growable: true),
