@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../converter_utils.dart';
 import '../graphics/graphics.dart';
 import '../graphics/meta_tile.dart';
@@ -60,10 +62,39 @@ class GBDKTileConverter extends SourceConverter {
     return pattern;
   }
 
-  @override
   String toHeader(Graphics graphics, String name) {
-    return """#define ${name}Bank 0
-extern unsigned char $name[];""";
+    // Read template file
+    String template = File('${Directory.current.path}/lib/models/sourceConverters/templates/background.h.tpl').readAsStringSync();
+
+    // Replace placeholders
+    return template
+        .replaceAll('{{NAME}}', name.toUpperCase())
+        .replaceAll('{{name}}', name)
+        .replaceAll('{{tile_origin}}', graphics.tileOrigin.toString())
+        .replaceAll('{{length}}', graphics.data.length.toString())
+        .replaceAll('{{width}}', graphics.width.toString())
+        .replaceAll('{{height}}', graphics.height.toString());
+  }
+
+  @override
+  String toSource(Graphics graphics, String name) {
+    // Read template file
+    String template = File('${Directory.current.path}/lib/models/sourceConverters/templates/tile.c.tpl').readAsStringSync();
+
+    // Format the data array
+    String formattedData = formatOutput(
+        graphics.data.map((e) => decimalToHex(e, prefix: true)).toList()
+    );
+
+    // Determine bank
+    int bank = 255; // implement this method
+
+    // Replace placeholders
+    return template
+        .replaceAll('{{bank}}', bank.toString())
+        .replaceAll('{{name}}', name)
+        .replaceAll('{{length}}', graphics.data.length.toString())
+        .replaceAll('{{data}}', formattedData);
   }
 
   List<int> reorderFromSourceToCanvas(List<int> data, int width, int height) {
@@ -146,14 +177,6 @@ extern unsigned char $name[];""";
 
   String toBin(Graphics graphics) =>
       toSourceData(graphics).map((e) => decimalToHex(e, prefix: false)).join();
-
-  @override
-  String toSource(Graphics graphics, String name) {
-    List<String> dataOrdered = toSourceData(
-      graphics,
-    ).map((e) => decimalToHex(e, prefix: true)).toList();
-    return "unsigned char $name[] =\n{${formatOutput(dataOrdered)}\n};";
-  }
 
   List<int> combine(List<int> values) {
     var data = <int>[];
