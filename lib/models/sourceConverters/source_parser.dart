@@ -1,6 +1,5 @@
-import 'package:petitparser/petitparser.dart';
-
 import '../graphics/graphics.dart';
+import 'package:petitparser/petitparser.dart';
 
 class SourceParser {
   late Parser _parser;
@@ -17,12 +16,12 @@ class SourceParser {
     final comment = lineComment | blockComment;
     final ws = (whitespace | comment).star();
 
-    // Integer type patterns
+    // Integer type patterns - order matters for longest match first
     final integerType =
-    string('char') |
     string('unsigned char') |
     string('uint8_t') |
-    string('UINT8');
+    string('UINT8') |
+    string('char');
 
     // Identifier (array name)
     final identifier =
@@ -92,12 +91,8 @@ class SourceParser {
       }
 
       return Graphics(
-        //type: type,
         name: name,
-        //size: size,
         data: values,
-        //startOffset: token.start,
-        //endOffset: token.stop,
       );
     });
   }
@@ -118,43 +113,66 @@ class SourceParser {
     String currentBlock = '';
     bool inArrayDefinition = false;
     int braceCount = 0;
-    int blockStartOffset = 0;
+    int arrayStartOffset = 0;
     int offset = 0;
+    bool foundEquals = false;
+    bool foundOpenBrace = false;
 
-    for (String line in lines) {
+    for (int i = 0; i < lines.length; i++) {
+      String line = lines[i];
       final trimmedLine = line.trim();
 
       if (trimmedLine.isEmpty ||
           trimmedLine.startsWith('//') ||
           trimmedLine.startsWith('/*')) {
+        if (inArrayDefinition) {
+          currentBlock += '\n$line';
+        }
         offset += line.length + 1; // +1 for newline
         continue;
       }
 
       if (!inArrayDefinition && _looksLikeArrayStart(trimmedLine)) {
         inArrayDefinition = true;
+        foundEquals = line.contains('=');
+        foundOpenBrace = line.contains('{');
         currentBlock = line;
-        blockStartOffset = offset;
+        arrayStartOffset = offset; // Track where the array definition starts
         braceCount = '{'.allMatches(line).length - '}'.allMatches(line).length;
       } else if (inArrayDefinition) {
         currentBlock += '\n$line';
+
+        // Check if we found the equals sign on this line
+        if (!foundEquals && line.contains('=')) {
+          foundEquals = true;
+        }
+
+        // Check if we found the opening brace on this line
+        if (!foundOpenBrace && line.contains('{')) {
+          foundOpenBrace = true;
+        }
+
         braceCount += '{'.allMatches(line).length - '}'.allMatches(line).length;
       }
 
-      if (inArrayDefinition && braceCount <= 0) {
+      // Only try to parse when we've found equals, opening brace, and closed all braces
+      if (inArrayDefinition && foundEquals && foundOpenBrace && braceCount <= 0) {
+        int arrayEndOffset = offset + line.length; // Track where the array definition ends
+
         final parsed = parseArray(currentBlock);
         if (parsed != null) {
           arrays.add(
             Graphics(
               name: parsed.name,
-              //size: parsed.size,
               data: parsed.data,
-              //startOffset: blockStartOffset,
-              //endOffset: offset + line.length,
+              startOffset: arrayStartOffset,
+              endOffset: arrayEndOffset,
             ),
           );
         }
         inArrayDefinition = false;
+        foundEquals = false;
+        foundOpenBrace = false;
         currentBlock = '';
         braceCount = 0;
       }
@@ -168,47 +186,14 @@ class SourceParser {
   bool _looksLikeArrayStart(String line) {
     final intTypes = [
       'uint8_t',
+      'unsigned char',
       'char',
       'UINT8'
     ];
 
+    // Check if line contains an integer type and has array brackets
     return intTypes.any(
           (type) => line.toLowerCase().contains(type.toLowerCase()),
-    ) &&
-        line.contains('[') &&
-        (line.contains('=') || line.contains('{'));
+    ) && line.contains('[');
   }
 }
-
-
-/// Replace the array contents in the source with new values
-/*String updateArrayValues(
-    String source,
-    Graphics array,
-    List<int> newValues,
-    ) {
-  // Format the new array content
-  final buffer = StringBuffer();
-  buffer.writeln('{');
-
-  for (int i = 0; i < newValues.length; i++) {
-    final v = newValues[i];
-    buffer.write('  0x${v.toRadixString(16).padLeft(2, '0')}');
-    if (i != newValues.length - 1) buffer.write(',');
-    if ((i + 1) % 8 == 0) buffer.writeln();
-  }
-
-  buffer.writeln();
-  buffer.write('}');
-
-  // Always recalc the size to match newValues.length
-  final updatedSize = newValues.length;
-
-  // Construct replacement string
-  final declaration =
-      '${array.type} ${array.name}[$updatedSize] = ${buffer.toString()};';
-
-  // Replace in source
-  return source.replaceRange(array.startOffset, array.endOffset, declaration);
-}*/
-

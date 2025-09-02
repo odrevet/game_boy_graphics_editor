@@ -1,3 +1,5 @@
+import 'package:petitparser/petitparser.dart';
+
 enum GraphicsType {
   undefined,
   tile,
@@ -13,6 +15,8 @@ class Graphics {
   int tileOrigin;
   String? filepath;
   GraphicsType type;
+  int startOffset;
+  int endOffset;
 
   Graphics({
     required this.name,
@@ -22,5 +26,8 @@ class Graphics {
     this.filepath,
     this.tileOrigin = 0,
     this.type = GraphicsType.undefined,
+    this.startOffset = 0,
+    this.endOffset = 0,
   });
+
 }
