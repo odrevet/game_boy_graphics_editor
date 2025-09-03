@@ -16,13 +16,12 @@
 #define numbers_transposed_COLORS_PER_PALETTE 4
 #define numbers_transposed_TOTAL_COLORS 4
 #define numbers_transposed_MAP_ATTRIBUTES 0
+extern const unsigned char numbers_transposed_map[16];
+#define numbers_transposed_map_attributes numbers_transposed_map
 
 BANKREF_EXTERN(numbers_transposed)
 
 extern const palette_color_t numbers_transposed_palettes[4];
 extern const uint8_t numbers_transposed_tiles[256];
-
-extern const unsigned char numbers_transposed_map[16];
-#define numbers_transposed_map_attributes numbers_transposed_map
 
 #endif
