@@ -36,10 +36,4 @@ const uint8_t birabuto_tiles[960] = {
     );
     print('---');
   }
-
-  // Example new values
-  final newValues = [0x11, 0x22, 0x33, 0x44];
-
-  //final updatedSource = updateArrayValues(cSource, arrays.first, newValues);
-  //print(updatedSource);
 }

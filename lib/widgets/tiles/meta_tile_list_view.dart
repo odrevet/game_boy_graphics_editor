@@ -6,7 +6,6 @@ import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import '../../cubits/graphics_cubit.dart';
 import '../../models/sourceConverters/converter_utils.dart';
 import '../../models/graphics/meta_tile.dart';
-import '../../models/sourceConverters/source_converter.dart';
 import 'meta_tile_display.dart';
 
 class MetaTileListView extends StatelessWidget {
@@ -22,16 +21,16 @@ class MetaTileListView extends StatelessWidget {
   });
 
   Widget _buildTileListItem(
-      BuildContext context,
-      int index,
-      TileInfo tileInfo,
-      int tileOrigin,
-      var metaTile,
-      ) {
+    BuildContext context,
+    int index,
+    TileInfo tileInfo,
+    int tileOrigin,
+    var metaTile,
+  ) {
     String title = "${index.toString()} ${decimalToHex(index, prefix: true)}";
     if (tileOrigin > 0) {
       title +=
-      "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
+          "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
     }
 
     // Calculate the correct aspect ratio based on MetaTile dimensions
@@ -136,11 +135,11 @@ class MetaTileListView extends StatelessWidget {
   }
 
   List<Widget> _buildListItems(
-      BuildContext context,
-      List<TileInfo> tileInfoList,
-      int tileOrigin,
-      var metaTile,
-      ) {
+    BuildContext context,
+    List<TileInfo> tileInfoList,
+    int tileOrigin,
+    var metaTile,
+  ) {
     List<Widget> items = [];
     String? currentSource;
     int? currentOrigin;
@@ -150,7 +149,8 @@ class MetaTileListView extends StatelessWidget {
       TileInfo tileInfo = tileInfoList[index];
 
       // Check if this is an unmapped tile (no source name or empty source name)
-      bool isUnmappedTile = tileInfo.sourceName == null || tileInfo.sourceName!.isEmpty;
+      bool isUnmappedTile =
+          tileInfo.sourceName == null || tileInfo.sourceName!.isEmpty;
 
       if (isUnmappedTile) {
         // Add unmapped header only once and only if we haven't added it yet
@@ -185,13 +185,13 @@ class MetaTileListView extends StatelessWidget {
                       final metaTileCubit = context.read<MetaTileCubit>();
                       final sourceTileData = metaTileCubit
                           .extractSourceTileData(
-                        tileInfo.sourceName!,
-                        tileInfo.origin,
-                      );
+                            tileInfo.sourceName!,
+                            tileInfo.origin,
+                          );
 
                       var sourceMetaTile = MetaTile(
                         height: 8, // metaTile.height,
-                        width: 8,// metaTile.width,
+                        width: 8, // metaTile.width,
                         data: sourceTileData,
                         name: tileInfo.sourceName,
                       );

@@ -1,11 +1,4 @@
-import 'package:petitparser/petitparser.dart';
-
-enum GraphicsType {
-  undefined,
-  tile,
-  map,
-  sprite,
-}
+enum GraphicsType { undefined, tile, map, sprite }
 
 class Graphics {
   String name;
@@ -29,5 +22,4 @@ class Graphics {
     this.startOffset = 0,
     this.endOffset = 0,
   });
-
 }

@@ -41,7 +41,9 @@ class _ExportDialogState extends State<ExportDialog> {
                       Expanded(
                         flex: 2,
                         child: Container(
-                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.surfaceContainerHighest,
                           padding: const EdgeInsets.all(16),
                           child: ExportPreview(type, parse),
                         ),

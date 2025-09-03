@@ -91,52 +91,52 @@ class GraphicsListWidget extends StatelessWidget {
               Expanded(
                 child: state.graphics.isEmpty
                     ? const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.image_not_supported,
-                        size: 64,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        'No graphics added yet',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.image_not_supported,
+                              size: 64,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              'No graphics added yet',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Import or create graphic',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Import or create graphic',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                )
+                      )
                     : ReorderableListView.builder(
-                  itemCount: state.graphics.length,
-                  onReorder: (oldIndex, newIndex) {
-                    if (newIndex > oldIndex) newIndex--;
-                    context.read<GraphicsCubit>().reorderGraphics(
-                      oldIndex,
-                      newIndex,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    final graphic = state.graphics[index];
-                    return _GraphicListTile(
-                      key: ValueKey('graphic_$index'),
-                      graphic: graphic,
-                      index: index,
-                      onEdit: () =>
-                          _showEditGraphicDialog(context, index, graphic),
-                      onDelete: () =>
-                          _showDeleteConfirmationDialog(context, index),
-                    );
-                  },
-                ),
+                        itemCount: state.graphics.length,
+                        onReorder: (oldIndex, newIndex) {
+                          if (newIndex > oldIndex) newIndex--;
+                          context.read<GraphicsCubit>().reorderGraphics(
+                            oldIndex,
+                            newIndex,
+                          );
+                        },
+                        itemBuilder: (context, index) {
+                          final graphic = state.graphics[index];
+                          return _GraphicListTile(
+                            key: ValueKey('graphic_$index'),
+                            graphic: graphic,
+                            index: index,
+                            onEdit: () =>
+                                _showEditGraphicDialog(context, index, graphic),
+                            onDelete: () =>
+                                _showDeleteConfirmationDialog(context, index),
+                          );
+                        },
+                      ),
               ),
             ],
           );
@@ -178,10 +178,10 @@ class GraphicsListWidget extends StatelessWidget {
   }
 
   void _showEditGraphicDialog(
-      BuildContext context,
-      int index,
-      Graphics graphic,
-      ) {
+    BuildContext context,
+    int index,
+    Graphics graphic,
+  ) {
     showDialog(
       context: context,
       builder: (dialogContext) => GraphicForm(
@@ -315,7 +315,9 @@ class _GraphicListTile extends StatelessWidget {
       // Show error message to user
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to load "${graphics.name}" as tiles: ${e.toString()}'),
+          content: Text(
+            'Failed to load "${graphics.name}" as tiles: ${e.toString()}',
+          ),
           backgroundColor: Colors.red,
           duration: const Duration(seconds: 4),
         ),
@@ -341,7 +343,8 @@ class _GraphicListTile extends StatelessWidget {
       context.read<MetaTileCubit>().state.height,
     );
     var preview = MetaTile(height: 8, width: 8, data: data);
-    final tileCount = preview.data.length ~/ 64; //(preview.height * preview.width);
+    final tileCount =
+        preview.data.length ~/ 64; //(preview.height * preview.width);
 
     showDialog(
       context: context,
@@ -389,7 +392,7 @@ class _GraphicListTile extends StatelessWidget {
                     runSpacing: 8,
                     children: List.generate(
                       tileCount,
-                          (index) => Column(
+                      (index) => Column(
                         children: [
                           SizedBox(
                             width: 40,
@@ -422,7 +425,9 @@ class _GraphicListTile extends StatelessWidget {
               // Show loading message
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Loading "${graphic.name}" as tiles with origin $origin...'),
+                  content: Text(
+                    'Loading "${graphic.name}" as tiles with origin $origin...',
+                  ),
                   duration: const Duration(seconds: 1),
                 ),
               );
@@ -455,7 +460,9 @@ class _GraphicListTile extends StatelessWidget {
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Failed to load "${graphics.name}" as background: ${e.toString()}'),
+          content: Text(
+            'Failed to load "${graphics.name}" as background: ${e.toString()}',
+          ),
           backgroundColor: Colors.red,
           duration: const Duration(seconds: 4),
         ),
@@ -480,10 +487,13 @@ class _GraphicListTile extends StatelessWidget {
           ),
           content: SizedBox(
             width: MediaQuery.of(ctx).size.width * 0.8,
-            height: MediaQuery.of(ctx).size.height * 0.6, // Reduced height for actions
+            height:
+                MediaQuery.of(ctx).size.height *
+                0.6, // Reduced height for actions
             child: BackgroundGrid(
               background: preview,
-              tileOrigin: 0, //preview.tileOrigin,
+              tileOrigin: 0,
+              //preview.tileOrigin,
               metaTile: context.read<MetaTileCubit>().state,
               showGrid: true,
               cellSize: 32,

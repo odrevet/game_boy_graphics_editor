@@ -8,17 +8,9 @@ class TileInfo {
   final int? sourceIndex;
   final int origin;
 
-  TileInfo({
-    this.sourceName,
-    this.sourceIndex,
-    required this.origin,
-  });
+  TileInfo({this.sourceName, this.sourceIndex, required this.origin});
 
-  TileInfo copyWith({
-    String? sourceName,
-    int? sourceIndex,
-    int? origin,
-  }) {
+  TileInfo copyWith({String? sourceName, int? sourceIndex, int? origin}) {
     return TileInfo(
       sourceName: sourceName ?? this.sourceName,
       sourceIndex: sourceIndex ?? this.sourceIndex,
@@ -309,16 +301,11 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
     // Convert back to source format
     return GBDKTileConverter().reorderFromCanvasToSource(
-        MetaTile(
-          height: state.height,
-          width: state.width,
-          data: sourceTiles,
-        )
+      MetaTile(height: state.height, width: state.width, data: sourceTiles),
     );
   }
 
-
-    /// Get tile information list
+  /// Get tile information list
   List<TileInfo> getTileInfoList() {
     final tileSize = state.height * state.width;
     final totalTiles = state.data.length ~/ tileSize;

@@ -23,12 +23,17 @@ class Editor extends StatefulWidget {
 class _EditorState extends State<Editor> {
   int hoverTileIndex = 0;
 
-  Widget _buildMetaTileCanvasWithAspectRatio(BuildContext context, MetaTile metaTile, AppState appState) {
+  Widget _buildMetaTileCanvasWithAspectRatio(
+    BuildContext context,
+    MetaTile metaTile,
+    AppState appState,
+  ) {
     // Calculate aspect ratio
     final double aspectRatio = metaTile.width / metaTile.height;
 
     // Base size for the canvas
-    final double baseSize = (MediaQuery.of(context).size.width ~/ 3) * appState.zoomTile.toDouble();
+    final double baseSize =
+        (MediaQuery.of(context).size.width ~/ 3) * appState.zoomTile.toDouble();
 
     // Calculate dimensions maintaining aspect ratio
     double canvasWidth, canvasHeight;
@@ -168,7 +173,11 @@ class _EditorState extends State<Editor> {
                 children: [
                   // ignore: prefer_const_constructors
                   MetaTileToolbar(),
-                  _buildMetaTileCanvasWithAspectRatio(context, metaTile, appState),
+                  _buildMetaTileCanvasWithAspectRatio(
+                    context,
+                    metaTile,
+                    appState,
+                  ),
                   SizedBox(
                     width: 200,
                     height: 200,

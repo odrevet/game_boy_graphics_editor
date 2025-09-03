@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../models/file_picker_utils.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
-
 
 class GraphicForm extends StatefulWidget {
   final String title;
@@ -152,7 +150,9 @@ class GraphicFormState extends State<GraphicForm> {
     if (result == null) return null;
 
     final source = await readString(result);
-    Map<String, int> defines = GBDKTileConverter().readDefinesFromSource(source);
+    Map<String, int> defines = GBDKTileConverter().readDefinesFromSource(
+      source,
+    );
 
     defines.forEach((key, value) {
       if (key.endsWith('TILE_ORIGIN')) {

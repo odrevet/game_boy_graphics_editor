@@ -27,7 +27,9 @@ class GBDKBackgroundConverter extends SourceConverter {
     Background background = graphics as Background;
 
     // Read template file
-    String template = File('${Directory.current.path}/lib/models/sourceConverters/templates/background.h.tpl').readAsStringSync();
+    String template = File(
+      '${Directory.current.path}/lib/models/sourceConverters/templates/background.h.tpl',
+    ).readAsStringSync();
 
     // Replace placeholders
     return template
@@ -41,7 +43,9 @@ class GBDKBackgroundConverter extends SourceConverter {
   @override
   String toSource(Graphics graphics, String name) {
     // Read template file
-    String template = File('${Directory.current.path}/lib/models/sourceConverters/templates/background.c.tpl').readAsStringSync();
+    String template = File(
+      '${Directory.current.path}/lib/models/sourceConverters/templates/background.c.tpl',
+    ).readAsStringSync();
 
     // Format the data array
     String formattedData = formatOutput(

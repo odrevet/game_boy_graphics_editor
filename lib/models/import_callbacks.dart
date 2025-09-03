@@ -16,9 +16,8 @@ import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import 'file_picker_utils.dart';
-import 'import_utils.dart';
 
-Future<List<Graphics>?>  onImportHttp(
+Future<List<Graphics>?> onImportHttp(
   BuildContext context,
   String parse,
   String type,
@@ -52,7 +51,7 @@ Future<List<Graphics>?>  onImportHttp(
     return graphicsElements;
   }
 
-/*  bool tile = parse == 'Tile';
+  /*  bool tile = parse == 'Tile';
   Uri uriObject = Uri.parse(url);
 
   if (type == 'Auto') {
@@ -134,6 +133,13 @@ Future<List<Graphics>?> onImport(
   }
 
   if (type == 'Binary') {
+    //        if (compression != 'none') {
+    //          String inputPath = result.files.single.path!;
+    //          List<int> content = _decompress(inputPath, compression, context);
+    //          if (content.isNotEmpty) {
+    //            loadBin(content, tile, transpose, context);
+    //          }
+
     final bin = await readBin(result);
 
     List<int> data = convertBytesToDecimals(bin);

@@ -64,7 +64,9 @@ class GBDKTileConverter extends SourceConverter {
 
   String toHeader(Graphics graphics, String name) {
     // Read template file
-    String template = File('${Directory.current.path}/lib/models/sourceConverters/templates/tile.h.tpl').readAsStringSync();
+    String template = File(
+      '${Directory.current.path}/lib/models/sourceConverters/templates/tile.h.tpl',
+    ).readAsStringSync();
 
     // Replace placeholders
     return template
@@ -79,11 +81,13 @@ class GBDKTileConverter extends SourceConverter {
   @override
   String toSource(Graphics graphics, String name) {
     // Read template file
-    String template = File('${Directory.current.path}/lib/models/sourceConverters/templates/tile.c.tpl').readAsStringSync();
+    String template = File(
+      '${Directory.current.path}/lib/models/sourceConverters/templates/tile.c.tpl',
+    ).readAsStringSync();
 
     // Format the data array
     String formattedData = formatOutput(
-        graphics.data.map((e) => decimalToHex(e, prefix: true)).toList()
+      graphics.data.map((e) => decimalToHex(e, prefix: true)).toList(),
     );
 
     // Determine bank
