@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/source_converter.dart';
 
-import 'converter_utils.dart';
 import '../graphics/graphics.dart';
+import 'converter_utils.dart';
 
 class GBDKBackgroundConverter extends SourceConverter {
   static final GBDKBackgroundConverter _singleton =

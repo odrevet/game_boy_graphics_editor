@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
+import 'package:game_boy_graphics_editor/widgets/editor.dart';
 import 'package:game_boy_graphics_editor/widgets/graphic_list_widget.dart';
 import 'package:game_boy_graphics_editor/widgets/settings_widget.dart';
-import 'package:game_boy_graphics_editor/widgets/editor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/states/app_state.dart';

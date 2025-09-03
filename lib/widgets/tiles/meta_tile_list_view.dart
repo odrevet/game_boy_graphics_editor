@@ -4,8 +4,8 @@ import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 
 import '../../cubits/graphics_cubit.dart';
-import '../../models/sourceConverters/converter_utils.dart';
 import '../../models/graphics/meta_tile.dart';
+import '../../models/sourceConverters/converter_utils.dart';
 import 'meta_tile_display.dart';
 
 class MetaTileListView extends StatelessWidget {

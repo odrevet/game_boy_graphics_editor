@@ -205,7 +205,9 @@ class _ImportDialogState extends State<ImportDialog> {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerHighest,
                         borderRadius: const BorderRadius.vertical(
                           top: Radius.circular(8),
                         ),

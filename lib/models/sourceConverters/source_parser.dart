@@ -1,5 +1,6 @@
-import '../graphics/graphics.dart';
 import 'package:petitparser/petitparser.dart';
+
+import '../graphics/graphics.dart';
 
 class SourceParser {
   late Parser _parser;
