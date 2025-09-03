@@ -28,96 +28,77 @@ class _ExportDialogState extends State<ExportDialog> {
   Widget build(BuildContext context) {
     return BlocBuilder<GraphicsCubit, GraphicsState>(
       builder: (context, state) {
-        return SizedBox(
-          child: SingleChildScrollView(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        return Dialog(
+          child: SizedBox(
+            width: 900,
+            height: 600,
+            child: Column(
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
                     children: [
-                      Row(
-                        children: [
-                          const Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.all(15.0),
-                              child: Text("Data type"),
-                            ),
-                          ),
-                          DropdownButton<String>(
-                            value: type,
-                            onChanged: (String? value) {
-                              setState(() {
-                                type = value!;
-                              });
-                            },
-                            items: <String>['Source code', 'Binary', 'PNG']
-                                .map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                })
-                                .toList(),
-                          ),
-                        ],
+                      // preview panel
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          padding: const EdgeInsets.all(16),
+                          child: ExportPreview(type, parse),
+                        ),
                       ),
-                      Row(
-                        children: [
-                          const Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.all(15.0),
-                              child: Text("From"),
+
+                      const VerticalDivider(width: 1),
+                      // settings panel
+                      Expanded(
+                        flex: 1,
+                        child: ListView(
+                          padding: const EdgeInsets.all(16),
+                          children: [
+                            _buildDropdown(
+                              label: "Data type",
+                              value: type,
+                              items: const ['Source code', 'Binary', 'PNG'],
+                              onChanged: (v) => setState(() => type = v!),
                             ),
-                          ),
-                          DropdownButton<String>(
-                            value: parse,
-                            onChanged: (String? value) {
-                              setState(() {
-                                parse = value!;
-                              });
-                            },
-                            items:
-                                [
-                                  'Tile',
-                                  'Background',
-                                  ...state.graphics.map((g) => g.name),
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                          ),
-                        ],
+                            const SizedBox(height: 16),
+                            _buildDropdown(
+                              label: "From",
+                              value: parse,
+                              items: [
+                                'Tile',
+                                'Background',
+                                ...state.graphics.map((g) => g.name),
+                              ],
+                              onChanged: (v) => setState(() => parse = v!),
+                            ),
+                          ],
+                        ),
                       ),
-                      /*CheckboxListTile(
-                    title: const Text("RLE compress"),
-                    value: compressedRLE,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        compressedRLE = value!;
-                      });
-                    },
+                    ],
                   ),
-                  CheckboxListTile(
-                    title: const Text("Transpose"),
-                    value: transpose,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        transpose = value!;
-                      });
-                    },
-                  ),*/
+                ),
+
+                // Actions
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text("Cancel"),
+                      ),
+                      const SizedBox(width: 12),
                       ElevatedButton.icon(
+                        icon: const Icon(Icons.save_alt),
+                        label: const Text("Save"),
                         onPressed: () {
                           if (parse == 'Tile') {
                             if (type == 'Source code') {
                               onFileSaveAsSourceCode(context, parse);
                             } else if (type == 'Binary') {
                               onFileSaveAsBinTile(context);
-                            } else if (type == 'PNG') {
+                            } else {
                               onFileTilesSaveAsPNG(context);
                             }
                           } else {
@@ -125,25 +106,40 @@ class _ExportDialogState extends State<ExportDialog> {
                               onFileSaveAsSourceCode(context, parse);
                             } else if (type == 'Binary') {
                               onFileSaveAsBinBackground(context);
-                            } else if (type == 'PNG') {
+                            } else {
                               onFileBackgroundSaveAsPNG(context);
                             }
                           }
                         },
-                        icon: const Icon(Icons.save_alt),
-                        label: const Text('Save'),
                       ),
                     ],
                   ),
                 ),
-                const VerticalDivider(),
-                // Preview
-                ExportPreview(type, parse),
               ],
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildDropdown({
+    required String label,
+    required String value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return Row(
+      children: [
+        Expanded(child: Text(label)),
+        DropdownButton<String>(
+          value: value,
+          onChanged: onChanged,
+          items: items
+              .map((e) => DropdownMenuItem<String>(value: e, child: Text(e)))
+              .toList(),
+        ),
+      ],
     );
   }
 }
@@ -184,19 +180,25 @@ class ExportPreview extends StatelessWidget {
       }
 
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SourceDisplay(source: header, name: name, extension: '.h'),
-          SourceDisplay(
-            source: source,
-            name: name,
-            extension: '.c',
-            //graphics: metaTile,
+          Expanded(
+            child: ListView(
+              children: [
+                SourceDisplay(source: header, name: name, extension: '.h'),
+                const SizedBox(height: 12),
+                SourceDisplay(source: source, name: name, extension: '.c'),
+              ],
+            ),
           ),
         ],
       );
     }
 
-    return const Text("no preview");
+    return const Center(
+      child: Text(
+        "No preview available",
+        style: TextStyle(fontStyle: FontStyle.italic),
+      ),
+    );
   }
 }
