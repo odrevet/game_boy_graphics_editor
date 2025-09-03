@@ -18,14 +18,41 @@ import '../models/sourceConverters/gbdk_tile_converter.dart';
 import 'file_picker_utils.dart';
 import 'import_utils.dart';
 
-onImportHttp(
+Future<List<Graphics>?>  onImportHttp(
   BuildContext context,
   String parse,
   String type,
   bool transpose,
   String url,
-) {
-  bool tile = parse == 'Tile';
+) async {
+  Uri uriObject = Uri.parse(url);
+
+  if (type == 'Auto') {
+    type = resolveType(uriObject.path);
+  }
+
+  if (type == 'Binary') {
+    final bin = await http.readBytes(uriObject);
+    List<int> data = convertBytesToDecimals(bin);
+    var graphics = Graphics(name: "from bin", data: data);
+    return [graphics];
+  } else {
+    final source = await http.read(uriObject);
+
+    // using source converter (regexp based)
+    //final formattedSource = GBDKTileConverter().formatSource(source);
+    //final graphicsElements = GBDKTileConverter().readGraphicsFromSource(
+    //  formattedSource,
+    //);
+
+    // using source parser (petitparser based)
+    final parser = SourceParser();
+    final graphicsElements = parser.parseAllArrays(source);
+
+    return graphicsElements;
+  }
+
+/*  bool tile = parse == 'Tile';
   Uri uriObject = Uri.parse(url);
 
   if (type == 'Auto') {
@@ -44,7 +71,7 @@ onImportHttp(
         _setBackgroundFromSource(source, context);
       }
     });
-  }
+  }*/
 }
 
 /*onImport(
@@ -112,8 +139,6 @@ Future<List<Graphics>?> onImport(
     List<int> data = convertBytesToDecimals(bin);
     var graphics = Graphics(name: "from bin", data: data);
     return [graphics];
-
-
   } else {
     final source = await readString(result);
 
@@ -129,7 +154,6 @@ Future<List<Graphics>?> onImport(
 
     return graphicsElements;
   }
-  return null;
 }
 
 String resolveType(String path) {

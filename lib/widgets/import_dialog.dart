@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/import_callbacks.dart';
 
-import '../cubits/app_state_cubit.dart';
 import '../cubits/graphics_cubit.dart';
 import '../models/graphics/graphics.dart';
 
@@ -299,56 +298,59 @@ class _ImportDialogState extends State<ImportDialog> {
   }
 
   void _showUrlImportDialog(BuildContext context) {
+    String dialogUrl = '';
+
     showDialog(
       context: context,
-      builder: (BuildContext alertDialogContext) => AlertDialog(
-        title: const Text('Import from URL'),
-        content: SizedBox(
-          width: 400,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'Enter URL',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.link),
+      builder: (BuildContext alertDialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: const Text('Import from URL'),
+          content: SizedBox(
+            width: 400,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Enter URL',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.link),
+                  ),
+                  onChanged: (text) => setDialogState(() {
+                    dialogUrl = text;
+                  }),
                 ),
-                onChanged: (text) => setState(() {
-                  url = text;
-                }),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: url.isEmpty
-                      ? null
-                      : () async {
-                    Navigator.of(alertDialogContext).pop();
-                    final elements = await onImportHttp(
-                      context,
-                      previewAs,
-                      type,
-                      transpose,
-                      url,
-                    );
-                    if (elements != null) {
-                      setState(() {
-                        graphicsPreview = elements;
-                        // Auto-select all imported graphics
-                        selectedGraphics = List.from(elements);
-                      });
-                    }
-                  },
-                  icon: const Icon(Icons.download),
-                  label: const Text('Load from URL'),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: dialogUrl.isEmpty
+                        ? null
+                        : () async {
+                      Navigator.of(alertDialogContext).pop();
+                      final elements = await onImportHttp(
+                        context,
+                        previewAs,
+                        type,
+                        transpose,
+                        dialogUrl,
+                      );
+                      if (elements != null) {
+                        setState(() {
+                          graphicsPreview = elements;
+                          // Auto-select all imported graphics
+                          selectedGraphics = List.from(elements);
+                        });
+                      }
+                    },
+                    icon: const Icon(Icons.download),
+                    label: const Text('Import from URL'),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
-  }
-}
+  }}
