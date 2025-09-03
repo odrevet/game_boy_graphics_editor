@@ -31,14 +31,6 @@ Future<List<Graphics>?> onImportHttp(
     return [graphics];
   } else {
     final source = await http.read(uriObject);
-
-    // using source converter (regexp based)
-    //final formattedSource = GBDKTileConverter().formatSource(source);
-    //final graphicsElements = GBDKTileConverter().readGraphicsFromSource(
-    //  formattedSource,
-    //);
-
-    // using source parser (petitparser based)
     final parser = SourceParser();
     final graphicsElements = parser.parseAllArrays(source);
 
