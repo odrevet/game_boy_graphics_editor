@@ -6,8 +6,10 @@ import 'package:game_boy_graphics_editor/models/export_callbacks.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_background_converter.dart';
 import 'package:game_boy_graphics_editor/widgets/source_display.dart';
 
+import '../cubits/graphics_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
+import '../models/states/graphics_state.dart';
 
 class ExportDialog extends StatefulWidget {
   const ExportDialog({super.key});
@@ -24,68 +26,73 @@ class _ExportDialogState extends State<ExportDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: SingleChildScrollView(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+    return BlocBuilder<GraphicsCubit, GraphicsState>(
+      builder: (context, state) {
+        return SizedBox(
+          child: SingleChildScrollView(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Text("Data type"),
-                        ),
+                      Row(
+                        children: [
+                          const Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.all(15.0),
+                              child: Text("Data type"),
+                            ),
+                          ),
+                          DropdownButton<String>(
+                            value: type,
+                            onChanged: (String? value) {
+                              setState(() {
+                                type = value!;
+                              });
+                            },
+                            items: <String>['Source code', 'Binary', 'PNG']
+                                .map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                })
+                                .toList(),
+                          ),
+                        ],
                       ),
-                      DropdownButton<String>(
-                        value: type,
-                        onChanged: (String? value) {
-                          setState(() {
-                            type = value!;
-                          });
-                        },
-                        items: <String>['Source code', 'Binary', 'PNG']
-                            .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            })
-                            .toList(),
+                      Row(
+                        children: [
+                          const Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.all(15.0),
+                              child: Text("From"),
+                            ),
+                          ),
+                          DropdownButton<String>(
+                            value: parse,
+                            onChanged: (String? value) {
+                              setState(() {
+                                parse = value!;
+                              });
+                            },
+                            items:
+                                [
+                                  'Tile',
+                                  'Background',
+                                  ...state.graphics.map((g) => g.name),
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Text("From"),
-                        ),
-                      ),
-                      DropdownButton<String>(
-                        value: parse,
-                        onChanged: (String? value) {
-                          setState(() {
-                            parse = value!;
-                          });
-                        },
-                        items: <String>['Tile', 'Background']
-                            .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            })
-                            .toList(),
-                      ),
-                    ],
-                  ),
-                  /*CheckboxListTile(
+                      /*CheckboxListTile(
                     title: const Text("RLE compress"),
                     value: compressedRLE,
                     onChanged: (bool? value) {
@@ -103,38 +110,40 @@ class _ExportDialogState extends State<ExportDialog> {
                       });
                     },
                   ),*/
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      if (parse == 'Tile') {
-                        if (type == 'Source code') {
-                          onFileSaveAsSourceCode(context, parse);
-                        } else if (type == 'Binary') {
-                          onFileSaveAsBinTile(context);
-                        } else if (type == 'PNG') {
-                          onFileTilesSaveAsPNG(context);
-                        }
-                      } else {
-                        if (type == 'Source code') {
-                          onFileSaveAsSourceCode(context, parse);
-                        } else if (type == 'Binary') {
-                          onFileSaveAsBinBackground(context);
-                        } else if (type == 'PNG') {
-                          onFileBackgroundSaveAsPNG(context);
-                        }
-                      }
-                    },
-                    icon: const Icon(Icons.save_alt),
-                    label: const Text('Save'),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          if (parse == 'Tile') {
+                            if (type == 'Source code') {
+                              onFileSaveAsSourceCode(context, parse);
+                            } else if (type == 'Binary') {
+                              onFileSaveAsBinTile(context);
+                            } else if (type == 'PNG') {
+                              onFileTilesSaveAsPNG(context);
+                            }
+                          } else {
+                            if (type == 'Source code') {
+                              onFileSaveAsSourceCode(context, parse);
+                            } else if (type == 'Binary') {
+                              onFileSaveAsBinBackground(context);
+                            } else if (type == 'PNG') {
+                              onFileBackgroundSaveAsPNG(context);
+                            }
+                          }
+                        },
+                        icon: const Icon(Icons.save_alt),
+                        label: const Text('Save'),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                const VerticalDivider(),
+                // Preview
+                ExportPreview(type, parse),
+              ],
             ),
-            const VerticalDivider(),
-            // Preview
-            ExportPreview(type, parse),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
