@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/models/sourceConverters/converter_utils.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/source_parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
@@ -105,19 +106,30 @@ Future<List<Graphics>?> onImport(
     type = resolveType(result.files.single.name);
   }
 
-  final source = await readString(result);
+  if (type == 'Binary') {
+    final bin = await readBin(result);
 
-  // using source converter (regexp based)
-  //final formattedSource = GBDKTileConverter().formatSource(source);
-  //final graphicsElements = GBDKTileConverter().readGraphicsFromSource(
-  //  formattedSource,
-  //);
+    List<int> data = convertBytesToDecimals(bin);
+    var graphics = Graphics(name: "from bin", data: data);
+    return [graphics];
 
-  // using source parser (petitparser based)
-  final parser = SourceParser();
-  final graphicsElements = parser.parseAllArrays(source);
 
-  return graphicsElements;
+  } else {
+    final source = await readString(result);
+
+    // using source converter (regexp based)
+    //final formattedSource = GBDKTileConverter().formatSource(source);
+    //final graphicsElements = GBDKTileConverter().readGraphicsFromSource(
+    //  formattedSource,
+    //);
+
+    // using source parser (petitparser based)
+    final parser = SourceParser();
+    final graphicsElements = parser.parseAllArrays(source);
+
+    return graphicsElements;
+  }
+  return null;
 }
 
 String resolveType(String path) {
