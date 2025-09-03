@@ -34,23 +34,28 @@ class MetaTileListView extends StatelessWidget {
       "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
     }
 
-    return ListTile(
-      leading: SizedBox(
-        width: 40,
-        height: 40,
-        child: MetaTileDisplay(
-          showGrid: false,
-          tileData: metaTile.getTileAtIndex(index),
+    // Calculate the correct aspect ratio based on MetaTile dimensions
+    final double aspectRatio = metaTile.width / metaTile.height;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      child: ListTile(
+        leading: AspectRatio(
+          aspectRatio: aspectRatio,
+          child: MetaTileDisplay(
+            showGrid: false,
+            tileData: metaTile.getTileAtIndex(index),
+          ),
         ),
+        title: Text(
+          title,
+          style: selectedTile == index
+              ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
+              : null,
+        ),
+        onTap: () => onTap(index),
+        onLongPress: () => _showTileInfo(context, index, tileInfo),
       ),
-      title: Text(
-        title,
-        style: selectedTile == index
-            ? const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)
-            : null,
-      ),
-      onTap: () => onTap(index),
-      onLongPress: () => _showTileInfo(context, index, tileInfo),
     );
   }
 

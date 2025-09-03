@@ -23,6 +23,33 @@ class Editor extends StatefulWidget {
 class _EditorState extends State<Editor> {
   int hoverTileIndex = 0;
 
+  Widget _buildMetaTileCanvasWithAspectRatio(BuildContext context, MetaTile metaTile, AppState appState) {
+    // Calculate aspect ratio
+    final double aspectRatio = metaTile.width / metaTile.height;
+
+    // Base size for the canvas
+    final double baseSize = (MediaQuery.of(context).size.width ~/ 3) * appState.zoomTile.toDouble();
+
+    // Calculate dimensions maintaining aspect ratio
+    double canvasWidth, canvasHeight;
+
+    if (aspectRatio >= 1.0) {
+      // Width >= Height: constrain by width
+      canvasWidth = baseSize;
+      canvasHeight = baseSize / aspectRatio;
+    } else {
+      // Height > Width: constrain by height
+      canvasHeight = baseSize;
+      canvasWidth = baseSize * aspectRatio;
+    }
+
+    return Container(
+      width: canvasWidth,
+      height: canvasHeight,
+      child: const MetaTileCanvas(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MetaTileCubit, MetaTile>(
@@ -141,15 +168,7 @@ class _EditorState extends State<Editor> {
                 children: [
                   // ignore: prefer_const_constructors
                   MetaTileToolbar(),
-                  SizedBox(
-                    width:
-                        (MediaQuery.of(context).size.width ~/ 3) *
-                        context.read<AppStateCubit>().state.zoomTile,
-                    height:
-                        (MediaQuery.of(context).size.width ~/ 3) *
-                        context.read<AppStateCubit>().state.zoomTile,
-                    child: const MetaTileCanvas(),
-                  ),
+                  _buildMetaTileCanvasWithAspectRatio(context, metaTile, appState),
                   SizedBox(
                     width: 200,
                     height: 200,
