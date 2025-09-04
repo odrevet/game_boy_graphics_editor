@@ -16,17 +16,9 @@
 #define {{name}}_COLORS_PER_PALETTE 4
 #define {{name}}_TOTAL_COLORS 4
 
-BANKREF_EXTERN({
-{
-name}})
+BANKREF_EXTERN({{name}})
 
-extern const palette_color_t {
-{
-name}}_palettes[4];
-extern const uint8_t {
-{
-name}}_tiles[{
-{
-length}}];
+extern const palette_color_t {{name}}_palettes[4];
+extern const uint8_t {{name}}_tiles[{{length}}];
 
 #endif
