@@ -27,7 +27,10 @@ Future<List<Graphics>?> onImportHttp(
   if (type == 'Binary') {
     final bin = await http.readBytes(uriObject);
     List<int> data = convertBytesToDecimals(bin);
-    var graphics = Graphics(name: "from bin", data: data);
+    String filename = uriObject.pathSegments.isNotEmpty
+        ? uriObject.pathSegments.last
+        : "from bin";
+    var graphics = Graphics(name: filename, data: data);
     return [graphics];
   } else {
     final source = await http.read(uriObject);
@@ -57,14 +60,14 @@ Future<List<Graphics>?> onImport(
       String inputPath = result.files.single.path!;
       List<int> data = _decompress(inputPath, compression, context);
       if (data.isNotEmpty) {
-        var graphics = Graphics(name: "from bin", data: data);
+        var graphics = Graphics(name: result.files.single.name, data: data);
         return [graphics];
       }
     } else {
       // From binary
       final bin = await readBin(result);
       List<int> data = convertBytesToDecimals(bin);
-      var graphics = Graphics(name: "from bin", data: data);
+      var graphics = Graphics(name: result.files.single.name, data: data);
       return [graphics];
     }
   } else {
@@ -75,6 +78,7 @@ Future<List<Graphics>?> onImport(
 
     return graphicsElements;
   }
+  return null;
 }
 
 String resolveType(String path) {
