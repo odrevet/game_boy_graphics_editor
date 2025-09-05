@@ -8,18 +8,16 @@
 
 #define numbers_TILE_ORIGIN 0
 #define numbers_TILE_W 8
-#define numbers_TILE_H 16
+#define numbers_TILE_H 8
 #define numbers_WIDTH 32
 #define numbers_HEIGHT 32
 #define numbers_TILE_COUNT 16
 #define numbers_PALETTE_COUNT 1
 #define numbers_COLORS_PER_PALETTE 4
 #define numbers_TOTAL_COLORS 4
-#define numbers_PIVOT_X 16
-#define numbers_PIVOT_Y 16
-#define numbers_PIVOT_W 32
-#define numbers_PIVOT_H 32
-extern const metasprite_t* const numbers_metasprites[1];
+#define numbers_MAP_ATTRIBUTES 0
+extern const unsigned char numbers_map[16];
+#define numbers_map_attributes numbers_map
 
 BANKREF_EXTERN(numbers)
 
