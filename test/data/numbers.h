@@ -15,9 +15,6 @@
 #define numbers_PALETTE_COUNT 1
 #define numbers_COLORS_PER_PALETTE 4
 #define numbers_TOTAL_COLORS 4
-#define numbers_MAP_ATTRIBUTES 0
-extern const unsigned char numbers_map[16];
-#define numbers_map_attributes numbers_map
 
 BANKREF_EXTERN(numbers)
 
