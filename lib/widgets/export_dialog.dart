@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/models/export_callbacks.dart';
-import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_background_converter.dart';
-import 'package:game_boy_graphics_editor/widgets/source_display.dart';
+import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
-import '../cubits/graphics_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
-import '../models/sourceConverters/gbdk_tile_converter.dart';
-import '../models/states/graphics_state.dart';
+import 'export_preview.dart';
 
 class ExportDialog extends StatefulWidget {
-  const ExportDialog({super.key});
+  final Graphics? graphic;
+
+  const ExportDialog({super.key, this.graphic});
 
   @override
   State<ExportDialog> createState() => _ExportDialogState();
@@ -24,104 +22,130 @@ class _ExportDialogState extends State<ExportDialog> {
   String type = 'Source code';
   String parse = 'Tile';
 
+  // Access the graphic parameter using widget.graphic
+  Graphics? get graphic => widget.graphic;
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GraphicsCubit, GraphicsState>(
-      builder: (context, state) {
-        return Dialog(
-          child: SizedBox(
-            width: 900,
-            height: 600,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      // preview panel
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.surfaceContainerHighest,
-                          padding: const EdgeInsets.all(16),
-                          child: ExportPreview(type, parse),
-                        ),
-                      ),
+    Graphics graphics;
+    if (widget.graphic != null) {
+      graphics = widget.graphic!;
+    } else {
+      if (parse == 'Tile') {
+        graphics = context.read<MetaTileCubit>().state;
+      } else {
+        graphics = context.read<BackgroundCubit>().state;
+      }
+    }
 
-                      const VerticalDivider(width: 1),
-                      // settings panel
-                      Expanded(
-                        flex: 1,
-                        child: ListView(
-                          padding: const EdgeInsets.all(16),
-                          children: [
-                            _buildDropdown(
-                              label: "Data type",
-                              value: type,
-                              items: const ['Source code', 'Binary', 'PNG'],
-                              onChanged: (v) => setState(() => type = v!),
-                            ),
-                            const SizedBox(height: 16),
-                            _buildDropdown(
-                              label: "From",
-                              value: parse,
-                              items: [
-                                'Tile',
-                                'Background',
-                                ...state.graphics.map((g) => g.name),
-                              ],
-                              onChanged: (v) => setState(() => parse = v!),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+    return Dialog(
+      child: SizedBox(
+        width: 900,
+        height: 600,
+        child: Column(
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  // preview panel
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHighest,
+                      padding: const EdgeInsets.all(16),
+                      child: ExportPreview(graphics, type, parse),
+                    ),
                   ),
-                ),
 
-                // Actions
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text("Cancel"),
-                      ),
-                      const SizedBox(width: 12),
-                      ElevatedButton.icon(
-                        icon: const Icon(Icons.save_alt),
-                        label: const Text("Save"),
-                        onPressed: () {
-                          if (parse == 'Tile') {
-                            if (type == 'Source code') {
-                              onFileSaveAsSourceCode(context, parse);
-                            } else if (type == 'Binary') {
-                              onFileSaveAsBinTile(context);
-                            } else {
-                              onFileTilesSaveAsPNG(context);
-                            }
-                          } else {
-                            if (type == 'Source code') {
-                              onFileSaveAsSourceCode(context, parse);
-                            } else if (type == 'Binary') {
-                              onFileSaveAsBinBackground(context);
-                            } else {
-                              onFileBackgroundSaveAsPNG(context);
-                            }
-                          }
-                        },
-                      ),
-                    ],
+                  const VerticalDivider(width: 1),
+                  // settings panel
+                  Expanded(
+                    flex: 1,
+                    child: ListView(
+                      padding: const EdgeInsets.all(16),
+                      children: [
+                        _buildDropdown(
+                          label: "Data type",
+                          value: type,
+                          items: const ['Source code', 'Binary', 'PNG'],
+                          onChanged: (v) => setState(() => type = v!),
+                        ),
+                        const SizedBox(height: 16),
+                        _buildDropdown(
+                          label: "From",
+                          value: parse,
+                          items: ['Tile', 'Background'],
+                          onChanged: (v) => setState(() => parse = v!),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+
+            // Actions
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text("Cancel"),
+                  ),
+                  const SizedBox(width: 12),
+                  ElevatedButton.icon(
+                    icon: const Icon(Icons.save_alt),
+                    label: const Text("Save"),
+                    onPressed: () {
+                      if (parse == 'Tile') {
+                        if (type == 'Source code') {
+                          onFileSaveAsSourceCode(
+                            context,
+                            parse,
+                            graphics,
+                          );
+                        } else if (type == 'Binary') {
+                          onFileSaveAsBinTile(
+                            context,
+                            context.read<MetaTileCubit>().state,
+                          );
+                        } else {
+                          onFileTilesSaveAsPNG(
+                            context,
+                            context.read<MetaTileCubit>().state,
+                          );
+                        }
+                      } else {
+                        if (type == 'Source code') {
+                          onFileSaveAsSourceCode(
+                            context,
+                            parse,
+                            context.read<BackgroundCubit>().state,
+                          );
+                        } else if (type == 'Binary') {
+                          onFileSaveAsBinBackground(
+                            context,
+                            context.read<BackgroundCubit>().state,
+                          );
+                        } else {
+                          onFileBackgroundSaveAsPNG(
+                            context,
+                            context.read<BackgroundCubit>().state,
+                          );
+                        }
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -142,65 +166,6 @@ class _ExportDialogState extends State<ExportDialog> {
               .toList(),
         ),
       ],
-    );
-  }
-}
-
-class ExportPreview extends StatelessWidget {
-  final String type;
-  final String parse;
-
-  const ExportPreview(this.type, this.parse, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    if (type == 'Source code') {
-      var name = '';
-      var header = '';
-      var source = '';
-
-      if (parse == 'Tile') {
-        header = GBDKTileConverter().toHeader(
-          context.read<MetaTileCubit>().state,
-          name,
-        );
-        source = GBDKTileConverter().toSource(
-          context.read<MetaTileCubit>().state,
-          name,
-        );
-        name = context.read<AppStateCubit>().state.tileName;
-      } else if (parse == 'Background') {
-        header = GBDKBackgroundConverter().toHeader(
-          context.read<BackgroundCubit>().state,
-          name,
-        );
-        source = GBDKBackgroundConverter().toSource(
-          context.read<BackgroundCubit>().state,
-          name,
-        );
-        name = context.read<AppStateCubit>().state.backgroundName;
-      }
-
-      return Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: [
-                SourceDisplay(source: header, name: name, extension: '.h'),
-                const SizedBox(height: 12),
-                SourceDisplay(source: source, name: name, extension: '.c'),
-              ],
-            ),
-          ),
-        ],
-      );
-    }
-
-    return const Center(
-      child: Text(
-        "No preview available",
-        style: TextStyle(fontStyle: FontStyle.italic),
-      ),
     );
   }
 }

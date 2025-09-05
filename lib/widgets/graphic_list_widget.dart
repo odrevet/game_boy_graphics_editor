@@ -421,17 +421,6 @@ class _GraphicListTile extends StatelessWidget {
             onPressed: () {
               final origin = int.tryParse(controller.text) ?? 0;
               Navigator.of(dialogContext).pop();
-
-              // Show loading message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Loading "${graphic.name}" as tiles with origin $origin...',
-                  ),
-                  duration: const Duration(seconds: 1),
-                ),
-              );
-
               _addMetaTile(graphic, context, origin);
             },
             child: const Text("Add Tiles"),
@@ -570,6 +559,17 @@ class _GraphicListTile extends StatelessWidget {
               icon: const Icon(Icons.edit),
               onPressed: onEdit,
               tooltip: 'Edit properties',
+            ),
+            IconButton(
+              icon: const Icon(Icons.arrow_downward),
+              onPressed: () => showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: Text('Export Graphic'),
+                  content: ExportDialog(graphic: graphic),
+                ),
+              ),
+              tooltip: 'Export',
             ),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),

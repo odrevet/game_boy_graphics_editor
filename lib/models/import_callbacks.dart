@@ -52,19 +52,23 @@ Future<List<Graphics>?> onImport(
   }
 
   if (type == 'Binary') {
-    //        if (compression != 'none') {
-    //          String inputPath = result.files.single.path!;
-    //          List<int> content = _decompress(inputPath, compression, context);
-    //          if (content.isNotEmpty) {
-    //            loadBin(content, tile, transpose, context);
-    //          }
-
-    final bin = await readBin(result);
-
-    List<int> data = convertBytesToDecimals(bin);
-    var graphics = Graphics(name: "from bin", data: data);
-    return [graphics];
+    if (compression != 'none') {
+      // From binary with compression
+      String inputPath = result.files.single.path!;
+      List<int> data = _decompress(inputPath, compression, context);
+      if (data.isNotEmpty) {
+        var graphics = Graphics(name: "from bin", data: data);
+        return [graphics];
+      }
+    } else {
+      // From binary
+      final bin = await readBin(result);
+      List<int> data = convertBytesToDecimals(bin);
+      var graphics = Graphics(name: "from bin", data: data);
+      return [graphics];
+    }
   } else {
+    // From source
     final source = await readString(result);
     final parser = SourceParser();
     final graphicsElements = parser.parseAllArrays(source);

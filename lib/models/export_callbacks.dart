@@ -10,59 +10,49 @@ import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_background
 import '../../models/download_stub.dart'
     if (dart.library.html) '../../models/download.dart';
 import '../cubits/app_state_cubit.dart';
-import '../cubits/background_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
 import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
-import 'export_utils.dart';
+import 'png.dart';
 
-void onFileSaveAsSourceCode(BuildContext context, String parse) {
+void onFileSaveAsSourceCode(
+  BuildContext context,
+  String parse,
+  Graphics graphics,
+) {
   if (parse == 'Tile') {
     if (kIsWeb) {
+      // Tile on Web
       download(
-        GBDKTileConverter().toHeader(
-          context.read<MetaTileCubit>().state,
-          context.read<AppStateCubit>().state.tileName,
-        ),
-        '${context.read<AppStateCubit>().state.tileName}.h',
+        GBDKTileConverter().toHeader(graphics, graphics.name),
+        '${graphics.name}.h',
       );
       download(
-        GBDKTileConverter().toSource(
-          context.read<MetaTileCubit>().state,
-          context.read<AppStateCubit>().state.tileName,
-        ),
-        '${context.read<AppStateCubit>().state.tileName}.c',
+        GBDKTileConverter().toSource(graphics, graphics.name),
+        '${graphics.name}.c',
       );
     } else {
-      _saveGraphics(
-        context.read<MetaTileCubit>().state,
-        context.read<AppStateCubit>().state.tileName,
-        GBDKTileConverter(),
-        context,
-      );
+      // Tile on Desktop
+      _saveGraphics(graphics, graphics.name, GBDKTileConverter(), context);
     }
   } else {
     if (kIsWeb) {
+      // Background on Web
       download(
-        GBDKBackgroundConverter().toHeader(
-          context.read<BackgroundCubit>().state,
-          context.read<AppStateCubit>().state.backgroundName,
-        ),
-        '${context.read<AppStateCubit>().state.backgroundName}.h',
+        GBDKBackgroundConverter().toHeader(graphics, graphics.name),
+        '${graphics.name}.h',
       );
       download(
-        GBDKBackgroundConverter().toSource(
-          context.read<BackgroundCubit>().state,
-          context.read<AppStateCubit>().state.backgroundName,
-        ),
-        '${context.read<AppStateCubit>().state.backgroundName}.c',
+        GBDKBackgroundConverter().toSource(graphics, graphics.name),
+        '${graphics.name}.c',
       );
     } else {
+      // Background on Desktop
       _saveGraphics(
-        context.read<BackgroundCubit>().state,
-        context.read<AppStateCubit>().state.backgroundName,
+        graphics,
+        graphics.name,
         GBDKBackgroundConverter(),
         context,
       );
@@ -70,30 +60,26 @@ void onFileSaveAsSourceCode(BuildContext context, String parse) {
   }
 }
 
-void onFileSaveAsBinTile(BuildContext context) async {
-  Graphics graphics = context.read<MetaTileCubit>().state;
+void onFileSaveAsBinTile(BuildContext context, Graphics graphics) async {
   List<int> bytes = GBDKTileConverter().getRawTileInt(
     GBDKTileConverter().reorderFromCanvasToSource(graphics),
   );
 
+  String name = graphics.name;
+
   if (kIsWeb) {
-    download(
-      bytes.join(),
-      '${context.read<AppStateCubit>().state.tileName}.bin',
-    );
+    download(bytes.join(), '${name}.bin');
   } else {
-    String name = context.read<AppStateCubit>().state.tileName;
     String? directory = await FilePicker.platform.getDirectoryPath();
 
     if (directory != null) {
-      saveBin(bytes, directory, name);
+      File("$directory/$name.bin").writeAsBytesSync(bytes);
     }
   }
 }
 
-void onFileSaveAsBinBackground(BuildContext context) async {
-  Graphics graphics = context.read<BackgroundCubit>().state;
-  String name = context.read<AppStateCubit>().state.backgroundName;
+void onFileSaveAsBinBackground(BuildContext context, Graphics graphics) async {
+  String name = graphics.name;
   List<int> bytes = graphics.data;
 
   if (kIsWeb) {
@@ -106,37 +92,34 @@ void onFileSaveAsBinBackground(BuildContext context) async {
   }
 }
 
-void onFileTilesSaveAsPNG(BuildContext context) async {
+void onFileTilesSaveAsPNG(BuildContext context, MetaTile metaTile) async {
   FilePicker.platform.getDirectoryPath().then((directory) {
     if (directory != null) {
-      MetaTile metaTile = context.read<MetaTileCubit>().state;
       List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
       String tileName = context.read<AppStateCubit>().state.tileName;
-      int count = context.read<MetaTileCubit>().count();
+      int count = metaTile.data.length ~/ (metaTile.height * metaTile.width);
 
-      tilesSaveToPNG(metaTile, colorSet, tileName, count, directory);
+      final png = tilesToPNG(metaTile, colorSet, count);
+      File("$directory/$tileName.png").writeAsBytesSync(png);
     }
   });
 }
 
-void onFileBackgroundSaveAsPNG(BuildContext context) async {
+void onFileBackgroundSaveAsPNG(
+  BuildContext context,
+  Background background,
+) async {
   FilePicker.platform.getDirectoryPath().then((directory) {
     if (directory != null) {
       MetaTile metaTile = context.read<MetaTileCubit>().state;
-      Background background = context.read<BackgroundCubit>().state;
       List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
-      String backgroundName = context
-          .read<AppStateCubit>()
-          .state
-          .backgroundName;
-
-      backgroundSaveToPNG(
+      String backgroundName = background.name;
+      final png = backgroundToPNG(
         background,
         metaTile,
-        colorSet,
-        backgroundName,
-        directory,
+        colorSet
       );
+      File("$directory/$backgroundName.png").writeAsBytesSync(png);
     }
   });
 }
@@ -165,7 +148,12 @@ Future<String?> _saveSourceToDirectory(
   String? directory = await FilePicker.platform.getDirectoryPath();
 
   if (directory != null) {
-    saveToSource(directory, name, sourceConverter, graphics);
+    File(
+      "$directory/$name.h",
+    ).writeAsString(sourceConverter.toHeader(graphics, name));
+    File(
+      "$directory/$name.c",
+    ).writeAsString(sourceConverter.toSource(graphics, name));
   }
 
   return directory;

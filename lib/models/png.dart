@@ -1,18 +1,14 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
-import 'package:game_boy_graphics_editor/models/sourceConverters/source_converter.dart';
 import 'package:image/image.dart' as img;
 
 import 'graphics/background.dart';
-import 'graphics/graphics.dart';
 
-void tilesSaveToPNG(
+Uint8List tilesToPNG(
   MetaTile metaTile,
   List<int> colorSet,
-  String tileName,
   int count,
-  String directory,
 ) {
   final image = img.Image(
     width: metaTile.width * count,
@@ -41,20 +37,13 @@ void tilesSaveToPNG(
     }
   }
 
-  final png = img.encodePng(image);
-  File("$directory/$tileName.png").writeAsBytesSync(png);
+  return img.encodePng(image);
 }
 
-void saveBin(List<int> bytes, String directory, String name) {
-  File("$directory/$name.bin").writeAsBytesSync(bytes);
-}
-
-void backgroundSaveToPNG(
+Uint8List backgroundToPNG(
   Background background,
   MetaTile metaTile,
-  List<int> colorSet,
-  String backgroundName,
-  String directory,
+  List<int> colorSet
 ) {
   final image = img.Image(
     width: background.width * metaTile.width,
@@ -90,20 +79,5 @@ void backgroundSaveToPNG(
     }
   }
 
-  final png = img.encodePng(image);
-  File("$directory/$backgroundName.png").writeAsBytesSync(png);
-}
-
-void saveToSource(
-  String directory,
-  String name,
-  SourceConverter sourceConverter,
-  Graphics graphics,
-) {
-  File(
-    "$directory/$name.h",
-  ).writeAsString(sourceConverter.toHeader(graphics, name));
-  File(
-    "$directory/$name.c",
-  ).writeAsString(sourceConverter.toSource(graphics, name));
+  return img.encodePng(image);
 }

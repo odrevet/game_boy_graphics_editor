@@ -56,7 +56,7 @@ class GBDKTileConverter extends SourceConverter {
     } else if (width == 32 && height == 32) {
       pattern = <int>[0, 2, 8, 10, 1, 3, 9, 11, 4, 6, 12, 14, 5, 7, 13, 15];
     } else {
-      throw ('Unknown meta tile size');
+      throw ('Unknown meta tile size width $width height $height');
     }
 
     return pattern;

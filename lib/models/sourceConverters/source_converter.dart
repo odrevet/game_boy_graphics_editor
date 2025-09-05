@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../graphics/graphics.dart';
 
 abstract class SourceConverter {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/import_callbacks.dart';
 
+import '../cubits/app_state_cubit.dart';
 import '../cubits/graphics_cubit.dart';
 import '../models/graphics/graphics.dart';
 
@@ -76,9 +77,51 @@ class _ImportDialogState extends State<ImportDialog> {
                           items: <String>['Auto', 'Source code', 'Binary']
                               .map(
                                 (v) =>
-                                    DropdownMenuItem(value: v, child: Text(v)),
-                              )
+                                DropdownMenuItem(value: v, child: Text(v)),
+                          )
                               .toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Compression
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 120,
+                        child: Text(
+                          "Compression:",
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      Expanded(
+                        child: DropdownButtonFormField<String>(
+                          initialValue: compression,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                          ),
+                          onChanged: kIsWeb ||
+                              !context.read<AppStateCubit>().state.gbdkPathValid
+                              ? null
+                              : (String? value) {
+                            setState(() {
+                              compression = value!;
+                            });
+                          },
+                          items: <String>['none', 'rle', 'gb']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
                         ),
                       ),
                     ],
@@ -139,8 +182,8 @@ class _ImportDialogState extends State<ImportDialog> {
                           onPressed: kIsWeb
                               ? null
                               : () {
-                                  _showUrlImportDialog(context);
-                                },
+                            _showUrlImportDialog(context);
+                          },
                           icon: const Icon(Icons.http),
                           label: const Text('Import from URL'),
                           style: ElevatedButton.styleFrom(
@@ -277,11 +320,11 @@ class _ImportDialogState extends State<ImportDialog> {
                 onPressed: selectedGraphics.isEmpty
                     ? null
                     : () {
-                        context.read<GraphicsCubit>().addGraphics(
-                          selectedGraphics,
-                        );
-                        Navigator.of(context).pop();
-                      },
+                  context.read<GraphicsCubit>().addGraphics(
+                    selectedGraphics,
+                  );
+                  Navigator.of(context).pop();
+                },
                 icon: const Icon(Icons.add),
                 label: Text(
                   selectedGraphics.isEmpty
@@ -329,22 +372,22 @@ class _ImportDialogState extends State<ImportDialog> {
                     onPressed: dialogUrl.isEmpty
                         ? null
                         : () async {
-                            Navigator.of(alertDialogContext).pop();
-                            final elements = await onImportHttp(
-                              context,
-                              previewAs,
-                              type,
-                              transpose,
-                              dialogUrl,
-                            );
-                            if (elements != null) {
-                              setState(() {
-                                graphicsPreview = elements;
-                                // Auto-select all imported graphics
-                                selectedGraphics = List.from(elements);
-                              });
-                            }
-                          },
+                      Navigator.of(alertDialogContext).pop();
+                      final elements = await onImportHttp(
+                        context,
+                        previewAs,
+                        type,
+                        transpose,
+                        dialogUrl,
+                      );
+                      if (elements != null) {
+                        setState(() {
+                          graphicsPreview = elements;
+                          // Auto-select all imported graphics
+                          selectedGraphics = List.from(elements);
+                        });
+                      }
+                    },
                     icon: const Icon(Icons.download),
                     label: const Text('Import from URL'),
                   ),

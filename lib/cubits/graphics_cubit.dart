@@ -162,10 +162,7 @@ class GraphicsCubit extends Cubit<GraphicsState> {
     List<int> indices = [];
     for (int i = 0; i < state.graphics.length; i++) {
       final graphic = state.graphics[i];
-      // Add logic here to identify which graphics are backgrounds
-      // This could be based on naming convention, type property, etc.
       if (graphic is Background == true) {
-        // Assuming you have this property
         indices.add(i);
       }
     }
