@@ -126,6 +126,14 @@ class MetaTileListView extends StatelessWidget {
                 "Unmapped Graphics",
                 0, // Default origin for unmapped tiles
               );
+
+              // Show success message
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Unmapped tiles loaded to graphics'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
             },
             icon: const Icon(Icons.arrow_circle_right),
           ),

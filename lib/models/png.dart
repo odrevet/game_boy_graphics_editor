@@ -1,8 +1,7 @@
 import 'dart:typed_data';
-
-import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:image/image.dart' as img;
 
+import 'graphics/meta_tile.dart';
 import 'graphics/background.dart';
 
 Uint8List tilesToPNG(

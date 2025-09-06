@@ -59,6 +59,11 @@ Future<List<Graphics>?> onImport(
       // From binary with compression
       String inputPath = result.files.single.path!;
       List<int> data = _decompress(inputPath, compression, context);
+
+      if (transpose) {
+        data = transposeList(data, 8, 8);
+      }
+
       if (data.isNotEmpty) {
         var graphics = Graphics(name: result.files.single.name, data: data);
         return [graphics];

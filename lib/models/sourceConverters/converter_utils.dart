@@ -56,7 +56,7 @@ List<int> convertBytesToDecimals(List<int> content) {
   return data;
 }
 
-List<int> transpose(List<int> raw, int height, int width) {
+List<int> transposeList(List<int> raw, int height, int width) {
   List<int> transposed = List<int>.filled(height * width, 0);
 
   int x = 0;

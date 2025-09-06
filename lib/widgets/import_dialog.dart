@@ -126,6 +126,34 @@ class _ImportDialogState extends State<ImportDialog> {
                       ),
                     ],
                   ),
+
+                  const SizedBox(height: 16),
+
+                  // Transpose checkbox
+                  /*Row(
+                    children: [
+                      const SizedBox(
+                        width: 120,
+                        child: Text(
+                          "Transpose:",
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      Expanded(
+                        child: CheckboxListTile(
+                          value: transpose,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              transpose = value ?? false;
+                            });
+                          },
+                          title: const Text('Transpose graphics'),
+                          contentPadding: EdgeInsets.zero,
+                          controlAffinity: ListTileControlAffinity.leading,
+                        ),
+                      ),
+                    ],
+                  ),*/
                 ],
               ),
             ),
@@ -332,7 +360,7 @@ class _ImportDialogState extends State<ImportDialog> {
                       : 'Import ${selectedGraphics.length} Selected Graphics',
                 ),
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  padding: const EdgeInsets.symmetric(vertical: 14                  ),
                 ),
               ),
             ),

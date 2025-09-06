@@ -73,7 +73,13 @@ class ExportPreview extends StatelessWidget {
         png = backgroundToPNG(graphics as Background, metaTile, colorSet);
       }
 
-      return Image.memory(png, width: 300, height: 300, fit: BoxFit.contain);
+      return Image.memory(
+        png,
+        width: 300,
+        height: 300,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.none,
+      );
     }
 
     return const Center(

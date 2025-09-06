@@ -13,7 +13,7 @@ import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/states/graphics_state.dart';
-import 'background/background_grid.dart';
+import 'background/background_preview_dialog.dart';
 import 'export_dialog.dart';
 import 'graphic_form.dart';
 import 'import_dialog.dart';
@@ -459,55 +459,6 @@ class _GraphicListTile extends StatelessWidget {
     }
   }
 
-  void _showBackgroundPreviewDialog(BuildContext context, graphic) {
-    Background preview = GBDKBackgroundConverter().fromGraphics(graphic);
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (ctx) {
-        return AlertDialog(
-          insetPadding: const EdgeInsets.all(20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          title: Text(
-            "Load ${graphic.name} as Background",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          content: SizedBox(
-            width: MediaQuery.of(ctx).size.width * 0.8,
-            height:
-                MediaQuery.of(ctx).size.height *
-                0.6, // Reduced height for actions
-            child: BackgroundGrid(
-              background: preview,
-              tileOrigin: 0,
-              //preview.tileOrigin,
-              metaTile: context.read<MetaTileCubit>().state,
-              showGrid: true,
-              cellSize: 32,
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-              child: const Text("Cancel"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-                _loadAsBackground(graphic, context);
-              },
-              child: const Text("Load"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final dataSize = (graphic.data.length / 1024).toStringAsFixed(1);
@@ -535,7 +486,14 @@ class _GraphicListTile extends StatelessWidget {
                 if (value == 'tile') {
                   _showTilePreviewDialog(context, graphic);
                 } else if (value == 'background') {
-                  _showBackgroundPreviewDialog(context, graphic);
+                  showDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (context) => BackgroundPreviewDialog(
+                      graphic: graphic,
+                      onLoad: () => _loadAsBackground(graphic, context),
+                    ),
+                  );
                 }
               },
               itemBuilder: (ctx) => [
