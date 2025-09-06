@@ -32,7 +32,7 @@ class BackgroundPreviewDialog extends StatelessWidget {
     final Background preview = GBDKBackgroundConverter().fromGraphics(graphic);
 
     // WIP transpose
-    preview.data = transposeList(preview.data, graphic.height, graphic.width);
+    //preview.data = transposeList(preview.data, graphic.height, graphic.width);
 
     final screenSize = MediaQuery.of(context).size;
 
