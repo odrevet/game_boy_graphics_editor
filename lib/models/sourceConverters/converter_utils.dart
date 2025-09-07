@@ -57,6 +57,7 @@ List<int> convertBytesToDecimals(List<int> content) {
 }
 
 List<int> transposeList(List<int> raw, int height, int width) {
+  print("transpose w $width h $height");
   List<int> transposed = List<int>.filled(height * width, 0);
 
   int x = 0;

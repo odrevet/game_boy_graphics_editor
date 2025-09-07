@@ -16,7 +16,6 @@ class ImportDialog extends StatefulWidget {
 
 class _ImportDialogState extends State<ImportDialog> {
   String compression = 'none';
-  bool transpose = false;
   String previewAs = 'Tile';
   String type = 'Auto';
   String url = '';
@@ -186,7 +185,6 @@ class _ImportDialogState extends State<ImportDialog> {
                             final elements = await onImport(
                               context,
                               type,
-                              transpose,
                               compression,
                             );
                             if (elements != null) {
@@ -405,7 +403,6 @@ class _ImportDialogState extends State<ImportDialog> {
                         context,
                         previewAs,
                         type,
-                        transpose,
                         dialogUrl,
                       );
                       if (elements != null) {

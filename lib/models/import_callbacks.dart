@@ -15,7 +15,6 @@ Future<List<Graphics>?> onImportHttp(
   BuildContext context,
   String parse,
   String type,
-  bool transpose,
   String url,
 ) async {
   Uri uriObject = Uri.parse(url);
@@ -44,7 +43,6 @@ Future<List<Graphics>?> onImportHttp(
 Future<List<Graphics>?> onImport(
   BuildContext context,
   String type,
-  bool transpose,
   String compression,
 ) async {
   final result = await selectFile(['*']);
@@ -59,10 +57,6 @@ Future<List<Graphics>?> onImport(
       // From binary with compression
       String inputPath = result.files.single.path!;
       List<int> data = _decompress(inputPath, compression, context);
-
-      if (transpose) {
-        data = transposeList(data, 8, 8);
-      }
 
       if (data.isNotEmpty) {
         var graphics = Graphics(name: result.files.single.name, data: data);

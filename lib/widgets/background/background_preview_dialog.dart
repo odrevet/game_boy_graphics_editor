@@ -7,7 +7,7 @@ import '../../models/graphics/background.dart';
 import '../../models/sourceConverters/gbdk_background_converter.dart';
 import 'background_grid.dart';
 
-class BackgroundPreviewDialog extends StatelessWidget {
+class BackgroundPreviewDialog extends StatefulWidget {
   final dynamic graphic;
   final VoidCallback onLoad;
   final String? title;
@@ -28,12 +28,20 @@ class BackgroundPreviewDialog extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final Background preview = GBDKBackgroundConverter().fromGraphics(graphic);
+  State<BackgroundPreviewDialog> createState() => _BackgroundPreviewDialogState();
+}
 
-    // WIP transpose
-    var data = transposeList(preview.data, graphic.height, graphic.width);
-    preview.data = data;
+class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
+  bool transpose = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final Background preview = GBDKBackgroundConverter().fromGraphics(widget.graphic);
+
+    if (transpose) {
+      var data = transposeList(preview.data, widget.graphic.height ~/ 8, widget.graphic.width ~/ 8);
+      preview.data = data;
+    }
 
     final screenSize = MediaQuery.of(context).size;
 
@@ -41,18 +49,38 @@ class BackgroundPreviewDialog extends StatelessWidget {
       insetPadding: const EdgeInsets.all(20),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       title: Text(
-        title ?? "Load ${graphic.name} as Background",
+        widget.title ?? "Load ${widget.graphic.name} as Background",
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
       content: SizedBox(
-        width: dialogWidth ?? screenSize.width * 0.8,
-        height: dialogHeight ?? screenSize.height * 0.6,
-        child: BackgroundGrid(
-          background: preview,
-          tileOrigin: 0,
-          metaTile: context.read<MetaTileCubit>().state,
-          showGrid: showGrid,
-          cellSize: cellSize,
+        width: widget.dialogWidth ?? screenSize.width * 0.8,
+        height: widget.dialogHeight ?? screenSize.height * 0.6,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Checkbox(
+                  value: transpose,
+                  onChanged: (value) {
+                    setState(() {
+                      transpose = value ?? false;
+                    });
+                  },
+                ),
+                const Text("Transpose"),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: BackgroundGrid(
+                background: preview,
+                tileOrigin: 0,
+                metaTile: context.read<MetaTileCubit>().state,
+                showGrid: widget.showGrid,
+                cellSize: widget.cellSize,
+              ),
+            ),
+          ],
         ),
       ),
       actions: [
@@ -63,7 +91,7 @@ class BackgroundPreviewDialog extends StatelessWidget {
         ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
-            onLoad();
+            widget.onLoad();
           },
           child: const Text("Load"),
         ),
