@@ -518,16 +518,54 @@ class _GraphicListTile extends StatelessWidget {
               onPressed: onEdit,
               tooltip: 'Edit properties',
             ),
-            IconButton(
+            PopupMenuButton<String>(
               icon: const Icon(Icons.arrow_downward),
-              onPressed: () => showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                  title: Text('Export Graphic'),
-                  content: ExportDialog(graphic: graphic),
-                ),
-              ),
               tooltip: 'Export',
+              onSelected: (value) {
+                if (value == 'tile') {
+                  var metatile = MetaTile(
+                    height: graphic.height,
+                    width: graphic.width,
+                    name: graphic.name,
+                  );
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text('Export ${metatile.name} as Tile'),
+                      content: ExportDialog(graphic: metatile),
+                    ),
+                  );
+                } else if (value == 'background') {
+                  var background = Background(
+                    height: graphic.height,
+                    width: graphic.width,
+                    name: graphic.name,
+                  );
+                  showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                      title: Text('Export ${background.name} as Background'),
+                      content: ExportDialog(graphic: background),
+                    ),
+                  );
+                }
+              },
+              itemBuilder: (ctx) => [
+                const PopupMenuItem(
+                  value: 'tile',
+                  child: ListTile(
+                    leading: Icon(Icons.image),
+                    title: Text("Export as Tile"),
+                  ),
+                ),
+                const PopupMenuItem(
+                  value: 'background',
+                  child: ListTile(
+                    leading: Icon(Icons.grid_4x4),
+                    title: Text("Export as Background"),
+                  ),
+                ),
+              ],
             ),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),

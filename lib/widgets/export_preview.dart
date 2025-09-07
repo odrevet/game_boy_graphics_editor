@@ -13,24 +13,29 @@ import '../models/sourceConverters/gbdk_tile_converter.dart';
 
 class ExportPreview extends StatelessWidget {
   final String type;
-  final String parse;
   final Graphics graphics;
 
-  const ExportPreview(this.graphics, this.type, this.parse, {super.key});
+  const ExportPreview(this.graphics, this.type, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    final graphic = graphics; // Create local variable for type promotion
+
     if (type == 'Source code') {
-      var name = graphics.name;
+      var name = graphic.name;
       var header = '';
       var source = '';
 
-      if (parse == 'Tile') {
-        header = GBDKTileConverter().toHeader(graphics, name);
-        source = GBDKTileConverter().toSource(graphics, name);
-      } else if (parse == 'Background') {
-        header = GBDKBackgroundConverter().toHeader(graphics, name);
-        source = GBDKBackgroundConverter().toSource(graphics, name);
+      if (graphic is Background) {
+        header = GBDKBackgroundConverter().toHeader(graphic, name);
+        source = GBDKBackgroundConverter().toSource(graphic, name);
+      } else if (graphic is MetaTile) {
+        header = GBDKTileConverter().toHeader(graphic, name);
+        source = GBDKTileConverter().toSource(graphic, name);
+      } else {
+        // For base Graphics type, default to tile conversion
+        header = GBDKTileConverter().toHeader(graphic, name);
+        source = GBDKTileConverter().toSource(graphic, name);
       }
 
       return Column(
@@ -48,38 +53,48 @@ class ExportPreview extends StatelessWidget {
       );
     } else if (type == 'Binary') {
       List<int> bytes = [];
-      if (parse == 'Tile') {
+      if (graphic is MetaTile) {
         bytes = GBDKTileConverter().getRawTileInt(
-          GBDKTileConverter().reorderFromCanvasToSource(graphics),
+          GBDKTileConverter().reorderFromCanvasToSource(graphic),
         );
-      } else {
-        // TODO
-        //bytes = GBDKBackgroundConverter().getRawTileInt(
-        //  GBDKBackgroundConverter().reorderFromCanvasToSource(graphics),
-        //);
+      } else if (graphic is Background) {
+        bytes = graphic.data;
       }
 
       return Text(bytes.toString());
     } else if (type == 'PNG') {
       var png;
-      if (parse == 'Tile') {
+      if (graphic is MetaTile) {
         List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
-        int count = graphics.data.length ~/ (graphics.height * graphics.width);
+        int count = graphic.data.length ~/ (graphic.height * graphic.width);
 
-        png = tilesToPNG(graphics as MetaTile, colorSet, count);
-      } else {
+        png = tilesToPNG(graphic, colorSet, count);
+      } else if (graphic is Background) {
         MetaTile metaTile = context.read<MetaTileCubit>().state;
         List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
-        png = backgroundToPNG(graphics as Background, metaTile, colorSet);
+        png = backgroundToPNG(graphic, metaTile, colorSet);
+      } else {
+        // For base Graphics type, we cannot generate PNG since tilesToPNG requires MetaTile
+        // and backgroundToPNG requires Background
+        png = null;
       }
 
-      return Image.memory(
-        png,
-        width: 300,
-        height: 300,
-        fit: BoxFit.contain,
-        filterQuality: FilterQuality.none,
-      );
+      if (png != null) {
+        return Image.memory(
+          png,
+          width: 300,
+          height: 300,
+          fit: BoxFit.contain,
+          filterQuality: FilterQuality.none,
+        );
+      } else {
+        return const Center(
+          child: Text(
+            "PNG preview not available for this graphics type",
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        );
+      }
     }
 
     return const Center(

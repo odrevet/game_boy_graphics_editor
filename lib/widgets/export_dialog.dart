@@ -55,7 +55,7 @@ class _ExportDialogState extends State<ExportDialog> {
                         context,
                       ).colorScheme.surfaceContainerHighest,
                       padding: const EdgeInsets.all(16),
-                      child: ExportPreview(graphics, type, parse),
+                      child: ExportPreview(graphics, type),
                     ),
                   ),
 
