@@ -229,7 +229,6 @@ class _EditorState extends State<Editor> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // ignore: prefer_const_constructors
                   MetaTileToolbar(),
                   _buildMetaTileCanvasWithAspectRatio(
                     context,

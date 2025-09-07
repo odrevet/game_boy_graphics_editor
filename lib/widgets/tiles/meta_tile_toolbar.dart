@@ -42,7 +42,6 @@ class MetaTileToolbar extends StatelessWidget {
               icon: const Icon(Icons.zoom_in),
             ),
             const VerticalDivider(),
-            // ignore: prefer_const_constructors
             DrawModeDropdown(),
             const VerticalDivider(),
             const TileDimensionDropdown(),
