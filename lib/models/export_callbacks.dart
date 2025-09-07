@@ -114,11 +114,7 @@ void onFileBackgroundSaveAsPNG(
       MetaTile metaTile = context.read<MetaTileCubit>().state;
       List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
       String backgroundName = background.name;
-      final png = backgroundToPNG(
-        background,
-        metaTile,
-        colorSet
-      );
+      final png = backgroundToPNG(background, metaTile, colorSet);
       File("$directory/$backgroundName.png").writeAsBytesSync(png);
     }
   });

@@ -70,9 +70,9 @@ class SourceParser {
     _parser = arrayDefinition.token().map((token) {
       final parts = token.value;
 
-      String type = parts[2] as String;
+      //String type = parts[2] as String;
       String name = parts[4] as String;
-      final sizeInfo = parts[6];
+      //final sizeInfo = parts[6];
       final arrayContentResult = parts[10] as List;
 
       final elementsResult = arrayContentResult[2] as List;
@@ -85,11 +85,11 @@ class SourceParser {
         }
       }
 
-      int? size;
-      if (sizeInfo != null && sizeInfo is List && sizeInfo.length >= 3) {
-        final sizeValue = sizeInfo[2];
-        if (sizeValue is int) size = sizeValue;
-      }
+      //int? size;
+      //if (sizeInfo != null && sizeInfo is List && sizeInfo.length >= 3) {
+      //  final sizeValue = sizeInfo[2];
+      //  if (sizeValue is int) size = sizeValue;
+      //}
 
       return Graphics(name: name, data: values);
     });

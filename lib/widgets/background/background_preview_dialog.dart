@@ -28,7 +28,8 @@ class BackgroundPreviewDialog extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<BackgroundPreviewDialog> createState() => _BackgroundPreviewDialogState();
+  State<BackgroundPreviewDialog> createState() =>
+      _BackgroundPreviewDialogState();
 }
 
 class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
@@ -36,10 +37,16 @@ class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final Background preview = GBDKBackgroundConverter().fromGraphics(widget.graphic);
+    final Background preview = GBDKBackgroundConverter().fromGraphics(
+      widget.graphic,
+    );
 
     if (transpose) {
-      var data = transposeList(preview.data, widget.graphic.height ~/ 8, widget.graphic.width ~/ 8);
+      var data = transposeList(
+        preview.data,
+        widget.graphic.height ~/ 8,
+        widget.graphic.width ~/ 8,
+      );
       preview.data = data;
     }
 

@@ -107,7 +107,9 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
       // Keep the tile info but reset source information if desired
       if (tileIndex < _tileInfoList.length) {
-        _tileInfoList[tileIndex] = TileInfo(origin: _tileInfoList[tileIndex].origin);
+        _tileInfoList[tileIndex] = TileInfo(
+          origin: _tileInfoList[tileIndex].origin,
+        );
       }
 
       emit(currentState.copyWith(data: newData));

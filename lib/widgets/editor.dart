@@ -24,10 +24,10 @@ class _EditorState extends State<Editor> {
   int hoverTileIndex = 0;
 
   Widget _buildMetaTileCanvasWithAspectRatio(
-      BuildContext context,
-      MetaTile metaTile,
-      AppState appState,
-      ) {
+    BuildContext context,
+    MetaTile metaTile,
+    AppState appState,
+  ) {
     // Calculate aspect ratio
     final double aspectRatio = metaTile.width / metaTile.height;
 
@@ -86,7 +86,8 @@ class _EditorState extends State<Editor> {
                           .tileIndexTile;
 
                       // Get total number of tiles
-                      int totalTiles = context.read<MetaTileCubit>().state.data.length ~/
+                      int totalTiles =
+                          context.read<MetaTileCubit>().state.data.length ~/
                           context.read<MetaTileCubit>().state.nbPixel;
 
                       // Only allow removal if more than 1 tile exists
@@ -95,14 +96,15 @@ class _EditorState extends State<Editor> {
 
                         // Adjust selected index if we removed the last tile
                         if (tileIndex >= totalTiles - 1) {
-                          context.read<AppStateCubit>().setSelectedTileIndex(tileIndex - 1);
+                          context.read<AppStateCubit>().setSelectedTileIndex(
+                            tileIndex - 1,
+                          );
                         }
                         // If we removed the first tile, keep index at 0
                         else if (tileIndex == 0) {
                           context.read<AppStateCubit>().setSelectedTileIndex(0);
                         }
-                      }
-                      else{
+                      } else {
                         context.read<MetaTileCubit>().clearTile(0);
                       }
 
@@ -140,7 +142,7 @@ class _EditorState extends State<Editor> {
                       context.read<MetaTileCubit>().clearTile(tileIndex);
                       Navigator.pop(contextMenuAreaContext);
                     },
-                  )
+                  ),
                 ],
                 child: Column(
                   children: [
@@ -170,23 +172,33 @@ class _EditorState extends State<Editor> {
                                 .tileIndexTile;
 
                             // Get total number of tiles
-                            int totalTiles = context.read<MetaTileCubit>().state.data.length ~/
+                            int totalTiles =
+                                context
+                                    .read<MetaTileCubit>()
+                                    .state
+                                    .data
+                                    .length ~/
                                 context.read<MetaTileCubit>().state.nbPixel;
 
                             // Only allow removal if more than 1 tile exists
                             if (totalTiles > 1) {
-                              context.read<MetaTileCubit>().removeTile(tileIndex);
+                              context.read<MetaTileCubit>().removeTile(
+                                tileIndex,
+                              );
 
                               // Adjust selected index if we removed the last tile
                               if (tileIndex >= totalTiles - 1) {
-                                context.read<AppStateCubit>().setSelectedTileIndex(tileIndex - 1);
+                                context
+                                    .read<AppStateCubit>()
+                                    .setSelectedTileIndex(tileIndex - 1);
                               }
                               // If we removed the first tile, keep index at 0
                               else if (tileIndex == 0) {
-                                context.read<AppStateCubit>().setSelectedTileIndex(0);
+                                context
+                                    .read<AppStateCubit>()
+                                    .setSelectedTileIndex(0);
                               }
-                            }
-                            else{
+                            } else {
                               context.read<MetaTileCubit>().clearTile(0);
                             }
                           },
@@ -238,13 +250,16 @@ class _EditorState extends State<Editor> {
                   ),
                 ],
               ),
-              const SizedBox(width: 16), // Add horizontal spacing before BackgroundEditor
+              const SizedBox(width: 16),
+              // Add horizontal spacing before BackgroundEditor
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0), // Add padding around BackgroundEditor
+                  padding: const EdgeInsets.all(16.0),
+                  // Add padding around BackgroundEditor
                   child: BackgroundEditor(
-                    onTapTileListView: (index) =>
-                        context.read<AppStateCubit>().setSelectedTileIndex(index),
+                    onTapTileListView: (index) => context
+                        .read<AppStateCubit>()
+                        .setSelectedTileIndex(index),
                   ),
                 ),
               ),

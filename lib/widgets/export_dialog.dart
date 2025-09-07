@@ -103,11 +103,7 @@ class _ExportDialogState extends State<ExportDialog> {
                     onPressed: () {
                       if (parse == 'Tile') {
                         if (type == 'Source code') {
-                          onFileSaveAsSourceCode(
-                            context,
-                            parse,
-                            graphics,
-                          );
+                          onFileSaveAsSourceCode(context, parse, graphics);
                         } else if (type == 'Binary') {
                           onFileSaveAsBinTile(
                             context,
