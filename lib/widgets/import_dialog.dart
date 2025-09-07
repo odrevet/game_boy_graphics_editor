@@ -26,299 +26,346 @@ class _ImportDialogState extends State<ImportDialog> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 600,
+      width: 900, // Increased width to accommodate side-by-side layout
       height: 700,
       padding: const EdgeInsets.all(24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Settings Section
-          Card(
-            elevation: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Import Settings',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Data type
-                  Row(
-                    children: [
-                      const SizedBox(
-                        width: 120,
-                        child: Text(
-                          "Data type:",
-                          style: TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                      Expanded(
-                        child: DropdownButtonFormField<String>(
-                          initialValue: type,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
-                          ),
-                          onChanged: (String? value) {
-                            setState(() {
-                              type = value!;
-                            });
-                          },
-                          items: <String>['Auto', 'Source code', 'Binary']
-                              .map(
-                                (v) =>
-                                    DropdownMenuItem(value: v, child: Text(v)),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Compression
-                  Row(
-                    children: [
-                      const SizedBox(
-                        width: 120,
-                        child: Text(
-                          "Compression:",
-                          style: TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                      Expanded(
-                        child: DropdownButtonFormField<String>(
-                          initialValue: compression,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
-                          ),
-                          onChanged:
-                              kIsWeb ||
-                                  !context
-                                      .read<AppStateCubit>()
-                                      .state
-                                      .gbdkPathValid
-                              ? null
-                              : (String? value) {
-                                  setState(() {
-                                    compression = value!;
-                                  });
-                                },
-                          items: <String>['none', 'rle', 'gb']
-                              .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              })
-                              .toList(),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 16),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          // Import Source Section
-          Card(
-            elevation: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Import Source',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // File & URL buttons
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () async {
-                            final elements = await onImport(
-                              context,
-                              type,
-                              compression,
-                            );
-                            if (elements != null) {
-                              setState(() {
-                                graphicsPreview = elements;
-                                // Auto-select all imported graphics
-                                selectedGraphics = List.from(elements);
-                              });
-                            }
-                          },
-                          icon: const Icon(Icons.file_open),
-                          label: const Text('Import from File'),
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: kIsWeb
-                              ? null
-                              : () {
-                                  _showUrlImportDialog(context);
-                                },
-                          icon: const Icon(Icons.http),
-                          label: const Text('Import from URL'),
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          // Graphics preview section
-          if (graphicsPreview.isNotEmpty) ...[
-            Row(
+          // Main content row with settings on left and preview on right
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Preview (${graphicsPreview.length} items)',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+                // Left side - Settings and Import Source
+                SizedBox(
+                  width: 400,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Settings Section
+                      Card(
+                        elevation: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Import Settings',
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 16),
+
+                              // Data type
+                              Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 120,
+                                    child: Text(
+                                      "Data type:",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: DropdownButtonFormField<String>(
+                                      initialValue: type,
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 8,
+                                        ),
+                                      ),
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          type = value!;
+                                        });
+                                      },
+                                      items:
+                                          <String>[
+                                                'Auto',
+                                                'Source code',
+                                                'Binary',
+                                              ]
+                                              .map(
+                                                (v) => DropdownMenuItem(
+                                                  value: v,
+                                                  child: Text(v),
+                                                ),
+                                              )
+                                              .toList(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 16),
+
+                              // Compression
+                              Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 120,
+                                    child: Text(
+                                      "Compression:",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: DropdownButtonFormField<String>(
+                                      initialValue: compression,
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 8,
+                                        ),
+                                      ),
+                                      onChanged:
+                                          kIsWeb ||
+                                              !context
+                                                  .read<AppStateCubit>()
+                                                  .state
+                                                  .gbdkPathValid
+                                          ? null
+                                          : (String? value) {
+                                              setState(() {
+                                                compression = value!;
+                                              });
+                                            },
+                                      items: <String>['none', 'rle', 'gb']
+                                          .map<DropdownMenuItem<String>>((
+                                            String value,
+                                          ) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          })
+                                          .toList(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 16),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // Import Source Section
+                      Card(
+                        elevation: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Import Source',
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 16),
+
+                              // File & URL buttons
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton.icon(
+                                      onPressed: () async {
+                                        final elements = await onImport(
+                                          context,
+                                          type,
+                                          compression,
+                                        );
+                                        if (elements != null) {
+                                          setState(() {
+                                            graphicsPreview = elements;
+                                            // Auto-select all imported graphics
+                                            selectedGraphics = List.from(
+                                              elements,
+                                            );
+                                          });
+                                        }
+                                      },
+                                      icon: const Icon(Icons.file_open),
+                                      label: const Text('Import from File'),
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton.icon(
+                                      onPressed: kIsWeb
+                                          ? null
+                                          : () {
+                                              _showUrlImportDialog(context);
+                                            },
+                                      icon: const Icon(Icons.http),
+                                      label: const Text('Import from URL'),
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const Spacer(),
-                TextButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      if (selectedGraphics.length == graphicsPreview.length) {
-                        selectedGraphics.clear();
-                      } else {
-                        selectedGraphics = List.from(graphicsPreview);
-                      }
-                    });
-                  },
-                  icon: Icon(
-                    selectedGraphics.length == graphicsPreview.length
-                        ? Icons.deselect
-                        : Icons.select_all,
-                  ),
-                  label: Text(
-                    selectedGraphics.length == graphicsPreview.length
-                        ? 'Deselect All'
-                        : 'Select All',
+
+                const SizedBox(width: 24),
+
+                // Right side - Graphics preview section
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Found ${graphicsPreview.length} graphic(s)',
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w600),
+                          ),
+                          const Spacer(),
+                          TextButton.icon(
+                            onPressed: () {
+                              setState(() {
+                                if (selectedGraphics.length ==
+                                    graphicsPreview.length) {
+                                  selectedGraphics.clear();
+                                } else {
+                                  selectedGraphics = List.from(graphicsPreview);
+                                }
+                              });
+                            },
+                            icon: Icon(
+                              selectedGraphics.length == graphicsPreview.length
+                                  ? Icons.deselect
+                                  : Icons.select_all,
+                            ),
+                            label: Text(
+                              selectedGraphics.length == graphicsPreview.length
+                                  ? 'Deselect All'
+                                  : 'Select All',
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+
+                      // Scrollable graphics list
+                      Expanded(
+                        child: Card(
+                          elevation: 2,
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.surfaceContainerHighest,
+                                  borderRadius: const BorderRadius.vertical(
+                                    top: Radius.circular(8),
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '${selectedGraphics.length} of ${graphicsPreview.length} selected',
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodySmall,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: graphicsPreview.length,
+                                  itemBuilder: (context, index) {
+                                    final graphic = graphicsPreview[index];
+                                    final isSelected = selectedGraphics
+                                        .contains(graphic);
+
+                                    return ListTile(
+                                      dense: true,
+                                      title: Text(
+                                        graphic.name,
+                                        style: TextStyle(
+                                          fontWeight: isSelected
+                                              ? FontWeight.w600
+                                              : FontWeight.normal,
+                                        ),
+                                      ),
+                                      leading: Checkbox(
+                                        value: isSelected,
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            if (value == true) {
+                                              selectedGraphics.add(graphic);
+                                            } else {
+                                              selectedGraphics.remove(graphic);
+                                            }
+                                          });
+                                        },
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          if (isSelected) {
+                                            selectedGraphics.remove(graphic);
+                                          } else {
+                                            selectedGraphics.add(graphic);
+                                          }
+                                        });
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+          ),
 
-            // Scrollable graphics list
-            Expanded(
-              child: Card(
-                elevation: 2,
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.surfaceContainerHighest,
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(8),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            '${selectedGraphics.length} of ${graphicsPreview.length} selected',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: graphicsPreview.length,
-                        itemBuilder: (context, index) {
-                          final graphic = graphicsPreview[index];
-                          final isSelected = selectedGraphics.contains(graphic);
-
-                          return ListTile(
-                            dense: true,
-                            title: Text(
-                              graphic.name,
-                              style: TextStyle(
-                                fontWeight: isSelected
-                                    ? FontWeight.w600
-                                    : FontWeight.normal,
-                              ),
-                            ),
-                            leading: Checkbox(
-                              value: isSelected,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  if (value == true) {
-                                    selectedGraphics.add(graphic);
-                                  } else {
-                                    selectedGraphics.remove(graphic);
-                                  }
-                                });
-                              },
-                            ),
-                            onTap: () {
-                              setState(() {
-                                if (isSelected) {
-                                  selectedGraphics.remove(graphic);
-                                } else {
-                                  selectedGraphics.add(graphic);
-                                }
-                              });
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
+          // Bottom import action (full width)
+          if (graphicsPreview.isNotEmpty) ...[
             const SizedBox(height: 16),
-
-            // Import action
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
