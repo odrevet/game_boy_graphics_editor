@@ -8,7 +8,7 @@ import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_background_converter.dart';
 
 import '../../models/download_stub.dart'
-if (dart.library.html) '../../models/download.dart';
+    if (dart.library.html) '../../models/download.dart';
 import '../cubits/app_state_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
 import '../models/graphics/background.dart';
@@ -17,9 +17,11 @@ import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
 import 'png.dart';
 
-void onFileSaveAsSourceCode(BuildContext context,
-    String parse,
-    Graphics graphics,) {
+void onFileSaveAsSourceCode(
+  BuildContext context,
+  String parse,
+  Graphics graphics,
+) {
   if (parse == 'Tile') {
     if (kIsWeb) {
       // Tile on Web
@@ -93,14 +95,8 @@ void onFileSaveAsBinBackground(BuildContext context, Graphics graphics) async {
 void onFileTilesSaveAsPNG(BuildContext context, MetaTile metaTile) async {
   FilePicker.platform.getDirectoryPath().then((directory) {
     if (directory != null) {
-      List<int> colorSet = context
-          .read<AppStateCubit>()
-          .state
-          .colorSet;
-      String tileName = context
-          .read<AppStateCubit>()
-          .state
-          .tileName;
+      List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
+      String tileName = context.read<AppStateCubit>().state.tileName;
       int count = metaTile.data.length ~/ (metaTile.height * metaTile.width);
 
       final png = tilesToPNG(metaTile, colorSet, count);
@@ -109,17 +105,14 @@ void onFileTilesSaveAsPNG(BuildContext context, MetaTile metaTile) async {
   });
 }
 
-void onFileBackgroundSaveAsPNG(BuildContext context,
-    Background background,) async {
+void onFileBackgroundSaveAsPNG(
+  BuildContext context,
+  Background background,
+) async {
   FilePicker.platform.getDirectoryPath().then((directory) {
     if (directory != null) {
-      MetaTile metaTile = context
-          .read<MetaTileCubit>()
-          .state;
-      List<int> colorSet = context
-          .read<AppStateCubit>()
-          .state
-          .colorSet;
+      MetaTile metaTile = context.read<MetaTileCubit>().state;
+      List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
       String backgroundName = background.name;
       final png = backgroundToPNG(background, metaTile, colorSet);
       File("$directory/$backgroundName.png").writeAsBytesSync(png);
@@ -127,10 +120,12 @@ void onFileBackgroundSaveAsPNG(BuildContext context,
   });
 }
 
-void _saveGraphics(Graphics graphics,
-    String name,
-    SourceConverter sourceConverter,
-    BuildContext context,) {
+void _saveGraphics(
+  Graphics graphics,
+  String name,
+  SourceConverter sourceConverter,
+  BuildContext context,
+) {
   _saveSourceToDirectory(graphics, name, sourceConverter).then((directory) {
     if (directory != null) {
       var snackBar = SnackBar(
@@ -141,9 +136,11 @@ void _saveGraphics(Graphics graphics,
   });
 }
 
-Future<String?> _saveSourceToDirectory(Graphics graphics,
-    String name,
-    SourceConverter sourceConverter,) async {
+Future<String?> _saveSourceToDirectory(
+  Graphics graphics,
+  String name,
+  SourceConverter sourceConverter,
+) async {
   String? directory = await FilePicker.platform.getDirectoryPath();
 
   if (directory != null) {

@@ -24,9 +24,9 @@ class GBDKTileConverter extends SourceConverter {
     }
 
     for (
-    int index = 0;
-    index < (combined.length ~/ size) * size;
-    index += size * 2
+      int index = 0;
+      index < (combined.length ~/ size) * size;
+      index += size * 2
     ) {
       String lo = "";
       String hi = "";
@@ -65,8 +65,7 @@ class GBDKTileConverter extends SourceConverter {
   String toHeader(Graphics graphics, String name) {
     // Read template file
     String template = File(
-      '${Directory.current
-          .path}/lib/models/sourceConverters/templates/tile.h.tpl',
+      '${Directory.current.path}/lib/models/sourceConverters/templates/tile.h.tpl',
     ).readAsStringSync();
 
     // Replace placeholders
@@ -83,8 +82,7 @@ class GBDKTileConverter extends SourceConverter {
   String toSource(Graphics graphics, String name) {
     // Read template file
     String template = File(
-      '${Directory.current
-          .path}/lib/models/sourceConverters/templates/tile.c.tpl',
+      '${Directory.current.path}/lib/models/sourceConverters/templates/tile.c.tpl',
     ).readAsStringSync();
 
     // Format the data array
@@ -114,9 +112,9 @@ class GBDKTileConverter extends SourceConverter {
     int nbTilePerMetaTile = (width * height) ~/ MetaTile.nbPixelPerTile;
 
     for (
-    int tileIndex = 0;
-    tileIndex < data.length ~/ MetaTile.nbPixelPerTile;
-    tileIndex++
+      int tileIndex = 0;
+      tileIndex < data.length ~/ MetaTile.nbPixelPerTile;
+      tileIndex++
     ) {
       int patternIndex = pattern[tileIndex % pattern.length];
       int metaTileIndex = tileIndex ~/ nbTilePerMetaTile;
@@ -128,10 +126,10 @@ class GBDKTileConverter extends SourceConverter {
         var row = data.sublist(start, end);
         int reorderedPixel =
             ((tileIndex % nbTilePerRow) * MetaTile.tileSize) +
-                (tileIndex ~/ nbTilePerRow).floor() *
-                    MetaTile.nbPixelPerTile *
-                    nbTilePerRow +
-                col * width;
+            (tileIndex ~/ nbTilePerRow).floor() *
+                MetaTile.nbPixelPerTile *
+                nbTilePerRow +
+            col * width;
         reorderedData.setRange(
           reorderedPixel,
           reorderedPixel + MetaTile.tileSize,
@@ -152,9 +150,9 @@ class GBDKTileConverter extends SourceConverter {
     var pattern = getPattern(graphics.width, graphics.height);
     final int nbTilePerRow = (graphics.width ~/ MetaTile.tileSize);
     for (
-    int pixelIndex = 0;
-    pixelIndex < graphics.data.length;
-    pixelIndex += MetaTile.tileSize
+      int pixelIndex = 0;
+      pixelIndex < graphics.data.length;
+      pixelIndex += MetaTile.tileSize
     ) {
       final int rowIndex =
           pixelIndex ~/ (nbTilePerRow * MetaTile.nbPixelPerTile);
@@ -169,8 +167,8 @@ class GBDKTileConverter extends SourceConverter {
       final metaTileIndex = pixelIndex ~/ (graphics.width * graphics.height);
       final int start =
           (patternIndex * MetaTile.nbPixelPerTile) +
-              (tileRowIndex * MetaTile.tileSize) +
-              (metaTileIndex * graphics.width * graphics.height);
+          (tileRowIndex * MetaTile.tileSize) +
+          (metaTileIndex * graphics.width * graphics.height);
       final int end = start + MetaTile.tileSize;
       reorderedData.setRange(start, end, rowData);
     }

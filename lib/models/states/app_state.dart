@@ -78,27 +78,25 @@ class AppState {
     List<int>? tileBuffer,
     List<int>? colorSet,
     ViewType? currentView,
-  }) =>
-      AppState(
-        intensity: intensity ?? this.intensity,
-        tileIndexTile: tileIndexTile ?? this.tileIndexTile,
-        zoomTile: zoomTile ?? this.zoomTile,
-        zoomBackground: zoomBackground ?? this.zoomBackground,
-        lockScrollBackground: lockScrollBackground ?? this.lockScrollBackground,
-        showGridTile: showGridTile ?? this.showGridTile,
-        gbdkPath: gbdkPath ?? this.gbdkPath,
-        gbdkPathValid: gbdkPathValid ?? this.gbdkPathValid,
-        tileName: tileName ?? this.tileName,
-        backgroundName: backgroundName ?? this.backgroundName,
-        drawModeTile: drawModeTile ?? this.drawModeTile,
-        drawModeBackground: drawModeBackground ?? this.drawModeBackground,
-        showGridBackground: showGridBackground ?? this.showGridBackground,
-        showExportPreviewBackground:
+  }) => AppState(
+    intensity: intensity ?? this.intensity,
+    tileIndexTile: tileIndexTile ?? this.tileIndexTile,
+    zoomTile: zoomTile ?? this.zoomTile,
+    zoomBackground: zoomBackground ?? this.zoomBackground,
+    lockScrollBackground: lockScrollBackground ?? this.lockScrollBackground,
+    showGridTile: showGridTile ?? this.showGridTile,
+    gbdkPath: gbdkPath ?? this.gbdkPath,
+    gbdkPathValid: gbdkPathValid ?? this.gbdkPathValid,
+    tileName: tileName ?? this.tileName,
+    backgroundName: backgroundName ?? this.backgroundName,
+    drawModeTile: drawModeTile ?? this.drawModeTile,
+    drawModeBackground: drawModeBackground ?? this.drawModeBackground,
+    showGridBackground: showGridBackground ?? this.showGridBackground,
+    showExportPreviewBackground:
         showExportPreviewBackground ?? this.showExportPreviewBackground,
-        showExportPreviewTile: showExportPreviewTile ??
-            this.showExportPreviewTile,
-        tileBuffer: tileBuffer ?? [...this.tileBuffer],
-        colorSet: colorSet ?? this.colorSet,
-        currentView: currentView ?? this.currentView,
-      );
+    showExportPreviewTile: showExportPreviewTile ?? this.showExportPreviewTile,
+    tileBuffer: tileBuffer ?? [...this.tileBuffer],
+    colorSet: colorSet ?? this.colorSet,
+    currentView: currentView ?? this.currentView,
+  );
 }

@@ -10,8 +10,7 @@ class GraphicsCubit extends Cubit<GraphicsState> {
 
   // Add a single graphic
   void addGraphic(Graphics graphic) {
-    final updatedGraphics = List<Graphics>.from(state.graphics)
-      ..add(graphic);
+    final updatedGraphics = List<Graphics>.from(state.graphics)..add(graphic);
     emit(state.copyWith(graphics: updatedGraphics, error: null));
   }
 
@@ -83,9 +82,11 @@ class GraphicsCubit extends Cubit<GraphicsState> {
   }
 
   // Commit background data to graphics - this is the key synchronization method
-  void commitMetaTileToGraphics(Graphics metaTile,
-      String sourceName,
-      int tileOrigin,) {
+  void commitMetaTileToGraphics(
+    Graphics metaTile,
+    String sourceName,
+    int tileOrigin,
+  ) {
     List<int> data = GBDKTileConverter().toSourceData(metaTile);
     int? targetIndex = findGraphicByNameAndOrigin(sourceName, tileOrigin);
 

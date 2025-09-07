@@ -7,18 +7,11 @@ String decToBinary(int value) {
 }
 
 String binaryToHex(value) {
-  return "0x${int
-      .parse(value, radix: 2)
-      .toRadixString(16)
-      .padLeft(2, "0")
-      .toUpperCase()}";
+  return "0x${int.parse(value, radix: 2).toRadixString(16).padLeft(2, "0").toUpperCase()}";
 }
 
 String decimalToHex(int value, {bool prefix = false}) {
-  return "${prefix ? '0x' : ''}${value
-      .toRadixString(16)
-      .padLeft(2, "0")
-      .toUpperCase()}";
+  return "${prefix ? '0x' : ''}${value.toRadixString(16).padLeft(2, "0").toUpperCase()}";
 }
 
 int binaryToDec(String value) {

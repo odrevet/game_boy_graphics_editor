@@ -52,10 +52,9 @@ class SettingsWidget extends StatelessWidget {
                             Text("Selected: $paletteName"),
                             const Spacer(),
                             TextButton.icon(
-                              onPressed: () =>
-                                  context
-                                      .read<AppStateCubit>()
-                                      .toggleColorSet(),
+                              onPressed: () => context
+                                  .read<AppStateCubit>()
+                                  .toggleColorSet(),
                               icon: const Icon(Icons.swap_horiz),
                               label: const Text("Switch"),
                             ),
@@ -66,8 +65,7 @@ class SettingsWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: activeColors
                               .map(
-                                (c) =>
-                                Container(
+                                (c) => Container(
                                   width: 40,
                                   height: 40,
                                   decoration: BoxDecoration(
@@ -76,7 +74,7 @@ class SettingsWidget extends StatelessWidget {
                                     border: Border.all(color: Colors.black26),
                                   ),
                                 ),
-                          )
+                              )
                               .toList(),
                         ),
                       ],
@@ -133,25 +131,26 @@ class SettingsWidget extends StatelessWidget {
                               onPressed: kIsWeb
                                   ? null
                                   : () {
-                                FilePicker.platform.getDirectoryPath().then((
-                                    dir,) async {
-                                  if (dir != null) {
-                                    context
-                                        .read<AppStateCubit>()
-                                        .setGbdkPath(dir);
-                                    context
-                                        .read<AppStateCubit>()
-                                        .setGbdkPathValid();
+                                      FilePicker.platform.getDirectoryPath().then((
+                                        dir,
+                                      ) async {
+                                        if (dir != null) {
+                                          context
+                                              .read<AppStateCubit>()
+                                              .setGbdkPath(dir);
+                                          context
+                                              .read<AppStateCubit>()
+                                              .setGbdkPathValid();
 
-                                    final SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                    await prefs.setString(
-                                      'gbdkPath',
-                                      dir,
-                                    );
-                                  }
-                                });
-                              },
+                                          final SharedPreferences prefs =
+                                              await SharedPreferences.getInstance();
+                                          await prefs.setString(
+                                            'gbdkPath',
+                                            dir,
+                                          );
+                                        }
+                                      });
+                                    },
                               icon: const Icon(Icons.folder_open),
                               label: const Text('Browse'),
                             ),

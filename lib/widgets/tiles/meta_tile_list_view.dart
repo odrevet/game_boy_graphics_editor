@@ -20,16 +20,17 @@ class MetaTileListView extends StatelessWidget {
     required this.selectedTile,
   });
 
-  Widget _buildTileListItem(BuildContext context,
-      int index,
-      TileInfo tileInfo,
-      int tileOrigin,
-      var metaTile,) {
+  Widget _buildTileListItem(
+    BuildContext context,
+    int index,
+    TileInfo tileInfo,
+    int tileOrigin,
+    var metaTile,
+  ) {
     String title = "${index.toString()} ${decimalToHex(index, prefix: true)}";
     if (tileOrigin > 0) {
       title +=
-      "\n${(index + tileOrigin).toString()} ${decimalToHex(
-          index + tileOrigin, prefix: true)}";
+          "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
     }
 
     // Calculate the correct aspect ratio based on MetaTile dimensions
@@ -60,35 +61,34 @@ class MetaTileListView extends StatelessWidget {
   void _showTileInfo(BuildContext context, int index, TileInfo tileInfo) {
     showDialog(
       context: context,
-      builder: (ctx) =>
-          AlertDialog(
-            title: Text("Tile $index Info"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Index: $index"),
-                Text("Hex: ${decimalToHex(index, prefix: true)}"),
-                if (tileInfo.sourceName != null)
-                  Text("Source: ${tileInfo.sourceName}"),
-                if (tileInfo.sourceIndex != null)
-                  Text("Source Index: ${tileInfo.sourceIndex}"),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(),
-                child: const Text("OK"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                  context.read<MetaTileCubit>().removeTileAt(index);
-                },
-                child: const Text("Clear", style: TextStyle(color: Colors.red)),
-              ),
-            ],
+      builder: (ctx) => AlertDialog(
+        title: Text("Tile $index Info"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Index: $index"),
+            Text("Hex: ${decimalToHex(index, prefix: true)}"),
+            if (tileInfo.sourceName != null)
+              Text("Source: ${tileInfo.sourceName}"),
+            if (tileInfo.sourceIndex != null)
+              Text("Source Index: ${tileInfo.sourceIndex}"),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text("OK"),
           ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              context.read<MetaTileCubit>().removeTileAt(index);
+            },
+            child: const Text("Clear", style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
     );
   }
 
@@ -142,10 +142,12 @@ class MetaTileListView extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildListItems(BuildContext context,
-      List<TileInfo> tileInfoList,
-      int tileOrigin,
-      var metaTile,) {
+  List<Widget> _buildListItems(
+    BuildContext context,
+    List<TileInfo> tileInfoList,
+    int tileOrigin,
+    var metaTile,
+  ) {
     List<Widget> items = [];
     String? currentSource;
     int? currentOrigin;
@@ -191,9 +193,9 @@ class MetaTileListView extends StatelessWidget {
                       final metaTileCubit = context.read<MetaTileCubit>();
                       final sourceTileData = metaTileCubit
                           .extractSourceTileData(
-                        tileInfo.sourceName!,
-                        tileInfo.origin,
-                      );
+                            tileInfo.sourceName!,
+                            tileInfo.origin,
+                          );
 
                       var sourceMetaTile = MetaTile(
                         height: 8, // metaTile.height,
@@ -231,13 +233,8 @@ class MetaTileListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int tileOrigin = context
-        .read<BackgroundCubit>()
-        .state
-        .tileOrigin;
-    var metaTile = context
-        .read<MetaTileCubit>()
-        .state;
+    int tileOrigin = context.read<BackgroundCubit>().state.tileOrigin;
+    var metaTile = context.read<MetaTileCubit>().state;
     var tileInfoList = context.read<MetaTileCubit>().getTileInfoList();
 
     return ListView(

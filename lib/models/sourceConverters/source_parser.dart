@@ -19,14 +19,14 @@ class SourceParser {
 
     // Integer type patterns - order matters for longest match first
     final integerType =
-    string('unsigned char') |
-    string('uint8_t') |
-    string('UINT8') |
-    string('char');
+        string('unsigned char') |
+        string('uint8_t') |
+        string('UINT8') |
+        string('char');
 
     // Identifier (array name)
     final identifier =
-    (letter() | char('_')) & (letter() | digit() | char('_')).star();
+        (letter() | char('_')) & (letter() | digit() | char('_')).star();
     final arrayName = identifier.flatten();
 
     // Array size (optional)
@@ -36,7 +36,7 @@ class SourceParser {
     // Hexadecimal number
     final hexDigit = pattern('0-9A-Fa-f');
     final hexNumber = (string('0x') & hexDigit.plus().flatten()).map(
-          (parts) => int.parse(parts[1], radix: 16),
+      (parts) => int.parse(parts[1], radix: 16),
     );
 
     // Decimal number
@@ -53,18 +53,18 @@ class SourceParser {
 
     // Complete array definition
     final arrayDefinition =
-    string('const').optional() &
-    ws &
-    integerType &
-    ws &
-    arrayName &
-    ws &
-    arraySize.optional() &
-    ws &
-    char('=') &
-    ws &
-    arrayContent &
-    char(';').optional();
+        string('const').optional() &
+        ws &
+        integerType &
+        ws &
+        arrayName &
+        ws &
+        arraySize.optional() &
+        ws &
+        char('=') &
+        ws &
+        arrayContent &
+        char(';').optional();
 
     // Use `token()` so we get offset information
     _parser = arrayDefinition.token().map((token) {
@@ -136,11 +136,7 @@ class SourceParser {
         foundOpenBrace = line.contains('{');
         currentBlock = line;
         arrayStartOffset = offset; // Track where the array definition starts
-        braceCount = '{'
-            .allMatches(line)
-            .length - '}'
-            .allMatches(line)
-            .length;
+        braceCount = '{'.allMatches(line).length - '}'.allMatches(line).length;
       } else if (inArrayDefinition) {
         currentBlock += '\n$line';
 
@@ -154,11 +150,7 @@ class SourceParser {
           foundOpenBrace = true;
         }
 
-        braceCount += '{'
-            .allMatches(line)
-            .length - '}'
-            .allMatches(line)
-            .length;
+        braceCount += '{'.allMatches(line).length - '}'.allMatches(line).length;
       }
 
       // Only try to parse when we've found equals, opening brace, and closed all braces
@@ -199,7 +191,7 @@ class SourceParser {
     // Check if line contains an integer type and has array brackets
     return intTypes.any(
           (type) => line.toLowerCase().contains(type.toLowerCase()),
-    ) &&
+        ) &&
         line.contains('[');
   }
 }

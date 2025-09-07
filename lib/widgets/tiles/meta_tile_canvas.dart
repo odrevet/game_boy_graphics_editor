@@ -29,10 +29,9 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
                     cursor: SystemMouseCursors.precise,
                     onEnter: (PointerEvent details) =>
                         setState(() => isHover = true),
-                    onExit: (PointerEvent details) =>
-                        setState(() {
-                          isHover = false;
-                        }),
+                    onExit: (PointerEvent details) => setState(() {
+                      isHover = false;
+                    }),
                     child: GestureDetector(
                       onPanUpdate: (DragUpdateDetails details) {
                         if (isHover &&
@@ -78,160 +77,94 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
     );
   }
 
-  draw(dynamic details,
-      BoxConstraints constraints,
-      int intensity,
-      DrawMode drawMode,) {
+  draw(
+    dynamic details,
+    BoxConstraints constraints,
+    int intensity,
+    DrawMode drawMode,
+  ) {
     var localPosition = details.localPosition;
     final pixelSize =
-        constraints.maxWidth / context
-            .read<MetaTileCubit>()
-            .state
-            .width;
+        constraints.maxWidth / context.read<MetaTileCubit>().state.width;
     final rowIndex = (localPosition.dx / pixelSize).floor();
     final colIndex = (localPosition.dy / pixelSize).floor();
-    int targetColor = context
-        .read<MetaTileCubit>()
-        .state
-        .getPixel(
+    int targetColor = context.read<MetaTileCubit>().state.getPixel(
       rowIndex,
       colIndex,
-      context
-          .read<AppStateCubit>()
-          .state
-          .tileIndexTile,
+      context.read<AppStateCubit>().state.tileIndexTile,
     );
 
-    switch (context
-        .read<AppStateCubit>()
-        .state
-        .drawModeTile) {
+    switch (context.read<AppStateCubit>().state.drawModeTile) {
       case DrawMode.single:
         if (targetColor != intensity) {
           context.read<MetaTileCubit>().setPixel(
             rowIndex,
             colIndex,
-            context
-                .read<AppStateCubit>()
-                .state
-                .tileIndexTile,
-            context
-                .read<AppStateCubit>()
-                .state
-                .intensity,
+            context.read<AppStateCubit>().state.tileIndexTile,
+            context.read<AppStateCubit>().state.intensity,
           );
         }
         break;
       case DrawMode.fill:
-        if (targetColor != context
-            .read<AppStateCubit>()
-            .state
-            .intensity) {
+        if (targetColor != context.read<AppStateCubit>().state.intensity) {
           context.read<MetaTileCubit>().fill(
             rowIndex,
             colIndex,
-            context
-                .read<AppStateCubit>()
-                .state
-                .tileIndexTile,
+            context.read<AppStateCubit>().state.tileIndexTile,
             intensity,
             targetColor,
           );
         }
         break;
       case DrawMode.line:
-        int? from = context
-            .read<AppStateCubit>()
-            .state
-            .drawFromTile;
+        int? from = context.read<AppStateCubit>().state.drawFromTile;
         if (from == null) {
-          context
-              .read<AppStateCubit>()
-              .state
-              .drawFromTile =
-          (context
-              .read<MetaTileCubit>()
-              .state
-              .width * rowIndex + colIndex)
-          as int?;
+          context.read<AppStateCubit>().state.drawFromTile =
+              (context.read<MetaTileCubit>().state.width * rowIndex + colIndex)
+                  as int?;
         } else {
-          int xFrom = (from % context
-              .read<MetaTileCubit>()
-              .state
-              .width)
+          int xFrom = (from % context.read<MetaTileCubit>().state.width)
               .toInt();
-          int yFrom = from ~/ context
-              .read<MetaTileCubit>()
-              .state
-              .width;
+          int yFrom = from ~/ context.read<MetaTileCubit>().state.width;
 
           context.read<MetaTileCubit>().line(
-            context
-                .read<AppStateCubit>()
-                .state
-                .tileIndexTile,
+            context.read<AppStateCubit>().state.tileIndexTile,
             intensity,
             xFrom,
             yFrom,
             colIndex,
             rowIndex,
           );
-          context
-              .read<AppStateCubit>()
-              .state
-              .drawFromTile = null;
+          context.read<AppStateCubit>().state.drawFromTile = null;
         }
         break;
       case DrawMode.rectangle:
-        int? from = context
-            .read<AppStateCubit>()
-            .state
-            .drawFromTile;
+        int? from = context.read<AppStateCubit>().state.drawFromTile;
         if (from == null) {
-          context
-              .read<AppStateCubit>()
-              .state
-              .drawFromTile =
-          (context
-              .read<MetaTileCubit>()
-              .state
-              .width * rowIndex + colIndex)
-          as int?;
+          context.read<AppStateCubit>().state.drawFromTile =
+              (context.read<MetaTileCubit>().state.width * rowIndex + colIndex)
+                  as int?;
         } else {
-          int xFrom = (from % context
-              .read<MetaTileCubit>()
-              .state
-              .width)
+          int xFrom = (from % context.read<MetaTileCubit>().state.width)
               .toInt();
-          int yFrom = from ~/ context
-              .read<MetaTileCubit>()
-              .state
-              .width;
+          int yFrom = from ~/ context.read<MetaTileCubit>().state.width;
 
           context.read<MetaTileCubit>().rectangle(
-            context
-                .read<AppStateCubit>()
-                .state
-                .tileIndexTile,
+            context.read<AppStateCubit>().state.tileIndexTile,
             intensity,
             xFrom,
             yFrom,
             colIndex,
             rowIndex,
           );
-          context
-              .read<AppStateCubit>()
-              .state
-              .drawFromTile = null;
+          context.read<AppStateCubit>().state.drawFromTile = null;
         }
         break;
     }
   }
 
   pickColorAtCursor(dynamic details, BoxConstraints constraints) {
-    var metaTile = context
-        .read<MetaTileCubit>()
-        .state;
+    var metaTile = context.read<MetaTileCubit>().state;
     var localPosition = details.localPosition;
     final pixelSize = constraints.maxWidth / metaTile.width;
     final rowIndex = (localPosition.dx / pixelSize).floor();
@@ -239,10 +172,7 @@ class _MetaTileCanvasState extends State<MetaTileCanvas> {
     int intensityAtCursor = metaTile.getPixel(
       rowIndex,
       colIndex,
-      context
-          .read<AppStateCubit>()
-          .state
-          .tileIndexTile,
+      context.read<AppStateCubit>().state.tileIndexTile,
     );
     context.read<AppStateCubit>().setIntensity(intensityAtCursor);
   }

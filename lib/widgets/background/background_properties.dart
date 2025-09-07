@@ -41,10 +41,7 @@ class _BackgroundPropertiesState extends State<BackgroundProperties> {
           children: [
             TextFormField(
               decoration: const InputDecoration(labelText: 'Name'),
-              initialValue: context
-                  .read<AppStateCubit>()
-                  .state
-                  .backgroundName,
+              initialValue: context.read<AppStateCubit>().state.backgroundName,
               onChanged: (text) =>
                   context.read<AppStateCubit>().setBackgroundName(text),
             ),
@@ -56,10 +53,7 @@ class _BackgroundPropertiesState extends State<BackgroundProperties> {
                       FilteringTextInputFormatter.allow(RegExp('^[0-9]*')),
                     ],
                     decoration: const InputDecoration(labelText: 'Width'),
-                    key: Key(context
-                        .read<AppStateCubit>()
-                        .state
-                        .tileName),
+                    key: Key(context.read<AppStateCubit>().state.tileName),
                     controller: _controllerWidth,
                   ),
                 ),
@@ -81,10 +75,7 @@ class _BackgroundPropertiesState extends State<BackgroundProperties> {
                       FilteringTextInputFormatter.allow(RegExp('^[0-9]*')),
                     ],
                     decoration: const InputDecoration(labelText: 'Height'),
-                    key: Key(context
-                        .read<AppStateCubit>()
-                        .state
-                        .tileName),
+                    key: Key(context.read<AppStateCubit>().state.tileName),
                     controller: _controllerHeight,
                   ),
                 ),

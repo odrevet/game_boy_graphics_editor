@@ -7,17 +7,17 @@ import '../models/states/app_state.dart';
 
 class AppStateCubit extends Cubit<AppState> {
   AppStateCubit()
-      : super(
-    AppState(
-      intensity: 3,
-      tileIndexTile: 0,
-      zoomTile: 0.6,
-      zoomBackground: 0.6,
-      showExportPreviewTile: true,
-      showExportPreviewBackground: true,
-      currentView: ViewType.editor,
-    ),
-  );
+    : super(
+        AppState(
+          intensity: 3,
+          tileIndexTile: 0,
+          zoomTile: 0.6,
+          zoomBackground: 0.6,
+          showExportPreviewTile: true,
+          showExportPreviewBackground: true,
+          currentView: ViewType.editor,
+        ),
+      );
 
   // View Management Methods
   void setCurrentView(ViewType newView) {
@@ -87,12 +87,11 @@ class AppStateCubit extends Cubit<AppState> {
   void toggleGridTile() =>
       emit(state.copyWith(showGridTile: !state.showGridTile));
 
-  void toggleColorSet() =>
-      emit(
-        state.copyWith(
-          colorSet: state.colorSet == colorsPocket ? colorsDMG : colorsPocket,
-        ),
-      );
+  void toggleColorSet() => emit(
+    state.copyWith(
+      colorSet: state.colorSet == colorsPocket ? colorsDMG : colorsPocket,
+    ),
+  );
 
   void toggleGridBackground() =>
       emit(state.copyWith(showGridBackground: !state.showGridBackground));

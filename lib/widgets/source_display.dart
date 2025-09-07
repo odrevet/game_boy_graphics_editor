@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../models/download_stub.dart'
-if (dart.library.html) '../models/download.dart';
+    if (dart.library.html) '../models/download.dart';
 
 class SourceDisplay extends StatelessWidget {
   final String name;
@@ -41,24 +41,24 @@ class SourceDisplay extends StatelessWidget {
             ),
             kIsWeb
                 ? IconButton(
-              iconSize: 18,
-              icon: const Icon(Icons.download),
-              onPressed: () => download(source, name),
-            )
+                    iconSize: 18,
+                    icon: const Icon(Icons.download),
+                    onPressed: () => download(source, name),
+                  )
                 : IconButton(
-              iconSize: 18,
-              icon: const Icon(Icons.save_as),
-              onPressed: () async {
-                var fileName = await FilePicker.platform.saveFile(
-                  allowedExtensions: [extension],
-                  fileName: name,
-                );
-                if (fileName != null) {
-                  var file = File(fileName);
-                  file.writeAsString(source);
-                }
-              },
-            ),
+                    iconSize: 18,
+                    icon: const Icon(Icons.save_as),
+                    onPressed: () async {
+                      var fileName = await FilePicker.platform.saveFile(
+                        allowedExtensions: [extension],
+                        fileName: name,
+                      );
+                      if (fileName != null) {
+                        var file = File(fileName);
+                        file.writeAsString(source);
+                      }
+                    },
+                  ),
           ],
         ),
         Align(
