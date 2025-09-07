@@ -24,16 +24,15 @@ class _EditorState extends State<Editor> {
   int hoverTileIndex = 0;
 
   Widget _buildMetaTileCanvasWithAspectRatio(
-    BuildContext context,
-    MetaTile metaTile,
-    AppState appState,
-  ) {
+      BuildContext context,
+      MetaTile metaTile,
+      AppState appState,
+      ) {
     // Calculate aspect ratio
     final double aspectRatio = metaTile.width / metaTile.height;
 
-    // Base size for the canvas
-    final double baseSize =
-        (MediaQuery.of(context).size.width ~/ 3) * appState.zoomTile.toDouble();
+    // Fixed base size for the canvas (no longer dependent on window width)
+    final double baseSize = 300.0 * appState.zoomTile.toDouble();
 
     // Calculate dimensions maintaining aspect ratio
     double canvasWidth, canvasHeight;
@@ -239,10 +238,14 @@ class _EditorState extends State<Editor> {
                   ),
                 ],
               ),
+              const SizedBox(width: 16), // Add horizontal spacing before BackgroundEditor
               Expanded(
-                child: BackgroundEditor(
-                  onTapTileListView: (index) =>
-                      context.read<AppStateCubit>().setSelectedTileIndex(index),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0), // Add padding around BackgroundEditor
+                  child: BackgroundEditor(
+                    onTapTileListView: (index) =>
+                        context.read<AppStateCubit>().setSelectedTileIndex(index),
+                  ),
                 ),
               ),
             ],
