@@ -9,8 +9,8 @@ class Background extends Graphics {
     fill,
     data,
   }) : super(
-         data: data ?? List.filled(width * height, fill ?? 0, growable: true),
-       );
+    data: data ?? List.filled(width * height, fill ?? 0, growable: true),
+  );
 
   copyWith({List<int>? data, int? width, int? height, int? tileOrigin}) =>
       Background(
@@ -82,8 +82,10 @@ class Background extends Graphics {
   }
 
   void line(int i, int xFrom, int yFrom, int xTo, int yTo) {
-    int dx = (xTo - xFrom).abs(), sx = xFrom < xTo ? 1 : -1;
-    int dy = (yTo - yFrom).abs(), sy = yFrom < yTo ? 1 : -1;
+    int dx = (xTo - xFrom).abs(),
+        sx = xFrom < xTo ? 1 : -1;
+    int dy = (yTo - yFrom).abs(),
+        sy = yFrom < yTo ? 1 : -1;
     double err = ((dx > dy ? dx : -dy) / 2);
     double e2;
 

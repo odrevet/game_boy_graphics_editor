@@ -13,9 +13,9 @@ Uint8List tilesToPNG(MetaTile metaTile, List<int> colorSet, int count) {
   for (int tileIndex = 0; tileIndex < count; tileIndex++) {
     var tile = metaTile.getTileAtIndex(tileIndex);
     for (
-      int pixelIndex = 0;
-      pixelIndex < metaTile.width * metaTile.height;
-      pixelIndex++
+    int pixelIndex = 0;
+    pixelIndex < metaTile.width * metaTile.height;
+    pixelIndex++
     ) {
       //get color in source tile
       var color = colorSet[tile[pixelIndex]];
@@ -36,26 +36,24 @@ Uint8List tilesToPNG(MetaTile metaTile, List<int> colorSet, int count) {
   return img.encodePng(image);
 }
 
-Uint8List backgroundToPNG(
-  Background background,
-  MetaTile metaTile,
-  List<int> colorSet,
-) {
+Uint8List backgroundToPNG(Background background,
+    MetaTile metaTile,
+    List<int> colorSet,) {
   final image = img.Image(
     width: background.width * metaTile.width,
     height: background.height * metaTile.height,
   );
   for (
-    int backgroundIndex = 0;
-    backgroundIndex < background.width * background.height;
-    backgroundIndex++
+  int backgroundIndex = 0;
+  backgroundIndex < background.width * background.height;
+  backgroundIndex++
   ) {
     var tile = metaTile.getTileAtIndex(background.data[backgroundIndex]);
 
     for (
-      int pixelIndex = 0;
-      pixelIndex < metaTile.width * metaTile.height;
-      pixelIndex++
+    int pixelIndex = 0;
+    pixelIndex < metaTile.width * metaTile.height;
+    pixelIndex++
     ) {
       //get color in source tile
       var color = colorSet[tile[pixelIndex]];
@@ -64,7 +62,7 @@ Uint8List backgroundToPNG(
       int x = pixelIndex % metaTile.width + backgroundIndex * metaTile.width;
       int y =
           pixelIndex ~/ metaTile.width +
-          (backgroundIndex ~/ background.width) * (metaTile.height - 1);
+              (backgroundIndex ~/ background.width) * (metaTile.height - 1);
       var pixel = image.getPixel(x, y);
 
       int red = (color >> 16) & 0xFF;

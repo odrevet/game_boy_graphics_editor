@@ -17,27 +17,45 @@ class MetaTileToolbar extends StatelessWidget {
         Row(
           children: [
             IconButton(
-              onPressed: context.read<MetaTileCubit>().canUndo
-                  ? context.read<MetaTileCubit>().undo
+              onPressed: context
+                  .read<MetaTileCubit>()
+                  .canUndo
+                  ? context
+                  .read<MetaTileCubit>()
+                  .undo
                   : null,
               icon: const Icon(Icons.undo),
             ),
             IconButton(
-              onPressed: context.read<MetaTileCubit>().canRedo
-                  ? context.read<MetaTileCubit>().redo
+              onPressed: context
+                  .read<MetaTileCubit>()
+                  .canRedo
+                  ? context
+                  .read<MetaTileCubit>()
+                  .redo
                   : null,
               icon: const Icon(Icons.redo),
             ),
             const VerticalDivider(),
             IconButton(
-              onPressed: context.read<AppStateCubit>().state.zoomTile >= 0.4
-                  ? context.read<AppStateCubit>().decreaseZoomTile
+              onPressed: context
+                  .read<AppStateCubit>()
+                  .state
+                  .zoomTile >= 0.4
+                  ? context
+                  .read<AppStateCubit>()
+                  .decreaseZoomTile
                   : null,
               icon: const Icon(Icons.zoom_out),
             ),
             IconButton(
-              onPressed: context.read<AppStateCubit>().state.zoomTile <= 0.8
-                  ? context.read<AppStateCubit>().increaseZoomTile
+              onPressed: context
+                  .read<AppStateCubit>()
+                  .state
+                  .zoomTile <= 0.8
+                  ? context
+                  .read<AppStateCubit>()
+                  .increaseZoomTile
                   : null,
               icon: const Icon(Icons.zoom_in),
             ),
@@ -54,82 +72,148 @@ class MetaTileToolbar extends StatelessWidget {
               children: [
                 IntensityButton(
                   intensity: 0,
-                  colorSet: context.read<AppStateCubit>().state.colorSet,
+                  colorSet: context
+                      .read<AppStateCubit>()
+                      .state
+                      .colorSet,
                 ),
                 IntensityButton(
                   intensity: 1,
-                  colorSet: context.read<AppStateCubit>().state.colorSet,
+                  colorSet: context
+                      .read<AppStateCubit>()
+                      .state
+                      .colorSet,
                 ),
                 IntensityButton(
                   intensity: 2,
-                  colorSet: context.read<AppStateCubit>().state.colorSet,
+                  colorSet: context
+                      .read<AppStateCubit>()
+                      .state
+                      .colorSet,
                 ),
                 IntensityButton(
                   intensity: 3,
-                  colorSet: context.read<AppStateCubit>().state.colorSet,
+                  colorSet: context
+                      .read<AppStateCubit>()
+                      .state
+                      .colorSet,
                 ),
               ],
             ),
             const VerticalDivider(),
             IconButton(
-              onPressed: () => context.read<MetaTileCubit>().flipVertical(
-                context.read<AppStateCubit>().state.tileIndexTile,
-              ),
+              onPressed: () =>
+                  context.read<MetaTileCubit>().flipVertical(
+                    context
+                        .read<AppStateCubit>()
+                        .state
+                        .tileIndexTile,
+                  ),
               icon: const Icon(Icons.flip),
             ),
             IconButton(
-              onPressed: () => context.read<MetaTileCubit>().flipHorizontal(
-                context.read<AppStateCubit>().state.tileIndexTile,
-              ),
+              onPressed: () =>
+                  context.read<MetaTileCubit>().flipHorizontal(
+                    context
+                        .read<AppStateCubit>()
+                        .state
+                        .tileIndexTile,
+                  ),
               icon: const RotatedBox(quarterTurns: 1, child: Icon(Icons.flip)),
             ),
             IconButton(
               onPressed: () =>
-                  context.read<MetaTileCubit>().state.width ==
-                      context.read<MetaTileCubit>().state.height
+              context
+                  .read<MetaTileCubit>()
+                  .state
+                  .width ==
+                  context
+                      .read<MetaTileCubit>()
+                      .state
+                      .height
                   ? context.read<MetaTileCubit>().rotateLeft(
-                      context.read<AppStateCubit>().state.tileIndexTile,
-                    )
+                context
+                    .read<AppStateCubit>()
+                    .state
+                    .tileIndexTile,
+              )
                   : null,
               icon: const Icon(Icons.rotate_left),
             ),
             IconButton(
               onPressed: () =>
-                  context.read<MetaTileCubit>().state.width ==
-                      context.read<MetaTileCubit>().state.height
+              context
+                  .read<MetaTileCubit>()
+                  .state
+                  .width ==
+                  context
+                      .read<MetaTileCubit>()
+                      .state
+                      .height
                   ? context.read<MetaTileCubit>().rotateRight(
-                      context.read<AppStateCubit>().state.tileIndexTile,
-                    )
+                context
+                    .read<AppStateCubit>()
+                    .state
+                    .tileIndexTile,
+              )
                   : null,
               icon: const Icon(Icons.rotate_right),
             ),
             const VerticalDivider(),
             IconButton(
-              onPressed: () => context.read<MetaTileCubit>().upShift(
-                context.read<AppStateCubit>().state.tileIndexTile,
-                context.read<AppStateCubit>().state.tileIndexTile,
-              ),
+              onPressed: () =>
+                  context.read<MetaTileCubit>().upShift(
+                    context
+                        .read<AppStateCubit>()
+                        .state
+                        .tileIndexTile,
+                    context
+                        .read<AppStateCubit>()
+                        .state
+                        .tileIndexTile,
+                  ),
               icon: const Icon(Icons.keyboard_arrow_up_rounded),
             ),
             IconButton(
-              onPressed: () => context.read<MetaTileCubit>().downShift(
-                context.read<AppStateCubit>().state.tileIndexTile,
-                context.read<AppStateCubit>().state.tileIndexTile,
-              ),
+              onPressed: () =>
+                  context.read<MetaTileCubit>().downShift(
+                    context
+                        .read<AppStateCubit>()
+                        .state
+                        .tileIndexTile,
+                    context
+                        .read<AppStateCubit>()
+                        .state
+                        .tileIndexTile,
+                  ),
               icon: const Icon(Icons.keyboard_arrow_down_rounded),
             ),
             IconButton(
-              onPressed: () => context.read<MetaTileCubit>().leftShift(
-                context.read<AppStateCubit>().state.tileIndexTile,
-                context.read<AppStateCubit>().state.tileIndexTile,
-              ),
+              onPressed: () =>
+                  context.read<MetaTileCubit>().leftShift(
+                    context
+                        .read<AppStateCubit>()
+                        .state
+                        .tileIndexTile,
+                    context
+                        .read<AppStateCubit>()
+                        .state
+                        .tileIndexTile,
+                  ),
               icon: const Icon(Icons.keyboard_arrow_left_rounded),
             ),
             IconButton(
-              onPressed: () => context.read<MetaTileCubit>().rightShift(
-                context.read<AppStateCubit>().state.tileIndexTile,
-                context.read<AppStateCubit>().state.tileIndexTile,
-              ),
+              onPressed: () =>
+                  context.read<MetaTileCubit>().rightShift(
+                    context
+                        .read<AppStateCubit>()
+                        .state
+                        .tileIndexTile,
+                    context
+                        .read<AppStateCubit>()
+                        .state
+                        .tileIndexTile,
+                  ),
               icon: const Icon(Icons.keyboard_arrow_right_rounded),
             ),
           ],
@@ -145,7 +229,10 @@ class DrawModeDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<DrawMode>(
-      value: context.read<AppStateCubit>().state.drawModeTile,
+      value: context
+          .read<AppStateCubit>()
+          .state
+          .drawModeTile,
       onChanged: (DrawMode? drawMode) {
         context.read<AppStateCubit>().setDrawModeTile(drawMode!);
       },
@@ -158,7 +245,10 @@ class DrawModeDropdown extends StatelessWidget {
               // Adding icon here
               const SizedBox(width: 8),
               // Adjust the spacing between icon and text
-              Text(mode.toString().split('.').last),
+              Text(mode
+                  .toString()
+                  .split('.')
+                  .last),
             ],
           ),
         );

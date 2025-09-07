@@ -25,10 +25,10 @@ class ApplicationMenuBar extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (BuildContext alertDialogContext) =>
-                            const AlertDialog(
-                              title: Text('Import'),
-                              content: ImportDialog(),
-                            ),
+                        const AlertDialog(
+                          title: Text('Import'),
+                          content: ImportDialog(),
+                        ),
                       );
                     },
                     child: const Row(
@@ -44,10 +44,10 @@ class ApplicationMenuBar extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (BuildContext alertDialogContext) =>
-                            const AlertDialog(
-                              title: Text('Export'),
-                              content: ExportDialog(),
-                            ),
+                        const AlertDialog(
+                          title: Text('Export'),
+                          content: ExportDialog(),
+                        ),
                       );
                     },
                     child: const Row(
@@ -101,15 +101,15 @@ class ApplicationMenuBar extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (BuildContext alertDialogContext) =>
-                            const AlertDialog(
-                              title: Text('Properties'),
-                              content: Row(
-                                children: [
-                                  TileSettings(),
-                                  BackgroundSettings(),
-                                ],
-                              ),
-                            ),
+                        const AlertDialog(
+                          title: Text('Properties'),
+                          content: Row(
+                            children: [
+                              TileSettings(),
+                              BackgroundSettings(),
+                            ],
+                          ),
+                        ),
                       );
                     },
                     child: const Row(

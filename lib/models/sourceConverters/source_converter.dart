@@ -6,10 +6,10 @@ abstract class SourceConverter {
         .asMap()
         .entries
         .map((entry) {
-          int idx = entry.key;
-          String val = entry.value;
-          return idx % 8 == 0 ? "\n  $val" : val;
-        })
+      int idx = entry.key;
+      String val = entry.value;
+      return idx % 8 == 0 ? "\n  $val" : val;
+    })
         .join(", ");
   }
 

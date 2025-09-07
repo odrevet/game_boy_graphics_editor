@@ -63,13 +63,21 @@ class ExportPreview extends StatelessWidget {
     } else if (type == 'PNG') {
       var png;
       if (parse == 'Tile') {
-        List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
+        List<int> colorSet = context
+            .read<AppStateCubit>()
+            .state
+            .colorSet;
         int count = graphics.data.length ~/ (graphics.height * graphics.width);
 
         png = tilesToPNG(graphics as MetaTile, colorSet, count);
       } else {
-        MetaTile metaTile = context.read<MetaTileCubit>().state;
-        List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
+        MetaTile metaTile = context
+            .read<MetaTileCubit>()
+            .state;
+        List<int> colorSet = context
+            .read<AppStateCubit>()
+            .state
+            .colorSet;
         png = backgroundToPNG(graphics as Background, metaTile, colorSet);
       }
 

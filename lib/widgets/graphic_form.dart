@@ -70,7 +70,9 @@ class GraphicFormState extends State<GraphicForm> {
                 controller: _nameController,
                 decoration: const InputDecoration(labelText: 'Name'),
                 validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
+                  if (value == null || value
+                      .trim()
+                      .isEmpty) {
                     return 'Please enter a name';
                   }
                   return null;

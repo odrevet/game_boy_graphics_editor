@@ -23,8 +23,14 @@ class TileSettings extends StatelessWidget {
                 FilteringTextInputFormatter.allow(RegExp('^[a-zA-Z0-9_]*')),
               ],
               decoration: const InputDecoration(labelText: 'Name'),
-              key: Key(context.read<AppStateCubit>().state.tileName),
-              initialValue: context.read<AppStateCubit>().state.tileName,
+              key: Key(context
+                  .read<AppStateCubit>()
+                  .state
+                  .tileName),
+              initialValue: context
+                  .read<AppStateCubit>()
+                  .state
+                  .tileName,
               onChanged: (text) =>
                   context.read<AppStateCubit>().setTileName(text),
             ),
@@ -36,15 +42,23 @@ class TileSettings extends StatelessWidget {
               decoration: const InputDecoration(labelText: 'Values'),
               key: const Key('values'),
               initialValue: GBDKTileConverter().toBin(
-                context.read<MetaTileCubit>().state,
+                context
+                    .read<MetaTileCubit>()
+                    .state,
               ),
               onChanged: (text) {
                 var values = hexToIntList(text);
                 var data = GBDKTileConverter().combine(values);
                 data = GBDKTileConverter().reorderFromSourceToCanvas(
                   data,
-                  context.read<MetaTileCubit>().state.width,
-                  context.read<MetaTileCubit>().state.height,
+                  context
+                      .read<MetaTileCubit>()
+                      .state
+                      .width,
+                  context
+                      .read<MetaTileCubit>()
+                      .state
+                      .height,
                 );
                 context.read<MetaTileCubit>().setData(data);
               },

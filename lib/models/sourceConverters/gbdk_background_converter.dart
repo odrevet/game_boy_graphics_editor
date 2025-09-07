@@ -8,7 +8,7 @@ import 'converter_utils.dart';
 
 class GBDKBackgroundConverter extends SourceConverter {
   static final GBDKBackgroundConverter _singleton =
-      GBDKBackgroundConverter._internal();
+  GBDKBackgroundConverter._internal();
 
   factory GBDKBackgroundConverter() {
     return _singleton;
@@ -16,11 +16,12 @@ class GBDKBackgroundConverter extends SourceConverter {
 
   GBDKBackgroundConverter._internal();
 
-  Background fromGraphics(Graphics graphics) => Background(
-    data: graphics.data,
-    width: graphics.width ~/ 8,
-    height: graphics.height ~/ 8,
-  );
+  Background fromGraphics(Graphics graphics) =>
+      Background(
+        data: graphics.data,
+        width: graphics.width ~/ 8,
+        height: graphics.height ~/ 8,
+      );
 
   @override
   String toHeader(Graphics graphics, String name) {
@@ -28,7 +29,8 @@ class GBDKBackgroundConverter extends SourceConverter {
 
     // Read template file
     String template = File(
-      '${Directory.current.path}/lib/models/sourceConverters/templates/background.h.tpl',
+      '${Directory.current
+          .path}/lib/models/sourceConverters/templates/background.h.tpl',
     ).readAsStringSync();
 
     // Replace placeholders
@@ -44,7 +46,8 @@ class GBDKBackgroundConverter extends SourceConverter {
   String toSource(Graphics graphics, String name) {
     // Read template file
     String template = File(
-      '${Directory.current.path}/lib/models/sourceConverters/templates/background.c.tpl',
+      '${Directory.current
+          .path}/lib/models/sourceConverters/templates/background.c.tpl',
     ).readAsStringSync();
 
     // Format the data array

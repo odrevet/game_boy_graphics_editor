@@ -5,7 +5,7 @@ import '../models/graphics/graphics.dart';
 
 class BackgroundCubit extends ReplayCubit<Background> {
   BackgroundCubit()
-    : super(Background(height: 18, width: 20, name: "background"));
+      : super(Background(height: 18, width: 20, name: "background"));
 
   // Load background data from a Graphics object
   void loadFromGraphics(Graphics graphics) {

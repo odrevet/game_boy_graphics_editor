@@ -20,31 +20,32 @@ class MyApp extends StatelessWidget {
   const MyApp({this.initialMode = 'tile', super.key});
 
   @override
-  Widget build(BuildContext context) => MultiBlocProvider(
-    providers: [
-      BlocProvider(create: (_) => AppStateCubit()),
-      BlocProvider(create: (_) => MetaTileCubit()),
-      BlocProvider(create: (_) => BackgroundCubit()),
-      BlocProvider(create: (_) => GraphicsCubit()),
-    ],
-    child: MaterialApp(
-      title: 'Game Boy Graphic Editor',
-      theme: ThemeData(
-        fontFamily: 'RobotoMono',
-        primarySwatch: Colors.grey,
-        colorScheme: ColorScheme.fromSeed(
-          brightness: MediaQuery.platformBrightnessOf(context),
-          seedColor: Colors.grey,
+  Widget build(BuildContext context) =>
+      MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => AppStateCubit()),
+          BlocProvider(create: (_) => MetaTileCubit()),
+          BlocProvider(create: (_) => BackgroundCubit()),
+          BlocProvider(create: (_) => GraphicsCubit()),
+        ],
+        child: MaterialApp(
+          title: 'Game Boy Graphic Editor',
+          theme: ThemeData(
+            fontFamily: 'RobotoMono',
+            primarySwatch: Colors.grey,
+            colorScheme: ColorScheme.fromSeed(
+              brightness: MediaQuery.platformBrightnessOf(context),
+              seedColor: Colors.grey,
+            ),
+            scrollbarTheme: const ScrollbarThemeData().copyWith(
+              thumbColor: WidgetStateProperty.all(Colors.blue[500]),
+              thickness: WidgetStateProperty.all(4.0),
+            ),
+          ),
+          scrollBehavior: const MaterialScrollBehavior().copyWith(
+            dragDevices: PointerDeviceKind.values.toSet(),
+          ),
+          home: const MainWidget(),
         ),
-        scrollbarTheme: const ScrollbarThemeData().copyWith(
-          thumbColor: WidgetStateProperty.all(Colors.blue[500]),
-          thickness: WidgetStateProperty.all(4.0),
-        ),
-      ),
-      scrollBehavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: PointerDeviceKind.values.toSet(),
-      ),
-      home: const MainWidget(),
-    ),
-  );
+      );
 }

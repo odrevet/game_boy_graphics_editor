@@ -11,12 +11,10 @@ import '../cubits/app_state_cubit.dart';
 import '../models/graphics/graphics.dart';
 import 'file_picker_utils.dart';
 
-Future<List<Graphics>?> onImportHttp(
-  BuildContext context,
-  String parse,
-  String type,
-  String url,
-) async {
+Future<List<Graphics>?> onImportHttp(BuildContext context,
+    String parse,
+    String type,
+    String url,) async {
   Uri uriObject = Uri.parse(url);
 
   if (type == 'Auto') {
@@ -40,11 +38,9 @@ Future<List<Graphics>?> onImportHttp(
   }
 }
 
-Future<List<Graphics>?> onImport(
-  BuildContext context,
-  String type,
-  String compression,
-) async {
+Future<List<Graphics>?> onImport(BuildContext context,
+    String type,
+    String compression,) async {
   final result = await selectFile(['*']);
   if (result == null) return null;
 
@@ -89,18 +85,19 @@ String resolveType(String path) {
   }
 }
 
-List<int> _decompress(
-  String inputPath,
-  String compression,
-  BuildContext context,
-) {
+List<int> _decompress(String inputPath,
+    String compression,
+    BuildContext context,) {
   var content = <int>[];
   // decompress to a temp file
   var systemTempDir = Directory.systemTemp;
   String outputPath = "${systemTempDir.path}/decompressed.bin";
 
   Process.runSync(
-    '${context.read<AppStateCubit>().state.gbdkPath}/gbcompress',
+    '${context
+        .read<AppStateCubit>()
+        .state
+        .gbdkPath}/gbcompress',
     ['-d', '--alg=$compression', inputPath, outputPath],
   );
 

@@ -38,19 +38,19 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
   List<int> _shift(List<int> list, int v) {
     var i = v % list.length;
-    return list.sublist(i)..addAll(list.sublist(0, i));
+    return list.sublist(i)
+      ..addAll(list.sublist(0, i));
   }
 
-  fill(
-    int rowIndex,
-    int colIndex,
-    int metaTileIndex,
-    int intensity,
-    int targetColor,
-  ) => emit(
-    state.copyWith()
-      ..fill(metaTileIndex, intensity, rowIndex, colIndex, targetColor),
-  );
+  fill(int rowIndex,
+      int colIndex,
+      int metaTileIndex,
+      int intensity,
+      int targetColor,) =>
+      emit(
+        state.copyWith()
+          ..fill(metaTileIndex, intensity, rowIndex, colIndex, targetColor),
+      );
 
   void setPixel(int rowIndex, int colIndex, int tileIndex, int intensity) {
     List<int> tileData = [...state.data];
@@ -244,14 +244,12 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     emit(metaTile);
   }
 
-  void rectangle(
-    int metaTileIndex,
-    int intensity,
-    int xFrom,
-    int yFrom,
-    int xTo,
-    int yTo,
-  ) {
+  void rectangle(int metaTileIndex,
+      int intensity,
+      int xFrom,
+      int yFrom,
+      int xTo,
+      int yTo,) {
     MetaTile metaTile = state.copyWith();
     metaTile.rectangle(metaTileIndex, intensity, xFrom, yFrom, xTo, yTo);
     emit(metaTile);
@@ -385,8 +383,8 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
         .entries
         .where(
           (entry) =>
-              entry.value.origin == origin && entry.value.sourceName != null,
-        )
+      entry.value.origin == origin && entry.value.sourceName != null,
+    )
         .map((entry) => entry.key)
         .toList();
   }

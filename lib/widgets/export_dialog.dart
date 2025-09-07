@@ -32,9 +32,13 @@ class _ExportDialogState extends State<ExportDialog> {
       graphics = widget.graphic!;
     } else {
       if (parse == 'Tile') {
-        graphics = context.read<MetaTileCubit>().state;
+        graphics = context
+            .read<MetaTileCubit>()
+            .state;
       } else {
-        graphics = context.read<BackgroundCubit>().state;
+        graphics = context
+            .read<BackgroundCubit>()
+            .state;
       }
     }
 
@@ -51,9 +55,12 @@ class _ExportDialogState extends State<ExportDialog> {
                   Expanded(
                     flex: 2,
                     child: Container(
-                      color: Theme.of(
+                      color: Theme
+                          .of(
                         context,
-                      ).colorScheme.surfaceContainerHighest,
+                      )
+                          .colorScheme
+                          .surfaceContainerHighest,
                       padding: const EdgeInsets.all(16),
                       child: ExportPreview(graphics, type, parse),
                     ),
@@ -107,12 +114,16 @@ class _ExportDialogState extends State<ExportDialog> {
                         } else if (type == 'Binary') {
                           onFileSaveAsBinTile(
                             context,
-                            context.read<MetaTileCubit>().state,
+                            context
+                                .read<MetaTileCubit>()
+                                .state,
                           );
                         } else {
                           onFileTilesSaveAsPNG(
                             context,
-                            context.read<MetaTileCubit>().state,
+                            context
+                                .read<MetaTileCubit>()
+                                .state,
                           );
                         }
                       } else {
@@ -120,17 +131,23 @@ class _ExportDialogState extends State<ExportDialog> {
                           onFileSaveAsSourceCode(
                             context,
                             parse,
-                            context.read<BackgroundCubit>().state,
+                            context
+                                .read<BackgroundCubit>()
+                                .state,
                           );
                         } else if (type == 'Binary') {
                           onFileSaveAsBinBackground(
                             context,
-                            context.read<BackgroundCubit>().state,
+                            context
+                                .read<BackgroundCubit>()
+                                .state,
                           );
                         } else {
                           onFileBackgroundSaveAsPNG(
                             context,
-                            context.read<BackgroundCubit>().state,
+                            context
+                                .read<BackgroundCubit>()
+                                .state,
                           );
                         }
                       }

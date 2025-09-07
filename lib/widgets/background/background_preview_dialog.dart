@@ -50,7 +50,9 @@ class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
       preview.data = data;
     }
 
-    final screenSize = MediaQuery.of(context).size;
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
 
     return AlertDialog(
       insetPadding: const EdgeInsets.all(20),
@@ -82,7 +84,9 @@ class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
               child: BackgroundGrid(
                 background: preview,
                 tileOrigin: 0,
-                metaTile: context.read<MetaTileCubit>().state,
+                metaTile: context
+                    .read<MetaTileCubit>()
+                    .state,
                 showGrid: widget.showGrid,
                 cellSize: widget.cellSize,
               ),
