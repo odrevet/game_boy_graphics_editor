@@ -88,6 +88,32 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     emit(state.copyWith(data: tileData));
   }
 
+  /// Clear all pixels in a tile (set them to 0)
+  void clearTile(int tileIndex) {
+    final currentState = state;
+    final tileSize = currentState.height * currentState.width;
+    final totalTiles = currentState.data.length ~/ tileSize;
+
+    if (tileIndex >= 0 && tileIndex < totalTiles) {
+      List<int> newData = List.from(currentState.data);
+      final startIndex = tileIndex * tileSize;
+
+      // Clear all pixels in the tile (set to 0)
+      for (int i = 0; i < tileSize; i++) {
+        if (startIndex + i < newData.length) {
+          newData[startIndex + i] = 0;
+        }
+      }
+
+      // Keep the tile info but reset source information if desired
+      if (tileIndex < _tileInfoList.length) {
+        _tileInfoList[tileIndex] = TileInfo(origin: _tileInfoList[tileIndex].origin);
+      }
+
+      emit(currentState.copyWith(data: newData));
+    }
+  }
+
   void rightShift(int tileIndex, int index) {
     var metaTile = state.copyWith();
 
