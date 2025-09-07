@@ -47,6 +47,36 @@ Convert to metatiles : No.
 
 ![linda](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/linda.png)
 
+
+# web release
+
+## build
+
+```
+flutter build web --release
+```
+
+Then remove `<base href="/">` from `build/web/index.html`
+
+## test
+
+```
+python -m http.server 8000 -d build/web
+```
+
+## deploy to github pages
+
+```
+cp -r build/web ~/Documents/
+git checkout gh-pages
+rm -rf *
+mv ~/Documents/web/* .
+git add .
+git commit -m "update web build"
+git push
+git checkout main
+```
+
 # References
 
 [laroldsjubilantjunkyard.com](https://laroldsjubilantjunkyard.com/tutorials/how-to-make-a-gameboy-game/sprites-and-backgrounds/)
