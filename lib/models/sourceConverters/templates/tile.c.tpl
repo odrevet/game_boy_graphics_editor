@@ -6,7 +6,7 @@
 #include <gbdk/platform.h>
 #include <gbdk/metasprites.h>
 
-BANKREF({{bank}})
+BANKREF({{name}})
 
 const palette_color_t {{name}}_palettes[4] = {
     RGB8(255,255,255), RGB8(170,170,170), RGB8( 85, 85, 85), RGB8(  0,  0,  0)
