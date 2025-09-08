@@ -21,6 +21,7 @@ class _ExportDialogState extends State<ExportDialog> {
   bool transpose = false;
   String type = 'Source code';
   String parse = 'Tile';
+  late bool displayFrom = widget.graphic == null;
 
   // Access the graphic parameter using widget.graphic
   Graphics? get graphic => widget.graphic;
@@ -73,12 +74,13 @@ class _ExportDialogState extends State<ExportDialog> {
                           onChanged: (v) => setState(() => type = v!),
                         ),
                         const SizedBox(height: 16),
-                        _buildDropdown(
-                          label: "From",
-                          value: parse,
-                          items: ['Tile', 'Background'],
-                          onChanged: (v) => setState(() => parse = v!),
-                        ),
+                        if (displayFrom)
+                          _buildDropdown(
+                            label: "From",
+                            value: parse,
+                            items: ['Tile', 'Background'],
+                            onChanged: (v) => setState(() => parse = v!),
+                          ),
                       ],
                     ),
                   ),
@@ -105,32 +107,26 @@ class _ExportDialogState extends State<ExportDialog> {
                         if (type == 'Source code') {
                           onFileSaveAsSourceCode(context, parse, graphics);
                         } else if (type == 'Binary') {
-                          onFileSaveAsBinTile(
-                            context,
-                            context.read<MetaTileCubit>().state,
-                          );
+                          onFileSaveAsBinTile(context, graphics);
                         } else {
-                          onFileTilesSaveAsPNG(
-                            context,
-                            context.read<MetaTileCubit>().state,
-                          );
+                          onFileTilesSaveAsPNG(context, graphics);
                         }
                       } else {
                         if (type == 'Source code') {
                           onFileSaveAsSourceCode(
                             context,
                             parse,
-                            context.read<BackgroundCubit>().state,
+                            graphics,
                           );
                         } else if (type == 'Binary') {
                           onFileSaveAsBinBackground(
                             context,
-                            context.read<BackgroundCubit>().state,
+                            graphics,
                           );
                         } else {
                           onFileBackgroundSaveAsPNG(
                             context,
-                            context.read<BackgroundCubit>().state,
+                            graphics,
                           );
                         }
                       }

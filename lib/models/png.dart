@@ -2,10 +2,10 @@ import 'dart:typed_data';
 
 import 'package:image/image.dart' as img;
 
-import 'graphics/background.dart';
+import 'graphics/graphics.dart';
 import 'graphics/meta_tile.dart';
 
-Uint8List tilesToPNG(MetaTile metaTile, List<int> colorSet, int count) {
+Uint8List tilesToPNG(Graphics metaTile, List<int> colorSet, int count) {
   final image = img.Image(
     width: metaTile.width * count,
     height: metaTile.height,
@@ -37,7 +37,7 @@ Uint8List tilesToPNG(MetaTile metaTile, List<int> colorSet, int count) {
 }
 
 Uint8List backgroundToPNG(
-  Background background,
+  Graphics background,
   MetaTile metaTile,
   List<int> colorSet,
 ) {
