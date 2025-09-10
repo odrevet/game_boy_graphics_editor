@@ -66,7 +66,7 @@ class GraphicsListWidget extends StatelessWidget {
                                 ),
                               ),
                           icon: const Icon(Icons.arrow_upward),
-                          label: const Text('Import Graphic from file'),
+                          label: const Text('Import Graphics'),
                         ),
                         const SizedBox(width: 8),
                         ElevatedButton.icon(
