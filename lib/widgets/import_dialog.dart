@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/import_callbacks.dart';
-import 'package:flutter/services.dart';
 
 import '../cubits/app_state_cubit.dart';
 import '../cubits/graphics_cubit.dart';
@@ -200,7 +199,7 @@ class _ImportDialogState extends State<ImportDialog> {
                                   Expanded(
                                     flex: 2,
                                     child: DropdownButtonFormField<String>(
-                                      value: importSource,
+                                      initialValue: importSource,
                                       decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                         contentPadding: EdgeInsets.symmetric(
@@ -395,7 +394,7 @@ class _ImportDialogState extends State<ImportDialog> {
                                           Container(
                                             width: 120,
                                             child: DropdownButtonFormField<String>(
-                                              value: parseOptions[graphic] ?? _getDefaultParseOption(graphic),
+                                              initialValue: parseOptions[graphic] ?? _getDefaultParseOption(graphic),
                                               decoration: const InputDecoration(
                                                 border: OutlineInputBorder(),
                                                 contentPadding: EdgeInsets.symmetric(

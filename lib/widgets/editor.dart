@@ -1,4 +1,3 @@
-import 'package:contextmenu/contextmenu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
@@ -61,89 +60,120 @@ class _EditorState extends State<Editor> {
         return BlocBuilder<AppStateCubit, AppState>(
           builder: (context, appState) => Row(
             children: [
-              ContextMenuArea(
-                builder: (BuildContext contextMenuAreaContext) => [
-                  ListTile(
-                    leading: const Icon(Icons.add),
-                    title: const Text("Insert"),
-                    onTap: () {
-                      {
+              GestureDetector(
+                onSecondaryTapDown: (details) {
+                  // Show context menu on right-click
+                  final RenderBox overlay =
+                      Overlay.of(context).context.findRenderObject()
+                          as RenderBox;
+                  showMenu(
+                    context: context,
+                    position: RelativeRect.fromRect(
+                      details.globalPosition & Size.zero,
+                      Offset.zero & overlay.size,
+                    ),
+                    items: [
+                      PopupMenuItem(
+                        child: ListTile(
+                          leading: const Icon(Icons.add),
+                          title: const Text("Insert"),
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                        value: 'insert',
+                      ),
+                      PopupMenuItem(
+                        child: ListTile(
+                          leading: const Icon(Icons.remove),
+                          title: const Text("Delete"),
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                        value: 'delete',
+                      ),
+                      /*PopupMenuItem(
+                        child: ListTile(
+                          leading: const Icon(Icons.copy),
+                          title: const Text("Copy"),
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                        value: 'copy',
+                      ),
+                      PopupMenuItem(
+                        child: ListTile(
+                          leading: const Icon(Icons.paste),
+                          title: const Text("Paste"),
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                        value: 'paste',
+                      ),*/
+                      PopupMenuItem(
+                        child: ListTile(
+                          leading: const Icon(Icons.clear),
+                          title: const Text("Clear"),
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                        value: 'clear',
+                      ),
+                    ],
+                  ).then((value) {
+                    // Handle menu selection
+                    switch (value) {
+                      case 'insert':
                         context.read<MetaTileCubit>().addTile(hoverTileIndex);
                         context.read<AppStateCubit>().setSelectedTileIndex(
                           ++hoverTileIndex,
                         );
-                        Navigator.pop(contextMenuAreaContext);
-                      }
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.remove),
-                    title: const Text("Delete"),
-                    onTap: () {
-                      int tileIndex = context
-                          .read<AppStateCubit>()
-                          .state
-                          .tileIndexTile;
+                        break;
+                      case 'delete':
+                        int tileIndex = context
+                            .read<AppStateCubit>()
+                            .state
+                            .tileIndexTile;
 
-                      // Get total number of tiles
-                      int totalTiles =
-                          context.read<MetaTileCubit>().state.data.length ~/
-                          context.read<MetaTileCubit>().state.nbPixel;
+                        // Get total number of tiles
+                        int totalTiles =
+                            context.read<MetaTileCubit>().state.data.length ~/
+                            context.read<MetaTileCubit>().state.nbPixel;
 
-                      // Only allow removal if more than 1 tile exists
-                      if (totalTiles > 1) {
-                        context.read<MetaTileCubit>().removeTile(tileIndex);
+                        // Only allow removal if more than 1 tile exists
+                        if (totalTiles > 1) {
+                          context.read<MetaTileCubit>().removeTile(tileIndex);
 
-                        // Adjust selected index if we removed the last tile
-                        if (tileIndex >= totalTiles - 1) {
-                          context.read<AppStateCubit>().setSelectedTileIndex(
-                            tileIndex - 1,
-                          );
+                          // Adjust selected index if we removed the last tile
+                          if (tileIndex >= totalTiles - 1) {
+                            context.read<AppStateCubit>().setSelectedTileIndex(
+                              tileIndex - 1,
+                            );
+                          }
+                          // If we removed the first tile, keep index at 0
+                          else if (tileIndex == 0) {
+                            context.read<AppStateCubit>().setSelectedTileIndex(
+                              0,
+                            );
+                          }
+                        } else {
+                          context.read<MetaTileCubit>().clearTile(0);
                         }
-                        // If we removed the first tile, keep index at 0
-                        else if (tileIndex == 0) {
-                          context.read<AppStateCubit>().setSelectedTileIndex(0);
-                        }
-                      } else {
-                        context.read<MetaTileCubit>().clearTile(0);
-                      }
-
-                      Navigator.pop(contextMenuAreaContext);
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.copy),
-                    title: const Text("Copy"),
-                    onTap: () {
-                      var tileData = metaTile.getTileAtIndex(hoverTileIndex);
-                      context.read<AppStateCubit>().setTileBuffer(tileData);
-                      Navigator.pop(contextMenuAreaContext);
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.paste),
-                    title: const Text("Paste"),
-                    onTap: () {
-                      context.read<MetaTileCubit>().setDataAtIndex(
-                        hoverTileIndex,
-                        appState.tileBuffer,
-                      );
-                      Navigator.pop(contextMenuAreaContext);
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.clear),
-                    title: const Text("Clear"),
-                    onTap: () {
-                      int tileIndex = context
-                          .read<AppStateCubit>()
-                          .state
-                          .tileIndexTile;
-                      context.read<MetaTileCubit>().clearTile(tileIndex);
-                      Navigator.pop(contextMenuAreaContext);
-                    },
-                  ),
-                ],
+                        break;
+                      case 'copy':
+                        var tileData = metaTile.getTileAtIndex(hoverTileIndex);
+                        context.read<AppStateCubit>().setTileBuffer(tileData);
+                        break;
+                      case 'paste':
+                        context.read<MetaTileCubit>().setDataAtIndex(
+                          hoverTileIndex,
+                          appState.tileBuffer,
+                        );
+                        break;
+                      case 'clear':
+                        int tileIndex = context
+                            .read<AppStateCubit>()
+                            .state
+                            .tileIndexTile;
+                        context.read<MetaTileCubit>().clearTile(tileIndex);
+                        break;
+                    }
+                  });
+                },
                 child: Column(
                   children: [
                     Row(
