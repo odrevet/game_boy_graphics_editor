@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../models/file_picker_utils.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
@@ -53,10 +54,34 @@ class GraphicFormState extends State<GraphicForm> {
       title: Row(
         children: [
           Expanded(child: Text(widget.title)),
-          IconButton(
-            onPressed: () => _readPropertiesFromHeader(),
+          PopupMenuButton<String>(
+            onSelected: (String value) {
+              if (value == 'file') {
+                _readPropertiesFromFile();
+              } else if (value == 'clipboard') {
+                _readPropertiesFromClipboard();
+              }
+            },
             icon: const Icon(Icons.article),
-            tooltip: 'Set Properties from Source Header',
+            tooltip: 'Load Properties',
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'file',
+                child: ListTile(
+                  leading: Icon(Icons.file_open),
+                  title: Text('Load from file'),
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ),
+              const PopupMenuItem<String>(
+                value: 'clipboard',
+                child: ListTile(
+                  leading: Icon(Icons.content_paste),
+                  title: Text('Load from clipboard'),
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -145,11 +170,33 @@ class GraphicFormState extends State<GraphicForm> {
     );
   }
 
-  _readPropertiesFromHeader() async {
+  _readPropertiesFromFile() async {
     final result = await selectFile(['*']);
     if (result == null) return null;
 
     final source = await readString(result);
+    _parseAndSetProperties(source);
+  }
+
+  _readPropertiesFromClipboard() async {
+    try {
+      final clipboardData = await Clipboard.getData('text/plain');
+      if (clipboardData?.text != null) {
+        _parseAndSetProperties(clipboardData!.text!);
+      }
+    } catch (e) {
+      // Handle clipboard access error if needed
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to read from clipboard'),
+          ),
+        );
+      }
+    }
+  }
+
+  void _parseAndSetProperties(String source) {
     Map<String, int> defines = GBDKTileConverter().readDefinesFromSource(
       source,
     );
