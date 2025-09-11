@@ -33,7 +33,7 @@ class BackgroundPreviewDialog extends StatefulWidget {
 }
 
 class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
-  bool transpose = true;
+  bool transpose = false;
 
   @override
   Widget build(BuildContext context) {
