@@ -46,22 +46,27 @@ class GraphicsListWidget extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'Total Graphics: ${state.graphics.length}',
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .titleMedium,
                       ),
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ElevatedButton.icon(
-                          onPressed: () => showDialog(
-                            context: context,
-                            builder: (_) => const AlertDialog(
-                              title: Text('Import'),
-                              content: ImportDialog(),
-                            ),
-                          ),
+                          onPressed: () =>
+                              showDialog(
+                                context: context,
+                                builder: (_) =>
+                                const AlertDialog(
+                                  title: Text('Import'),
+                                  content: ImportDialog(),
+                                ),
+                              ),
                           icon: const Icon(Icons.arrow_upward),
-                          label: const Text('Import Graphic from file'),
+                          label: const Text('Import Graphics'),
                         ),
                         const SizedBox(width: 8),
                         ElevatedButton.icon(
@@ -71,13 +76,15 @@ class GraphicsListWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         ElevatedButton.icon(
-                          onPressed: () => showDialog(
-                            context: context,
-                            builder: (_) => const AlertDialog(
-                              title: Text('Export'),
-                              content: ExportDialog(),
-                            ),
-                          ),
+                          onPressed: () =>
+                              showDialog(
+                                context: context,
+                                builder: (_) =>
+                                const AlertDialog(
+                                  title: Text('Export'),
+                                  content: ExportDialog(),
+                                ),
+                              ),
                           icon: const Icon(Icons.arrow_downward),
                           label: const Text('Export Graphic'),
                         ),
@@ -91,52 +98,52 @@ class GraphicsListWidget extends StatelessWidget {
               Expanded(
                 child: state.graphics.isEmpty
                     ? const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.image_not_supported,
-                              size: 64,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(height: 16),
-                            Text(
-                              'No graphics added yet',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Import or create graphic',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      )
-                    : ReorderableListView.builder(
-                        itemCount: state.graphics.length,
-                        onReorder: (oldIndex, newIndex) {
-                          if (newIndex > oldIndex) newIndex--;
-                          context.read<GraphicsCubit>().reorderGraphics(
-                            oldIndex,
-                            newIndex,
-                          );
-                        },
-                        itemBuilder: (context, index) {
-                          final graphic = state.graphics[index];
-                          return _GraphicListTile(
-                            key: ValueKey('graphic_$index'),
-                            graphic: graphic,
-                            index: index,
-                            onEdit: () =>
-                                _showEditGraphicDialog(context, index, graphic),
-                            onDelete: () =>
-                                _showDeleteConfirmationDialog(context, index),
-                          );
-                        },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.image_not_supported,
+                        size: 64,
+                        color: Colors.grey,
                       ),
+                      SizedBox(height: 16),
+                      Text(
+                        'No graphics added yet',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Import or create graphic',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                )
+                    : ReorderableListView.builder(
+                  itemCount: state.graphics.length,
+                  onReorder: (oldIndex, newIndex) {
+                    if (newIndex > oldIndex) newIndex--;
+                    context.read<GraphicsCubit>().reorderGraphics(
+                      oldIndex,
+                      newIndex,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    final graphic = state.graphics[index];
+                    return _GraphicListTile(
+                      key: ValueKey('graphic_$index'),
+                      graphic: graphic,
+                      index: index,
+                      onEdit: () =>
+                          _showEditGraphicDialog(context, index, graphic),
+                      onDelete: () =>
+                          _showDeleteConfirmationDialog(context, index),
+                    );
+                  },
+                ),
               ),
             ],
           );
@@ -148,117 +155,125 @@ class GraphicsListWidget extends StatelessWidget {
   void _showAddGraphicDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (dialogContext) => GraphicForm(
-        title: 'Add New Graphic',
-        onSubmit: (name, width, height, tileOrigin) {
-          final dataLength =
-              width * height; // Calculate data length based on dimensions
-          final data = List.generate(dataLength, (index) => index % 256);
+      builder: (dialogContext) =>
+          GraphicForm(
+            title: 'Add New Graphic',
+            onSubmit: (name, width, height, tileOrigin) {
+              final dataLength =
+                  width * height; // Calculate data length based on dimensions
+              final data = List.generate(dataLength, (index) => index % 256);
 
-          // Determine type based on name
-          GraphicsType type = GraphicsType.undefined;
-          if (name.toLowerCase().endsWith('tiles')) {
-            type = GraphicsType.tile;
-          } else if (name.toLowerCase().endsWith('map')) {
-            type = GraphicsType.map;
-          }
+              // Determine type based on name
+              GraphicsType type = GraphicsType.undefined;
+              if (name.toLowerCase().endsWith('tiles')) {
+                type = GraphicsType.tile;
+              } else if (name.toLowerCase().endsWith('map')) {
+                type = GraphicsType.map;
+              }
 
-          final graphic = Graphics(
-            name: name,
-            data: data,
-            width: width,
-            height: height,
-            tileOrigin: tileOrigin,
-            type: type,
-          );
-          context.read<GraphicsCubit>().addGraphic(graphic);
-        },
-      ),
+              final graphic = Graphics(
+                name: name,
+                data: data,
+                width: width,
+                height: height,
+                tileOrigin: tileOrigin,
+                type: type,
+              );
+              context.read<GraphicsCubit>().addGraphic(graphic);
+            },
+          ),
     );
   }
 
-  void _showEditGraphicDialog(
-    BuildContext context,
-    int index,
-    Graphics graphic,
-  ) {
+  void _showEditGraphicDialog(BuildContext context,
+      int index,
+      Graphics graphic,) {
     showDialog(
       context: context,
-      builder: (dialogContext) => GraphicForm(
-        title: 'Properties',
-        initialName: graphic.name,
-        initialWidth: graphic.width,
-        initialHeight: graphic.height,
-        initialTileOrigin: graphic.tileOrigin,
-        onSubmit: (name, width, height, tileOrigin) {
-          // Calculate new data length based on dimensions
-          //final dataLength = width * height;
-          // Create updated graphic with new dimensions but preserve some original data
-          //final data = List.generate(
-          //  dataLength,
-          //  (i) => i < graphic.data.length ? graphic.data[i] : 0,
-          //);
-          final updatedGraphic = Graphics(
-            name: name,
-            data: graphic.data,
-            width: width,
-            height: height,
-            tileOrigin: tileOrigin,
-          );
-          context.read<GraphicsCubit>().updateGraphicAt(index, updatedGraphic);
-        },
-      ),
+      builder: (dialogContext) =>
+          GraphicForm(
+            title: 'Properties',
+            initialName: graphic.name,
+            initialWidth: graphic.width,
+            initialHeight: graphic.height,
+            initialTileOrigin: graphic.tileOrigin,
+            onSubmit: (name, width, height, tileOrigin) {
+              // Calculate new data length based on dimensions
+              //final dataLength = width * height;
+              // Create updated graphic with new dimensions but preserve some original data
+              //final data = List.generate(
+              //  dataLength,
+              //  (i) => i < graphic.data.length ? graphic.data[i] : 0,
+              //);
+              final updatedGraphic = Graphics(
+                name: name,
+                data: graphic.data,
+                width: width,
+                height: height,
+                tileOrigin: tileOrigin,
+              );
+              context.read<GraphicsCubit>().updateGraphicAt(
+                  index, updatedGraphic);
+            },
+          ),
     );
   }
 
   void _showDeleteConfirmationDialog(BuildContext context, int index) {
-    final graphic = context.read<GraphicsCubit>().state.graphics[index];
+    final graphic = context
+        .read<GraphicsCubit>()
+        .state
+        .graphics[index];
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Delete Graphic'),
-        content: Text(
-          'Are you sure you want to delete "${graphic.name.isNotEmpty ? graphic.name : 'Graphic ${index + 1}'}"?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Cancel'),
+      builder: (dialogContext) =>
+          AlertDialog(
+            title: const Text('Delete Graphic'),
+            content: Text(
+              'Are you sure you want to delete "${graphic.name.isNotEmpty
+                  ? graphic.name
+                  : 'Graphic ${index + 1}'}"?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  context.read<GraphicsCubit>().removeGraphicAt(index);
+                },
+                child: const Text('Delete'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-              context.read<GraphicsCubit>().removeGraphicAt(index);
-            },
-            child: const Text('Delete'),
-          ),
-        ],
-      ),
     );
   }
 
   void _showClearConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Clear All Graphics'),
-        content: const Text(
-          'Are you sure you want to remove all graphics? This action cannot be undone.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Cancel'),
+      builder: (dialogContext) =>
+          AlertDialog(
+            title: const Text('Clear All Graphics'),
+            content: const Text(
+              'Are you sure you want to remove all graphics? This action cannot be undone.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  context.read<GraphicsCubit>().clearGraphics();
+                },
+                child: const Text('Clear All'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-              context.read<GraphicsCubit>().clearGraphics();
-            },
-            child: const Text('Clear All'),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -283,8 +298,14 @@ class _GraphicListTile extends StatelessWidget {
       var data = GBDKTileConverter().combine(graphics.data);
       data = GBDKTileConverter().reorderFromSourceToCanvas(
         data,
-        context.read<MetaTileCubit>().state.width,
-        context.read<MetaTileCubit>().state.height,
+        context
+            .read<MetaTileCubit>()
+            .state
+            .width,
+        context
+            .read<MetaTileCubit>()
+            .state
+            .height,
       );
 
       // Add tile to the collection with the specified origin
@@ -339,8 +360,14 @@ class _GraphicListTile extends StatelessWidget {
     var data = GBDKTileConverter().combine(graphic.data);
     data = GBDKTileConverter().reorderFromSourceToCanvas(
       data,
-      context.read<MetaTileCubit>().state.width,
-      context.read<MetaTileCubit>().state.height,
+      context
+          .read<MetaTileCubit>()
+          .state
+          .width,
+      context
+          .read<MetaTileCubit>()
+          .state
+          .height,
     );
     var preview = MetaTile(height: 8, width: 8, data: data);
     final tileCount =
@@ -348,85 +375,89 @@ class _GraphicListTile extends StatelessWidget {
 
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text("Load ${graphic.name} as Tile"),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(bottom: 4),
-                child: Text(
-                  "Parameter",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: TextFormField(
-                  controller: controller,
-                  decoration: const InputDecoration(labelText: "Tile Origin"),
-                  keyboardType: TextInputType.number,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: Text(
-                  "This will add $tileCount tiles starting from the origin",
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 4),
-                child: Text(
-                  "Preview",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              Flexible(
-                child: SingleChildScrollView(
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: List.generate(
-                      tileCount,
-                      (index) => Column(
-                        children: [
-                          SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: MetaTileDisplay(
-                              showGrid: false,
-                              tileData: preview.getTileAtIndex(index),
-                            ),
-                          ),
-                          Text("#$index", style: const TextStyle(fontSize: 10)),
-                        ],
+      builder: (dialogContext) =>
+          AlertDialog(
+            title: Text("Load ${graphic.name} as Tile"),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 4),
+                    child: Text(
+                      "Parameter",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: TextFormField(
+                      controller: controller,
+                      decoration: const InputDecoration(
+                          labelText: "Tile Origin"),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Text(
+                      "This will add $tileCount tiles starting from the origin",
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 4),
+                    child: Text(
+                      "Preview",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Flexible(
+                    child: SingleChildScrollView(
+                      child: Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: List.generate(
+                          tileCount,
+                              (index) =>
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: 40,
+                                    height: 40,
+                                    child: MetaTileDisplay(
+                                      showGrid: false,
+                                      tileData: preview.getTileAtIndex(index),
+                                    ),
+                                  ),
+                                  Text("#$index",
+                                      style: const TextStyle(fontSize: 10)),
+                                ],
+                              ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  final origin = int.tryParse(controller.text) ?? 0;
+                  Navigator.of(dialogContext).pop();
+                  _addMetaTile(graphic, context, origin);
+                },
+                child: const Text("Add Tiles"),
               ),
             ],
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text("Cancel"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final origin = int.tryParse(controller.text) ?? 0;
-              Navigator.of(dialogContext).pop();
-              _addMetaTile(graphic, context, origin);
-            },
-            child: const Text("Add Tiles"),
-          ),
-        ],
-      ),
     );
   }
 
@@ -489,14 +520,16 @@ class _GraphicListTile extends StatelessWidget {
                   showDialog(
                     context: context,
                     barrierDismissible: true,
-                    builder: (context) => BackgroundPreviewDialog(
-                      graphic: graphic,
-                      onLoad: () => _loadAsBackground(graphic, context),
-                    ),
+                    builder: (context) =>
+                        BackgroundPreviewDialog(
+                          graphic: graphic,
+                          onLoad: () => _loadAsBackground(graphic, context),
+                        ),
                   );
                 }
               },
-              itemBuilder: (ctx) => [
+              itemBuilder: (ctx) =>
+              [
                 const PopupMenuItem(
                   value: 'tile',
                   child: ListTile(
@@ -523,34 +556,53 @@ class _GraphicListTile extends StatelessWidget {
               tooltip: 'Export',
               onSelected: (value) {
                 if (value == 'tile') {
+                  var data = GBDKTileConverter().combine(graphic.data);
+                  data = GBDKTileConverter().reorderFromSourceToCanvas(
+                    data,
+                    context
+                        .read<MetaTileCubit>()
+                        .state
+                        .width,
+                    context
+                        .read<MetaTileCubit>()
+                        .state
+                        .height,
+                  );
+
                   var metatile = MetaTile(
                     height: graphic.height,
                     width: graphic.width,
                     name: graphic.name,
+                    data: data,
                   );
                   showDialog(
                     context: context,
-                    builder: (_) => AlertDialog(
-                      title: Text('Export ${metatile.name} as Tile'),
-                      content: ExportDialog(graphic: metatile),
-                    ),
+                    builder: (_) =>
+                        AlertDialog(
+                          title: Text('Export ${metatile.name} as Tile'),
+                          content: ExportDialog(graphic: metatile),
+                        ),
                   );
                 } else if (value == 'background') {
-                  var background = Background(
-                    height: graphic.height,
-                    width: graphic.width,
-                    name: graphic.name,
+                  Background background = Background(
+                      data: graphic.data,
+                      width: graphic.width,
+                      height: graphic.height,
+                      name: graphic.name
                   );
                   showDialog(
                     context: context,
-                    builder: (_) => AlertDialog(
-                      title: Text('Export ${background.name} as Background'),
-                      content: ExportDialog(graphic: background),
-                    ),
+                    builder: (_) =>
+                        AlertDialog(
+                          title: Text(
+                              'Export ${background.name} as Background'),
+                          content: ExportDialog(graphic: background),
+                        ),
                   );
                 }
               },
-              itemBuilder: (ctx) => [
+              itemBuilder: (ctx) =>
+              [
                 const PopupMenuItem(
                   value: 'tile',
                   child: ListTile(

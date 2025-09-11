@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/import_callbacks.dart';
+import 'package:flutter/services.dart';
 
 import '../cubits/app_state_cubit.dart';
 import '../cubits/graphics_cubit.dart';
@@ -177,7 +178,7 @@ class _ImportDialogState extends State<ImportDialog> {
                               ),
                               const SizedBox(height: 16),
 
-                              // File & URL buttons
+                              // File button
                               Row(
                                 children: [
                                   Expanded(
@@ -210,6 +211,8 @@ class _ImportDialogState extends State<ImportDialog> {
                                 ],
                               ),
                               const SizedBox(height: 8),
+
+                              // URL button
                               Row(
                                 children: [
                                   Expanded(
@@ -221,6 +224,43 @@ class _ImportDialogState extends State<ImportDialog> {
                                             },
                                       icon: const Icon(Icons.http),
                                       label: const Text('Import from URL'),
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+
+                              // Clipboard button
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton.icon(
+                                      onPressed: () async {
+                                        final elements =
+                                            await onImportFromClipboard(
+                                              context,
+                                              type,
+                                              compression,
+                                            );
+                                        if (elements != null) {
+                                          setState(() {
+                                            graphicsPreview = elements;
+                                            // Auto-select all imported graphics
+                                            selectedGraphics = List.from(
+                                              elements,
+                                            );
+                                          });
+                                        }
+                                      },
+                                      icon: const Icon(Icons.content_paste),
+                                      label: const Text(
+                                        'Import from Clipboard',
+                                      ),
                                       style: ElevatedButton.styleFrom(
                                         padding: const EdgeInsets.symmetric(
                                           vertical: 12,

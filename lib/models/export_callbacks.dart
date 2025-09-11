@@ -92,14 +92,14 @@ void onFileSaveAsBinBackground(BuildContext context, Graphics graphics) async {
   }
 }
 
-void onFileTilesSaveAsPNG(BuildContext context, MetaTile metaTile) async {
+void onFileTilesSaveAsPNG(BuildContext context, Graphics graphics) async {
   FilePicker.platform.getDirectoryPath().then((directory) {
     if (directory != null) {
       List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
       String tileName = context.read<AppStateCubit>().state.tileName;
-      int count = metaTile.data.length ~/ (metaTile.height * metaTile.width);
+      int count = graphics.data.length ~/ (graphics.height * graphics.width);
 
-      final png = tilesToPNG(metaTile, colorSet, count);
+      final png = tilesToPNG(graphics, colorSet, count);
       File("$directory/$tileName.png").writeAsBytesSync(png);
     }
   });
@@ -107,7 +107,7 @@ void onFileTilesSaveAsPNG(BuildContext context, MetaTile metaTile) async {
 
 void onFileBackgroundSaveAsPNG(
   BuildContext context,
-  Background background,
+  Graphics background,
 ) async {
   FilePicker.platform.getDirectoryPath().then((directory) {
     if (directory != null) {

@@ -22,4 +22,10 @@ class Graphics {
     this.startOffset = 0,
     this.endOffset = 0,
   });
+
+  int get nbPixel => width * height;
+
+  List<int> getTileAtIndex(int index) {
+    return data.getRange(nbPixel * index, nbPixel * index + nbPixel).toList();
+  }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/converter_utils.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/source_parser.dart';
@@ -74,6 +75,51 @@ Future<List<Graphics>?> onImport(
     final source = await readString(result);
     final parser = SourceParser();
     final graphicsElements = parser.parseAllArrays(source);
+
+    return graphicsElements;
+  }
+  return null;
+}
+
+Future<List<Graphics>?> onImportFromClipboard(
+    BuildContext context,
+    String type,
+    String compression,
+    ) async {
+  ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+  if (type == 'Auto') {
+    type = 'Source';
+  }
+
+  if(clipboardData == null || clipboardData.text!.isEmpty){
+    return null;
+  }
+
+  if (type == 'Binary') {
+    if (compression != 'none') {
+      // From binary with compression
+      //String inputPath = result.files.single.path!;
+      //List<int> data = _decompress(inputPath, compression, context);
+
+      //if (data.isNotEmpty) {
+      //  var graphics = Graphics(name: 'clipboard_data', data: data);
+      //  return [graphics];
+      //}
+      return null; // TODO create a temporary file with clipboard data
+    } else {
+      // From binary
+
+      return null; // TODO
+      //final bin = await readBin(result);
+      //List<int> data = convertBytesToDecimals(bin);
+      //var graphics = Graphics(name: 'clipboard_data', data: data);
+      //return [graphics];
+    }
+  } else {
+    // From source
+    final source = clipboardData.text;
+    final parser = SourceParser();
+    final graphicsElements = parser.parseAllArrays(source!);
 
     return graphicsElements;
   }

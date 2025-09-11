@@ -7,9 +7,7 @@ class MetaTile extends Graphics {
     String? name,
     List<int>? data,
     required super.height,
-    required super.width,
-    metaTileWidth = 8,
-    metaTileHeight = 8,
+    required super.width
   }) : super(
          name: name ?? "",
          data: data ?? List.filled(width * height, 0, growable: true),
@@ -30,12 +28,6 @@ class MetaTile extends Graphics {
   void calcMaxTileIndex() => maxTileIndex = data.length ~/ (height * width);
 
   int get nbTilePerRow => (width ~/ tileSize);
-
-  int get nbPixel => width * height;
-
-  List<int> getTileAtIndex(int index) {
-    return data.getRange(nbPixel * index, nbPixel * index + nbPixel).toList();
-  }
 
   int getPixel(int rowIndex, int colIndex, int tileIndex) =>
       data[(colIndex * width + rowIndex) + nbPixel * tileIndex];
