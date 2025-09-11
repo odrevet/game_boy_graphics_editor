@@ -547,7 +547,7 @@ class _GraphicListTile extends StatelessWidget {
               ],
             ),
             IconButton(
-              icon: const Icon(Icons.edit),
+              icon: const Icon(Icons.edit_attributes),
               onPressed: onEdit,
               tooltip: 'Edit properties',
             ),

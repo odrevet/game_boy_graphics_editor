@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import '../cubits/app_state_cubit.dart';
 import '../cubits/graphics_cubit.dart';
 import '../models/graphics/graphics.dart';
+import 'graphic_form.dart';
 
 class ImportDialog extends StatefulWidget {
   const ImportDialog({super.key});
@@ -373,6 +374,12 @@ class _ImportDialogState extends State<ImportDialog> {
                                           });
                                         },
                                       ),
+                                      trailing: IconButton(
+                                        icon: const Icon(Icons.edit_attributes),
+                                        tooltip: 'Properties',
+                                        onPressed: () => _showEditGraphicDialog(context, graphic),
+                                        splashRadius: 20,
+                                      ),
                                       onTap: () {
                                         setState(() {
                                           if (isSelected) {
@@ -427,6 +434,28 @@ class _ImportDialogState extends State<ImportDialog> {
       ),
     );
   }
+
+  void _showEditGraphicDialog(BuildContext context,
+      Graphics graphic,) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) =>
+          GraphicForm(
+            title: 'Properties',
+            initialName: graphic.name,
+            initialWidth: graphic.width,
+            initialHeight: graphic.height,
+            initialTileOrigin: graphic.tileOrigin,
+            onSubmit: (name, width, height, tileOrigin) {
+              graphic.name = name;
+              graphic.width = width;
+              graphic.height = height;
+              graphic.tileOrigin = tileOrigin;
+            },
+          ),
+    );
+  }
+
 
   void _handleImport() async {
     List<Graphics>? elements;
@@ -508,6 +537,31 @@ class _ImportDialogState extends State<ImportDialog> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void _previewGraphic(Graphics graphic) {
+    // Handle graphic preview action
+    // You can implement your preview logic here
+    // For example, show a dialog with the graphic preview
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text('Preview: ${graphic.name}'),
+        content: const SizedBox(
+          width: 200,
+          height: 200,
+          child: Center(
+            child: Text('Graphic preview would go here'),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+        ],
       ),
     );
   }
