@@ -25,6 +25,20 @@ class _ImportDialogState extends State<ImportDialog> {
 
   List<Graphics> graphicsPreview = [];
   List<Graphics> selectedGraphics = [];
+  Map<Graphics, String> parseOptions = {}; // Track parse option for each graphic
+
+  /// Determines the default parse option based on the graphic name
+  String _getDefaultParseOption(Graphics graphic) {
+    final name = graphic.name.toLowerCase();
+
+    if (name.endsWith('tiles') || name.endsWith('tile')) {
+      return 'Tile';
+    } else if (name.endsWith('map')) {
+      return 'Background';
+    } else {
+      return 'Graphics';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -374,11 +388,52 @@ class _ImportDialogState extends State<ImportDialog> {
                                           });
                                         },
                                       ),
-                                      trailing: IconButton(
-                                        icon: const Icon(Icons.edit_attributes),
-                                        tooltip: 'Properties',
-                                        onPressed: () => _showEditGraphicDialog(context, graphic),
-                                        splashRadius: 20,
+                                      trailing: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          // Parse option dropdown
+                                          Container(
+                                            width: 120,
+                                            child: DropdownButtonFormField<String>(
+                                              value: parseOptions[graphic] ?? _getDefaultParseOption(graphic),
+                                              decoration: const InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                contentPadding: EdgeInsets.symmetric(
+                                                  horizontal: 8,
+                                                  vertical: 4,
+                                                ),
+                                                isDense: true,
+                                              ),
+                                              onChanged: (String? value) {
+                                                setState(() {
+                                                  parseOptions[graphic] = value!;
+                                                });
+                                              },
+                                              items: const [
+                                                DropdownMenuItem(
+                                                  value: 'Graphics',
+                                                  child: Text('Graphics', style: TextStyle(fontSize: 12)),
+                                                ),
+                                                DropdownMenuItem(
+                                                  value: 'Tile',
+                                                  child: Text('Tile', style: TextStyle(fontSize: 12)),
+                                                ),
+                                                DropdownMenuItem(
+                                                  value: 'Background',
+                                                  child: Text('Background', style: TextStyle(fontSize: 12)),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          // Edit properties button
+                                          IconButton(
+                                            icon: const Icon(Icons.edit_attributes),
+                                            tooltip: 'Properties',
+                                            onPressed: () => _showEditGraphicDialog(context, graphic),
+                                            splashRadius: 20,
+                                          ),
+                                        ],
                                       ),
                                       onTap: () {
                                         setState(() {
@@ -480,6 +535,10 @@ class _ImportDialogState extends State<ImportDialog> {
         graphicsPreview = elements!;
         // Auto-select all imported graphics
         selectedGraphics = List.from(elements);
+        // Initialize parse options for new graphics with smart defaults
+        for (final graphic in elements) {
+          parseOptions[graphic] ??= _getDefaultParseOption(graphic);
+        }
       });
     }
   }
@@ -526,6 +585,10 @@ class _ImportDialogState extends State<ImportDialog> {
                           graphicsPreview = elements;
                           // Auto-select all imported graphics
                           selectedGraphics = List.from(elements);
+                          // Initialize parse options for new graphics with smart defaults
+                          for (final graphic in elements) {
+                            parseOptions[graphic] ??= _getDefaultParseOption(graphic);
+                          }
                         });
                       }
                     },
@@ -537,31 +600,6 @@ class _ImportDialogState extends State<ImportDialog> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  void _previewGraphic(Graphics graphic) {
-    // Handle graphic preview action
-    // You can implement your preview logic here
-    // For example, show a dialog with the graphic preview
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text('Preview: ${graphic.name}'),
-        content: const SizedBox(
-          width: 200,
-          height: 200,
-          child: Center(
-            child: Text('Graphic preview would go here'),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
-          ),
-        ],
       ),
     );
   }
