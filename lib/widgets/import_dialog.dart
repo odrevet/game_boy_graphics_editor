@@ -268,7 +268,7 @@ class _ImportDialogState extends State<ImportDialog> {
                                     flex: 3,
                                     child: ElevatedButton.icon(
                                       onPressed: () => _handleImport(),
-                                      icon: const Icon(Icons.download),
+                                      icon: const Icon(Icons.arrow_upward),
                                       label: const Text('Import'),
                                       style: ElevatedButton.styleFrom(
                                         padding: const EdgeInsets.symmetric(
@@ -592,7 +592,7 @@ class _ImportDialogState extends State<ImportDialog> {
                         });
                       }
                     },
-                    icon: const Icon(Icons.download),
+                    icon: const Icon(Icons.arrow_upward),
                     label: const Text('Import from URL'),
                   ),
                 ),

@@ -33,7 +33,7 @@ class ApplicationMenuBar extends StatelessWidget {
                     },
                     child: const Row(
                       children: [
-                        Icon(Icons.upload),
+                        Icon(Icons.arrow_upward),
                         SizedBox(width: 5),
                         MenuAcceleratorLabel('&Import'),
                       ],
@@ -52,7 +52,7 @@ class ApplicationMenuBar extends StatelessWidget {
                     },
                     child: const Row(
                       children: [
-                        Icon(Icons.download),
+                        Icon(Icons.arrow_downward),
                         SizedBox(width: 5),
                         MenuAcceleratorLabel('&Export'),
                       ],
