@@ -95,35 +95,12 @@ Future<List<Graphics>?> onImportFromClipboard(
     return null;
   }
 
-  if (type == 'Binary') {
-    if (compression != 'none') {
-      // From binary with compression
-      //String inputPath = result.files.single.path!;
-      //List<int> data = _decompress(inputPath, compression, context);
+  // From source
+  final source = clipboardData.text;
+  final parser = SourceParser();
+  final graphicsElements = parser.parseAllArrays(source!);
 
-      //if (data.isNotEmpty) {
-      //  var graphics = Graphics(name: 'clipboard_data', data: data);
-      //  return [graphics];
-      //}
-      return null; // TODO create a temporary file with clipboard data
-    } else {
-      // From binary
-
-      return null; // TODO
-      //final bin = await readBin(result);
-      //List<int> data = convertBytesToDecimals(bin);
-      //var graphics = Graphics(name: 'clipboard_data', data: data);
-      //return [graphics];
-    }
-  } else {
-    // From source
-    final source = clipboardData.text;
-    final parser = SourceParser();
-    final graphicsElements = parser.parseAllArrays(source!);
-
-    return graphicsElements;
-  }
-  return null;
+  return graphicsElements;
 }
 
 String resolveType(String path) {

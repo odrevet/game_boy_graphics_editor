@@ -39,6 +39,25 @@ class _ImportDialogState extends State<ImportDialog> {
     }
   }
 
+  /// Get available data type options based on import source
+  List<String> _getAvailableDataTypes() {
+    if (importSource == 'Clipboard') {
+      return ['Source code']; // Only allow Source code for clipboard
+    }
+    return ['Auto', 'Source code', 'Binary'];
+  }
+
+  /// Handle import source change and update data type if needed
+  void _onImportSourceChanged(String? value) {
+    setState(() {
+      importSource = value!;
+      // If switching to clipboard, force type to Source code
+      if (importSource == 'Clipboard' && type != 'Source code') {
+        type = 'Source code';
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -88,7 +107,7 @@ class _ImportDialogState extends State<ImportDialog> {
                                   ),
                                   Expanded(
                                     child: DropdownButtonFormField<String>(
-                                      initialValue: type,
+                                      value: _getAvailableDataTypes().contains(type) ? type : _getAvailableDataTypes().first,
                                       decoration: const InputDecoration(
                                         border: OutlineInputBorder(),
                                         contentPadding: EdgeInsets.symmetric(
@@ -101,12 +120,7 @@ class _ImportDialogState extends State<ImportDialog> {
                                           type = value!;
                                         });
                                       },
-                                      items:
-                                      <String>[
-                                        'Auto',
-                                        'Source code',
-                                        'Binary',
-                                      ]
+                                      items: _getAvailableDataTypes()
                                           .map(
                                             (v) => DropdownMenuItem(
                                           value: v,
@@ -148,7 +162,8 @@ class _ImportDialogState extends State<ImportDialog> {
                                           !context
                                               .read<AppStateCubit>()
                                               .state
-                                              .gbdkPathValid
+                                              .gbdkPathValid ||
+                                          type != 'Binary'
                                           ? null
                                           : (String? value) {
                                         setState(() {
@@ -207,11 +222,7 @@ class _ImportDialogState extends State<ImportDialog> {
                                           vertical: 8,
                                         ),
                                       ),
-                                      onChanged: (String? value) {
-                                        setState(() {
-                                          importSource = value!;
-                                        });
-                                      },
+                                      onChanged: _onImportSourceChanged,
                                       items: [
                                         const DropdownMenuItem(
                                           value: 'File',
@@ -223,32 +234,18 @@ class _ImportDialogState extends State<ImportDialog> {
                                             ],
                                           ),
                                         ),
-                                        DropdownMenuItem(
-                                          value: 'URL',
-                                          enabled: !kIsWeb,
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.http,
-                                                size: 16,
-                                                color: kIsWeb
-                                                    ? Theme.of(context)
-                                                    .disabledColor
-                                                    : null,
-                                              ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                'URL',
-                                                style: TextStyle(
-                                                  color: kIsWeb
-                                                      ? Theme.of(context)
-                                                      .disabledColor
-                                                      : null,
-                                                ),
-                                              ),
-                                            ],
+                                        // Only show URL option when not on web
+                                        if (!kIsWeb)
+                                          const DropdownMenuItem(
+                                            value: 'URL',
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.http, size: 16),
+                                                SizedBox(width: 8),
+                                                Text('URL'),
+                                              ],
+                                            ),
                                           ),
-                                        ),
                                         const DropdownMenuItem(
                                           value: 'Clipboard',
                                           child: Row(
@@ -391,7 +388,7 @@ class _ImportDialogState extends State<ImportDialog> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           // Parse option dropdown
-                                          Container(
+                                          /*Container(
                                             width: 120,
                                             child: DropdownButtonFormField<String>(
                                               initialValue: parseOptions[graphic] ?? _getDefaultParseOption(graphic),
@@ -423,7 +420,7 @@ class _ImportDialogState extends State<ImportDialog> {
                                                 ),
                                               ],
                                             ),
-                                          ),
+                                          ),*/
                                           const SizedBox(width: 8),
                                           // Edit properties button
                                           IconButton(
