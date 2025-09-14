@@ -34,20 +34,29 @@ class BackgroundPreviewDialog extends StatefulWidget {
 
 class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
   bool transpose = false;
+  String? errorMessage;
 
   @override
   Widget build(BuildContext context) {
-    final Background preview = GBDKBackgroundConverter().fromGraphics(
-      widget.graphic,
-    );
-
-    if (transpose) {
-      var data = transposeList(
-        preview.data,
-        widget.graphic.height ~/ 8,
-        widget.graphic.width ~/ 8,
+    Background? preview;
+    try {
+      preview = GBDKBackgroundConverter().fromGraphics(
+        widget.graphic,
       );
-      preview.data = data;
+
+      if (transpose) {
+        var data = transposeList(
+          preview.data,
+          widget.graphic.height ~/ 8,
+          widget.graphic.width ~/ 8,
+        );
+        preview.data = data;
+      }
+      errorMessage = null;
+    } on RangeError catch (e) {
+      errorMessage = "RangeError: ${e.message}. Check background dimensions";
+    } catch (e) {
+      errorMessage = "Error: $e";
     }
 
     final screenSize = MediaQuery.of(context).size;
@@ -79,8 +88,16 @@ class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
             ),
             const SizedBox(height: 8),
             Expanded(
-              child: BackgroundGrid(
-                background: preview,
+              child: errorMessage != null
+                  ? Center(
+                child: Text(
+                  errorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+              )
+                  : BackgroundGrid(
+                background: preview!,
                 tileOrigin: 0,
                 metaTile: context.read<MetaTileCubit>().state,
                 showGrid: widget.showGrid,
@@ -96,7 +113,9 @@ class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
           child: const Text("Cancel"),
         ),
         ElevatedButton(
-          onPressed: () {
+          onPressed: errorMessage != null
+              ? null
+              : () {
             Navigator.of(context).pop();
             widget.onLoad();
           },
