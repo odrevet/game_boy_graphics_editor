@@ -92753,7 +92753,7 @@ $0(){var s=A.H(this.a,!1,t.i)
 s.bd(s.c.IL(B.a0j))},
 $S:0}
 A.a3b.prototype={
-$0(){A.b1P("GameBoy Graphics Editor","1.0.3",this.a)},
+$0(){A.b1P("GameBoy Graphics Editor","2.0.0",this.a)},
 $S:0}
 A.RT.prototype={
 F(a){return A.ka(new A.akH(),t.i,t.Tz)}}
