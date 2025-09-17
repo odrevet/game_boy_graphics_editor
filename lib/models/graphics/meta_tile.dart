@@ -9,7 +9,7 @@ class MetaTile extends Graphics {
     required super.height,
     required super.width
   }) : super(
-         name: name ?? "",
+         name: name ?? "tiles",
          data: data ?? List.filled(width * height, 0, growable: true),
        ) {
     calcMaxTileIndex();

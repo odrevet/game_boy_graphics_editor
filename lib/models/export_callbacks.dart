@@ -24,11 +24,11 @@ void onFileSaveAsSourceCode(
   if (parse == 'Tile') {
     if (kIsWeb) {
       // Tile on Web
-      download(
+      downloadString(
         GBDKTileConverter().toHeader(graphics, graphics.name),
         '${graphics.name}.h',
       );
-      download(
+      downloadString(
         GBDKTileConverter().toSource(graphics, graphics.name),
         '${graphics.name}.c',
       );
@@ -39,11 +39,11 @@ void onFileSaveAsSourceCode(
   } else {
     if (kIsWeb) {
       // Background on Web
-      download(
+      downloadString(
         GBDKBackgroundConverter().toHeader(graphics, graphics.name),
         '${graphics.name}.h',
       );
-      download(
+      downloadString(
         GBDKBackgroundConverter().toSource(graphics, graphics.name),
         '${graphics.name}.c',
       );
@@ -67,7 +67,7 @@ void onFileSaveAsBinTile(BuildContext context, Graphics graphics) async {
   String name = graphics.name;
 
   if (kIsWeb) {
-    download(bytes.join(), '${name}.bin');
+    downloadBytes(bytes, '${name}.bin');
   } else {
     String? directory = await FilePicker.platform.getDirectoryPath();
 
@@ -82,7 +82,7 @@ void onFileSaveAsBinBackground(BuildContext context, Graphics graphics) async {
   List<int> bytes = graphics.data;
 
   if (kIsWeb) {
-    download(bytes.join(), '$name.bin');
+    downloadBytes(bytes, '$name.bin');
   } else {
     String? directory = await FilePicker.platform.getDirectoryPath();
     if (directory != null) {
@@ -92,31 +92,41 @@ void onFileSaveAsBinBackground(BuildContext context, Graphics graphics) async {
 }
 
 void onFileTilesSaveAsPNG(BuildContext context, Graphics graphics) async {
-  FilePicker.platform.getDirectoryPath().then((directory) {
-    if (directory != null) {
-      List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
-      String tileName = context.read<AppStateCubit>().state.tileName;
-      int count = graphics.data.length ~/ (graphics.height * graphics.width);
+  List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
+  String tileName = context.read<AppStateCubit>().state.tileName;
+  int count = graphics.data.length ~/ (graphics.height * graphics.width);
 
-      final png = tilesToPNG(graphics, colorSet, count);
-      File("$directory/$tileName.png").writeAsBytesSync(png);
-    }
-  });
+  final png = tilesToPNG(graphics, colorSet, count);
+
+  if (kIsWeb) {
+    downloadBytes(png, "$tileName.png");
+  } else {
+    FilePicker.platform.getDirectoryPath().then((directory) {
+      if (directory != null) {
+        File("$directory/$tileName.png").writeAsBytesSync(png);
+      }
+    });
+  }
 }
 
 void onFileBackgroundSaveAsPNG(
   BuildContext context,
   Graphics background,
 ) async {
-  FilePicker.platform.getDirectoryPath().then((directory) {
-    if (directory != null) {
-      MetaTile metaTile = context.read<MetaTileCubit>().state;
-      List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
-      String backgroundName = background.name;
-      final png = backgroundToPNG(background, metaTile, colorSet);
-      File("$directory/$backgroundName.png").writeAsBytesSync(png);
-    }
-  });
+  MetaTile metaTile = context.read<MetaTileCubit>().state;
+  List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
+  String backgroundName = background.name;
+  final png = backgroundToPNG(background, metaTile, colorSet);
+
+  if (kIsWeb) {
+    downloadBytes(png, "$backgroundName.png");
+  } else {
+    FilePicker.platform.getDirectoryPath().then((directory) {
+      if (directory != null) {
+        File("$directory/$backgroundName.png").writeAsBytesSync(png);
+      }
+    });
+  }
 }
 
 void _saveGraphics(

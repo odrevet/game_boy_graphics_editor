@@ -4,7 +4,7 @@ class Background extends Graphics {
   Background({
     super.height = 18,
     super.width = 20,
-    super.name = "",
+    super.name = "background",
     super.tileOrigin = 0,
     fill,
     data,

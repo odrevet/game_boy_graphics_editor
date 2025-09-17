@@ -43,7 +43,7 @@ class SourceDisplay extends StatelessWidget {
                 ? IconButton(
                     iconSize: 18,
                     icon: const Icon(Icons.download),
-                    onPressed: () => download(source, name),
+                    onPressed: () => downloadString(source, name),
                   )
                 : IconButton(
                     iconSize: 18,
