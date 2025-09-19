@@ -161,7 +161,7 @@ class GraphicsListWidget extends StatelessWidget {
             onSubmit: (name, width, height, tileOrigin) {
               final dataLength =
                   width * height; // Calculate data length based on dimensions
-              final data = List.generate(dataLength, (index) => index % 256);
+              final data = List.generate(dataLength, (index) => 0);
 
               // Determine type based on name
               GraphicsType type = GraphicsType.undefined;
