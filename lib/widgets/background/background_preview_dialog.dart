@@ -40,9 +40,7 @@ class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
   Widget build(BuildContext context) {
     Background? preview;
     try {
-      preview = GBDKBackgroundConverter().fromGraphics(
-        widget.graphic,
-      );
+      preview = Background.fromGraphics(widget.graphic);
 
       if (transpose) {
         var data = transposeList(

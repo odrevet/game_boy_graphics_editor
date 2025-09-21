@@ -69,12 +69,6 @@ const unsigned char {{name}}_map[{{length}}] = {
     }
   }
 
-  Background fromGraphics(Graphics graphics) => Background(
-    data: graphics.data,
-    width: graphics.width ~/ 8,
-    height: graphics.height ~/ 8,
-  );
-
   @override
   String toHeader(Graphics graphics, String name) {
     Background background = graphics as Background;

@@ -12,6 +12,20 @@ class Background extends Graphics {
          data: data ?? List.filled(width * height, fill ?? 0, growable: true),
        );
 
+  factory Background.fromGraphics(Graphics graphics) {
+
+    return Background(
+      data: graphics.data,
+      width: graphics.width ~/ 8,
+      height: graphics.height ~/ 8,
+      name: graphics.name,
+      tileOrigin: graphics.tileOrigin,
+    )
+      ..filepath = graphics.filepath
+      ..startOffset = graphics.startOffset
+      ..endOffset = graphics.endOffset;
+  }
+
   copyWith({List<int>? data, int? width, int? height, int? tileOrigin}) =>
       Background(
         data: data ?? [...this.data],

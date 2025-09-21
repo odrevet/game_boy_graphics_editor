@@ -438,7 +438,7 @@ class _GraphicListTile extends StatelessWidget {
 
   void _loadAsBackground(Graphics graphics, BuildContext context) {
     try {
-      Background background = GBDKBackgroundConverter().fromGraphics(graphics);
+      Background background = Background.fromGraphics(graphics);
       context.read<BackgroundCubit>().setWidth(background.width);
       context.read<BackgroundCubit>().setHeight(background.height);
       context.read<BackgroundCubit>().setData(background.data);
@@ -550,12 +550,7 @@ class _GraphicListTile extends StatelessWidget {
                     ),
                   );
                 } else if (value == 'background') {
-                  Background background = Background(
-                    data: graphic.data,
-                    width: graphic.width,
-                    height: graphic.height,
-                    name: graphic.name,
-                  );
+                  Background background = Background.fromGraphics(graphic);
                   showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
