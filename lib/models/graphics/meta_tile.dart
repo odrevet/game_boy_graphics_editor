@@ -2,6 +2,8 @@ import 'dart:core';
 
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
+import '../sourceConverters/gbdk_tile_converter.dart';
+
 class MetaTile extends Graphics {
   MetaTile({
     String? name,
@@ -13,6 +15,26 @@ class MetaTile extends Graphics {
          data: data ?? List.filled(width * height, 0, growable: true),
        ) {
     calcMaxTileIndex();
+  }
+
+  factory MetaTile.fromGraphics(Graphics graphics, {int? targetWidth, int? targetHeight}) {
+    var data = GBDKTileConverter().combine(graphics.data);
+    data = GBDKTileConverter().reorderFromSourceToCanvas(
+      data,
+      targetWidth ?? 8,  // Default to 8x8 tiles if not specified
+      targetHeight ?? 8,
+    );
+
+    return MetaTile(
+      name: graphics.name,
+      data: data,
+      height: targetHeight ?? 8,
+      width: targetWidth ?? 8,
+    )
+      ..tileOrigin = graphics.tileOrigin
+      ..filepath = graphics.filepath
+      ..startOffset = graphics.startOffset
+      ..endOffset = graphics.endOffset;
   }
 
   copyWith({List<int>? data, int? width, int? height}) => MetaTile(
