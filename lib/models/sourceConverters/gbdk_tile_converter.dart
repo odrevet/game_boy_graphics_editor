@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import '../graphics/graphics.dart';
 import '../graphics/meta_tile.dart';
 import 'converter_utils.dart';

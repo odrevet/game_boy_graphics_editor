@@ -4,7 +4,6 @@ import 'package:game_boy_graphics_editor/models/sourceConverters/converter_utils
 
 import '../../cubits/meta_tile_cubit.dart';
 import '../../models/graphics/background.dart';
-import '../../models/sourceConverters/gbdk_background_converter.dart';
 import 'background_grid.dart';
 
 class BackgroundPreviewDialog extends StatefulWidget {

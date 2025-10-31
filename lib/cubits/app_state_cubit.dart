@@ -26,6 +26,8 @@ class AppStateCubit extends Cubit<AppState> {
 
   void navigateToEditor() => setCurrentView(ViewType.editor);
 
+  void navigateToImport() => setCurrentView(ViewType.import);
+
   void navigateToMemoryManager() => setCurrentView(ViewType.memoryManager);
 
   void navigateToSettings() => setCurrentView(ViewType.settings);
@@ -45,6 +47,8 @@ class AppStateCubit extends Cubit<AppState> {
         return 'Memory Manager';
       case ViewType.settings:
         return 'Settings';
+      case ViewType.import:
+        return 'Import';
     }
   }
 

@@ -2,7 +2,7 @@ import '../colors.dart';
 
 enum DrawMode { single, fill, line, rectangle }
 
-enum ViewType { editor, memoryManager, settings }
+enum ViewType { editor, memoryManager, settings, import }
 
 class AppState {
   int intensity;

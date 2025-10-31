@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:game_boy_graphics_editor/models/graphics/background.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/source_converter.dart';
 

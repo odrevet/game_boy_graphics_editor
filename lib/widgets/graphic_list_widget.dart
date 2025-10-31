@@ -10,12 +10,11 @@ import '../cubits/graphics_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
 import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
-import '../models/sourceConverters/gbdk_background_converter.dart';
 import '../models/states/graphics_state.dart';
 import 'background/background_preview_dialog.dart';
-import 'export_dialog.dart';
+import 'export_page.dart';
 import 'graphic_form.dart';
-import 'import_dialog.dart';
+import 'import_page.dart';
 
 class GraphicsListWidget extends StatelessWidget {
   const GraphicsListWidget({Key? key}) : super(key: key);
@@ -52,13 +51,12 @@ class GraphicsListWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ElevatedButton.icon(
-                          onPressed: () => showDialog(
-                            context: context,
-                            builder: (_) => const AlertDialog(
-                              title: Text('Import'),
-                              content: ImportDialog(),
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const ImportPage(),
                             ),
                           ),
+
                           icon: const Icon(Icons.arrow_upward),
                           label: const Text('Import Graphics'),
                         ),
@@ -70,11 +68,9 @@ class GraphicsListWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         ElevatedButton.icon(
-                          onPressed: () => showDialog(
-                            context: context,
-                            builder: (_) => const AlertDialog(
-                              title: Text('Export'),
-                              content: ExportDialog(),
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const ExportPage(),
                             ),
                           ),
                           icon: const Icon(Icons.arrow_downward),
@@ -542,20 +538,16 @@ class _GraphicListTile extends StatelessWidget {
                     targetHeight: targetHeight,
                   );
 
-                  showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: Text('Export ${metatile.name} as Tile'),
-                      content: ExportDialog(graphic: metatile),
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ExportPage(graphic: metatile),
                     ),
                   );
                 } else if (value == 'background') {
                   Background background = Background.fromGraphics(graphic);
-                  showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: Text('Export ${background.name} as Background'),
-                      content: ExportDialog(graphic: background),
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ExportPage(graphic: background),
                     ),
                   );
                 }
