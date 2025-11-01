@@ -28,7 +28,6 @@ class _ImportPageState extends State<ImportPage> {
   List<Graphics> graphicsPreview = [];
   List<Graphics> selectedGraphics = [];
   Map<Graphics, String> parseOptions = {};
-  Graphics? hoveredGraphic; // for hover preview
 
   String _getDefaultParseOption(Graphics graphic) {
     final name = graphic.name.toLowerCase();
@@ -59,10 +58,6 @@ class _ImportPageState extends State<ImportPage> {
 
   @override
   Widget build(BuildContext context) {
-    final previewGraphic =
-        hoveredGraphic ??
-            (selectedGraphics.isNotEmpty ? selectedGraphics.last : null);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Import Graphics'),
@@ -300,240 +295,167 @@ class _ImportPageState extends State<ImportPage> {
 
             const SizedBox(width: 24),
 
-            // Right side
+            // Right side - Graphics list
             Expanded(
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Graphics list
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Found ${graphicsPreview.length} graphic(s)',
-                              style: Theme.of(context).textTheme.titleMedium
-                                  ?.copyWith(fontWeight: FontWeight.w600),
-                            ),
-                            const Spacer(),
-                            if (graphicsPreview.isNotEmpty)
-                              TextButton.icon(
-                                onPressed: () {
-                                  setState(() {
-                                    graphicsPreview.clear();
-                                    selectedGraphics.clear();
-                                    parseOptions.clear();
-                                  });
-                                },
-                                icon: const Icon(Icons.clear_all),
-                                label: const Text('Clear All'),
-                              ),
-                            TextButton.icon(
-                              onPressed: graphicsPreview.isEmpty
-                                  ? null
-                                  : () {
-                                setState(() {
-                                  if (selectedGraphics.length ==
-                                      graphicsPreview.length) {
-                                    selectedGraphics.clear();
-                                  } else {
-                                    selectedGraphics = List.from(
-                                      graphicsPreview,
-                                    );
-                                  }
-                                });
-                              },
-                              icon: Icon(
-                                selectedGraphics.length ==
-                                    graphicsPreview.length
-                                    ? Icons.deselect
-                                    : Icons.select_all,
-                              ),
-                              label: Text(
-                                selectedGraphics.length ==
-                                    graphicsPreview.length
-                                    ? 'Deselect All'
-                                    : 'Select All',
-                              ),
-                            ),
-                          ],
+                  Row(
+                    children: [
+                      Text(
+                        'Found ${graphicsPreview.length} graphic(s)',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                      const Spacer(),
+                      if (graphicsPreview.isNotEmpty)
+                        TextButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              graphicsPreview.clear();
+                              selectedGraphics.clear();
+                              parseOptions.clear();
+                            });
+                          },
+                          icon: const Icon(Icons.clear_all),
+                          label: const Text('Clear All'),
                         ),
-                        const SizedBox(height: 8),
-                        Expanded(
-                          child: Card(
-                            elevation: 2,
-                            child: graphicsPreview.isEmpty
-                                ? _buildEmptyState(context)
-                                : ListView.builder(
-                              itemCount: graphicsPreview.length,
-                              itemBuilder: (context, index) {
-                                final graphic = graphicsPreview[index];
-                                final isSelected = selectedGraphics
-                                    .contains(graphic);
-                                return MouseRegion(
-                                  onEnter: (_) {
-                                    setState(() {
-                                      hoveredGraphic = graphic;
-                                    });
-                                  },
-                                  onExit: (_) {
-                                    setState(() {
-                                      hoveredGraphic = null;
-                                    });
-                                  },
-                                  child: Card(
-                                    elevation: 3,
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 6,
-                                    ),
-                                    child: ListTile(
-                                      leading: Checkbox(
-                                        value: isSelected,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            if (value == true) {
-                                              selectedGraphics.add(
-                                                graphic,
-                                              );
-                                            } else {
-                                              selectedGraphics.remove(
-                                                graphic,
-                                              );
-                                            }
-                                          });
-                                        },
-                                      ),
-                                      title: Text(
-                                        graphic.name,
-                                        style: TextStyle(
-                                          fontWeight: isSelected
-                                              ? FontWeight.w600
-                                              : FontWeight.normal,
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        '${graphic.width}×${graphic.height} px',
-                                      ),
-                                      trailing: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          ToggleButtons(
-                                            isSelected: [
-                                              (parseOptions[graphic] ?? 'Tiles') == 'Tiles',
-                                              (parseOptions[graphic] ?? 'Tiles') == 'Background',
-                                            ],
-                                            onPressed: (index) {
-                                              setState(() {
-                                                parseOptions[graphic] = index == 0 ? 'Tiles' : 'Background';
-                                              });
-                                            },
-                                            borderRadius: BorderRadius.circular(8),
-                                            constraints: const BoxConstraints(minHeight: 32, minWidth: 36),
-                                            children: const [
-                                              Icon(Icons.image, size: 18),       // Tiles
-                                              Icon(Icons.grid_4x4, size: 18),    // Background
-                                            ],
-                                          ),
-
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.edit_attributes,
-                                            ),
-                                            tooltip: 'Properties',
-                                            onPressed: () =>
-                                                _showEditGraphicDialog(
-                                                  context,
-                                                  graphic,
-                                                ),
-                                            splashRadius: 20,
-                                          ),
-                                        ],
-                                      ),
-                                      onTap: () {
-                                        setState(() {
-                                          if (isSelected) {
-                                            selectedGraphics.remove(
-                                              graphic,
-                                            );
-                                          } else {
-                                            selectedGraphics.add(graphic);
-                                          }
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                      TextButton.icon(
+                        onPressed: graphicsPreview.isEmpty
+                            ? null
+                            : () {
+                          setState(() {
+                            if (selectedGraphics.length ==
+                                graphicsPreview.length) {
+                              selectedGraphics.clear();
+                            } else {
+                              selectedGraphics = List.from(
+                                graphicsPreview,
+                              );
+                            }
+                          });
+                        },
+                        icon: Icon(
+                          selectedGraphics.length ==
+                              graphicsPreview.length
+                              ? Icons.deselect
+                              : Icons.select_all,
                         ),
-                      ],
-                    ),
+                        label: Text(
+                          selectedGraphics.length ==
+                              graphicsPreview.length
+                              ? 'Deselect All'
+                              : 'Select All',
+                        ),
+                      ),
+                    ],
                   ),
-
-                  const SizedBox(width: 16),
-
-                  // Preview panel
+                  const SizedBox(height: 8),
                   Expanded(
                     child: Card(
                       elevation: 2,
-                      child: Center(
-                        child: previewGraphic == null
-                            ? Text(
-                          'hover a graphic to preview',
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurfaceVariant
-                                .withValues(alpha: 0.6),
-                          ),
-                        )
-                            : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              previewGraphic.name,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.w600),
+                      child: graphicsPreview.isEmpty
+                          ? _buildEmptyState(context)
+                          : ListView.builder(
+                        itemCount: graphicsPreview.length,
+                        itemBuilder: (context, index) {
+                          final graphic = graphicsPreview[index];
+                          final isSelected = selectedGraphics
+                              .contains(graphic);
+                          return Card(
+                            elevation: 3,
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 6,
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              '${previewGraphic.width}×${previewGraphic.height} px',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodyMedium,
-                            ),
-                            Flexible(
-                              child: SingleChildScrollView(
-                                child: Wrap(
-                                  spacing: 8,
-                                  runSpacing: 8,
-                                  children: List.generate(
-                                    64, // WIP tile count
-                                        (index) => Column(
-                                      children: [
-                                        SizedBox(
-                                          width: 40,
-                                          height: 40,
-                                          child: MetaTileDisplay(
-                                            showGrid: false,
-                                            tileData: previewGraphic.getTileAtIndex(index),
-                                          ),
-                                        ),
-                                        Text("#$index", style: const TextStyle(fontSize: 10)),
-                                      ],
-                                    ),
-                                  ),
+                            child: ListTile(
+                              leading: Checkbox(
+                                value: isSelected,
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (value == true) {
+                                      selectedGraphics.add(
+                                        graphic,
+                                      );
+                                    } else {
+                                      selectedGraphics.remove(
+                                        graphic,
+                                      );
+                                    }
+                                  });
+                                },
+                              ),
+                              title: Text(
+                                graphic.name,
+                                style: TextStyle(
+                                  fontWeight: isSelected
+                                      ? FontWeight.w600
+                                      : FontWeight.normal,
                                 ),
                               ),
-                            )
-                          ],
-                        ),
+                              subtitle: Text(
+                                '${graphic.width}×${graphic.height} px',
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ToggleButtons(
+                                    isSelected: [
+                                      (parseOptions[graphic] ?? 'Tiles') == 'Tiles',
+                                      (parseOptions[graphic] ?? 'Tiles') == 'Background',
+                                    ],
+                                    onPressed: (index) {
+                                      setState(() {
+                                        parseOptions[graphic] = index == 0 ? 'Tiles' : 'Background';
+                                      });
+                                    },
+                                    borderRadius: BorderRadius.circular(8),
+                                    constraints: const BoxConstraints(minHeight: 32, minWidth: 36),
+                                    children: const [
+                                      Icon(Icons.image, size: 18),       // Tiles
+                                      Icon(Icons.grid_4x4, size: 18),    // Background
+                                    ],
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.visibility,
+                                    ),
+                                    tooltip: 'Preview',
+                                    onPressed: () =>
+                                        _showPreviewDialog(
+                                          context,
+                                          graphic,
+                                        ),
+                                    splashRadius: 20,
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.edit_attributes,
+                                    ),
+                                    tooltip: 'Properties',
+                                    onPressed: () =>
+                                        _showEditGraphicDialog(
+                                          context,
+                                          graphic,
+                                        ),
+                                    splashRadius: 20,
+                                  ),
+                                ],
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  if (isSelected) {
+                                    selectedGraphics.remove(
+                                      graphic,
+                                    );
+                                  } else {
+                                    selectedGraphics.add(graphic);
+                                  }
+                                });
+                              },
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -581,11 +503,7 @@ class _ImportPageState extends State<ImportPage> {
     );
   }
 
-  void _showTilePreviewDialog(BuildContext context, graphic) {
-    final controller = TextEditingController(
-      text: graphic.tileOrigin.toString(),
-    );
-
+  void _showPreviewDialog(BuildContext context, Graphics graphic) {
     // Get dimensions from cubit state
     final targetWidth = context.read<MetaTileCubit>().state.width;
     final targetHeight = context.read<MetaTileCubit>().state.height;
@@ -596,10 +514,68 @@ class _ImportPageState extends State<ImportPage> {
       targetHeight: targetHeight,
     );
 
-    final tileCount =
-        preview.data.length ~/ 64; //(preview.height * preview.width);
-  }
+    final tileCount = preview.data.length ~/ 64;
 
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text("Preview ${graphic.name}"),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Text(
+                  "${graphic.width}×${graphic.height} px - $tileCount tiles",
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 4),
+                child: Text(
+                  "Tile Preview",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: List.generate(
+                      tileCount,
+                          (index) => Column(
+                        children: [
+                          SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: MetaTileDisplay(
+                              showGrid: false,
+                              tileData: preview.getTileAtIndex(index),
+                            ),
+                          ),
+                          Text("#$index", style: const TextStyle(fontSize: 10)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text("Close"),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _showEditGraphicDialog(BuildContext context, Graphics graphic) {
     showDialog(
