@@ -225,7 +225,7 @@ class _ImportPageState extends State<ImportPage> {
                               Expanded(
                                 flex: 2,
                                 child: DropdownButtonFormField<String>(
-                                  initialValue: importSource,
+                                  value: importSource,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     contentPadding: EdgeInsets.symmetric(
@@ -234,13 +234,15 @@ class _ImportPageState extends State<ImportPage> {
                                     ),
                                   ),
                                   onChanged: _onImportSourceChanged,
+                                  isExpanded: true,
                                   items: [
                                     const DropdownMenuItem(
                                       value: 'File',
                                       child: Row(
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Icon(Icons.file_open, size: 16),
-                                          SizedBox(width: 8),
+                                          SizedBox(width: 6),
                                           Text('File'),
                                         ],
                                       ),
@@ -249,9 +251,10 @@ class _ImportPageState extends State<ImportPage> {
                                       const DropdownMenuItem(
                                         value: 'URL',
                                         child: Row(
+                                          mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Icon(Icons.http, size: 16),
-                                            SizedBox(width: 8),
+                                            SizedBox(width: 6),
                                             Text('URL'),
                                           ],
                                         ),
@@ -259,9 +262,10 @@ class _ImportPageState extends State<ImportPage> {
                                     const DropdownMenuItem(
                                       value: 'Clipboard',
                                       child: Row(
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Icon(Icons.content_paste, size: 16),
-                                          SizedBox(width: 8),
+                                          SizedBox(width: 6),
                                           Text('Clipboard'),
                                         ],
                                       ),
