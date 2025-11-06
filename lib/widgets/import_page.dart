@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/import_callbacks.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_display.dart';
+import 'package:game_boy_graphics_editor/widgets/background/background_preview_dialog.dart';
 
 import '../cubits/app_state_cubit.dart';
 import '../cubits/graphics_cubit.dart';
@@ -32,11 +33,11 @@ class _ImportPageState extends State<ImportPage> {
   String _getDefaultParseOption(Graphics graphic) {
     final name = graphic.name.toLowerCase();
     if (name.endsWith('tiles') || name.endsWith('tile')) {
-      return 'Tile';
-    } else if (name.endsWith('map')) {
+      return 'Tiles';
+    } else if (name.endsWith('map') || name.endsWith('maps')) {
       return 'Background';
     } else {
-      return 'Graphics';
+      return 'Tiles';
     }
   }
 
@@ -366,6 +367,8 @@ class _ImportPageState extends State<ImportPage> {
                           final graphic = graphicsPreview[index];
                           final isSelected = selectedGraphics
                               .contains(graphic);
+                          final currentParseOption = parseOptions[graphic] ?? _getDefaultParseOption(graphic);
+
                           return Card(
                             elevation: 3,
                             margin: const EdgeInsets.symmetric(
@@ -405,12 +408,12 @@ class _ImportPageState extends State<ImportPage> {
                                 children: [
                                   ToggleButtons(
                                     isSelected: [
-                                      (parseOptions[graphic] ?? 'Tiles') == 'Tiles',
-                                      (parseOptions[graphic] ?? 'Tiles') == 'Background',
+                                      currentParseOption == 'Tiles',
+                                      currentParseOption == 'Background',
                                     ],
-                                    onPressed: (index) {
+                                    onPressed: (btnIndex) {
                                       setState(() {
-                                        parseOptions[graphic] = index == 0 ? 'Tiles' : 'Background';
+                                        parseOptions[graphic] = btnIndex == 0 ? 'Tiles' : 'Background';
                                       });
                                     },
                                     borderRadius: BorderRadius.circular(8),
@@ -425,11 +428,14 @@ class _ImportPageState extends State<ImportPage> {
                                       Icons.visibility,
                                     ),
                                     tooltip: 'Preview',
-                                    onPressed: () =>
-                                        _showPreviewDialog(
-                                          context,
-                                          graphic,
-                                        ),
+                                    onPressed: () {
+                                      final parseType = parseOptions[graphic] ?? _getDefaultParseOption(graphic);
+                                      if (parseType == 'Background') {
+                                        _showBackgroundPreviewDialog(context, graphic);
+                                      } else {
+                                        _showTilePreviewDialog(context, graphic);
+                                      }
+                                    },
                                     splashRadius: 20,
                                   ),
                                   IconButton(
@@ -507,7 +513,7 @@ class _ImportPageState extends State<ImportPage> {
     );
   }
 
-  void _showPreviewDialog(BuildContext context, Graphics graphic) {
+  void _showTilePreviewDialog(BuildContext context, Graphics graphic) {
     // Get dimensions from cubit state
     final targetWidth = context.read<MetaTileCubit>().state.width;
     final targetHeight = context.read<MetaTileCubit>().state.height;
@@ -523,7 +529,7 @@ class _ImportPageState extends State<ImportPage> {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text("Preview ${graphic.name}"),
+        title: Text("Preview ${graphic.name} as Tiles"),
         content: SizedBox(
           width: double.maxFinite,
           child: Column(
@@ -577,6 +583,21 @@ class _ImportPageState extends State<ImportPage> {
             child: const Text("Close"),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showBackgroundPreviewDialog(BuildContext context, Graphics graphic) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (dialogContext) => BackgroundPreviewDialog(
+        graphic: graphic,
+        title: "Preview ${graphic.name} as Background",
+        onLoad: () {
+          // This is just a preview in the import page, so we don't actually load it
+          // The actual loading happens when the user clicks the main Import button
+        },
       ),
     );
   }
