@@ -607,18 +607,14 @@ class _ImportPageState extends State<ImportPage> {
     );
   }
 
-  void _showBackgroundPreviewDialog(BuildContext context, Graphics graphic) {
+  void _showBackgroundPreviewDialog(BuildContext context, Graphics graphics) {
+    Background preview = Background.fromGraphics(graphics);
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (dialogContext) => BackgroundPreviewDialog(
-        graphic: graphic as Background,
-        title: "Preview ${graphic.name} as Background",
-        showLoadButton: false,
-        onLoad: () {
-          // This is just a preview in the import page, so we don't actually load it
-          // The actual loading happens when the user clicks the main Import button
-        },
+        graphic: preview,
+        title: "Preview ${preview.name} as Background",
       ),
     );
   }

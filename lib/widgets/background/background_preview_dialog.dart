@@ -8,25 +8,23 @@ import 'background_grid.dart';
 
 class BackgroundPreviewDialog extends StatefulWidget {
   final Background graphic;
-  final VoidCallback onLoad;
+  final VoidCallback? onLoad;
   final String? title;
   final double? dialogWidth;
   final double? dialogHeight;
   final double cellSize;
   final bool showGrid;
-  final bool showLoadButton;
 
 
   const BackgroundPreviewDialog({
     Key? key,
     required this.graphic,
-    required this.onLoad,
+    this.onLoad,
     this.title,
     this.dialogWidth,
     this.dialogHeight,
     this.cellSize = 32,
     this.showGrid = true,
-    this.showLoadButton = true,
   }) : super(key: key);
 
   @override
@@ -110,15 +108,15 @@ class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Cancel"),
+            child: const Text("Close"),
           ),
-          if (widget.showLoadButton)
+          if (widget.onLoad != null)
             ElevatedButton(
               onPressed: errorMessage != null
                   ? null
                   : () {
                 Navigator.of(context).pop();
-                widget.onLoad();
+                widget.onLoad!();
               },
               child: const Text("Load"),
             ),
