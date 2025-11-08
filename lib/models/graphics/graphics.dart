@@ -1,5 +1,3 @@
-enum GraphicsType { undefined, tile, map, sprite }
-
 class Graphics {
   String name;
   List<int> data;
@@ -7,7 +5,6 @@ class Graphics {
   int width;
   int tileOrigin;
   String? filepath;
-  GraphicsType type;
   int startOffset;
   int endOffset;
 
@@ -18,7 +15,6 @@ class Graphics {
     this.height = 0,
     this.filepath,
     this.tileOrigin = 0,
-    this.type = GraphicsType.undefined,
     this.startOffset = 0,
     this.endOffset = 0,
   });
