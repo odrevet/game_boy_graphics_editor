@@ -1,7 +1,7 @@
 name: game_boy_graphics_editor
 description: Edit GBDK graphics source files
 
-version: 2.1.0+6
+version: 2.1.1+7
 
 publish_to: 'none'
 
