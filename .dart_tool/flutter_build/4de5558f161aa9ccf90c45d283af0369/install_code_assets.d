@@ -1,0 +1,1 @@
+ /home/odrevet/projects/game_boy_graphics_editor/.dart_tool/flutter_build/4de5558f161aa9ccf90c45d283af0369/native_assets.json: 
