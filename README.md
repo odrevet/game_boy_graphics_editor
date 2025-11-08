@@ -15,10 +15,15 @@ https://odrevet.github.io/game_boy_graphics_editor
 
 # Screenshots
 
-![import](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/import.png)
-![preview](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/preview.png)
-![editor](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/editor.png)
+# Screenshots
 
+| Import | Preview |
+|--------|---------|
+| [![Import](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/import.png)](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/import.png) | [![Preview](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/preview.png)](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/preview.png) |
+
+| Editor | Export |
+|--------|--------|
+| [![Editor](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/editor.png)](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/editor.png) | [![Export](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/export.png)](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/export.png) |
 # How to Use
 
 ## Workflow Overview
