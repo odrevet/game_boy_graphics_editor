@@ -86,52 +86,52 @@ class GraphicsListWidget extends StatelessWidget {
               Expanded(
                 child: state.graphics.isEmpty
                     ? const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.image_not_supported,
-                              size: 64,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(height: 16),
-                            Text(
-                              'No graphics added yet',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Import or create graphic',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      )
-                    : ReorderableListView.builder(
-                        itemCount: state.graphics.length,
-                        onReorder: (oldIndex, newIndex) {
-                          if (newIndex > oldIndex) newIndex--;
-                          context.read<GraphicsCubit>().reorderGraphics(
-                            oldIndex,
-                            newIndex,
-                          );
-                        },
-                        itemBuilder: (context, index) {
-                          final graphic = state.graphics[index];
-                          return _GraphicListTile(
-                            key: ValueKey('graphic_$index'),
-                            graphic: graphic,
-                            index: index,
-                            onEdit: () =>
-                                _showEditGraphicDialog(context, index, graphic),
-                            onDelete: () =>
-                                _showDeleteConfirmationDialog(context, index),
-                          );
-                        },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.image_not_supported,
+                        size: 64,
+                        color: Colors.grey,
                       ),
+                      SizedBox(height: 16),
+                      Text(
+                        'No graphics added yet',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Import or create graphic',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                )
+                    : ReorderableListView.builder(
+                  itemCount: state.graphics.length,
+                  onReorder: (oldIndex, newIndex) {
+                    if (newIndex > oldIndex) newIndex--;
+                    context.read<GraphicsCubit>().reorderGraphics(
+                      oldIndex,
+                      newIndex,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    final graphic = state.graphics[index];
+                    return _GraphicListTile(
+                      key: ValueKey('graphic_$index'),
+                      graphic: graphic,
+                      index: index,
+                      onEdit: () =>
+                          _showEditGraphicDialog(context, index, graphic),
+                      onDelete: () =>
+                          _showDeleteConfirmationDialog(context, index),
+                    );
+                  },
+                ),
               ),
             ],
           );
@@ -150,21 +150,12 @@ class GraphicsListWidget extends StatelessWidget {
               width * height; // Calculate data length based on dimensions
           final data = List.generate(dataLength, (index) => 0);
 
-          // Determine type based on name
-          GraphicsType type = GraphicsType.undefined;
-          if (name.toLowerCase().endsWith('tiles')) {
-            type = GraphicsType.tile;
-          } else if (name.toLowerCase().endsWith('map')) {
-            type = GraphicsType.map;
-          }
-
           final graphic = Graphics(
             name: name,
             data: data,
             width: width,
             height: height,
             tileOrigin: tileOrigin,
-            type: type,
           );
           context.read<GraphicsCubit>().addGraphic(graphic);
         },
@@ -173,10 +164,10 @@ class GraphicsListWidget extends StatelessWidget {
   }
 
   void _showEditGraphicDialog(
-    BuildContext context,
-    int index,
-    Graphics graphic,
-  ) {
+      BuildContext context,
+      int index,
+      Graphics graphic,
+      ) {
     showDialog(
       context: context,
       builder: (dialogContext) => GraphicForm(
@@ -186,13 +177,6 @@ class GraphicsListWidget extends StatelessWidget {
         initialHeight: graphic.height,
         initialTileOrigin: graphic.tileOrigin,
         onSubmit: (name, width, height, tileOrigin) {
-          // Calculate new data length based on dimensions
-          //final dataLength = width * height;
-          // Create updated graphic with new dimensions but preserve some original data
-          //final data = List.generate(
-          //  dataLength,
-          //  (i) => i < graphic.data.length ? graphic.data[i] : 0,
-          //);
           final updatedGraphic = Graphics(
             name: name,
             data: graphic.data,
@@ -272,18 +256,43 @@ class _GraphicListTile extends StatelessWidget {
     required this.onDelete,
   }) : super(key: key);
 
+  // Helper to determine graphic type
+  bool get _isBackground => graphic is Background;
+  bool get _isMetaTile => graphic is MetaTile;
+  bool get _isBaseGraphics => !_isBackground && !_isMetaTile;
+
+  // Get icon based on type
+  IconData get _typeIcon {
+    if (_isBackground) return Icons.grid_4x4;
+    if (_isMetaTile) return Icons.image;
+    return Icons.help_outline;
+  }
+
+  // Get type label
+  String get _typeLabel {
+    if (_isBackground) return 'Background';
+    if (_isMetaTile) return 'Tiles';
+    return 'Graphics';
+  }
+
   bool _addMetaTile(Graphics graphics, BuildContext context, int tileOrigin) {
     bool hasLoaded = true;
     try {
-      // Get dimensions from cubit state
-      final targetWidth = context.read<MetaTileCubit>().state.width;
-      final targetHeight = context.read<MetaTileCubit>().state.height;
+      MetaTile metaTile;
 
-      var metaTile = MetaTile.fromGraphics(
-        graphic,
-        targetWidth: targetWidth,
-        targetHeight: targetHeight,
-      );
+      if (graphics is MetaTile) {
+        // Already a MetaTile, use directly
+        metaTile = graphics;
+      } else {
+        // Convert from Graphics
+        final targetWidth = context.read<MetaTileCubit>().state.width;
+        final targetHeight = context.read<MetaTileCubit>().state.height;
+        metaTile = MetaTile.fromGraphics(
+          graphics,
+          targetWidth: targetWidth,
+          targetHeight: targetHeight,
+        );
+      }
 
       // Add tile to the collection with the specified origin
       context.read<MetaTileCubit>().addTileAtOrigin(
@@ -305,12 +314,10 @@ class _GraphicListTile extends StatelessWidget {
       );
     } catch (e) {
       if (kDebugMode) {
-        // Keep debug print for development
         print("ERROR $e");
       }
       hasLoaded = false;
 
-      // Show error message to user
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -323,7 +330,6 @@ class _GraphicListTile extends StatelessWidget {
     }
 
     if (hasLoaded) {
-      // Set selected tile to the first tile of the newly added graphic
       context.read<AppStateCubit>().setSelectedTileIndex(tileOrigin);
     }
 
@@ -339,14 +345,18 @@ class _GraphicListTile extends StatelessWidget {
     final targetWidth = context.read<MetaTileCubit>().state.width;
     final targetHeight = context.read<MetaTileCubit>().state.height;
 
-    var preview = MetaTile.fromGraphics(
-      graphic,
-      targetWidth: targetWidth,
-      targetHeight: targetHeight,
-    );
+    MetaTile preview;
+    if (graphic is MetaTile) {
+      preview = graphic;
+    } else {
+      preview = MetaTile.fromGraphics(
+        graphic,
+        targetWidth: targetWidth,
+        targetHeight: targetHeight,
+      );
+    }
 
-    final tileCount =
-        preview.data.length ~/ 64; //(preview.height * preview.width);
+    final tileCount = preview.data.length ~/ 64;
 
     showDialog(
       context: context,
@@ -394,7 +404,7 @@ class _GraphicListTile extends StatelessWidget {
                     runSpacing: 8,
                     children: List.generate(
                       tileCount,
-                      (index) => Column(
+                          (index) => Column(
                         children: [
                           SizedBox(
                             width: 40,
@@ -434,12 +444,19 @@ class _GraphicListTile extends StatelessWidget {
 
   void _loadAsBackground(Graphics graphics, BuildContext context) {
     try {
-      Background background = Background.fromGraphics(graphics);
+      Background background;
+      if (graphics is Background) {
+        // Already a Background, use directly
+        background = graphics;
+      } else {
+        // Convert from Graphics
+        background = Background.fromGraphics(graphics);
+      }
+
       context.read<BackgroundCubit>().setWidth(background.width);
       context.read<BackgroundCubit>().setHeight(background.height);
       context.read<BackgroundCubit>().setData(background.data);
 
-      // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Successfully loaded "${graphics.name}" as background'),
@@ -448,7 +465,6 @@ class _GraphicListTile extends StatelessWidget {
         ),
       );
     } catch (e) {
-      // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -461,6 +477,150 @@ class _GraphicListTile extends StatelessWidget {
     }
   }
 
+  Widget _buildLoadButton(BuildContext context) {
+    // If it's a Background, load directly as background
+    if (_isBackground) {
+      return IconButton(
+        icon: const Icon(Icons.arrow_circle_left),
+        tooltip: 'Load as Background',
+        onPressed: () {
+          showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) => BackgroundPreviewDialog(
+              graphic: graphic,
+              onLoad: () => _loadAsBackground(graphic, context),
+            ),
+          );
+        },
+      );
+    }
+
+    // If it's a MetaTile, load directly as tiles
+    if (_isMetaTile) {
+      return IconButton(
+        icon: const Icon(Icons.arrow_circle_left),
+        tooltip: 'Load as Tiles',
+        onPressed: () => _showTilePreviewDialog(context, graphic),
+      );
+    }
+
+    // If it's base Graphics, show popup menu with both options
+    return PopupMenuButton<String>(
+      icon: const Icon(Icons.arrow_circle_left),
+      tooltip: 'Load as...',
+      onSelected: (value) {
+        if (value == 'tile') {
+          _showTilePreviewDialog(context, graphic);
+        } else if (value == 'background') {
+          showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) => BackgroundPreviewDialog(
+              graphic: graphic,
+              onLoad: () => _loadAsBackground(graphic, context),
+            ),
+          );
+        }
+      },
+      itemBuilder: (ctx) => [
+        const PopupMenuItem(
+          value: 'tile',
+          child: ListTile(
+            leading: Icon(Icons.image),
+            title: Text("Load as Tiles"),
+          ),
+        ),
+        const PopupMenuItem(
+          value: 'background',
+          child: ListTile(
+            leading: Icon(Icons.grid_4x4),
+            title: Text("Load as Background"),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExportButton(BuildContext context) {
+    // If it's a Background, export directly as background
+    if (_isBackground) {
+      return IconButton(
+        icon: const Icon(Icons.arrow_downward),
+        tooltip: 'Export as Background',
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ExportPage(graphic: graphic),
+            ),
+          );
+        },
+      );
+    }
+
+    // If it's a MetaTile, export directly as tiles
+    if (_isMetaTile) {
+      return IconButton(
+        icon: const Icon(Icons.arrow_downward),
+        tooltip: 'Export as Tiles',
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ExportPage(graphic: graphic),
+            ),
+          );
+        },
+      );
+    }
+
+    // If it's base Graphics, show popup menu with both options
+    return PopupMenuButton<String>(
+      icon: const Icon(Icons.arrow_downward),
+      tooltip: 'Export as...',
+      onSelected: (value) {
+        if (value == 'tile') {
+          final targetWidth = context.read<MetaTileCubit>().state.width;
+          final targetHeight = context.read<MetaTileCubit>().state.height;
+
+          var metatile = MetaTile.fromGraphics(
+            graphic,
+            targetWidth: targetWidth,
+            targetHeight: targetHeight,
+          );
+
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ExportPage(graphic: metatile),
+            ),
+          );
+        } else if (value == 'background') {
+          Background background = Background.fromGraphics(graphic);
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ExportPage(graphic: background),
+            ),
+          );
+        }
+      },
+      itemBuilder: (ctx) => [
+        const PopupMenuItem(
+          value: 'tile',
+          child: ListTile(
+            leading: Icon(Icons.image),
+            title: Text("Export as Tile"),
+          ),
+        ),
+        const PopupMenuItem(
+          value: 'background',
+          child: ListTile(
+            leading: Icon(Icons.grid_4x4),
+            title: Text("Export as Background"),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final dataSize = (graphic.data.length / 1024).toStringAsFixed(1);
@@ -471,7 +631,31 @@ class _GraphicListTile extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: ListTile(
-        title: Text(displayName),
+        leading: Icon(
+          _typeIcon,
+          size: 32,
+          color: Theme.of(context).primaryColor,
+        ),
+        title: Row(
+          children: [
+            Expanded(child: Text(displayName)),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                _typeLabel,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -482,93 +666,13 @@ class _GraphicListTile extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            PopupMenuButton<String>(
-              icon: const Icon(Icons.arrow_circle_left),
-              onSelected: (value) {
-                if (value == 'tile') {
-                  _showTilePreviewDialog(context, graphic);
-                } else if (value == 'background') {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: true,
-                    builder: (context) => BackgroundPreviewDialog(
-                      graphic: graphic,
-                      onLoad: () => _loadAsBackground(graphic, context),
-                    ),
-                  );
-                }
-              },
-              itemBuilder: (ctx) => [
-                const PopupMenuItem(
-                  value: 'tile',
-                  child: ListTile(
-                    leading: Icon(Icons.image),
-                    title: Text("Load as Tiles"),
-                  ),
-                ),
-                const PopupMenuItem(
-                  value: 'background',
-                  child: ListTile(
-                    leading: Icon(Icons.grid_4x4),
-                    title: Text("Load as Background"),
-                  ),
-                ),
-              ],
-            ),
+            _buildLoadButton(context),
             IconButton(
               icon: const Icon(Icons.edit_attributes),
               onPressed: onEdit,
               tooltip: 'Edit properties',
             ),
-            PopupMenuButton<String>(
-              icon: const Icon(Icons.arrow_downward),
-              tooltip: 'Export',
-              onSelected: (value) {
-                if (value == 'tile') {
-                  // Get dimensions from cubit state
-                  final targetWidth = context.read<MetaTileCubit>().state.width;
-                  final targetHeight = context
-                      .read<MetaTileCubit>()
-                      .state
-                      .height;
-
-                  var metatile = MetaTile.fromGraphics(
-                    graphic,
-                    targetWidth: targetWidth,
-                    targetHeight: targetHeight,
-                  );
-
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ExportPage(graphic: metatile),
-                    ),
-                  );
-                } else if (value == 'background') {
-                  Background background = Background.fromGraphics(graphic);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ExportPage(graphic: background),
-                    ),
-                  );
-                }
-              },
-              itemBuilder: (ctx) => [
-                const PopupMenuItem(
-                  value: 'tile',
-                  child: ListTile(
-                    leading: Icon(Icons.image),
-                    title: Text("Export as Tile"),
-                  ),
-                ),
-                const PopupMenuItem(
-                  value: 'background',
-                  child: ListTile(
-                    leading: Icon(Icons.grid_4x4),
-                    title: Text("Export as Background"),
-                  ),
-                ),
-              ],
-            ),
+            _buildExportButton(context),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: onDelete,

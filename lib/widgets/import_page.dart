@@ -10,6 +10,7 @@ import '../cubits/graphics_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
 import '../models/graphics/graphics.dart';
 import '../models/graphics/meta_tile.dart';
+import '../models/graphics/background.dart';
 import 'graphic_form.dart';
 
 class ImportPage extends StatefulWidget {
@@ -71,8 +72,27 @@ class _ImportPageState extends State<ImportPage> {
                   onPressed: selectedGraphics.isEmpty
                       ? null
                       : () {
+                    // Get dimensions from cubit state for MetaTile conversion
+                    final targetWidth = context.read<MetaTileCubit>().state.width;
+                    final targetHeight = context.read<MetaTileCubit>().state.height;
+
+                    // Convert graphics to their appropriate types based on parseOptions
+                    final graphicsToImport = selectedGraphics.map((graphic) {
+                      final parseType = parseOptions[graphic] ?? _getDefaultParseOption(graphic);
+                      if (parseType == 'Background') {
+                        return Background.fromGraphics(graphic);
+                      } else {
+                        // For tiles, convert to MetaTile
+                        return MetaTile.fromGraphics(
+                          graphic,
+                          targetWidth: targetWidth,
+                          targetHeight: targetHeight,
+                        );
+                      }
+                    }).toList();
+
                     context.read<GraphicsCubit>().addGraphics(
-                      selectedGraphics,
+                      graphicsToImport,
                     );
                     Navigator.of(context).pop();
                     context
