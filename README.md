@@ -15,8 +15,6 @@ https://odrevet.github.io/game_boy_graphics_editor
 
 # Screenshots
 
-# Screenshots
-
 | Import | Preview |
 |--------|---------|
 | [![Import](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/import.png)](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/import.png) | [![Preview](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/preview.png)](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/preview.png) |
