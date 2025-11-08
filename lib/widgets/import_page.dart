@@ -246,7 +246,7 @@ class _ImportPageState extends State<ImportPage> {
                               Expanded(
                                 flex: 2,
                                 child: DropdownButtonFormField<String>(
-                                  value: importSource,
+                                  initialValue: importSource,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     contentPadding: EdgeInsets.symmetric(
@@ -612,8 +612,9 @@ class _ImportPageState extends State<ImportPage> {
       context: context,
       barrierDismissible: true,
       builder: (dialogContext) => BackgroundPreviewDialog(
-        graphic: graphic,
+        graphic: graphic as Background,
         title: "Preview ${graphic.name} as Background",
+        showLoadButton: false,
         onLoad: () {
           // This is just a preview in the import page, so we don't actually load it
           // The actual loading happens when the user clicks the main Import button

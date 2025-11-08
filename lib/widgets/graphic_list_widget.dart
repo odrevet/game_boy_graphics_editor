@@ -86,52 +86,52 @@ class GraphicsListWidget extends StatelessWidget {
               Expanded(
                 child: state.graphics.isEmpty
                     ? const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.image_not_supported,
-                        size: 64,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(height: 16),
-                      Text(
-                        'No graphics added yet',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.image_not_supported,
+                              size: 64,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              'No graphics added yet',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Import or create graphic',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Import or create graphic',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                )
+                      )
                     : ReorderableListView.builder(
-                  itemCount: state.graphics.length,
-                  onReorder: (oldIndex, newIndex) {
-                    if (newIndex > oldIndex) newIndex--;
-                    context.read<GraphicsCubit>().reorderGraphics(
-                      oldIndex,
-                      newIndex,
-                    );
-                  },
-                  itemBuilder: (context, index) {
-                    final graphic = state.graphics[index];
-                    return _GraphicListTile(
-                      key: ValueKey('graphic_$index'),
-                      graphic: graphic,
-                      index: index,
-                      onEdit: () =>
-                          _showEditGraphicDialog(context, index, graphic),
-                      onDelete: () =>
-                          _showDeleteConfirmationDialog(context, index),
-                    );
-                  },
-                ),
+                        itemCount: state.graphics.length,
+                        onReorder: (oldIndex, newIndex) {
+                          if (newIndex > oldIndex) newIndex--;
+                          context.read<GraphicsCubit>().reorderGraphics(
+                            oldIndex,
+                            newIndex,
+                          );
+                        },
+                        itemBuilder: (context, index) {
+                          final graphic = state.graphics[index];
+                          return _GraphicListTile(
+                            key: ValueKey('graphic_$index'),
+                            graphic: graphic,
+                            index: index,
+                            onEdit: () =>
+                                _showEditGraphicDialog(context, index, graphic),
+                            onDelete: () =>
+                                _showDeleteConfirmationDialog(context, index),
+                          );
+                        },
+                      ),
               ),
             ],
           );
@@ -164,10 +164,10 @@ class GraphicsListWidget extends StatelessWidget {
   }
 
   void _showEditGraphicDialog(
-      BuildContext context,
-      int index,
-      Graphics graphic,
-      ) {
+    BuildContext context,
+    int index,
+    Graphics graphic,
+  ) {
     showDialog(
       context: context,
       builder: (dialogContext) => GraphicForm(
@@ -258,8 +258,8 @@ class _GraphicListTile extends StatelessWidget {
 
   // Helper to determine graphic type
   bool get _isBackground => graphic is Background;
+
   bool get _isMetaTile => graphic is MetaTile;
-  bool get _isBaseGraphics => !_isBackground && !_isMetaTile;
 
   // Get icon based on type
   IconData get _typeIcon {
@@ -404,7 +404,7 @@ class _GraphicListTile extends StatelessWidget {
                     runSpacing: 8,
                     children: List.generate(
                       tileCount,
-                          (index) => Column(
+                      (index) => Column(
                         children: [
                           SizedBox(
                             width: 40,
@@ -488,7 +488,7 @@ class _GraphicListTile extends StatelessWidget {
             context: context,
             barrierDismissible: true,
             builder: (context) => BackgroundPreviewDialog(
-              graphic: graphic,
+              graphic: graphic as Background,
               onLoad: () => _loadAsBackground(graphic, context),
             ),
           );
@@ -517,7 +517,7 @@ class _GraphicListTile extends StatelessWidget {
             context: context,
             barrierDismissible: true,
             builder: (context) => BackgroundPreviewDialog(
-              graphic: graphic,
+              graphic: graphic as Background,
               onLoad: () => _loadAsBackground(graphic, context),
             ),
           );
@@ -642,7 +642,7 @@ class _GraphicListTile extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
+                color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(

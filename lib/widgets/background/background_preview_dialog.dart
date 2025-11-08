@@ -7,13 +7,15 @@ import '../../models/graphics/background.dart';
 import 'background_grid.dart';
 
 class BackgroundPreviewDialog extends StatefulWidget {
-  final dynamic graphic;
+  final Background graphic;
   final VoidCallback onLoad;
   final String? title;
   final double? dialogWidth;
   final double? dialogHeight;
   final double cellSize;
   final bool showGrid;
+  final bool showLoadButton;
+
 
   const BackgroundPreviewDialog({
     Key? key,
@@ -24,6 +26,7 @@ class BackgroundPreviewDialog extends StatefulWidget {
     this.dialogHeight,
     this.cellSize = 32,
     this.showGrid = true,
+    this.showLoadButton = true,
   }) : super(key: key);
 
   @override
@@ -39,7 +42,7 @@ class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
   Widget build(BuildContext context) {
     Background? preview;
     try {
-      preview = Background.fromGraphics(widget.graphic);
+      preview = widget.graphic;
 
       if (transpose) {
         var data = transposeList(
@@ -104,21 +107,22 @@ class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
           ],
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text("Cancel"),
-        ),
-        ElevatedButton(
-          onPressed: errorMessage != null
-              ? null
-              : () {
-            Navigator.of(context).pop();
-            widget.onLoad();
-          },
-          child: const Text("Load"),
-        ),
-      ],
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Cancel"),
+          ),
+          if (widget.showLoadButton)
+            ElevatedButton(
+              onPressed: errorMessage != null
+                  ? null
+                  : () {
+                Navigator.of(context).pop();
+                widget.onLoad();
+              },
+              child: const Text("Load"),
+            ),
+        ],
     );
   }
 }
