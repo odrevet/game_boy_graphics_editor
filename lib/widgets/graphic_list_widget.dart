@@ -86,52 +86,52 @@ class GraphicsListWidget extends StatelessWidget {
               Expanded(
                 child: state.graphics.isEmpty
                     ? const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.image_not_supported,
-                              size: 64,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(height: 16),
-                            Text(
-                              'No graphics added yet',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Import or create graphic',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      )
-                    : ReorderableListView.builder(
-                        itemCount: state.graphics.length,
-                        onReorder: (oldIndex, newIndex) {
-                          if (newIndex > oldIndex) newIndex--;
-                          context.read<GraphicsCubit>().reorderGraphics(
-                            oldIndex,
-                            newIndex,
-                          );
-                        },
-                        itemBuilder: (context, index) {
-                          final graphic = state.graphics[index];
-                          return _GraphicListTile(
-                            key: ValueKey('graphic_$index'),
-                            graphic: graphic,
-                            index: index,
-                            onEdit: () =>
-                                _showEditGraphicDialog(context, index, graphic),
-                            onDelete: () =>
-                                _showDeleteConfirmationDialog(context, index),
-                          );
-                        },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.image_not_supported,
+                        size: 64,
+                        color: Colors.grey,
                       ),
+                      SizedBox(height: 16),
+                      Text(
+                        'No graphics added yet',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Import or create graphic',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                )
+                    : ReorderableListView.builder(
+                  itemCount: state.graphics.length,
+                  onReorder: (oldIndex, newIndex) {
+                    if (newIndex > oldIndex) newIndex--;
+                    context.read<GraphicsCubit>().reorderGraphics(
+                      oldIndex,
+                      newIndex,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    final graphic = state.graphics[index];
+                    return _GraphicListTile(
+                      key: ValueKey('graphic_$index'),
+                      graphic: graphic,
+                      index: index,
+                      onEdit: () =>
+                          _showEditGraphicDialog(context, index, graphic),
+                      onDelete: () =>
+                          _showDeleteConfirmationDialog(context, index),
+                    );
+                  },
+                ),
               ),
             ],
           );
@@ -164,10 +164,10 @@ class GraphicsListWidget extends StatelessWidget {
   }
 
   void _showEditGraphicDialog(
-    BuildContext context,
-    int index,
-    Graphics graphic,
-  ) {
+      BuildContext context,
+      int index,
+      Graphics graphic,
+      ) {
     showDialog(
       context: context,
       builder: (dialogContext) => GraphicForm(
@@ -273,6 +273,37 @@ class _GraphicListTile extends StatelessWidget {
     if (_isBackground) return 'Background';
     if (_isMetaTile) return 'Tiles';
     return 'Graphics';
+  }
+
+  String _getSourceFormatLabel(SourceFormat format) {
+    switch (format) {
+      case SourceFormat.file:
+        return 'File';
+      case SourceFormat.url:
+        return 'URL';
+      case SourceFormat.clipboard:
+        return 'Clipboard';
+    }
+  }
+
+  IconData _getSourceFormatIcon(SourceFormat format) {
+    switch (format) {
+      case SourceFormat.file:
+        return Icons.insert_drive_file;
+      case SourceFormat.url:
+        return Icons.link;
+      case SourceFormat.clipboard:
+        return Icons.content_paste;
+    }
+  }
+
+  String _getDataTypeLabel(DataType dataType) {
+    switch (dataType) {
+      case DataType.sourceCode:
+        return 'Source';
+      case DataType.binary:
+        return 'Binary';
+    }
   }
 
   bool _addMetaTile(Graphics graphics, BuildContext context, int tileOrigin) {
@@ -404,7 +435,7 @@ class _GraphicListTile extends StatelessWidget {
                     runSpacing: 8,
                     children: List.generate(
                       tileCount,
-                      (index) => Column(
+                          (index) => Column(
                         children: [
                           SizedBox(
                             width: 40,
@@ -627,6 +658,9 @@ class _GraphicListTile extends StatelessWidget {
     final displayName = graphic.name.isNotEmpty
         ? graphic.name
         : 'Graphic ${index + 1}';
+    final sourceInfo = graphic.sourceInfo;
+
+    print(sourceInfo);
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -661,6 +695,46 @@ class _GraphicListTile extends StatelessWidget {
           children: [
             Text('Dimensions: ${graphic.width} × ${graphic.height}'),
             Text('Data: ${dataSize}KB (${graphic.data.length} bytes)'),
+            if (sourceInfo != null) ...[
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  Icon(
+                    _getSourceFormatIcon(sourceInfo.format),
+                    size: 14,
+                    color: Colors.grey[600],
+                  ),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      sourceInfo.path ?? _getSourceFormatLabel(sourceInfo.format),
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Colors.grey[600],
+                        fontStyle: FontStyle.italic,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      _getDataTypeLabel(sourceInfo.dataType),
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
         trailing: Row(

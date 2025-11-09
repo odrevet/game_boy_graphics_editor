@@ -80,14 +80,18 @@ class _ImportPageState extends State<ImportPage> {
                     final graphicsToImport = selectedGraphics.map((graphic) {
                       final parseType = parseOptions[graphic] ?? _getDefaultParseOption(graphic);
                       if (parseType == 'Background') {
-                        return Background.fromGraphics(graphic);
+                        final bg = Background.fromGraphics(graphic);
+                        bg.sourceInfo = graphic.sourceInfo; // Preserve source info
+                        return bg;
                       } else {
                         // For tiles, convert to MetaTile
-                        return MetaTile.fromGraphics(
+                        final mt = MetaTile.fromGraphics(
                           graphic,
                           targetWidth: targetWidth,
                           targetHeight: targetHeight,
                         );
+                        mt.sourceInfo = graphic.sourceInfo; // Preserve source info
+                        return mt;
                       }
                     }).toList();
 
@@ -246,7 +250,7 @@ class _ImportPageState extends State<ImportPage> {
                               Expanded(
                                 flex: 2,
                                 child: DropdownButtonFormField<String>(
-                                  initialValue: importSource,
+                                  value: importSource,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     contentPadding: EdgeInsets.symmetric(
@@ -607,14 +611,13 @@ class _ImportPageState extends State<ImportPage> {
     );
   }
 
-  void _showBackgroundPreviewDialog(BuildContext context, Graphics graphics) {
-    Background preview = Background.fromGraphics(graphics);
+  void _showBackgroundPreviewDialog(BuildContext context, Graphics graphic) {
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (dialogContext) => BackgroundPreviewDialog(
-        graphic: preview,
-        title: "Preview ${preview.name} as Background",
+        graphic: graphic as Background,
+        title: "Preview ${graphic.name} as Background",
       ),
     );
   }

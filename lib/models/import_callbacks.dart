@@ -13,11 +13,11 @@ import '../models/graphics/graphics.dart';
 import 'file_picker_utils.dart';
 
 Future<List<Graphics>?> onImportHttp(
-  BuildContext context,
-  String parse,
-  String type,
-  String url,
-) async {
+    BuildContext context,
+    String parse,
+    String type,
+    String url,
+    ) async {
   Uri uriObject = Uri.parse(url);
 
   if (type == 'Auto') {
@@ -30,44 +30,98 @@ Future<List<Graphics>?> onImportHttp(
     String filename = uriObject.pathSegments.isNotEmpty
         ? uriObject.pathSegments.last
         : "from bin";
-    var graphics = Graphics(name: filename, data: data);
+
+    final sourceInfo = SourceInfo(
+      format: SourceFormat.url,
+      dataType: DataType.binary,
+      path: url,
+      content: bin,
+    );
+
+    var graphics = Graphics(
+      name: filename,
+      data: data,
+      sourceInfo: sourceInfo,
+    );
     return [graphics];
   } else {
     final source = await http.read(uriObject);
     final parser = SourceParser();
     final graphicsElements = parser.parseAllArrays(source);
 
+    // Create single SourceInfo shared by all graphics from this source
+    final sourceInfo = SourceInfo(
+      format: SourceFormat.url,
+      dataType: DataType.sourceCode,
+      path: url,
+      content: source,
+    );
+
+    // All graphics reference the same SourceInfo instance
+    for (var graphic in graphicsElements) {
+      graphic.sourceInfo = sourceInfo;
+    }
+
     return graphicsElements;
   }
 }
 
 Future<List<Graphics>?> onImport(
-  BuildContext context,
-  String type,
-  String compression,
-) async {
+    BuildContext context,
+    String type,
+    String compression,
+    ) async {
   final result = await selectFile(['*']);
   if (result == null) return null;
 
+  final filePath = result.files.single.path!;
+  final fileName = result.files.single.name;
+
   if (type == 'Auto') {
-    type = resolveType(result.files.single.name);
+    type = resolveType(fileName);
   }
 
   if (type == 'Binary') {
+    List<int> data;
+    List<int> originalContent;
+
     if (compression != 'none') {
       // From binary with compression
-      String inputPath = result.files.single.path!;
-      List<int> data = _decompress(inputPath, compression, context);
+      originalContent = File(filePath).readAsBytesSync();
+      data = _decompress(filePath, compression, context);
 
       if (data.isNotEmpty) {
-        var graphics = Graphics(name: result.files.single.name, data: data);
+        final sourceInfo = SourceInfo(
+          format: SourceFormat.file,
+          dataType: DataType.binary,
+          path: filePath,
+          content: originalContent,
+        );
+
+        var graphics = Graphics(
+          name: fileName,
+          data: data,
+          sourceInfo: sourceInfo,
+        );
         return [graphics];
       }
     } else {
       // From binary
       final bin = await readBin(result);
-      List<int> data = convertBytesToDecimals(bin);
-      var graphics = Graphics(name: result.files.single.name, data: data);
+      data = convertBytesToDecimals(bin);
+
+      final sourceInfo = SourceInfo(
+        format: SourceFormat.file,
+        dataType: DataType.binary,
+        path: filePath,
+        content: bin,
+      );
+
+      var graphics = Graphics(
+        name: fileName,
+        data: data,
+        sourceInfo: sourceInfo,
+      );
       return [graphics];
     }
   } else {
@@ -75,6 +129,19 @@ Future<List<Graphics>?> onImport(
     final source = await readString(result);
     final parser = SourceParser();
     final graphicsElements = parser.parseAllArrays(source);
+
+    // Create single SourceInfo shared by all graphics from this source file
+    final sourceInfo = SourceInfo(
+      format: SourceFormat.file,
+      dataType: DataType.sourceCode,
+      path: filePath,
+      content: source,
+    );
+
+    // All graphics from the same file reference the same SourceInfo instance
+    for (var graphic in graphicsElements) {
+      graphic.sourceInfo = sourceInfo;
+    }
 
     return graphicsElements;
   }
@@ -96,9 +163,22 @@ Future<List<Graphics>?> onImportFromClipboard(
   }
 
   // From source
-  final source = clipboardData.text;
+  final source = clipboardData.text!;
   final parser = SourceParser();
-  final graphicsElements = parser.parseAllArrays(source!);
+  final graphicsElements = parser.parseAllArrays(source);
+
+  // Create single SourceInfo shared by all graphics from clipboard
+  final sourceInfo = SourceInfo(
+    format: SourceFormat.clipboard,
+    dataType: DataType.sourceCode,
+    path: null, // No path for clipboard
+    content: source,
+  );
+
+  // All graphics from clipboard reference the same SourceInfo instance
+  for (var graphic in graphicsElements) {
+    graphic.sourceInfo = sourceInfo;
+  }
 
   return graphicsElements;
 }
@@ -113,10 +193,10 @@ String resolveType(String path) {
 }
 
 List<int> _decompress(
-  String inputPath,
-  String compression,
-  BuildContext context,
-) {
+    String inputPath,
+    String compression,
+    BuildContext context,
+    ) {
   var content = <int>[];
   // decompress to a temp file
   var systemTempDir = Directory.systemTemp;
