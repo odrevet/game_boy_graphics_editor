@@ -660,8 +660,6 @@ class _GraphicListTile extends StatelessWidget {
         : 'Graphic ${index + 1}';
     final sourceInfo = graphic.sourceInfo;
 
-    print(sourceInfo);
-
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: ListTile(
