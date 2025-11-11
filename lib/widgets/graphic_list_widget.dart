@@ -488,6 +488,8 @@ class _GraphicListTile extends StatelessWidget {
       context.read<BackgroundCubit>().setWidth(background.width);
       context.read<BackgroundCubit>().setHeight(background.height);
       context.read<BackgroundCubit>().setData(background.data);
+      context.read<BackgroundCubit>().setName(background.name);
+      context.read<AppStateCubit>().setBackgroundName(background.name);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

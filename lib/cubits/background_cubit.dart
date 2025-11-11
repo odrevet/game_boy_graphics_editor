@@ -34,6 +34,10 @@ class BackgroundCubit extends ReplayCubit<Background> {
     emit(state.copyWith(data: data));
   }
 
+  setName(String name) {
+    emit(state.copyWith(name: name));
+  }
+
   setWidth(int width) {
     Background background = state.copyWith();
 

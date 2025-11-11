@@ -55,6 +55,7 @@ class GraphicsCubit extends Cubit<GraphicsState> {
   // Commit background data to graphics
   void commitBackgroundToGraphics(Background background) {
     int? targetIndex = findGraphicByName(background.name);
+    print("SEARCH ${background.name} -> ${targetIndex}");
     if (targetIndex != null) {
       // Update existing graphic at specified index
       updateGraphicAt(targetIndex, background);
