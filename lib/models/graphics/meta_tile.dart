@@ -3,17 +3,23 @@ import 'dart:core';
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 import '../sourceConverters/gbdk_tile_converter.dart';
+import '../source_info.dart';
 
 class MetaTile extends Graphics {
   MetaTile({
     String? name,
     List<int>? data,
     required super.height,
-    required super.width
+    required super.width,
+    super.tileOrigin = 0,
+    super.filepath,
+    super.startOffset = 0,
+    super.endOffset = 0,
+    super.sourceInfo,
   }) : super(
-         name: name ?? "tiles",
-         data: data ?? List.filled(width * height, 0, growable: true),
-       ) {
+    name: name ?? "tiles",
+    data: data ?? List.filled(width * height, 0, growable: true),
+  ) {
     calcMaxTileIndex();
   }
 
@@ -30,18 +36,38 @@ class MetaTile extends Graphics {
       data: data,
       height: targetHeight ?? 8,
       width: targetWidth ?? 8,
-    )
-      ..tileOrigin = graphics.tileOrigin
-      ..filepath = graphics.filepath
-      ..startOffset = graphics.startOffset
-      ..endOffset = graphics.endOffset;
+      tileOrigin: graphics.tileOrigin,
+      filepath: graphics.filepath,
+      startOffset: graphics.startOffset,
+      endOffset: graphics.endOffset,
+      sourceInfo: graphics.sourceInfo,
+    );
   }
 
-  copyWith({List<int>? data, int? width, int? height}) => MetaTile(
-    data: data ?? [...this.data],
-    width: width ?? this.width,
-    height: height ?? this.height,
-  );
+  @override
+  MetaTile copyWith({
+    String? name,
+    List<int>? data,
+    int? width,
+    int? height,
+    int? tileOrigin,
+    String? filepath,
+    int? startOffset,
+    int? endOffset,
+    SourceInfo? sourceInfo,
+  }) {
+    return MetaTile(
+      name: name ?? this.name,
+      data: data ?? [...this.data],
+      width: width ?? this.width,
+      height: height ?? this.height,
+      tileOrigin: tileOrigin ?? this.tileOrigin,
+      filepath: filepath ?? this.filepath,
+      startOffset: startOffset ?? this.startOffset,
+      endOffset: endOffset ?? this.endOffset,
+      sourceInfo: sourceInfo ?? this.sourceInfo,
+    );
+  }
 
   static int tileSize = 8;
   static int nbPixelPerTile = tileSize * tileSize;
@@ -69,12 +95,12 @@ class MetaTile extends Graphics {
   }
 
   fill(
-    int metaTileIndex,
-    int intensity,
-    int rowIndex,
-    int colIndex,
-    int targetColor,
-  ) {
+      int metaTileIndex,
+      int intensity,
+      int rowIndex,
+      int colIndex,
+      int targetColor,
+      ) {
     if (getPixel(rowIndex, colIndex, metaTileIndex) == targetColor) {
       setPixel(rowIndex, colIndex, metaTileIndex, intensity);
       if (inbound(rowIndex, colIndex - 1)) {
@@ -117,13 +143,13 @@ class MetaTile extends Graphics {
   }
 
   void rectangle(
-    int metaTileIndex,
-    int intensity,
-    int xFrom,
-    int yFrom,
-    int xTo,
-    int yTo,
-  ) {
+      int metaTileIndex,
+      int intensity,
+      int xFrom,
+      int yFrom,
+      int xTo,
+      int yTo,
+      ) {
     int startX = xFrom < xTo ? xFrom : xTo;
     int endX = xFrom < xTo ? xTo : xFrom;
     int startY = yFrom < yTo ? yFrom : yTo;

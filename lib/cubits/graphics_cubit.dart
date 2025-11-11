@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 
 import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
@@ -81,29 +82,20 @@ class GraphicsCubit extends Cubit<GraphicsState> {
     return null;
   }
 
-  // Commit background data to graphics - this is the key synchronization method
+  // Commit MetaTile data to graphics - this is the key synchronization method
   void commitMetaTileToGraphics(
-    Graphics metaTile,
+    MetaTile metaTile,
     String sourceName,
     int tileOrigin,
   ) {
-    List<int> data = GBDKTileConverter().toSourceData(metaTile);
     int? targetIndex = findGraphicByNameAndOrigin(sourceName, tileOrigin);
-
-    final graphics = Graphics(
-      height: metaTile.height,
-      width: metaTile.width,
-      data: data,
-      tileOrigin: metaTile.tileOrigin,
-      name: metaTile.name,
-    );
-
+    //final graphics = metaTile.copyWith();
     if (targetIndex != null) {
       // Update existing graphic at specified index
-      updateGraphicAt(targetIndex, graphics);
+      updateGraphicAt(targetIndex, metaTile);
     } else {
       // Add as new graphic
-      addGraphic(graphics);
+      addGraphic(metaTile);
     }
   }
 

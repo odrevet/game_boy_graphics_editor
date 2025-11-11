@@ -250,7 +250,7 @@ class _ImportPageState extends State<ImportPage> {
                               Expanded(
                                 flex: 2,
                                 child: DropdownButtonFormField<String>(
-                                  value: importSource,
+                                  initialValue: importSource,
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     contentPadding: EdgeInsets.symmetric(
@@ -611,13 +611,13 @@ class _ImportPageState extends State<ImportPage> {
     );
   }
 
-  void _showBackgroundPreviewDialog(BuildContext context, Graphics graphic) {
+  void _showBackgroundPreviewDialog(BuildContext context, Graphics graphics) {
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (dialogContext) => BackgroundPreviewDialog(
-        graphic: graphic as Background,
-        title: "Preview ${graphic.name} as Background",
+        graphic: Background.fromGraphics(graphics),
+        title: "Preview ${graphics.name} as Background",
       ),
     );
   }

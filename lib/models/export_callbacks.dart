@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_background_converter.dart';
+import 'package:game_boy_graphics_editor/models/source_info.dart';
 
 import '../../models/download_stub.dart'
     if (dart.library.html) '../../models/download.dart';
@@ -162,4 +163,98 @@ Future<String?> _saveSourceToDirectory(
   }
 
   return directory;
+}
+
+/// Save updated source code - replaces the original array definition
+Future<void> onFileSaveUpdatedSourceCode(
+    BuildContext context,
+    Graphics graphics,
+    String updatedSource,
+    ) async {
+  try {
+    // If we have a source path, offer to overwrite or save as new
+    if (graphics.sourceInfo?.path != null &&
+        graphics.sourceInfo!.format == SourceFormat.file) {
+      final shouldOverwrite = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Save Updated Source'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Do you want to overwrite the original file?'),
+              const SizedBox(height: 16),
+              Text(
+                graphics.sourceInfo!.path!,
+                style: const TextStyle(
+                  fontFamily: 'monospace',
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Save As New'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Overwrite'),
+            ),
+          ],
+        ),
+      );
+
+      if (shouldOverwrite == null) return; // User cancelled
+
+      if (shouldOverwrite) {
+        // Overwrite the original file
+        final file = File(graphics.sourceInfo!.path!);
+        await file.writeAsString(updatedSource);
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Updated ${file.path}'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+        return;
+      }
+    }
+
+    // Save as new file
+    final result = await FilePicker.platform.saveFile(
+      dialogTitle: 'Save Updated Source Code',
+      fileName: '${graphics.name}.c',
+      type: FileType.custom,
+      allowedExtensions: ['c', 'h', 'cpp', 'hpp'],
+    );
+
+    if (result == null) return; // User cancelled
+
+    final file = File(result);
+    await file.writeAsString(updatedSource);
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Saved to ${file.path}'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+  } catch (e) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error saving file: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 }

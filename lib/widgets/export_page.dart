@@ -5,6 +5,8 @@ import 'package:game_boy_graphics_editor/models/export_callbacks.dart';
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 import '../cubits/meta_tile_cubit.dart';
+import '../models/sourceConverters/source_parser.dart';
+import '../models/source_info.dart';
 import 'export_preview.dart';
 
 class ExportPage extends StatefulWidget {
@@ -22,62 +24,95 @@ class _ExportPageState extends State<ExportPage> {
   String type = 'Source code';
   String parse = 'Tile';
   late bool displayFrom = widget.graphic == null;
+  final SourceParser _sourceParser = SourceParser();
 
   Graphics? get graphic => widget.graphic;
 
-  @override
-  Widget build(BuildContext context) {
-    Graphics graphics;
+  bool get canSaveUpdated {
+    final graphics = _getGraphics();
+    return graphics.sourceInfo != null &&
+        graphics.sourceInfo!.dataType == DataType.sourceCode &&
+        type == 'Source code';
+  }
+
+  Graphics _getGraphics() {
     if (widget.graphic != null) {
-      graphics = widget.graphic!;
+      return widget.graphic!;
     } else {
       if (parse == 'Tile') {
-        graphics = context.read<MetaTileCubit>().state;
+        return context.read<MetaTileCubit>().state;
       } else {
-        graphics = context.read<BackgroundCubit>().state;
+        return context.read<BackgroundCubit>().state;
       }
     }
+  }
+
+  void _handleSaveUpdated() {
+    final graphics = _getGraphics();
+
+    try {
+      final updatedSource = _sourceParser.exportEdited(graphics);
+      onFileSaveUpdatedSourceCode(context, graphics, updatedSource);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error updating source: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  void _handleSaveNew() {
+    final graphics = _getGraphics();
+
+    if (parse == 'Tile') {
+      if (type == 'Source code') {
+        onFileSaveAsSourceCode(context, parse, graphics);
+      } else if (type == 'Binary') {
+        onFileSaveAsBinTile(context, graphics);
+      } else {
+        onFileTilesSaveAsPNG(context, graphics);
+      }
+    } else {
+      if (type == 'Source code') {
+        onFileSaveAsSourceCode(context, parse, graphics);
+      } else if (type == 'Binary') {
+        onFileSaveAsBinBackground(context, graphics);
+      } else {
+        onFileBackgroundSaveAsPNG(context, graphics);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final graphics = _getGraphics();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Export Graphics'),
         actions: [
+          if (canSaveUpdated) ...[
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.update),
+                label: const Text("Save Updated"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                ),
+                onPressed: _handleSaveUpdated,
+              ),
+            ),
+          ],
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: ElevatedButton.icon(
               icon: const Icon(Icons.save_alt),
-              label: const Text("Export"),
-              onPressed: () {
-                if (parse == 'Tile') {
-                  if (type == 'Source code') {
-                    onFileSaveAsSourceCode(context, parse, graphics);
-                  } else if (type == 'Binary') {
-                    onFileSaveAsBinTile(context, graphics);
-                  } else {
-                    onFileTilesSaveAsPNG(context, graphics);
-                  }
-                } else {
-                  if (type == 'Source code') {
-                    onFileSaveAsSourceCode(
-                      context,
-                      parse,
-                      graphics,
-                    );
-                  } else if (type == 'Binary') {
-                    onFileSaveAsBinBackground(
-                      context,
-                      graphics,
-                    );
-                  } else {
-                    onFileBackgroundSaveAsPNG(
-                      context,
-                      graphics,
-                    );
-                  }
-                }
-                // Optionally close after export
-                // Navigator.of(context).pop();
-              },
+              label: const Text("Save New"),
+              onPressed: _handleSaveNew,
             ),
           ),
         ],
@@ -120,6 +155,12 @@ class _ExportPageState extends State<ExportPage> {
                           items: ['Tile', 'Background'],
                           onChanged: (v) => setState(() => parse = v!),
                         ),
+                      if (canSaveUpdated) ...[
+                        const SizedBox(height: 24),
+                        const Divider(),
+                        const SizedBox(height: 16),
+                        _buildInfoCard(graphics),
+                      ],
                     ],
                   ),
                 ),
@@ -159,6 +200,65 @@ class _ExportPageState extends State<ExportPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfoCard(Graphics graphics) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.info_outline,
+                size: 16,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Update Mode Available',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Array name: ${graphics.name}',
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
+          ),
+          if (graphics.sourceInfo?.path != null)
+            Text(
+              'Source: ${graphics.sourceInfo!.path}',
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          const SizedBox(height: 4),
+          Text(
+            '"Save Updated" will replace the original array definition with your changes.',
+            style: TextStyle(
+              fontSize: 11,
+              fontStyle: FontStyle.italic,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
+          ),
+        ],
       ),
     );
   }

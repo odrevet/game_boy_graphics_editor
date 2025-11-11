@@ -10,6 +10,7 @@ import '../cubits/graphics_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
 import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
+import '../models/source_info.dart';
 import '../models/states/graphics_state.dart';
 import 'background/background_preview_dialog.dart';
 import 'export_page.dart';
@@ -177,9 +178,9 @@ class GraphicsListWidget extends StatelessWidget {
         initialHeight: graphic.height,
         initialTileOrigin: graphic.tileOrigin,
         onSubmit: (name, width, height, tileOrigin) {
-          final updatedGraphic = Graphics(
+          // Use copyWith to preserve the original type and all other properties
+          final updatedGraphic = graphic.copyWith(
             name: name,
-            data: graphic.data,
             width: width,
             height: height,
             tileOrigin: tileOrigin,
@@ -548,7 +549,7 @@ class _GraphicListTile extends StatelessWidget {
             context: context,
             barrierDismissible: true,
             builder: (context) => BackgroundPreviewDialog(
-              graphic: graphic as Background,
+              graphic: Background.fromGraphics(graphic),
               onLoad: () => _loadAsBackground(graphic, context),
             ),
           );

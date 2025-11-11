@@ -1,45 +1,4 @@
-enum SourceFormat {
-  file,
-  url,
-  clipboard,
-}
-
-enum DataType {
-  sourceCode,
-  binary,
-}
-
-class SourceInfo {
-  final SourceFormat format;
-  final DataType dataType;
-  final String? path; // URL or file path (null for clipboard)
-  final dynamic content; // String for source code, List<int> for binary
-  final DateTime importedAt;
-
-  SourceInfo({
-    required this.format,
-    required this.dataType,
-    this.path,
-    required this.content,
-    DateTime? importedAt,
-  }) : importedAt = importedAt ?? DateTime.now();
-
-  SourceInfo copyWith({
-    SourceFormat? format,
-    DataType? dataType,
-    String? path,
-    dynamic content,
-    DateTime? importedAt,
-  }) {
-    return SourceInfo(
-      format: format ?? this.format,
-      dataType: dataType ?? this.dataType,
-      path: path ?? this.path,
-      content: content ?? this.content,
-      importedAt: importedAt ?? this.importedAt,
-    );
-  }
-}
+import '../source_info.dart';
 
 class Graphics {
   String name;
@@ -68,5 +27,29 @@ class Graphics {
 
   List<int> getTileAtIndex(int index) {
     return data.getRange(nbPixel * index, nbPixel * index + nbPixel).toList();
+  }
+
+  Graphics copyWith({
+    String? name,
+    List<int>? data,
+    int? width,
+    int? height,
+    int? tileOrigin,
+    String? filepath,
+    int? startOffset,
+    int? endOffset,
+    SourceInfo? sourceInfo,
+  }) {
+    return Graphics(
+      name: name ?? this.name,
+      data: data ?? this.data,
+      width: width ?? this.width,
+      height: height ?? this.height,
+      tileOrigin: tileOrigin ?? this.tileOrigin,
+      filepath: filepath ?? this.filepath,
+      startOffset: startOffset ?? this.startOffset,
+      endOffset: endOffset ?? this.endOffset,
+      sourceInfo: sourceInfo ?? this.sourceInfo,
+    );
   }
 }

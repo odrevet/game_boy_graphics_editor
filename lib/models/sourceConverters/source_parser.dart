@@ -1,6 +1,7 @@
 import 'package:petitparser/petitparser.dart';
 
 import '../graphics/graphics.dart';
+import '../source_info.dart';
 
 class SourceParser {
   late Parser _parser;
@@ -19,14 +20,14 @@ class SourceParser {
 
     // Integer type patterns - order matters for longest match first
     final integerType =
-        string('unsigned char') |
-        string('uint8_t') |
-        string('UINT8') |
-        string('char');
+    string('unsigned char') |
+    string('uint8_t') |
+    string('UINT8') |
+    string('char');
 
     // Identifier (array name)
     final identifier =
-        (letter() | char('_')) & (letter() | digit() | char('_')).star();
+    (letter() | char('_')) & (letter() | digit() | char('_')).star();
     final arrayName = identifier.flatten();
 
     // Array size (optional)
@@ -36,7 +37,7 @@ class SourceParser {
     // Hexadecimal number
     final hexDigit = pattern('0-9A-Fa-f');
     final hexNumber = (string('0x') & hexDigit.plus().flatten()).map(
-      (parts) => int.parse(parts[1], radix: 16),
+          (parts) => int.parse(parts[1], radix: 16),
     );
 
     // Decimal number
@@ -53,18 +54,18 @@ class SourceParser {
 
     // Complete array definition
     final arrayDefinition =
-        string('const').optional() &
-        ws &
-        integerType &
-        ws &
-        arrayName &
-        ws &
-        arraySize.optional() &
-        ws &
-        char('=') &
-        ws &
-        arrayContent &
-        char(';').optional();
+    string('const').optional() &
+    ws &
+    integerType &
+    ws &
+    arrayName &
+    ws &
+    arraySize.optional() &
+    ws &
+    char('=') &
+    ws &
+    arrayContent &
+    char(';').optional();
 
     // Use `token()` so we get offset information
     _parser = arrayDefinition.token().map((token) {
@@ -191,7 +192,127 @@ class SourceParser {
     // Check if line contains an integer type and has array brackets
     return intTypes.any(
           (type) => line.toLowerCase().contains(type.toLowerCase()),
-        ) &&
+    ) &&
         line.contains('[');
+  }
+
+  /// Export edited graphics back to source code
+  /// Replaces the array definition with new values while preserving formatting
+  String exportEdited(Graphics graphic) {
+    if (graphic.sourceInfo == null ||
+        graphic.sourceInfo!.dataType != DataType.sourceCode) {
+      throw Exception('No source code available for export');
+    }
+
+    final sourceContent = graphic.sourceInfo!.content as String;
+
+    // Parse all arrays to find the one matching our graphic
+    final allArrays = parseAllArrays(sourceContent);
+    final matchingArray = allArrays.firstWhere(
+          (arr) => arr.name == graphic.name,
+      orElse: () => throw Exception('Array ${graphic.name} not found in source'),
+    );
+
+    // Extract the original array definition substring
+    final originalDef = sourceContent.substring(
+      matchingArray.startOffset,
+      matchingArray.endOffset,
+    );
+
+    // Generate new array content with proper formatting
+    final newArrayContent = _generateArrayContent(
+      graphic.data,
+      originalDef,
+    );
+
+    // Replace the old array with the new one
+    final before = sourceContent.substring(0, matchingArray.startOffset);
+    final after = sourceContent.substring(matchingArray.endOffset);
+
+    return before + newArrayContent + after;
+  }
+
+  /// Generate formatted array content matching the original style
+  String _generateArrayContent(List<int> data, String originalDef) {
+    // Extract the array declaration part (everything before the '=')
+    final equalsIndex = originalDef.indexOf('=');
+    if (equalsIndex == -1) {
+      throw Exception('Invalid array definition: missing "="');
+    }
+
+    final declaration = originalDef.substring(0, equalsIndex + 1).trim();
+
+    // Determine if original used hex format
+    final usesHex = originalDef.contains('0x') || originalDef.contains('0X');
+
+    // Detect indentation from original
+    final lines = originalDef.split('\n');
+    String indent = '';
+    if (lines.length > 1) {
+      // Find first line with array values
+      for (final line in lines) {
+        if (line.contains('{') || line.trim().startsWith('0')) {
+          final match = RegExp(r'^(\s+)').firstMatch(line);
+          if (match != null) {
+            indent = match.group(1)!;
+            break;
+          }
+        }
+      }
+    }
+
+    // Determine items per line from original formatting
+    int itemsPerLine = 8; // default
+    if (lines.length > 1) {
+      for (final line in lines) {
+        final commaCount = ','.allMatches(line).length;
+        if (commaCount > 0) {
+          itemsPerLine = commaCount + 1;
+          break;
+        }
+      }
+    }
+
+    // Generate formatted values
+    final buffer = StringBuffer();
+    buffer.write('$declaration {\n');
+
+    for (int i = 0; i < data.length; i++) {
+      if (i % itemsPerLine == 0) {
+        buffer.write(indent);
+      }
+
+      if (usesHex) {
+        buffer.write('0x${data[i].toRadixString(16).padLeft(2, '0').toUpperCase()}');
+      } else {
+        buffer.write(data[i].toString());
+      }
+
+      if (i < data.length - 1) {
+        buffer.write(',');
+        if ((i + 1) % itemsPerLine == 0) {
+          buffer.write('\n');
+        } else {
+          buffer.write(' ');
+        }
+      } else {
+        buffer.write('\n');
+      }
+    }
+
+    buffer.write('};');
+
+    return buffer.toString();
+  }
+
+  /// Convenience method to export and update sourceInfo
+  Graphics exportAndUpdate(Graphics graphic) {
+    final newSource = exportEdited(graphic);
+
+    return graphic.copyWith(
+      sourceInfo: graphic.sourceInfo!.copyWith(
+        content: newSource,
+      ),
+    );
   }
 }

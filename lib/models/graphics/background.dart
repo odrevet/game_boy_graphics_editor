@@ -1,38 +1,61 @@
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
+import '../source_info.dart';
+
 class Background extends Graphics {
   Background({
     super.height = 18,
     super.width = 20,
     super.name = "background",
     super.tileOrigin = 0,
+    super.filepath,
+    super.startOffset = 0,
+    super.endOffset = 0,
+    super.sourceInfo,
     fill,
     data,
   }) : super(
-         data: data ?? List.filled(width * height, fill ?? 0, growable: true),
-       );
+    data: data ?? List.filled(width * height, fill ?? 0, growable: true),
+  );
 
   factory Background.fromGraphics(Graphics graphics) {
-
     return Background(
       data: graphics.data,
       width: graphics.width ~/ 8,
       height: graphics.height ~/ 8,
       name: graphics.name,
       tileOrigin: graphics.tileOrigin,
-    )
-      ..filepath = graphics.filepath
-      ..startOffset = graphics.startOffset
-      ..endOffset = graphics.endOffset;
+      filepath: graphics.filepath,
+      startOffset: graphics.startOffset,
+      endOffset: graphics.endOffset,
+      sourceInfo: graphics.sourceInfo,
+    );
   }
 
-  copyWith({List<int>? data, int? width, int? height, int? tileOrigin}) =>
-      Background(
-        data: data ?? [...this.data],
-        width: width ?? this.width,
-        height: height ?? this.height,
-        tileOrigin: tileOrigin ?? this.tileOrigin,
-      );
+  @override
+  Background copyWith({
+    String? name,
+    List<int>? data,
+    int? width,
+    int? height,
+    int? tileOrigin,
+    String? filepath,
+    int? startOffset,
+    int? endOffset,
+    SourceInfo? sourceInfo,
+  }) {
+    return Background(
+      name: name ?? this.name,
+      data: data ?? [...this.data],
+      width: width ?? this.width,
+      height: height ?? this.height,
+      tileOrigin: tileOrigin ?? this.tileOrigin,
+      filepath: filepath ?? this.filepath,
+      startOffset: startOffset ?? this.startOffset,
+      endOffset: endOffset ?? this.endOffset,
+      sourceInfo: sourceInfo ?? this.sourceInfo,
+    );
+  }
 
   void insertCol(int at, int fill) {
     width += 1;

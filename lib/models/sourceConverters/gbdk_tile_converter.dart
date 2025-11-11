@@ -123,6 +123,10 @@ const uint8_t {{name}}_tiles[{{length}}] = {
     // Calculate tile count
     int tileCount = (graphics.width * graphics.height) ~/ MetaTile.nbPixelPerTile;
 
+    var bytes = GBDKTileConverter().getRawTileInt(
+      GBDKTileConverter().reorderFromCanvasToSource(graphics),
+    );
+
     // Replace placeholders
     return template
         .replaceAll('{{name}}', name)
@@ -130,7 +134,7 @@ const uint8_t {{name}}_tiles[{{length}}] = {
         .replaceAll('{{width}}', graphics.width.toString())
         .replaceAll('{{height}}', graphics.height.toString())
         .replaceAll('{{tile_count}}', tileCount.toString())
-        .replaceAll('{{length}}', graphics.data.length.toString());
+        .replaceAll('{{length}}', bytes.length.toString());
   }
 
   @override
@@ -138,18 +142,24 @@ const uint8_t {{name}}_tiles[{{length}}] = {
     // Get template (from embedded or file system)
     String template = _getTemplate('tile.c.tpl');
 
+    var bytes = GBDKTileConverter().getRawTileInt(
+      GBDKTileConverter().reorderFromCanvasToSource(graphics),
+    );
+
     // Format the data array
     String formattedData = formatOutput(
-      graphics.data.map((e) => decimalToHex(e, prefix: true)).toList(),
+      //graphics.data.map((e) => decimalToHex(e, prefix: true)).toList(),
+      bytes.map((e) => decimalToHex(e, prefix: true)).toList(),
     );
 
     // Determine bank
     int bank = 255;
 
+
     return template
         .replaceAll('{{bank}}', bank.toString())
         .replaceAll('{{name}}', name)
-        .replaceAll('{{length}}', graphics.data.length.toString())
+        .replaceAll('{{length}}', bytes.length.toString())
         .replaceAll('{{data}}', formattedData);
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/converter_utils.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/source_parser.dart';
+import 'package:game_boy_graphics_editor/models/source_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 
