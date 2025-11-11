@@ -3,7 +3,6 @@ import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 
 import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
-import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/states/graphics_state.dart';
 
 class GraphicsCubit extends Cubit<GraphicsState> {
@@ -54,21 +53,14 @@ class GraphicsCubit extends Cubit<GraphicsState> {
   }
 
   // Commit background data to graphics
-  void commitBackgroundToGraphics(Background background, {int? targetIndex}) {
-    final graphicsFromBackground = Graphics(
-      height: background.height,
-      width: background.width,
-      data: List<int>.from(background.data),
-      tileOrigin: background.tileOrigin,
-      name: background.name,
-    );
-
+  void commitBackgroundToGraphics(Background background) {
+    int? targetIndex = findGraphicByName(background.name);
     if (targetIndex != null) {
       // Update existing graphic at specified index
-      updateGraphicAt(targetIndex, graphicsFromBackground);
+      updateGraphicAt(targetIndex, background);
     } else {
       // Add as new graphic
-      addGraphic(graphicsFromBackground);
+      addGraphic(background);
     }
   }
 
@@ -76,6 +68,16 @@ class GraphicsCubit extends Cubit<GraphicsState> {
     for (int i = 0; i < state.graphics.length; i++) {
       final g = state.graphics[i];
       if (g.name == name && g.tileOrigin == tileOrigin) {
+        return i;
+      }
+    }
+    return null;
+  }
+
+  int? findGraphicByName(String name) {
+    for (int i = 0; i < state.graphics.length; i++) {
+      final g = state.graphics[i];
+      if (g.name == name) {
         return i;
       }
     }
