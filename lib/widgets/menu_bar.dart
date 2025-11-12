@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/app_state_cubit.dart';
-import 'package:game_boy_graphics_editor/widgets/import_page.dart';
 import 'package:game_boy_graphics_editor/widgets/export_page.dart';
+import 'package:game_boy_graphics_editor/widgets/import_page.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/tile_settings.dart';
 
 import 'background/background_settings.dart';
@@ -99,15 +99,15 @@ class ApplicationMenuBar extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (BuildContext alertDialogContext) =>
-                        const AlertDialog(
-                          title: Text('Properties'),
-                          content: Row(
-                            children: [
-                              TileSettings(),
-                              BackgroundSettings(),
-                            ],
-                          ),
-                        ),
+                            const AlertDialog(
+                              title: Text('Properties'),
+                              content: Row(
+                                children: [
+                                  TileSettings(),
+                                  BackgroundSettings(),
+                                ],
+                              ),
+                            ),
                       );
                     },
                     child: const Row(

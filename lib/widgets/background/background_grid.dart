@@ -46,10 +46,7 @@ class _BackgroundGridState extends State<BackgroundGrid> {
 
   @override
   Widget build(BuildContext context) {
-    bool lock = context
-        .read<AppStateCubit>()
-        .state
-        .lockScrollBackground;
+    bool lock = context.read<AppStateCubit>().state.lockScrollBackground;
     return Scrollbar(
       thumbVisibility: true,
       controller: _horizontalController,
@@ -60,15 +57,15 @@ class _BackgroundGridState extends State<BackgroundGrid> {
           verticalDetails: lock
               ? ScrollableDetails.vertical(controller: _verticalController)
               : ScrollableDetails.vertical(
-            controller: _verticalController,
-            physics: const NeverScrollableScrollPhysics(),
-          ),
+                  controller: _verticalController,
+                  physics: const NeverScrollableScrollPhysics(),
+                ),
           horizontalDetails: lock
               ? ScrollableDetails.horizontal(controller: _horizontalController)
               : ScrollableDetails.horizontal(
-            controller: _horizontalController,
-            physics: const NeverScrollableScrollPhysics(),
-          ),
+                  controller: _horizontalController,
+                  physics: const NeverScrollableScrollPhysics(),
+                ),
           cellBuilder: _buildCell,
           columnCount: widget.background.width,
           columnBuilder: _buildColumnSpan,

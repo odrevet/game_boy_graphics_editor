@@ -167,10 +167,10 @@ Future<String?> _saveSourceToDirectory(
 
 /// Save updated source code - replaces the original array definition
 Future<void> onFileSaveUpdatedSourceCode(
-    BuildContext context,
-    Graphics graphics,
-    String updatedSource,
-    ) async {
+  BuildContext context,
+  Graphics graphics,
+  String updatedSource,
+) async {
   try {
     // If we have a source path, offer to overwrite or save as new
     if (graphics.sourceInfo?.path != null &&
@@ -187,10 +187,7 @@ Future<void> onFileSaveUpdatedSourceCode(
               const SizedBox(height: 16),
               Text(
                 graphics.sourceInfo!.path!,
-                style: const TextStyle(
-                  fontFamily: 'monospace',
-                  fontSize: 12,
-                ),
+                style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
               ),
             ],
           ),

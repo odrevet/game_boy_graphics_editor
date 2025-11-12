@@ -2,15 +2,15 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/import_callbacks.dart';
-import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_display.dart';
 import 'package:game_boy_graphics_editor/widgets/background/background_preview_dialog.dart';
+import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_display.dart';
 
 import '../cubits/app_state_cubit.dart';
 import '../cubits/graphics_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
+import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 import '../models/graphics/meta_tile.dart';
-import '../models/graphics/background.dart';
 import 'graphic_form.dart';
 
 class ImportPage extends StatefulWidget {
@@ -72,37 +72,49 @@ class _ImportPageState extends State<ImportPage> {
                   onPressed: selectedGraphics.isEmpty
                       ? null
                       : () {
-                    // Get dimensions from cubit state for MetaTile conversion
-                    final targetWidth = context.read<MetaTileCubit>().state.width;
-                    final targetHeight = context.read<MetaTileCubit>().state.height;
+                          // Get dimensions from cubit state for MetaTile conversion
+                          final targetWidth = context
+                              .read<MetaTileCubit>()
+                              .state
+                              .width;
+                          final targetHeight = context
+                              .read<MetaTileCubit>()
+                              .state
+                              .height;
 
-                    // Convert graphics to their appropriate types based on parseOptions
-                    final graphicsToImport = selectedGraphics.map((graphic) {
-                      final parseType = parseOptions[graphic] ?? _getDefaultParseOption(graphic);
-                      if (parseType == 'Background') {
-                        final bg = Background.fromGraphics(graphic);
-                        bg.sourceInfo = graphic.sourceInfo; // Preserve source info
-                        return bg;
-                      } else {
-                        // For tiles, convert to MetaTile
-                        final mt = MetaTile.fromGraphics(
-                          graphic,
-                          targetWidth: targetWidth,
-                          targetHeight: targetHeight,
-                        );
-                        mt.sourceInfo = graphic.sourceInfo; // Preserve source info
-                        return mt;
-                      }
-                    }).toList();
+                          // Convert graphics to their appropriate types based on parseOptions
+                          final graphicsToImport = selectedGraphics.map((
+                            graphic,
+                          ) {
+                            final parseType =
+                                parseOptions[graphic] ??
+                                _getDefaultParseOption(graphic);
+                            if (parseType == 'Background') {
+                              final bg = Background.fromGraphics(graphic);
+                              bg.sourceInfo =
+                                  graphic.sourceInfo; // Preserve source info
+                              return bg;
+                            } else {
+                              // For tiles, convert to MetaTile
+                              final mt = MetaTile.fromGraphics(
+                                graphic,
+                                targetWidth: targetWidth,
+                                targetHeight: targetHeight,
+                              );
+                              mt.sourceInfo =
+                                  graphic.sourceInfo; // Preserve source info
+                              return mt;
+                            }
+                          }).toList();
 
-                    context.read<GraphicsCubit>().addGraphics(
-                      graphicsToImport,
-                    );
-                    Navigator.of(context).pop();
-                    context
-                        .read<AppStateCubit>()
-                        .navigateToMemoryManager();
-                  },
+                          context.read<GraphicsCubit>().addGraphics(
+                            graphicsToImport,
+                          );
+                          Navigator.of(context).pop();
+                          context
+                              .read<AppStateCubit>()
+                              .navigateToMemoryManager();
+                        },
                   icon: const Icon(Icons.check),
                   label: Text('Import ${selectedGraphics.length} Selected'),
                 ),
@@ -149,7 +161,7 @@ class _ImportPageState extends State<ImportPage> {
                               Expanded(
                                 child: DropdownButtonFormField<String>(
                                   initialValue:
-                                  _getAvailableDataTypes().contains(type)
+                                      _getAvailableDataTypes().contains(type)
                                       ? type
                                       : _getAvailableDataTypes().first,
                                   decoration: const InputDecoration(
@@ -167,10 +179,10 @@ class _ImportPageState extends State<ImportPage> {
                                   items: _getAvailableDataTypes()
                                       .map(
                                         (v) => DropdownMenuItem(
-                                      value: v,
-                                      child: Text(v),
-                                    ),
-                                  )
+                                          value: v,
+                                          child: Text(v),
+                                        ),
+                                      )
                                       .toList(),
                                 ),
                               ),
@@ -199,25 +211,25 @@ class _ImportPageState extends State<ImportPage> {
                                     ),
                                   ),
                                   onChanged:
-                                  kIsWeb ||
-                                      !context
-                                          .read<AppStateCubit>()
-                                          .state
-                                          .gbdkPathValid ||
-                                      type != 'Binary'
+                                      kIsWeb ||
+                                          !context
+                                              .read<AppStateCubit>()
+                                              .state
+                                              .gbdkPathValid ||
+                                          type != 'Binary'
                                       ? null
                                       : (value) {
-                                    setState(() {
-                                      compression = value!;
-                                    });
-                                  },
+                                          setState(() {
+                                            compression = value!;
+                                          });
+                                        },
                                   items: ['none', 'rle', 'gb']
                                       .map(
                                         (v) => DropdownMenuItem(
-                                      value: v,
-                                      child: Text(v),
-                                    ),
-                                  )
+                                          value: v,
+                                          child: Text(v),
+                                        ),
+                                      )
                                       .toList(),
                                 ),
                               ),
@@ -353,26 +365,24 @@ class _ImportPageState extends State<ImportPage> {
                         onPressed: graphicsPreview.isEmpty
                             ? null
                             : () {
-                          setState(() {
-                            if (selectedGraphics.length ==
-                                graphicsPreview.length) {
-                              selectedGraphics.clear();
-                            } else {
-                              selectedGraphics = List.from(
-                                graphicsPreview,
-                              );
-                            }
-                          });
-                        },
+                                setState(() {
+                                  if (selectedGraphics.length ==
+                                      graphicsPreview.length) {
+                                    selectedGraphics.clear();
+                                  } else {
+                                    selectedGraphics = List.from(
+                                      graphicsPreview,
+                                    );
+                                  }
+                                });
+                              },
                         icon: Icon(
-                          selectedGraphics.length ==
-                              graphicsPreview.length
+                          selectedGraphics.length == graphicsPreview.length
                               ? Icons.deselect
                               : Icons.select_all,
                         ),
                         label: Text(
-                          selectedGraphics.length ==
-                              graphicsPreview.length
+                          selectedGraphics.length == graphicsPreview.length
                               ? 'Deselect All'
                               : 'Select All',
                         ),
@@ -386,111 +396,124 @@ class _ImportPageState extends State<ImportPage> {
                       child: graphicsPreview.isEmpty
                           ? _buildEmptyState(context)
                           : ListView.builder(
-                        itemCount: graphicsPreview.length,
-                        itemBuilder: (context, index) {
-                          final graphic = graphicsPreview[index];
-                          final isSelected = selectedGraphics
-                              .contains(graphic);
-                          final currentParseOption = parseOptions[graphic] ?? _getDefaultParseOption(graphic);
+                              itemCount: graphicsPreview.length,
+                              itemBuilder: (context, index) {
+                                final graphic = graphicsPreview[index];
+                                final isSelected = selectedGraphics.contains(
+                                  graphic,
+                                );
+                                final currentParseOption =
+                                    parseOptions[graphic] ??
+                                    _getDefaultParseOption(graphic);
 
-                          return Card(
-                            elevation: 3,
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 6,
-                            ),
-                            child: ListTile(
-                              leading: Checkbox(
-                                value: isSelected,
-                                onChanged: (value) {
-                                  setState(() {
-                                    if (value == true) {
-                                      selectedGraphics.add(
-                                        graphic,
-                                      );
-                                    } else {
-                                      selectedGraphics.remove(
-                                        graphic,
-                                      );
-                                    }
-                                  });
-                                },
-                              ),
-                              title: Text(
-                                graphic.name,
-                                style: TextStyle(
-                                  fontWeight: isSelected
-                                      ? FontWeight.w600
-                                      : FontWeight.normal,
-                                ),
-                              ),
-                              subtitle: Text(
-                                '${graphic.width}×${graphic.height} px',
-                              ),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ToggleButtons(
-                                    isSelected: [
-                                      currentParseOption == 'Tiles',
-                                      currentParseOption == 'Background',
-                                    ],
-                                    onPressed: (btnIndex) {
+                                return Card(
+                                  elevation: 3,
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 6,
+                                  ),
+                                  child: ListTile(
+                                    leading: Checkbox(
+                                      value: isSelected,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          if (value == true) {
+                                            selectedGraphics.add(graphic);
+                                          } else {
+                                            selectedGraphics.remove(graphic);
+                                          }
+                                        });
+                                      },
+                                    ),
+                                    title: Text(
+                                      graphic.name,
+                                      style: TextStyle(
+                                        fontWeight: isSelected
+                                            ? FontWeight.w600
+                                            : FontWeight.normal,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      '${graphic.width}×${graphic.height} px',
+                                    ),
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ToggleButtons(
+                                          isSelected: [
+                                            currentParseOption == 'Tiles',
+                                            currentParseOption == 'Background',
+                                          ],
+                                          onPressed: (btnIndex) {
+                                            setState(() {
+                                              parseOptions[graphic] =
+                                                  btnIndex == 0
+                                                  ? 'Tiles'
+                                                  : 'Background';
+                                            });
+                                          },
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                          constraints: const BoxConstraints(
+                                            minHeight: 32,
+                                            minWidth: 36,
+                                          ),
+                                          children: const [
+                                            Icon(Icons.image, size: 18),
+                                            // Tiles
+                                            Icon(Icons.grid_4x4, size: 18),
+                                            // Background
+                                          ],
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.visibility),
+                                          tooltip: 'Preview',
+                                          onPressed: () {
+                                            final parseType =
+                                                parseOptions[graphic] ??
+                                                _getDefaultParseOption(graphic);
+                                            if (parseType == 'Background') {
+                                              _showBackgroundPreviewDialog(
+                                                context,
+                                                graphic,
+                                              );
+                                            } else {
+                                              _showTilePreviewDialog(
+                                                context,
+                                                graphic,
+                                              );
+                                            }
+                                          },
+                                          splashRadius: 20,
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(
+                                            Icons.edit_attributes,
+                                          ),
+                                          tooltip: 'Properties',
+                                          onPressed: () =>
+                                              _showEditGraphicDialog(
+                                                context,
+                                                graphic,
+                                              ),
+                                          splashRadius: 20,
+                                        ),
+                                      ],
+                                    ),
+                                    onTap: () {
                                       setState(() {
-                                        parseOptions[graphic] = btnIndex == 0 ? 'Tiles' : 'Background';
+                                        if (isSelected) {
+                                          selectedGraphics.remove(graphic);
+                                        } else {
+                                          selectedGraphics.add(graphic);
+                                        }
                                       });
                                     },
-                                    borderRadius: BorderRadius.circular(8),
-                                    constraints: const BoxConstraints(minHeight: 32, minWidth: 36),
-                                    children: const [
-                                      Icon(Icons.image, size: 18),       // Tiles
-                                      Icon(Icons.grid_4x4, size: 18),    // Background
-                                    ],
                                   ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.visibility,
-                                    ),
-                                    tooltip: 'Preview',
-                                    onPressed: () {
-                                      final parseType = parseOptions[graphic] ?? _getDefaultParseOption(graphic);
-                                      if (parseType == 'Background') {
-                                        _showBackgroundPreviewDialog(context, graphic);
-                                      } else {
-                                        _showTilePreviewDialog(context, graphic);
-                                      }
-                                    },
-                                    splashRadius: 20,
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.edit_attributes,
-                                    ),
-                                    tooltip: 'Properties',
-                                    onPressed: () =>
-                                        _showEditGraphicDialog(
-                                          context,
-                                          graphic,
-                                        ),
-                                    splashRadius: 20,
-                                  ),
-                                ],
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  if (isSelected) {
-                                    selectedGraphics.remove(
-                                      graphic,
-                                    );
-                                  } else {
-                                    selectedGraphics.add(graphic);
-                                  }
-                                });
+                                );
                               },
                             ),
-                          );
-                        },
-                      ),
                     ),
                   ),
                 ],
@@ -581,7 +604,7 @@ class _ImportPageState extends State<ImportPage> {
                     runSpacing: 8,
                     children: List.generate(
                       tileCount,
-                          (index) => Column(
+                      (index) => Column(
                         children: [
                           SizedBox(
                             width: 40,
@@ -700,24 +723,24 @@ class _ImportPageState extends State<ImportPage> {
                     onPressed: dialogUrl.isEmpty
                         ? null
                         : () async {
-                      Navigator.of(alertDialogContext).pop();
-                      final elements = await onImportHttp(
-                        context,
-                        previewAs,
-                        type,
-                        dialogUrl,
-                      );
-                      if (elements != null && elements.isNotEmpty) {
-                        setState(() {
-                          graphicsPreview.addAll(elements);
-                          selectedGraphics.addAll(elements);
-                          for (final graphic in elements) {
-                            parseOptions[graphic] ??=
-                                _getDefaultParseOption(graphic);
-                          }
-                        });
-                      }
-                    },
+                            Navigator.of(alertDialogContext).pop();
+                            final elements = await onImportHttp(
+                              context,
+                              previewAs,
+                              type,
+                              dialogUrl,
+                            );
+                            if (elements != null && elements.isNotEmpty) {
+                              setState(() {
+                                graphicsPreview.addAll(elements);
+                                selectedGraphics.addAll(elements);
+                                for (final graphic in elements) {
+                                  parseOptions[graphic] ??=
+                                      _getDefaultParseOption(graphic);
+                                }
+                              });
+                            }
+                          },
                     icon: const Icon(Icons.arrow_upward),
                     label: const Text('Import from URL'),
                   ),

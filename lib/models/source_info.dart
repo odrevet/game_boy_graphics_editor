@@ -1,13 +1,6 @@
-enum SourceFormat {
-  file,
-  url,
-  clipboard,
-}
+enum SourceFormat { file, url, clipboard }
 
-enum DataType {
-  sourceCode,
-  binary,
-}
+enum DataType { sourceCode, binary }
 
 class SourceInfo {
   final SourceFormat format;

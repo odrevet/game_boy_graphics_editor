@@ -24,6 +24,10 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.read<AppStateCubit>().state;
+    final backgroundState = context.read<BackgroundCubit>().state;
+    final metaTileState = context.read<MetaTileCubit>().state;
+
     return BlocBuilder<BackgroundCubit, Background>(
       builder: (context, background) {
         return Column(
@@ -34,7 +38,9 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
               child: GestureDetector(
                 onSecondaryTapDown: (details) {
                   // Show context menu on right-click
-                  final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+                  final RenderBox overlay =
+                      Overlay.of(context).context.findRenderObject()
+                          as RenderBox;
                   showMenu(
                     context: context,
                     position: RelativeRect.fromRect(
@@ -104,7 +110,6 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                             ],
                           ),
                         ),
-
                     ],
                   ).then((value) {
                     // Handle menu selection
@@ -133,17 +138,14 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                 child: BackgroundGrid(
                   hoverTileIndexX: hoverTileIndexX,
                   hoverTileIndexY: hoverTileIndexY,
-                  background: context.read<BackgroundCubit>().state,
-                  tileOrigin: context.read<BackgroundCubit>().state.tileOrigin,
-                  showGrid: context
-                      .read<AppStateCubit>()
-                      .state
-                      .showGridBackground,
-                  metaTile: context.read<MetaTileCubit>().state,
-                  cellSize:
-                  40 * context.read<AppStateCubit>().state.zoomBackground,
-                  onTap: (index) {
-                    draw(context, index, background);
+                  background: backgroundState,
+                  tileOrigin: backgroundState.tileOrigin,
+                  showGrid: appState.showGridBackground,
+                  metaTile: metaTileState,
+                  cellSize: 40 * appState.zoomBackground,
+                  onTap: (index) => {
+                    if (!appState.lockScrollBackground)
+                      {draw(context, index, backgroundState)},
                   },
                   onHover: (x, y) => setState(() {
                     hoverTileIndexX = x;
@@ -234,12 +236,12 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
           context.read<AppStateCubit>().state.drawFromBackground = index;
         } else {
           int xFrom =
-          (context.read<AppStateCubit>().state.drawFromBackground! %
-              background.width)
-              .toInt();
+              (context.read<AppStateCubit>().state.drawFromBackground! %
+                      background.width)
+                  .toInt();
           int yFrom =
               context.read<AppStateCubit>().state.drawFromBackground! ~/
-                  background.width;
+              background.width;
 
           context.read<BackgroundCubit>().rectangle(
             tileIndex + tileOrigin,

@@ -14,11 +14,11 @@ import '../models/graphics/graphics.dart';
 import 'file_picker_utils.dart';
 
 Future<List<Graphics>?> onImportHttp(
-    BuildContext context,
-    String parse,
-    String type,
-    String url,
-    ) async {
+  BuildContext context,
+  String parse,
+  String type,
+  String url,
+) async {
   Uri uriObject = Uri.parse(url);
 
   if (type == 'Auto') {
@@ -39,11 +39,7 @@ Future<List<Graphics>?> onImportHttp(
       content: bin,
     );
 
-    var graphics = Graphics(
-      name: filename,
-      data: data,
-      sourceInfo: sourceInfo,
-    );
+    var graphics = Graphics(name: filename, data: data, sourceInfo: sourceInfo);
     return [graphics];
   } else {
     final source = await http.read(uriObject);
@@ -68,10 +64,10 @@ Future<List<Graphics>?> onImportHttp(
 }
 
 Future<List<Graphics>?> onImport(
-    BuildContext context,
-    String type,
-    String compression,
-    ) async {
+  BuildContext context,
+  String type,
+  String compression,
+) async {
   final result = await selectFile(['*']);
   if (result == null) return null;
 
@@ -150,16 +146,16 @@ Future<List<Graphics>?> onImport(
 }
 
 Future<List<Graphics>?> onImportFromClipboard(
-    BuildContext context,
-    String type,
-    String compression,
-    ) async {
+  BuildContext context,
+  String type,
+  String compression,
+) async {
   ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
   if (type == 'Auto') {
     type = 'Source';
   }
 
-  if(clipboardData == null || clipboardData.text!.isEmpty){
+  if (clipboardData == null || clipboardData.text!.isEmpty) {
     return null;
   }
 
@@ -194,10 +190,10 @@ String resolveType(String path) {
 }
 
 List<int> _decompress(
-    String inputPath,
-    String compression,
-    BuildContext context,
-    ) {
+  String inputPath,
+  String compression,
+  BuildContext context,
+) {
   var content = <int>[];
   // decompress to a temp file
   var systemTempDir = Directory.systemTemp;

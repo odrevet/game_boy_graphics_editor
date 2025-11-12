@@ -17,17 +17,21 @@ class MetaTile extends Graphics {
     super.endOffset = 0,
     super.sourceInfo,
   }) : super(
-    name: name ?? "tiles",
-    data: data ?? List.filled(width * height, 0, growable: true),
-  ) {
+         name: name ?? "tiles",
+         data: data ?? List.filled(width * height, 0, growable: true),
+       ) {
     calcMaxTileIndex();
   }
 
-  factory MetaTile.fromGraphics(Graphics graphics, {int? targetWidth, int? targetHeight}) {
+  factory MetaTile.fromGraphics(
+    Graphics graphics, {
+    int? targetWidth,
+    int? targetHeight,
+  }) {
     var data = GBDKTileConverter().combine(graphics.data);
     data = GBDKTileConverter().reorderFromSourceToCanvas(
       data,
-      targetWidth ?? 8,  // Default to 8x8 tiles if not specified
+      targetWidth ?? 8, // Default to 8x8 tiles if not specified
       targetHeight ?? 8,
     );
 
@@ -95,12 +99,12 @@ class MetaTile extends Graphics {
   }
 
   fill(
-      int metaTileIndex,
-      int intensity,
-      int rowIndex,
-      int colIndex,
-      int targetColor,
-      ) {
+    int metaTileIndex,
+    int intensity,
+    int rowIndex,
+    int colIndex,
+    int targetColor,
+  ) {
     if (getPixel(rowIndex, colIndex, metaTileIndex) == targetColor) {
       setPixel(rowIndex, colIndex, metaTileIndex, intensity);
       if (inbound(rowIndex, colIndex - 1)) {
@@ -143,13 +147,13 @@ class MetaTile extends Graphics {
   }
 
   void rectangle(
-      int metaTileIndex,
-      int intensity,
-      int xFrom,
-      int yFrom,
-      int xTo,
-      int yTo,
-      ) {
+    int metaTileIndex,
+    int intensity,
+    int xFrom,
+    int yFrom,
+    int xTo,
+    int yTo,
+  ) {
     int startX = xFrom < xTo ? xFrom : xTo;
     int endX = xFrom < xTo ? xTo : xFrom;
     int startY = yFrom < yTo ? yFrom : yTo;

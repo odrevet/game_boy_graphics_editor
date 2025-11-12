@@ -15,7 +15,6 @@ class BackgroundPreviewDialog extends StatefulWidget {
   final double cellSize;
   final bool showGrid;
 
-
   const BackgroundPreviewDialog({
     Key? key,
     required this.graphic,
@@ -88,39 +87,39 @@ class _BackgroundPreviewDialogState extends State<BackgroundPreviewDialog> {
             Expanded(
               child: errorMessage != null
                   ? Center(
-                child: Text(
-                  errorMessage!,
-                  style: const TextStyle(color: Colors.red),
-                  textAlign: TextAlign.center,
-                ),
-              )
+                      child: Text(
+                        errorMessage!,
+                        style: const TextStyle(color: Colors.red),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
                   : BackgroundGrid(
-                background: preview!,
-                tileOrigin: 0,
-                metaTile: context.read<MetaTileCubit>().state,
-                showGrid: widget.showGrid,
-                cellSize: widget.cellSize,
-              ),
+                      background: preview!,
+                      tileOrigin: 0,
+                      metaTile: context.read<MetaTileCubit>().state,
+                      showGrid: widget.showGrid,
+                      cellSize: widget.cellSize,
+                    ),
             ),
           ],
         ),
       ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Close"),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text("Close"),
+        ),
+        if (widget.onLoad != null)
+          ElevatedButton(
+            onPressed: errorMessage != null
+                ? null
+                : () {
+                    Navigator.of(context).pop();
+                    widget.onLoad!();
+                  },
+            child: const Text("Load"),
           ),
-          if (widget.onLoad != null)
-            ElevatedButton(
-              onPressed: errorMessage != null
-                  ? null
-                  : () {
-                Navigator.of(context).pop();
-                widget.onLoad!();
-              },
-              child: const Text("Load"),
-            ),
-        ],
+      ],
     );
   }
 }

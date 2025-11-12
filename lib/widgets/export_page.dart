@@ -135,9 +135,7 @@ class _ExportPageState extends State<ExportPage> {
                     children: [
                       Text(
                         'Export Settings',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
+                        style: Theme.of(context).textTheme.titleMedium
                             ?.copyWith(fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 24),
@@ -176,10 +174,9 @@ class _ExportPageState extends State<ExportPage> {
                 children: [
                   Text(
                     'Preview',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Expanded(
@@ -187,9 +184,9 @@ class _ExportPageState extends State<ExportPage> {
                       elevation: 2,
                       child: Container(
                         width: double.infinity,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .surfaceContainerHighest,
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerHighest,
                         padding: const EdgeInsets.all(16),
                         child: ExportPreview(graphics, type),
                       ),
@@ -275,9 +272,7 @@ class _ExportPageState extends State<ExportPage> {
           width: 120,
           child: Text(
             label,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.w500),
           ),
         ),
         Expanded(
@@ -285,10 +280,7 @@ class _ExportPageState extends State<ExportPage> {
             initialValue: value,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 8,
-              ),
+              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             ),
             onChanged: onChanged,
             items: items

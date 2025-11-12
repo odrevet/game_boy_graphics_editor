@@ -15,8 +15,8 @@ class Background extends Graphics {
     fill,
     data,
   }) : super(
-    data: data ?? List.filled(width * height, fill ?? 0, growable: true),
-  );
+         data: data ?? List.filled(width * height, fill ?? 0, growable: true),
+       );
 
   factory Background.fromGraphics(Graphics graphics) {
     return Background(

@@ -188,9 +188,7 @@ class GraphicFormState extends State<GraphicForm> {
       // Handle clipboard access error if needed
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to read from clipboard'),
-          ),
+          const SnackBar(content: Text('Failed to read from clipboard')),
         );
       }
     }

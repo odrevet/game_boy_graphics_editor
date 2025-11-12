@@ -20,14 +20,14 @@ class SourceParser {
 
     // Integer type patterns - order matters for longest match first
     final integerType =
-    string('unsigned char') |
-    string('uint8_t') |
-    string('UINT8') |
-    string('char');
+        string('unsigned char') |
+        string('uint8_t') |
+        string('UINT8') |
+        string('char');
 
     // Identifier (array name)
     final identifier =
-    (letter() | char('_')) & (letter() | digit() | char('_')).star();
+        (letter() | char('_')) & (letter() | digit() | char('_')).star();
     final arrayName = identifier.flatten();
 
     // Array size (optional)
@@ -37,7 +37,7 @@ class SourceParser {
     // Hexadecimal number
     final hexDigit = pattern('0-9A-Fa-f');
     final hexNumber = (string('0x') & hexDigit.plus().flatten()).map(
-          (parts) => int.parse(parts[1], radix: 16),
+      (parts) => int.parse(parts[1], radix: 16),
     );
 
     // Decimal number
@@ -54,18 +54,18 @@ class SourceParser {
 
     // Complete array definition
     final arrayDefinition =
-    string('const').optional() &
-    ws &
-    integerType &
-    ws &
-    arrayName &
-    ws &
-    arraySize.optional() &
-    ws &
-    char('=') &
-    ws &
-    arrayContent &
-    char(';').optional();
+        string('const').optional() &
+        ws &
+        integerType &
+        ws &
+        arrayName &
+        ws &
+        arraySize.optional() &
+        ws &
+        char('=') &
+        ws &
+        arrayContent &
+        char(';').optional();
 
     // Use `token()` so we get offset information
     _parser = arrayDefinition.token().map((token) {
@@ -192,7 +192,7 @@ class SourceParser {
     // Check if line contains an integer type and has array brackets
     return intTypes.any(
           (type) => line.toLowerCase().contains(type.toLowerCase()),
-    ) &&
+        ) &&
         line.contains('[');
   }
 
@@ -209,8 +209,9 @@ class SourceParser {
     // Parse all arrays to find the one matching our graphic
     final allArrays = parseAllArrays(sourceContent);
     final matchingArray = allArrays.firstWhere(
-          (arr) => arr.name == graphic.name,
-      orElse: () => throw Exception('Array ${graphic.name} not found in source'),
+      (arr) => arr.name == graphic.name,
+      orElse: () =>
+          throw Exception('Array ${graphic.name} not found in source'),
     );
 
     // Extract the original array definition substring
@@ -220,10 +221,7 @@ class SourceParser {
     );
 
     // Generate new array content with proper formatting
-    final newArrayContent = _generateArrayContent(
-      graphic.data,
-      originalDef,
-    );
+    final newArrayContent = _generateArrayContent(graphic.data, originalDef);
 
     // Replace the old array with the new one
     final before = sourceContent.substring(0, matchingArray.startOffset);
@@ -283,7 +281,9 @@ class SourceParser {
       }
 
       if (usesHex) {
-        buffer.write('0x${data[i].toRadixString(16).padLeft(2, '0').toUpperCase()}');
+        buffer.write(
+          '0x${data[i].toRadixString(16).padLeft(2, '0').toUpperCase()}',
+        );
       } else {
         buffer.write(data[i].toString());
       }
@@ -310,9 +310,7 @@ class SourceParser {
     final newSource = exportEdited(graphic);
 
     return graphic.copyWith(
-      sourceInfo: graphic.sourceInfo!.copyWith(
-        content: newSource,
-      ),
+      sourceInfo: graphic.sourceInfo!.copyWith(content: newSource),
     );
   }
 }
