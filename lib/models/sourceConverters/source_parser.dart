@@ -4,6 +4,7 @@ import '../graphics/background.dart';
 import '../graphics/graphics.dart';
 import '../graphics/meta_tile.dart';
 import '../source_info.dart';
+import 'gbdk_tile_converter.dart';
 
 class SourceParser {
   late Parser _parser;
@@ -232,7 +233,16 @@ class SourceParser {
     );
 
     // Generate new array content with proper formatting
-    final newArrayContent = _generateArrayContent(graphic.data, originalDef);
+    List<int> data = [];
+    if (graphic is MetaTile) {
+      data = GBDKTileConverter().getRawTileInt(
+        GBDKTileConverter().reorderFromCanvasToSource(graphic),
+      );
+    } else if (graphic is Background) {
+      data = graphic.data;
+    }
+
+    final newArrayContent = _generateArrayContent(data, originalDef);
 
     // Replace the old array with the new one
     final before = sourceContent.substring(0, matchingArray.startOffset);
