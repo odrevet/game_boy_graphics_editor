@@ -2,22 +2,7 @@ import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
 import '../models/sourceConverters/gbdk_tile_converter.dart';
-
-class TileInfo {
-  final String? sourceName;
-  final int? sourceIndex;
-  final int origin;
-
-  TileInfo({this.sourceName, this.sourceIndex, required this.origin});
-
-  TileInfo copyWith({String? sourceName, int? sourceIndex, int? origin}) {
-    return TileInfo(
-      sourceName: sourceName ?? this.sourceName,
-      sourceIndex: sourceIndex ?? this.sourceIndex,
-      origin: origin ?? this.origin,
-    );
-  }
-}
+import '../models/tile_info.dart';
 
 class MetaTileCubit extends ReplayCubit<MetaTile> {
   MetaTileCubit() : super(MetaTile(height: 8, width: 8));
