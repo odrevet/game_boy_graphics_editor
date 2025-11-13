@@ -313,10 +313,8 @@ class _GraphicListTile extends StatelessWidget {
       MetaTile metaTile;
 
       if (graphics is MetaTile) {
-        // Already a MetaTile, use directly
         metaTile = graphics;
       } else {
-        // Convert from Graphics
         final targetWidth = context.read<MetaTileCubit>().state.width;
         final targetHeight = context.read<MetaTileCubit>().state.height;
         metaTile = MetaTile.fromGraphics(
@@ -326,16 +324,9 @@ class _GraphicListTile extends StatelessWidget {
         );
       }
 
-      // Add tile to the collection with the specified origin
-      context.read<MetaTileCubit>().addTileAtOrigin(
-        metaTile,
-        tileOrigin
-      );
-
-      // Set the tile name for the app state
+      context.read<MetaTileCubit>().addTileAtOrigin(metaTile, tileOrigin);
       context.read<AppStateCubit>().setTileName(graphics.name);
 
-      // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Successfully loaded "${graphics.name}" as tiles'),
@@ -372,7 +363,6 @@ class _GraphicListTile extends StatelessWidget {
       text: graphic.tileOrigin.toString(),
     );
 
-    // Get dimensions from cubit state
     final targetWidth = context.read<MetaTileCubit>().state.width;
     final targetHeight = context.read<MetaTileCubit>().state.height;
 
@@ -435,7 +425,7 @@ class _GraphicListTile extends StatelessWidget {
                     runSpacing: 8,
                     children: List.generate(
                       tileCount,
-                      (index) => Column(
+                          (index) => Column(
                         children: [
                           SizedBox(
                             width: 40,
@@ -477,10 +467,8 @@ class _GraphicListTile extends StatelessWidget {
     try {
       Background background;
       if (graphics is Background) {
-        // Already a Background, use directly
         background = graphics;
       } else {
-        // Convert from Graphics
         background = Background.fromGraphics(graphics);
       }
 
@@ -511,7 +499,6 @@ class _GraphicListTile extends StatelessWidget {
   }
 
   Widget _buildLoadButton(BuildContext context) {
-    // If it's a Background, load directly as background
     if (_isBackground) {
       return IconButton(
         icon: const Icon(Icons.arrow_circle_left),
@@ -529,7 +516,6 @@ class _GraphicListTile extends StatelessWidget {
       );
     }
 
-    // If it's a MetaTile, load directly as tiles
     if (_isMetaTile) {
       return IconButton(
         icon: const Icon(Icons.arrow_circle_left),
@@ -538,7 +524,6 @@ class _GraphicListTile extends StatelessWidget {
       );
     }
 
-    // If it's base Graphics, show popup menu with both options
     return PopupMenuButton<String>(
       icon: const Icon(Icons.arrow_circle_left),
       tooltip: 'Load as...',
@@ -576,7 +561,6 @@ class _GraphicListTile extends StatelessWidget {
   }
 
   Widget _buildExportButton(BuildContext context) {
-    // If it's a Background, export directly as background
     if (_isBackground) {
       return IconButton(
         icon: const Icon(Icons.arrow_downward),
@@ -591,7 +575,6 @@ class _GraphicListTile extends StatelessWidget {
       );
     }
 
-    // If it's a MetaTile, export directly as tiles
     if (_isMetaTile) {
       return IconButton(
         icon: const Icon(Icons.arrow_downward),
@@ -606,7 +589,6 @@ class _GraphicListTile extends StatelessWidget {
       );
     }
 
-    // If it's base Graphics, show popup menu with both options
     return PopupMenuButton<String>(
       icon: const Icon(Icons.arrow_downward),
       tooltip: 'Export as...',
@@ -664,97 +646,159 @@ class _GraphicListTile extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: ListTile(
-        leading: Icon(
-          _typeIcon,
-          size: 32,
-          color: Theme.of(context).primaryColor,
-        ),
-        title: Row(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
           children: [
-            Expanded(child: Text(displayName)),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                _typeLabel,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Dimensions: ${graphic.width} × ${graphic.height}'),
-            Text('Data: ${dataSize}KB (${graphic.data.length} bytes)'),
-            if (sourceInfo != null) ...[
-              const SizedBox(height: 4),
-              Row(
+            // Left part - Icon and Content (50% of card width)
+            Expanded(
+              flex: 1,
+              child: Row(
                 children: [
+                  // Icon
                   Icon(
-                    _getSourceFormatIcon(sourceInfo.format),
-                    size: 14,
-                    color: Colors.grey[600],
+                    _typeIcon,
+                    size: 40,
+                    color: Theme.of(context).primaryColor,
                   ),
-                  const SizedBox(width: 4),
+                  const SizedBox(width: 12),
+
+                  // Content
                   Expanded(
-                    child: Text(
-                      sourceInfo.path ??
-                          _getSourceFormatLabel(sourceInfo.format),
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.grey[600],
-                        fontStyle: FontStyle.italic,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6,
-                      vertical: 1,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      _getDataTypeLabel(sourceInfo.dataType),
-                      style: TextStyle(
-                        fontSize: 9,
-                        color: Colors.grey[700],
-                        fontWeight: FontWeight.w600,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Title row with name and type badge
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                displayName,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                _typeLabel,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: Theme.of(context).primaryColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Dimensions and data info
+                        Text(
+                          'Dimensions: ${graphic.width} × ${graphic.height}',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+                        Text(
+                          'Data: ${dataSize}KB (${graphic.data.length} bytes)',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+
+                        // Source info if available
+                        if (sourceInfo != null) ...[
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Icon(
+                                _getSourceFormatIcon(sourceInfo.format),
+                                size: 14,
+                                color: Colors.grey[600],
+                              ),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  sourceInfo.path ??
+                                      _getSourceFormatLabel(sourceInfo.format),
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.grey[600],
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 1,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  _getDataTypeLabel(sourceInfo.dataType),
+                                  style: TextStyle(
+                                    fontSize: 9,
+                                    color: Colors.grey[700],
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ],
                     ),
                   ),
                 ],
               ),
-            ],
-          ],
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildLoadButton(context),
-            IconButton(
-              icon: const Icon(Icons.edit_attributes),
-              onPressed: onEdit,
-              tooltip: 'Edit properties',
             ),
-            _buildExportButton(context),
-            IconButton(
-              icon: const Icon(Icons.delete, color: Colors.red),
-              onPressed: onDelete,
-              tooltip: 'Delete Graphic',
+
+            const SizedBox(width: 12),
+
+            // Right part - Action buttons (expands to fill remaining space)
+            Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildLoadButton(context),
+                      _buildExportButton(context),
+                      IconButton(
+                        icon: const Icon(Icons.edit_attributes),
+                        onPressed: onEdit,
+                        tooltip: 'Edit properties',
+                        color: Colors.blue[700],
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: onDelete,
+                        tooltip: 'Delete Graphic',
+                        color: Colors.red[700],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
