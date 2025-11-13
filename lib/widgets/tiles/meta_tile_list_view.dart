@@ -130,7 +130,7 @@ class MetaTileListView extends StatelessWidget {
               // Show success message
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Unmapped tiles loaded to graphics'),
+                  content: Text('Unmapped tiles saved to graphics'),
                   duration: Duration(seconds: 2),
                 ),
               );
@@ -209,6 +209,13 @@ class MetaTileListView extends StatelessWidget {
                         sourceMetaTile,
                         tileInfo.sourceName!,
                         tileInfo.origin,
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${sourceMetaTile.name} tiles saved to graphics'),
+                          duration: const Duration(seconds: 2),
+                        ),
                       );
                     },
                     icon: const Icon(Icons.arrow_circle_right),
