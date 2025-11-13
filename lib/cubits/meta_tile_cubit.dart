@@ -243,10 +243,10 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   }
 
   /// Add tiles from graphics data at specified origin
-  void addTileAtOrigin(List<int> data, String sourceName, int tileOrigin) {
+  void addTileAtOrigin(MetaTile metaTile, int tileOrigin) {
     final currentState = state;
     final tileSize = currentState.height * currentState.width;
-    final numTiles = data.length ~/ tileSize;
+    final numTiles = metaTile.data.length ~/ tileSize;
 
     // Ensure our tile info list is large enough
     while (_tileInfoList.length < currentState.data.length ~/ tileSize) {
@@ -272,16 +272,17 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
       // Copy tile data
       for (int j = 0; j < tileSize; j++) {
         if (dataStartIndex + j < newData.length &&
-            sourceStartIndex + j < data.length) {
-          newData[dataStartIndex + j] = data[sourceStartIndex + j];
+            sourceStartIndex + j < metaTile.data.length) {
+          newData[dataStartIndex + j] = metaTile.data[sourceStartIndex + j];
         }
       }
 
       // Update tile info (overwrite existing info)
       _tileInfoList[tileIndex] = TileInfo(
-        sourceName: sourceName,
+        sourceName: metaTile.name,
         sourceIndex: i,
         origin: tileOrigin,
+        sourceInfo: metaTile.sourceInfo
       );
     }
 

@@ -328,9 +328,8 @@ class _GraphicListTile extends StatelessWidget {
 
       // Add tile to the collection with the specified origin
       context.read<MetaTileCubit>().addTileAtOrigin(
-        metaTile.data,
-        metaTile.name,
-        tileOrigin,
+        metaTile,
+        tileOrigin
       );
 
       // Set the tile name for the app state

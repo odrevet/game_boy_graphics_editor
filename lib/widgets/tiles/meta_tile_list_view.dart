@@ -203,6 +203,7 @@ class MetaTileListView extends StatelessWidget {
                         width: 8, // metaTile.width,
                         data: sourceTileData,
                         name: tileInfo.sourceName,
+                        sourceInfo: tileInfo.sourceInfo
                       );
 
                       // Commit with the extracted source-specific data
