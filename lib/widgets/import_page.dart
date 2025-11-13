@@ -33,9 +33,9 @@ class _ImportPageState extends State<ImportPage> {
 
   String _getDefaultParseOption(Graphics graphic) {
     final name = graphic.name.toLowerCase();
-    if (name.endsWith('tiles') || name.endsWith('tile')) {
+    if (name.endsWith('tiles')) {
       return 'Tiles';
-    } else if (name.endsWith('map') || name.endsWith('maps')) {
+    } else if (name.endsWith('map')) {
       return 'Background';
     } else {
       return 'Tiles';
@@ -84,13 +84,22 @@ class _ImportPageState extends State<ImportPage> {
 
                           // Convert graphics to their appropriate types based on parseOptions
                           final graphicsToImport = selectedGraphics.map((
-                            graphic,
-                          ) {
+                              graphic,
+                              ) {
+                            // Strip _map or _tiles from the name
+                            String cleanedName = graphic.name;
+                            if (cleanedName.endsWith('_map')) {
+                              cleanedName = cleanedName.substring(0, cleanedName.length - 4);
+                            } else if (cleanedName.endsWith('_tiles')) {
+                              cleanedName = cleanedName.substring(0, cleanedName.length - 6);
+                            }
+
                             final parseType =
                                 parseOptions[graphic] ??
-                                _getDefaultParseOption(graphic);
+                                    _getDefaultParseOption(graphic);
                             if (parseType == 'Background') {
                               final bg = Background.fromGraphics(graphic);
+                              bg.name = cleanedName; // Set cleaned name
                               bg.sourceInfo =
                                   graphic.sourceInfo; // Preserve source info
                               return bg;
@@ -101,6 +110,7 @@ class _ImportPageState extends State<ImportPage> {
                                 targetWidth: targetWidth,
                                 targetHeight: targetHeight,
                               );
+                              mt.name = cleanedName; // Set cleaned name
                               mt.sourceInfo =
                                   graphic.sourceInfo; // Preserve source info
                               return mt;
