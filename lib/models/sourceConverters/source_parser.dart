@@ -1,6 +1,8 @@
 import 'package:petitparser/petitparser.dart';
 
+import '../graphics/background.dart';
 import '../graphics/graphics.dart';
+import '../graphics/meta_tile.dart';
 import '../source_info.dart';
 
 class SourceParser {
@@ -208,10 +210,19 @@ class SourceParser {
 
     // Parse all arrays to find the one matching our graphic
     final allArrays = parseAllArrays(sourceContent);
+
+    // Add back the suffix based on graphic type
+    String nameToSearch = graphic.name;
+    if (graphic is MetaTile) {
+      nameToSearch = '${graphic.name}_tiles';
+    } else if (graphic is Background) {
+      nameToSearch = '${graphic.name}_map';
+    }
+
     final matchingArray = allArrays.firstWhere(
-      (arr) => arr.name == graphic.name,
+          (arr) => arr.name == nameToSearch,
       orElse: () =>
-          throw Exception('Array ${graphic.name} not found in source'),
+      throw Exception('Array $nameToSearch not found in source'),
     );
 
     // Extract the original array definition substring
