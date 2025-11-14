@@ -334,4 +334,14 @@ class SourceParser {
       sourceInfo: graphic.sourceInfo!.copyWith(content: newSource),
     );
   }
+
+  // read the defines from source, using regexp
+  Map<String, int> readDefinesFromSource(String source) {
+    Map<String, int> defines = {};
+    RegExp regExp = RegExp(r"#define (\w+) (\d+)");
+    for (Match match in regExp.allMatches(source)) {
+      defines[match.group(1)!] = int.parse(match.group(2)!);
+    }
+    return defines;
+  }
 }

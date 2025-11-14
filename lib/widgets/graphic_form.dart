@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:game_boy_graphics_editor/models/sourceConverters/source_parser.dart';
 
 import '../models/file_picker_utils.dart';
-import '../models/sourceConverters/gbdk_tile_converter.dart';
 
 class GraphicForm extends StatefulWidget {
   final String title;
@@ -195,7 +195,7 @@ class GraphicFormState extends State<GraphicForm> {
   }
 
   void _parseAndSetProperties(String source) {
-    Map<String, int> defines = GBDKTileConverter().readDefinesFromSource(
+    Map<String, int> defines = SourceParser().readDefinesFromSource(
       source,
     );
 

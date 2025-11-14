@@ -16,13 +16,4 @@ abstract class SourceConverter {
   String toHeader(Graphics graphics, String name);
 
   String toSource(Graphics graphics, String name);
-
-  Map<String, int> readDefinesFromSource(String source) {
-    Map<String, int> defines = {};
-    RegExp regExp = RegExp(r"#define (\w+) (\d+)");
-    for (Match match in regExp.allMatches(source)) {
-      defines[match.group(1)!] = int.parse(match.group(2)!);
-    }
-    return defines;
-  }
 }
