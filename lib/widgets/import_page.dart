@@ -692,7 +692,49 @@ class _ImportPageState extends State<ImportPage> {
               final source = await readStringFromPlatformFile(platformFile);
               final parser = SourceParser();
               final defines = parser.readDefinesFromSource(source);
-              print(defines);
+
+              // Apply defines to matching graphics
+              if (graphics != null && defines.isNotEmpty) {
+                for (var i = 0; i < graphics.length; i++) {
+                  final graphic = graphics[i];
+                  var graphicName = graphic.name;
+
+                  // Remove _tiles or _map suffix if present
+                  if (graphicName.endsWith('_tiles')) {
+                    graphicName = graphicName.substring(0, graphicName.length - 6);
+                  } else if (graphicName.endsWith('_map')) {
+                    graphicName = graphicName.substring(0, graphicName.length - 4);
+                  }
+
+                  // Look for matching defines for this graphic
+                  final widthKey = '${graphicName}_WIDTH';
+                  final heightKey = '${graphicName}_HEIGHT';
+                  final tileOriginKey = '${graphicName}_TILE_ORIGIN';
+
+                  int? newWidth;
+                  int? newHeight;
+                  int? newTileOrigin;
+
+                  if (defines.containsKey(widthKey)) {
+                    newWidth = int.tryParse(defines[widthKey].toString());
+                  }
+                  if (defines.containsKey(heightKey)) {
+                    newHeight = int.tryParse(defines[heightKey].toString());
+                  }
+                  if (defines.containsKey(tileOriginKey)) {
+                    newTileOrigin = int.tryParse(defines[tileOriginKey].toString());
+                  }
+
+                  // Update graphic if any properties were found
+                  if (newWidth != null || newHeight != null || newTileOrigin != null) {
+                    graphics[i] = graphic.copyWith(
+                      width: newWidth,
+                      height: newHeight,
+                      tileOrigin: newTileOrigin,
+                    );
+                  }
+                }
+              }
             }
           }
         }
