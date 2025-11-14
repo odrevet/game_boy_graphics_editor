@@ -30,15 +30,6 @@ Future<String> readStringFromPlatformFile(PlatformFile platformFile) async {
   }
 }
 
-Future<List<int>> readBinFromFilePickerResult(FilePickerResult filePickerResult) async {
-  if (kIsWeb) {
-    return filePickerResult.files.single.bytes!;
-  } else {
-    File file = File(filePickerResult.files.single.path!);
-    return await file.readAsBytes();
-  }
-}
-
 Future<List<int>> readBinFromPlatformFile(PlatformFile platformFile) async {
   if (kIsWeb) {
     return platformFile.bytes!;

@@ -68,14 +68,12 @@ Future<List<Graphics>?> onImport(
     BuildContext context,
     String type,
     String compression,
+    FilePickerResult filePickerResult
     ) async {
-  final result = await selectFile(['*']);
-  if (result == null) return null;
-
   // Handle multiple files
   final allGraphics = <Graphics>[];
 
-  for (var platformFile in result.files) {
+  for (var platformFile in filePickerResult.files) {
     final filePath = platformFile.path!;
     final fileName = platformFile.name;
 

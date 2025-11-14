@@ -8,9 +8,11 @@ import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_display.dart';
 import '../cubits/app_state_cubit.dart';
 import '../cubits/graphics_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
+import '../models/file_picker_utils.dart';
 import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
 import '../models/graphics/meta_tile.dart';
+import '../models/sourceConverters/source_parser.dart';
 import 'graphic_form.dart';
 
 class ImportPage extends StatefulWidget {
@@ -677,10 +679,23 @@ class _ImportPageState extends State<ImportPage> {
   }
 
   void _handleImport() async {
-    List<Graphics>? elements;
+    List<Graphics>? graphics;
     switch (importSource) {
       case 'File':
-        elements = await onImport(context, type, compression);
+        final filePickerResult = await selectFile(['*']);
+        if (filePickerResult != null) {
+          graphics = await onImport(context, type, compression, filePickerResult);
+
+          // also search for properties and apply to matching graphic by name
+          if(compression == 'none' && type != 'Binary') {
+            for (var platformFile in filePickerResult.files) {
+              final source = await readStringFromPlatformFile(platformFile);
+              final parser = SourceParser();
+              final defines = parser.readDefinesFromSource(source);
+              print(defines);
+            }
+          }
+        }
         break;
       case 'URL':
         if (!kIsWeb) {
@@ -689,15 +704,15 @@ class _ImportPageState extends State<ImportPage> {
         }
         break;
       case 'Clipboard':
-        elements = await onImportFromClipboard(context, type, compression);
+        graphics = await onImportFromClipboard(context, type, compression);
         break;
     }
 
-    if (elements != null && elements.isNotEmpty) {
+    if (graphics != null && graphics.isNotEmpty) {
       setState(() {
-        graphicsPreview.addAll(elements as Iterable<Graphics>);
-        selectedGraphics.addAll(elements as Iterable<Graphics>);
-        for (final graphic in elements!) {
+        graphicsPreview.addAll(graphics as Iterable<Graphics>);
+        selectedGraphics.addAll(graphics as Iterable<Graphics>);
+        for (final graphic in graphics!) {
           parseOptions[graphic] ??= _getDefaultParseOption(graphic);
         }
       });
