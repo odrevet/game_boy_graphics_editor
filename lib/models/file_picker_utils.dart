@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 Future<FilePickerResult?> selectFile(List<String> allowedExtensions) async =>
     await FilePicker.platform.pickFiles(
       type: FileType.custom,
+      allowMultiple: true,
       allowedExtensions: allowedExtensions,
     );
 

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,35 +65,60 @@ Future<List<Graphics>?> onImportHttp(
 }
 
 Future<List<Graphics>?> onImport(
-  BuildContext context,
-  String type,
-  String compression,
-) async {
+    BuildContext context,
+    String type,
+    String compression,
+    ) async {
   final result = await selectFile(['*']);
   if (result == null) return null;
 
-  final filePath = result.files.single.path!;
-  final fileName = result.files.single.name;
+  // Handle multiple files
+  final allGraphics = <Graphics>[];
 
-  if (type == 'Auto') {
-    type = resolveType(fileName);
-  }
+  for (var file in result.files) {
+    final filePath = file.path!;
+    final fileName = file.name;
 
-  if (type == 'Binary') {
-    List<int> data;
-    List<int> originalContent;
+    String currentType = type;
+    if (currentType == 'Auto') {
+      currentType = resolveType(fileName);
+    }
 
-    if (compression != 'none') {
-      // From binary with compression
-      originalContent = File(filePath).readAsBytesSync();
-      data = _decompress(filePath, compression, context);
+    if (currentType == 'Binary') {
+      List<int> data;
+      List<int> originalContent;
 
-      if (data.isNotEmpty) {
+      if (compression != 'none') {
+        // From binary with compression
+        originalContent = File(filePath).readAsBytesSync();
+        data = _decompress(filePath, compression, context);
+
+        if (data.isNotEmpty) {
+          final sourceInfo = SourceInfo(
+            format: SourceFormat.file,
+            dataType: DataType.binary,
+            path: filePath,
+            content: originalContent,
+          );
+
+          var graphics = Graphics(
+            name: fileName,
+            data: data,
+            sourceInfo: sourceInfo,
+          );
+          allGraphics.add(graphics);
+        }
+      } else {
+        // From binary - create FilePickerResult for single file
+        final singleFileResult = FilePickerResult([file]);
+        final bin = await readBin(singleFileResult);
+        data = convertBytesToDecimals(bin);
+
         final sourceInfo = SourceInfo(
           format: SourceFormat.file,
           dataType: DataType.binary,
           path: filePath,
-          content: originalContent,
+          content: bin,
         );
 
         var graphics = Graphics(
@@ -100,49 +126,33 @@ Future<List<Graphics>?> onImport(
           data: data,
           sourceInfo: sourceInfo,
         );
-        return [graphics];
+        allGraphics.add(graphics);
       }
     } else {
-      // From binary
-      final bin = await readBin(result);
-      data = convertBytesToDecimals(bin);
+      // From source - create FilePickerResult for single file
+      final singleFileResult = FilePickerResult([file]);
+      final source = await readString(singleFileResult);
+      final parser = SourceParser();
+      final graphicsElements = parser.parseAllArrays(source);
 
+      // Create single SourceInfo shared by all graphics from this source file
       final sourceInfo = SourceInfo(
         format: SourceFormat.file,
-        dataType: DataType.binary,
+        dataType: DataType.sourceCode,
         path: filePath,
-        content: bin,
+        content: source,
       );
 
-      var graphics = Graphics(
-        name: fileName,
-        data: data,
-        sourceInfo: sourceInfo,
-      );
-      return [graphics];
+      // All graphics from the same file reference the same SourceInfo instance
+      for (var graphic in graphicsElements) {
+        graphic.sourceInfo = sourceInfo;
+      }
+
+      allGraphics.addAll(graphicsElements);
     }
-  } else {
-    // From source
-    final source = await readString(result);
-    final parser = SourceParser();
-    final graphicsElements = parser.parseAllArrays(source);
-
-    // Create single SourceInfo shared by all graphics from this source file
-    final sourceInfo = SourceInfo(
-      format: SourceFormat.file,
-      dataType: DataType.sourceCode,
-      path: filePath,
-      content: source,
-    );
-
-    // All graphics from the same file reference the same SourceInfo instance
-    for (var graphic in graphicsElements) {
-      graphic.sourceInfo = sourceInfo;
-    }
-
-    return graphicsElements;
   }
-  return null;
+
+  return allGraphics.isEmpty ? null : allGraphics;
 }
 
 Future<List<Graphics>?> onImportFromClipboard(

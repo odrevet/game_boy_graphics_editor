@@ -110,31 +110,68 @@ class MetaTileListView extends StatelessWidget {
           const Expanded(child: Divider(indent: 8)),
           IconButton(
             onPressed: () {
-              // Create a MetaTile with all unmapped tiles
+              // Get the MetaTileCubit and tile info list
               final metaTileCubit = context.read<MetaTileCubit>();
               final currentMetaTile = metaTileCubit.state;
+              final tileInfoList = metaTileCubit.getTileInfoList();
 
-              var unmappedMetaTile = MetaTile(
-                height: currentMetaTile.height,
-                width: currentMetaTile.width,
-                data: currentMetaTile.data,
-                name: "Unmapped",
-              );
+              // Calculate tile size
+              final tileSize = currentMetaTile.height * currentMetaTile.width;
 
-              // Commit unmapped tiles to graphics
-              context.read<GraphicsCubit>().commitMetaTileToGraphics(
-                unmappedMetaTile,
-                "Unmapped Graphics",
-                0, // Default origin for unmapped tiles
-              );
+              // Collect ONLY unmapped tile data
+              List<int> unmappedData = [];
+              for (int index = 0; index < tileInfoList.length; index++) {
+                TileInfo tileInfo = tileInfoList[index];
 
-              // Show success message
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Unmapped tiles saved to graphics'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+                // Check if this tile is unmapped
+                bool isUnmappedTile =
+                    tileInfo.sourceName == null || tileInfo.sourceName!.isEmpty;
+
+                if (isUnmappedTile) {
+                  // Extract this tile's data
+                  final startIndex = index * tileSize;
+                  final endIndex = startIndex + tileSize;
+
+                  if (endIndex <= currentMetaTile.data.length) {
+                    unmappedData.addAll(
+                        currentMetaTile.data.sublist(startIndex, endIndex)
+                    );
+                  }
+                }
+              }
+
+              // Only commit if there are unmapped tiles
+              if (unmappedData.isNotEmpty) {
+                var unmappedMetaTile = MetaTile(
+                  height: currentMetaTile.height,
+                  width: currentMetaTile.width,
+                  data: unmappedData,
+                  name: "Unmapped",
+                );
+
+                // Commit unmapped tiles to graphics
+                context.read<GraphicsCubit>().commitMetaTileToGraphics(
+                  unmappedMetaTile,
+                  "Unmapped Graphics",
+                  0, // Default origin for unmapped tiles
+                );
+
+                // Show success message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Unmapped tiles saved to graphics'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              } else {
+                // Show message if no unmapped tiles found
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('No unmapped tiles to save'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              }
             },
             icon: const Icon(Icons.arrow_circle_right),
           ),
