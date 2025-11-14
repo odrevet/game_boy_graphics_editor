@@ -174,7 +174,7 @@ class GraphicFormState extends State<GraphicForm> {
     final result = await selectFile(['*']);
     if (result == null) return null;
 
-    final source = await readString(result);
+    final source = await readStringFromFilePickerResult(result);
     _parseAndSetProperties(source);
   }
 

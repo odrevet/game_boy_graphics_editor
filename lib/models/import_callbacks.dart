@@ -75,9 +75,9 @@ Future<List<Graphics>?> onImport(
   // Handle multiple files
   final allGraphics = <Graphics>[];
 
-  for (var file in result.files) {
-    final filePath = file.path!;
-    final fileName = file.name;
+  for (var platformFile in result.files) {
+    final filePath = platformFile.path!;
+    final fileName = platformFile.name;
 
     String currentType = type;
     if (currentType == 'Auto') {
@@ -109,9 +109,8 @@ Future<List<Graphics>?> onImport(
           allGraphics.add(graphics);
         }
       } else {
-        // From binary - create FilePickerResult for single file
-        final singleFileResult = FilePickerResult([file]);
-        final bin = await readBin(singleFileResult);
+        // From binary
+        final bin = await readBinFromPlatformFile(platformFile);
         data = convertBytesToDecimals(bin);
 
         final sourceInfo = SourceInfo(
@@ -129,9 +128,8 @@ Future<List<Graphics>?> onImport(
         allGraphics.add(graphics);
       }
     } else {
-      // From source - create FilePickerResult for single file
-      final singleFileResult = FilePickerResult([file]);
-      final source = await readString(singleFileResult);
+      // From source
+      final source = await readStringFromPlatformFile(platformFile);
       final parser = SourceParser();
       final graphicsElements = parser.parseAllArrays(source);
 
