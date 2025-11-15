@@ -358,7 +358,7 @@ class _ImportPageState extends State<ImportPage> {
                                 child: ElevatedButton.icon(
                                   onPressed: _handleImport,
                                   icon: const Icon(Icons.arrow_upward),
-                                  label: const Text('Import'),
+                                  label: const Text('Read'),
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
                                       vertical: 12,
