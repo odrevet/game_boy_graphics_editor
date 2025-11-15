@@ -258,7 +258,7 @@ class _ImportPageState extends State<ImportPage> {
                             ],
                           ),
                           const SizedBox(height: 16),
-                          
+
                           CheckboxListTile(
                             title: const Text(
                               'Load on import',

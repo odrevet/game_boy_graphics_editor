@@ -6,7 +6,6 @@ import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import '../cubits/app_state_cubit.dart';
 import '../cubits/background_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
-import 'graphics/background.dart';
 import 'graphics/graphics.dart';
 
 
@@ -63,18 +62,8 @@ bool loadMetaTile(Graphics graphics, BuildContext context, int tileOrigin) {
 
 void loadBackground(Graphics graphics, BuildContext context) {
   try {
-    Background background;
-    if (graphics is Background) {
-      background = graphics;
-    } else {
-      background = Background.fromGraphics(graphics);
-    }
-
-    context.read<BackgroundCubit>().setWidth(background.width);
-    context.read<BackgroundCubit>().setHeight(background.height);
-    context.read<BackgroundCubit>().setData(background.data);
-    context.read<BackgroundCubit>().setName(background.name);
-    context.read<AppStateCubit>().setBackgroundName(background.name);
+    context.read<BackgroundCubit>().loadFromGraphics(graphics);
+    context.read<AppStateCubit>().setBackgroundName(graphics.name);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
