@@ -6,7 +6,6 @@ import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 import '../../cubits/graphics_cubit.dart';
 import '../../models/graphics/meta_tile.dart';
 import '../../models/sourceConverters/converter_utils.dart';
-import '../../models/tile_info.dart';
 import 'meta_tile_display.dart';
 
 class MetaTileListView extends StatelessWidget {
@@ -22,16 +21,16 @@ class MetaTileListView extends StatelessWidget {
   });
 
   Widget _buildTileListItem(
-    BuildContext context,
-    int index,
-    TileInfo tileInfo,
-    int tileOrigin,
-    var metaTile,
-  ) {
+      BuildContext context,
+      int index,
+      MetaTile? tileInfo,
+      int tileOrigin,
+      var metaTile,
+      ) {
     String title = "${index.toString()} ${decimalToHex(index, prefix: true)}";
     if (tileOrigin > 0) {
       title +=
-          "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
+      "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
     }
 
     // Calculate the correct aspect ratio based on MetaTile dimensions
@@ -59,7 +58,7 @@ class MetaTileListView extends StatelessWidget {
     );
   }
 
-  void _showTileInfo(BuildContext context, int index, TileInfo tileInfo) {
+  void _showTileInfo(BuildContext context, int index, MetaTile? tileInfo) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -70,10 +69,10 @@ class MetaTileListView extends StatelessWidget {
           children: [
             Text("Index: $index"),
             Text("Hex: ${decimalToHex(index, prefix: true)}"),
-            if (tileInfo.sourceName != null)
-              Text("Source: ${tileInfo.sourceName}"),
-            if (tileInfo.sourceIndex != null)
-              Text("Source Index: ${tileInfo.sourceIndex}"),
+            if (tileInfo != null && tileInfo.name.isNotEmpty)
+              Text("Source: ${tileInfo.name}"),
+            if (tileInfo != null)
+              Text("Source Origin: ${tileInfo.tileOrigin}"),
           ],
         ),
         actions: [
@@ -110,22 +109,21 @@ class MetaTileListView extends StatelessWidget {
           const Expanded(child: Divider(indent: 8)),
           IconButton(
             onPressed: () {
-              // Get the MetaTileCubit and tile info list
+              // Get the MetaTileCubit and meta tiles info
               final metaTileCubit = context.read<MetaTileCubit>();
               final currentMetaTile = metaTileCubit.state;
-              final tileInfoList = metaTileCubit.getTileInfoList();
+              final metaTilesInfo = metaTileCubit.getMetaTilesInfo();
 
               // Calculate tile size
               final tileSize = currentMetaTile.height * currentMetaTile.width;
 
               // Collect ONLY unmapped tile data
               List<int> unmappedData = [];
-              for (int index = 0; index < tileInfoList.length; index++) {
-                TileInfo tileInfo = tileInfoList[index];
+              for (int index = 0; index < metaTilesInfo.length; index++) {
+                final tileInfo = metaTilesInfo[index];
 
                 // Check if this tile is unmapped
-                bool isUnmappedTile =
-                    tileInfo.sourceName == null || tileInfo.sourceName!.isEmpty;
+                bool isUnmappedTile = tileInfo == null || tileInfo.name.isEmpty;
 
                 if (isUnmappedTile) {
                   // Extract this tile's data
@@ -181,35 +179,34 @@ class MetaTileListView extends StatelessWidget {
   }
 
   List<Widget> _buildListItems(
-    BuildContext context,
-    List<TileInfo> tileInfoList,
-    int tileOrigin,
-    var metaTile,
-  ) {
+      BuildContext context,
+      List<MetaTile?> metaTilesInfo,
+      int tileOrigin,
+      var metaTile,
+      ) {
     List<Widget> items = [];
     String? currentSource;
     int? currentOrigin;
     bool hasAddedUnmappedHeader = false;
 
-    for (int index = 0; index < tileInfoList.length; index++) {
-      TileInfo tileInfo = tileInfoList[index];
+    for (int index = 0; index < metaTilesInfo.length; index++) {
+      MetaTile? tileInfo = metaTilesInfo[index];
 
-      // Check if this is an unmapped tile (no source name or empty source name)
-      bool isUnmappedTile =
-          tileInfo.sourceName == null || tileInfo.sourceName!.isEmpty;
+      // Check if this is an unmapped tile (null or no source name)
+      bool isUnmappedTile = tileInfo == null || tileInfo.name.isEmpty;
 
       if (isUnmappedTile) {
-        // Add unmapped header only once and only if we haven't added it yet
+        // Add unmapped header only once
         if (!hasAddedUnmappedHeader) {
           items.add(_buildUnmappedHeader(context, metaTile));
           hasAddedUnmappedHeader = true;
-          currentSource = null; // Reset current source for unmapped section
+          currentSource = null;
           currentOrigin = null;
         }
       } else {
         // Add separator when source changes (for mapped tiles)
-        if (tileInfo.sourceName != currentSource ||
-            tileInfo.origin != currentOrigin) {
+        if (tileInfo.name != currentSource ||
+            tileInfo.tileOrigin != currentOrigin) {
           items.add(
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -217,7 +214,7 @@ class MetaTileListView extends StatelessWidget {
                 children: [
                   const SizedBox(width: 8),
                   Text(
-                    tileInfo.sourceName!,
+                    tileInfo.name,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.grey,
@@ -231,23 +228,23 @@ class MetaTileListView extends StatelessWidget {
                       final metaTileCubit = context.read<MetaTileCubit>();
                       final sourceTileData = metaTileCubit
                           .extractSourceTileData(
-                            tileInfo.sourceName!,
-                            tileInfo.origin,
-                          );
+                        tileInfo.name,
+                        tileInfo.tileOrigin,
+                      );
 
                       var sourceMetaTile = MetaTile(
-                        height: 8, // metaTile.height,
-                        width: 8, // metaTile.width,
+                        height: 8,
+                        width: 8,
                         data: sourceTileData,
-                        name: tileInfo.sourceName,
-                        sourceInfo: tileInfo.sourceInfo
+                        name: tileInfo.name,
+                        sourceInfo: tileInfo.sourceInfo,
                       );
 
                       // Commit with the extracted source-specific data
                       context.read<GraphicsCubit>().commitMetaTileToGraphics(
                         sourceMetaTile,
-                        tileInfo.sourceName!,
-                        tileInfo.origin,
+                        tileInfo.name,
+                        tileInfo.tileOrigin,
                       );
 
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -263,8 +260,8 @@ class MetaTileListView extends StatelessWidget {
               ),
             ),
           );
-          currentSource = tileInfo.sourceName;
-          currentOrigin = tileInfo.origin;
+          currentSource = tileInfo.name;
+          currentOrigin = tileInfo.tileOrigin;
         }
       }
 
@@ -281,11 +278,11 @@ class MetaTileListView extends StatelessWidget {
   Widget build(BuildContext context) {
     int tileOrigin = context.read<BackgroundCubit>().state.tileOrigin;
     var metaTile = context.read<MetaTileCubit>().state;
-    var tileInfoList = context.read<MetaTileCubit>().getTileInfoList();
+    var metaTilesInfo = context.read<MetaTileCubit>().getMetaTilesInfo();
 
     return ListView(
       shrinkWrap: true,
-      children: _buildListItems(context, tileInfoList, tileOrigin, metaTile),
+      children: _buildListItems(context, metaTilesInfo, tileOrigin, metaTile),
     );
   }
 }

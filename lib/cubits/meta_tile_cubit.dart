@@ -2,14 +2,15 @@ import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:replay_bloc/replay_bloc.dart';
 
 import '../models/sourceConverters/gbdk_tile_converter.dart';
-import '../models/tile_info.dart';
 
 class MetaTileCubit extends ReplayCubit<MetaTile> {
   MetaTileCubit() : super(MetaTile(height: 8, width: 8));
-  List<TileInfo> _tileInfoList = [];
+
+  // Replace TileInfo list with MetaTile list
+  List<MetaTile?> _metaTilesInfo = [];
 
   setData(List<int> data) {
-    _tileInfoList.clear();
+    _metaTilesInfo.clear();
     emit(state.copyWith(data: data));
   }
 
@@ -27,12 +28,12 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   }
 
   fill(
-    int rowIndex,
-    int colIndex,
-    int metaTileIndex,
-    int intensity,
-    int targetColor,
-  ) => emit(
+      int rowIndex,
+      int colIndex,
+      int metaTileIndex,
+      int intensity,
+      int targetColor,
+      ) => emit(
     state.copyWith()
       ..fill(metaTileIndex, intensity, rowIndex, colIndex, targetColor),
   );
@@ -52,8 +53,8 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     var newTile = List.generate(state.width * state.height, (index) => 0);
     tileData.insertAll((index + 1) * state.nbPixel, newTile);
 
-    // Update tile info list
-    _tileInfoList.insert(index + 1, TileInfo(origin: index + 1));
+    // Update meta tiles info list - add null for empty tile
+    _metaTilesInfo.insert(index + 1, null);
 
     emit(state.copyWith(data: tileData));
   }
@@ -65,9 +66,9 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
       tileIndex * state.nbPixel + state.nbPixel,
     );
 
-    // Update tile info list
-    if (tileIndex < _tileInfoList.length) {
-      _tileInfoList.removeAt(tileIndex);
+    // Update meta tiles info list
+    if (tileIndex < _metaTilesInfo.length) {
+      _metaTilesInfo.removeAt(tileIndex);
     }
 
     emit(state.copyWith(data: tileData));
@@ -90,11 +91,9 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
         }
       }
 
-      // Keep the tile info but reset source information if desired
-      if (tileIndex < _tileInfoList.length) {
-        _tileInfoList[tileIndex] = TileInfo(
-          origin: _tileInfoList[tileIndex].origin,
-        );
+      // Clear the meta tile info for this position
+      if (tileIndex < _metaTilesInfo.length) {
+        _metaTilesInfo[tileIndex] = null;
       }
 
       emit(currentState.copyWith(data: newData));
@@ -230,13 +229,13 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   }
 
   void rectangle(
-    int metaTileIndex,
-    int intensity,
-    int xFrom,
-    int yFrom,
-    int xTo,
-    int yTo,
-  ) {
+      int metaTileIndex,
+      int intensity,
+      int xFrom,
+      int yFrom,
+      int xTo,
+      int yTo,
+      ) {
     MetaTile metaTile = state.copyWith();
     metaTile.rectangle(metaTileIndex, intensity, xFrom, yFrom, xTo, yTo);
     emit(metaTile);
@@ -248,9 +247,9 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     final tileSize = currentState.height * currentState.width;
     final numTiles = metaTile.data.length ~/ tileSize;
 
-    // Ensure our tile info list is large enough
-    while (_tileInfoList.length < currentState.data.length ~/ tileSize) {
-      _tileInfoList.add(TileInfo(origin: _tileInfoList.length));
+    // Ensure our meta tiles info list is large enough
+    while (_metaTilesInfo.length < currentState.data.length ~/ tileSize) {
+      _metaTilesInfo.add(null);
     }
 
     // Extend data if necessary to accommodate new tiles
@@ -260,7 +259,7 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     while (newData.length < requiredSize) {
       // Add empty tiles (filled with 0s)
       newData.addAll(List.filled(tileSize, 0));
-      _tileInfoList.add(TileInfo(origin: _tileInfoList.length));
+      _metaTilesInfo.add(null);
     }
 
     // Copy the new tile data starting at the specified origin
@@ -277,13 +276,8 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
         }
       }
 
-      // Update tile info (overwrite existing info)
-      _tileInfoList[tileIndex] = TileInfo(
-        sourceName: metaTile.name,
-        sourceIndex: i,
-        origin: tileOrigin,
-        sourceInfo: metaTile.sourceInfo
-      );
+      // Store the source MetaTile info with the tile origin
+      _metaTilesInfo[tileIndex] = metaTile.copyWith(tileOrigin: tileOrigin);
     }
 
     emit(
@@ -301,9 +295,11 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     List<int> sourceTiles = [];
 
     // Find all tiles that belong to this source
-    for (int i = 0; i < _tileInfoList.length; i++) {
-      final tileInfo = _tileInfoList[i];
-      if (tileInfo.sourceName == sourceName && tileInfo.origin == tileOrigin) {
+    for (int i = 0; i < _metaTilesInfo.length; i++) {
+      final metaTileInfo = _metaTilesInfo[i];
+      if (metaTileInfo != null &&
+          metaTileInfo.name == sourceName &&
+          metaTileInfo.tileOrigin == tileOrigin) {
         final startIndex = i * tileSize;
         final endIndex = startIndex + tileSize;
 
@@ -319,17 +315,17 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
     );
   }
 
-  /// Get tile information list
-  List<TileInfo> getTileInfoList() {
+  /// Get meta tiles info list
+  List<MetaTile?> getMetaTilesInfo() {
     final tileSize = state.height * state.width;
     final totalTiles = state.data.length ~/ tileSize;
 
     // Ensure info list matches current tile count
-    while (_tileInfoList.length < totalTiles) {
-      _tileInfoList.add(TileInfo(origin: _tileInfoList.length));
+    while (_metaTilesInfo.length < totalTiles) {
+      _metaTilesInfo.add(null);
     }
 
-    return List.from(_tileInfoList);
+    return List.from(_metaTilesInfo);
   }
 
   /// Remove tile at specific index (clear tile data)
@@ -349,9 +345,9 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
         }
       }
 
-      // Update tile info
-      if (index < _tileInfoList.length) {
-        _tileInfoList[index] = TileInfo(origin: index);
+      // Clear meta tile info
+      if (index < _metaTilesInfo.length) {
+        _metaTilesInfo[index] = null;
       }
 
       emit(
@@ -366,24 +362,49 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
 
   /// Get tiles loaded at specific origin
   List<int> getTilesAtOrigin(int origin) {
-    return _tileInfoList
+    return _metaTilesInfo
         .asMap()
         .entries
         .where(
           (entry) =>
-              entry.value.origin == origin && entry.value.sourceName != null,
-        )
+      entry.value != null && entry.value!.tileOrigin == origin,
+    )
         .map((entry) => entry.key)
         .toList();
   }
 
   /// Get all unique origins
   List<int> getUniqueOrigins() {
-    return _tileInfoList
-        .where((info) => info.sourceName != null)
-        .map((info) => info.origin)
+    return _metaTilesInfo
+        .where((info) => info != null)
+        .map((info) => info!.tileOrigin)
         .toSet()
         .toList()
       ..sort();
+  }
+
+  /// Check if a tile at index is unmapped (null or has no name)
+  bool isTileUnmapped(int index) {
+    if (index >= _metaTilesInfo.length) return true;
+    final info = _metaTilesInfo[index];
+    return info == null || info.name.isEmpty;
+  }
+
+  /// Get the source name for a tile at index
+  String? getTileSourceName(int index) {
+    if (index >= _metaTilesInfo.length) return null;
+    return _metaTilesInfo[index]?.name;
+  }
+
+  /// Get the tile origin for a tile at index
+  int? getTileOrigin(int index) {
+    if (index >= _metaTilesInfo.length) return null;
+    return _metaTilesInfo[index]?.tileOrigin;
+  }
+
+  /// Get the source info for a tile at index
+  dynamic getTileSourceInfo(int index) {
+    if (index >= _metaTilesInfo.length) return null;
+    return _metaTilesInfo[index]?.sourceInfo;
   }
 }
