@@ -9,6 +9,7 @@ class BackgroundCubit extends ReplayCubit<Background> {
 
   // Load background data from a Graphics object
   void loadFromGraphics(Graphics graphics) {
+    graphics.tileOrigin = 0; // WIP
     emit(graphics as Background);
   }
 
