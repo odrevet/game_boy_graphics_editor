@@ -9,25 +9,7 @@ class BackgroundCubit extends ReplayCubit<Background> {
 
   // Load background data from a Graphics object
   void loadFromGraphics(Graphics graphics) {
-    emit(
-      Background(
-        height: graphics.height,
-        width: graphics.width,
-        data: List<int>.from(graphics.data),
-        //tileOrigin: graphics.tileOrigin,  // WIP
-      ),
-    );
-  }
-
-  // Convert current background to Graphics format for committing back
-  Graphics toGraphics() {
-    return Graphics(
-      height: state.height,
-      width: state.width,
-      data: List<int>.from(state.data),
-      tileOrigin: state.tileOrigin,
-      name: '',
-    );
+    emit(graphics as Background);
   }
 
   setData(List<int> data) {
