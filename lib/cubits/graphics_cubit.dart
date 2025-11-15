@@ -55,7 +55,6 @@ class GraphicsCubit extends Cubit<GraphicsState> {
   // Commit background data to graphics
   void commitBackgroundToGraphics(Background background) {
     int? targetIndex = findGraphicByName(background.name);
-    print("SEARCH ${background.name} -> ${targetIndex}");
     if (targetIndex != null) {
       // Update existing graphic at specified index
       updateGraphicAt(targetIndex, background);
@@ -85,14 +84,13 @@ class GraphicsCubit extends Cubit<GraphicsState> {
     return null;
   }
 
-  // Commit MetaTile data to graphics - this is the key synchronization method
+  // Commit MetaTile data to graphics
   void commitMetaTileToGraphics(
     MetaTile metaTile,
     String sourceName,
     int tileOrigin,
   ) {
     int? targetIndex = findGraphicByNameAndOrigin(sourceName, tileOrigin);
-    //final graphics = metaTile.copyWith();
     if (targetIndex != null) {
       // Update existing graphic at specified index
       updateGraphicAt(targetIndex, metaTile);

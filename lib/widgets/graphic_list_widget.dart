@@ -4,12 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_display.dart';
 
-import '../cubits/app_state_cubit.dart';
-import '../cubits/background_cubit.dart';
 import '../cubits/graphics_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
 import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
+import '../models/load_callbacks.dart';
 import '../models/source_info.dart';
 import '../models/states/graphics_state.dart';
 import 'background/background_preview_dialog.dart';
@@ -307,56 +306,6 @@ class _GraphicListTile extends StatelessWidget {
     }
   }
 
-  bool _addMetaTile(Graphics graphics, BuildContext context, int tileOrigin) {
-    bool hasLoaded = true;
-    try {
-      MetaTile metaTile;
-
-      if (graphics is MetaTile) {
-        metaTile = graphics;
-      } else {
-        final targetWidth = context.read<MetaTileCubit>().state.width;
-        final targetHeight = context.read<MetaTileCubit>().state.height;
-        metaTile = MetaTile.fromGraphics(
-          graphics,
-          targetWidth: targetWidth,
-          targetHeight: targetHeight,
-        );
-      }
-
-      context.read<MetaTileCubit>().addTileAtOrigin(metaTile, tileOrigin);
-      context.read<AppStateCubit>().setTileName(graphics.name);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Successfully loaded "${graphics.name}" as tiles'),
-          backgroundColor: Colors.green,
-          duration: const Duration(seconds: 2),
-        ),
-      );
-    } catch (e) {
-      if (kDebugMode) {
-        print("ERROR $e");
-      }
-      hasLoaded = false;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Failed to load "${graphics.name}" as tiles: ${e.toString()}',
-          ),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 4),
-        ),
-      );
-    }
-
-    if (hasLoaded) {
-      context.read<AppStateCubit>().setSelectedTileIndex(tileOrigin);
-    }
-
-    return hasLoaded;
-  }
 
   void _showTilePreviewDialog(BuildContext context, graphic) {
     final controller = TextEditingController(
@@ -454,48 +403,13 @@ class _GraphicListTile extends StatelessWidget {
             onPressed: () {
               final origin = int.tryParse(controller.text) ?? 0;
               Navigator.of(dialogContext).pop();
-              _addMetaTile(graphic, context, origin);
+              loadMetaTile(graphic, context, origin);
             },
             child: const Text("Add Tiles"),
           ),
         ],
       ),
     );
-  }
-
-  void _loadAsBackground(Graphics graphics, BuildContext context) {
-    try {
-      Background background;
-      if (graphics is Background) {
-        background = graphics;
-      } else {
-        background = Background.fromGraphics(graphics);
-      }
-
-      context.read<BackgroundCubit>().setWidth(background.width);
-      context.read<BackgroundCubit>().setHeight(background.height);
-      context.read<BackgroundCubit>().setData(background.data);
-      context.read<BackgroundCubit>().setName(background.name);
-      context.read<AppStateCubit>().setBackgroundName(background.name);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Successfully loaded "${graphics.name}" as background'),
-          backgroundColor: Colors.green,
-          duration: const Duration(seconds: 2),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Failed to load "${graphics.name}" as background: ${e.toString()}',
-          ),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 4),
-        ),
-      );
-    }
   }
 
   Widget _buildLoadButton(BuildContext context) {
@@ -509,7 +423,7 @@ class _GraphicListTile extends StatelessWidget {
             barrierDismissible: true,
             builder: (context) => BackgroundPreviewDialog(
               graphic: graphic as Background,
-              onLoad: () => _loadAsBackground(graphic, context),
+              onLoad: () => loadBackground(graphic, context),
             ),
           );
         },
@@ -536,7 +450,7 @@ class _GraphicListTile extends StatelessWidget {
             barrierDismissible: true,
             builder: (context) => BackgroundPreviewDialog(
               graphic: Background.fromGraphics(graphic),
-              onLoad: () => _loadAsBackground(graphic, context),
+              onLoad: () => loadBackground(graphic, context),
             ),
           );
         }
