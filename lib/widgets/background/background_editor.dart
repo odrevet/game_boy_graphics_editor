@@ -143,7 +143,10 @@ class _BackgroundEditorState extends State<BackgroundEditor> {
                   showGrid: appState.showGridBackground,
                   metaTile: metaTileState,
                   cellSize: 40 * appState.zoomBackground,
-                  lock: context.read<AppStateCubit>().state.lockScrollBackground,
+                  lock: context
+                      .read<AppStateCubit>()
+                      .state
+                      .lockScrollBackground,
                   onTap: (index) => {
                     if (!appState.lockScrollBackground)
                       {draw(context, index, backgroundState)},

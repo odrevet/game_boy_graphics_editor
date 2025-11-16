@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:game_boy_graphics_editor/models/sourceConverters/source_parser.dart';
+import 'package:game_boy_graphics_editor/models/source_parser.dart';
 
-import '../models/file_picker_utils.dart';
+import '../core/file_picker_utils.dart';
 
 class GraphicForm extends StatefulWidget {
   final String title;
@@ -195,9 +195,7 @@ class GraphicFormState extends State<GraphicForm> {
   }
 
   void _parseAndSetProperties(String source) {
-    Map<String, int> defines = SourceParser().readDefinesFromSource(
-      source,
-    );
+    Map<String, int> defines = SourceParser().readDefinesFromSource(source);
 
     defines.forEach((key, value) {
       if (key.endsWith('TILE_ORIGIN')) {

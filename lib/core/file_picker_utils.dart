@@ -3,14 +3,18 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 
-Future<FilePickerResult?> selectFile(List<String> allowedExtensions, [bool allowMultiple = true]) async =>
-    await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowMultiple: allowMultiple,
-      allowedExtensions: allowedExtensions,
-    );
+Future<FilePickerResult?> selectFile(
+  List<String> allowedExtensions, [
+  bool allowMultiple = true,
+]) async => await FilePicker.platform.pickFiles(
+  type: FileType.custom,
+  allowMultiple: allowMultiple,
+  allowedExtensions: allowedExtensions,
+);
 
-Future<String> readStringFromFilePickerResult(FilePickerResult filePickerResult) async {
+Future<String> readStringFromFilePickerResult(
+  FilePickerResult filePickerResult,
+) async {
   if (kIsWeb) {
     Uint8List? bytes = filePickerResult.files.single.bytes;
     return String.fromCharCodes(bytes!);

@@ -57,15 +57,15 @@ class _BackgroundGridState extends State<BackgroundGrid> {
           verticalDetails: widget.lock
               ? ScrollableDetails.vertical(controller: _verticalController)
               : ScrollableDetails.vertical(
-            controller: _verticalController,
-            physics: const NeverScrollableScrollPhysics(),
-          ),
+                  controller: _verticalController,
+                  physics: const NeverScrollableScrollPhysics(),
+                ),
           horizontalDetails: widget.lock
               ? ScrollableDetails.horizontal(controller: _horizontalController)
               : ScrollableDetails.horizontal(
-            controller: _horizontalController,
-            physics: const NeverScrollableScrollPhysics(),
-          ),
+                  controller: _horizontalController,
+                  physics: const NeverScrollableScrollPhysics(),
+                ),
           cellBuilder: _buildCell,
           columnCount: widget.background.width,
           columnBuilder: _buildColumnSpan,
@@ -83,18 +83,18 @@ class _BackgroundGridState extends State<BackgroundGrid> {
         context.read<MetaTileCubit>().maxTileIndex() + widget.tileOrigin;
     bool valid =
         tileIndex < maxTileIndexWithOrigin &&
-            widget.background.data[mapIndex] - widget.tileOrigin >= 0;
+        widget.background.data[mapIndex] - widget.tileOrigin >= 0;
 
     bool showBorder =
         widget.hoverTileIndexX == vicinity.xIndex &&
-            widget.hoverTileIndexY == vicinity.yIndex;
+        widget.hoverTileIndexY == vicinity.yIndex;
 
     // Generate a unique color for each invalid index
     Color getErrorColor(int index) {
       // Use HSL color space to generate distinct colors
       final hue =
           (widget.background.data[mapIndex] * 137.5) %
-              360; // Golden angle for good distribution
+          360; // Golden angle for good distribution
       return HSLColor.fromAHSL(1.0, hue, 0.7, 0.8).toColor();
     }
 
@@ -107,26 +107,26 @@ class _BackgroundGridState extends State<BackgroundGrid> {
     return TableViewCell(
       child: valid
           ? Container(
-        decoration: showBorder
-            ? BoxDecoration(
-          border: Border.all(color: Colors.red, width: 2.0),
-        )
-            : null,
-        child: MetaTileDisplay(
-          tileData: widget.metaTile.getTileAtIndex(
-            widget.background.data[mapIndex] - widget.tileOrigin,
-          ),
-        ),
-      )
+              decoration: showBorder
+                  ? BoxDecoration(
+                      border: Border.all(color: Colors.red, width: 2.0),
+                    )
+                  : null,
+              child: MetaTileDisplay(
+                tileData: widget.metaTile.getTileAtIndex(
+                  widget.background.data[mapIndex] - widget.tileOrigin,
+                ),
+              ),
+            )
           : Tooltip(
-        message: getErrorMessage(),
-        child: Container(
-          decoration: BoxDecoration(
-            color: getErrorColor(mapIndex),
-            border: Border.all(color: Colors.red, width: 2.0),
-          ),
-        ),
-      ),
+              message: getErrorMessage(),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: getErrorColor(mapIndex),
+                  border: Border.all(color: Colors.red, width: 2.0),
+                ),
+              ),
+            ),
     );
   }
 
@@ -167,15 +167,15 @@ class _BackgroundGridState extends State<BackgroundGrid> {
       }),
       recognizerFactories: <Type, GestureRecognizerFactory>{
         TapGestureRecognizer:
-        GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
+            GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
               () => TapGestureRecognizer(),
               (TapGestureRecognizer t) =>
-          t.onTapDown = (TapDownDetails details) {
-            widget.onTap!(
-              currentRow * widget.background.width + currentCol,
-            );
-          },
-        ),
+                  t.onTapDown = (TapDownDetails details) {
+                    widget.onTap!(
+                      currentRow * widget.background.width + currentCol,
+                    );
+                  },
+            ),
       },
     );
   }

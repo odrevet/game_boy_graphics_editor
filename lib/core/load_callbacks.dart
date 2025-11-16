@@ -6,8 +6,7 @@ import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import '../cubits/app_state_cubit.dart';
 import '../cubits/background_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
-import 'graphics/graphics.dart';
-
+import '../models/graphics/graphics.dart';
 
 bool loadMetaTile(Graphics graphics, BuildContext context, int tileOrigin) {
   bool hasLoaded = true;

@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
 import 'package:game_boy_graphics_editor/cubits/meta_tile_cubit.dart';
 
+import '../../core/converter_utils.dart';
 import '../../cubits/graphics_cubit.dart';
 import '../../models/graphics/meta_tile.dart';
-import '../../models/sourceConverters/converter_utils.dart';
 import 'meta_tile_display.dart';
 
 class MetaTileListView extends StatelessWidget {
@@ -21,16 +21,16 @@ class MetaTileListView extends StatelessWidget {
   });
 
   Widget _buildTileListItem(
-      BuildContext context,
-      int index,
-      MetaTile? tileInfo,
-      int tileOrigin,
-      var metaTile,
-      ) {
+    BuildContext context,
+    int index,
+    MetaTile? tileInfo,
+    int tileOrigin,
+    var metaTile,
+  ) {
     String title = "${index.toString()} ${decimalToHex(index, prefix: true)}";
     if (tileOrigin > 0) {
       title +=
-      "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
+          "\n${(index + tileOrigin).toString()} ${decimalToHex(index + tileOrigin, prefix: true)}";
     }
 
     // Calculate the correct aspect ratio based on MetaTile dimensions
@@ -71,8 +71,7 @@ class MetaTileListView extends StatelessWidget {
             Text("Hex: ${decimalToHex(index, prefix: true)}"),
             if (tileInfo != null && tileInfo.name.isNotEmpty)
               Text("Source: ${tileInfo.name}"),
-            if (tileInfo != null)
-              Text("Source Origin: ${tileInfo.tileOrigin}"),
+            if (tileInfo != null) Text("Source Origin: ${tileInfo.tileOrigin}"),
           ],
         ),
         actions: [
@@ -132,7 +131,7 @@ class MetaTileListView extends StatelessWidget {
 
                   if (endIndex <= currentMetaTile.data.length) {
                     unmappedData.addAll(
-                        currentMetaTile.data.sublist(startIndex, endIndex)
+                      currentMetaTile.data.sublist(startIndex, endIndex),
                     );
                   }
                 }
@@ -179,11 +178,11 @@ class MetaTileListView extends StatelessWidget {
   }
 
   List<Widget> _buildListItems(
-      BuildContext context,
-      List<MetaTile?> metaTilesInfo,
-      int tileOrigin,
-      var metaTile,
-      ) {
+    BuildContext context,
+    List<MetaTile?> metaTilesInfo,
+    int tileOrigin,
+    var metaTile,
+  ) {
     List<Widget> items = [];
     String? currentSource;
     int? currentOrigin;
@@ -228,9 +227,9 @@ class MetaTileListView extends StatelessWidget {
                       final metaTileCubit = context.read<MetaTileCubit>();
                       final sourceTileData = metaTileCubit
                           .extractSourceTileData(
-                        tileInfo.name,
-                        tileInfo.tileOrigin,
-                      );
+                            tileInfo.name,
+                            tileInfo.tileOrigin,
+                          );
 
                       var sourceMetaTile = MetaTile(
                         height: 8,
@@ -249,7 +248,9 @@ class MetaTileListView extends StatelessWidget {
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('${sourceMetaTile.name} tiles saved to graphics'),
+                          content: Text(
+                            '${sourceMetaTile.name} tiles saved to graphics',
+                          ),
                           duration: const Duration(seconds: 2),
                         ),
                       );

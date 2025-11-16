@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:game_boy_graphics_editor/widgets/tiles/meta_tile_display.dart';
 
+import '../core/load_callbacks.dart';
 import '../cubits/graphics_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
 import '../models/graphics/background.dart';
 import '../models/graphics/graphics.dart';
-import '../models/load_callbacks.dart';
 import '../models/source_info.dart';
 import '../models/states/graphics_state.dart';
 import 'background/background_preview_dialog.dart';
@@ -305,7 +305,6 @@ class _GraphicListTile extends StatelessWidget {
     }
   }
 
-
   void _showTilePreviewDialog(BuildContext context, graphic) {
     final controller = TextEditingController(
       text: graphic.tileOrigin.toString(),
@@ -373,7 +372,7 @@ class _GraphicListTile extends StatelessWidget {
                     runSpacing: 8,
                     children: List.generate(
                       tileCount,
-                          (index) => Column(
+                      (index) => Column(
                         children: [
                           SizedBox(
                             width: 40,
@@ -599,7 +598,9 @@ class _GraphicListTile extends StatelessWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                                color: Theme.of(
+                                  context,
+                                ).primaryColor.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(

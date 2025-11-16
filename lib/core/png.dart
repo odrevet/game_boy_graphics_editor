@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:image/image.dart' as img;
 
-import 'graphics/graphics.dart';
-import 'graphics/meta_tile.dart';
+import '../models/graphics/graphics.dart';
+import '../models/graphics/meta_tile.dart';
 
 Uint8List tilesToPNG(Graphics metaTile, List<int> colorSet, int count) {
   final image = img.Image(

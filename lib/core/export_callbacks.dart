@@ -8,13 +8,12 @@ import 'package:game_boy_graphics_editor/models/graphics/meta_tile.dart';
 import 'package:game_boy_graphics_editor/models/sourceConverters/gbdk_background_converter.dart';
 import 'package:game_boy_graphics_editor/models/source_info.dart';
 
-import '../../models/download_stub.dart'
-    if (dart.library.html) '../../models/download.dart';
 import '../cubits/app_state_cubit.dart';
 import '../cubits/meta_tile_cubit.dart';
 import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
+import 'download_stub.dart' if (dart.library.html) '../../models/download.dart';
 import 'png.dart';
 
 void onFileSaveAsSourceCode(

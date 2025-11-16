@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:game_boy_graphics_editor/core/export_callbacks.dart';
 import 'package:game_boy_graphics_editor/cubits/background_cubit.dart';
-import 'package:game_boy_graphics_editor/models/export_callbacks.dart';
 import 'package:game_boy_graphics_editor/models/graphics/graphics.dart';
 
 import '../cubits/meta_tile_cubit.dart';
-import '../models/sourceConverters/source_parser.dart';
+import '../models/source_parser.dart';
 import '../models/source_info.dart';
 import 'export_preview.dart';
 

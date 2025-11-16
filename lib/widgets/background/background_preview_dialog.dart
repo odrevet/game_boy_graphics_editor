@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_boy_graphics_editor/models/sourceConverters/converter_utils.dart';
+import 'package:game_boy_graphics_editor/core/converter_utils.dart';
 
 import '../../cubits/meta_tile_cubit.dart';
 import '../../models/graphics/background.dart';

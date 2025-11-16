@@ -1,10 +1,10 @@
 import 'package:petitparser/petitparser.dart';
 
-import '../graphics/background.dart';
-import '../graphics/graphics.dart';
-import '../graphics/meta_tile.dart';
-import '../source_info.dart';
-import 'gbdk_tile_converter.dart';
+import 'graphics/background.dart';
+import 'graphics/graphics.dart';
+import 'graphics/meta_tile.dart';
+import 'source_info.dart';
+import 'sourceConverters/gbdk_tile_converter.dart';
 
 class SourceParser {
   late Parser _parser;
@@ -221,9 +221,8 @@ class SourceParser {
     }
 
     final matchingArray = allArrays.firstWhere(
-          (arr) => arr.name == nameToSearch,
-      orElse: () =>
-      throw Exception('Array $nameToSearch not found in source'),
+      (arr) => arr.name == nameToSearch,
+      orElse: () => throw Exception('Array $nameToSearch not found in source'),
     );
 
     // Extract the original array definition substring

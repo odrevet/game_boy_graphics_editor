@@ -4,8 +4,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:game_boy_graphics_editor/models/sourceConverters/converter_utils.dart';
-import 'package:game_boy_graphics_editor/models/sourceConverters/source_parser.dart';
+import 'package:game_boy_graphics_editor/core/converter_utils.dart';
+import 'package:game_boy_graphics_editor/models/source_parser.dart';
 import 'package:game_boy_graphics_editor/models/source_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
@@ -65,11 +65,11 @@ Future<List<Graphics>?> onImportHttp(
 }
 
 Future<List<Graphics>?> onImport(
-    BuildContext context,
-    String type,
-    String compression,
-    FilePickerResult filePickerResult
-    ) async {
+  BuildContext context,
+  String type,
+  String compression,
+  FilePickerResult filePickerResult,
+) async {
   // Handle multiple files
   final allGraphics = <Graphics>[];
 

@@ -28,12 +28,12 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   }
 
   fill(
-      int rowIndex,
-      int colIndex,
-      int metaTileIndex,
-      int intensity,
-      int targetColor,
-      ) => emit(
+    int rowIndex,
+    int colIndex,
+    int metaTileIndex,
+    int intensity,
+    int targetColor,
+  ) => emit(
     state.copyWith()
       ..fill(metaTileIndex, intensity, rowIndex, colIndex, targetColor),
   );
@@ -229,13 +229,13 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
   }
 
   void rectangle(
-      int metaTileIndex,
-      int intensity,
-      int xFrom,
-      int yFrom,
-      int xTo,
-      int yTo,
-      ) {
+    int metaTileIndex,
+    int intensity,
+    int xFrom,
+    int yFrom,
+    int xTo,
+    int yTo,
+  ) {
     MetaTile metaTile = state.copyWith();
     metaTile.rectangle(metaTileIndex, intensity, xFrom, yFrom, xTo, yTo);
     emit(metaTile);
@@ -366,9 +366,8 @@ class MetaTileCubit extends ReplayCubit<MetaTile> {
         .asMap()
         .entries
         .where(
-          (entry) =>
-      entry.value != null && entry.value!.tileOrigin == origin,
-    )
+          (entry) => entry.value != null && entry.value!.tileOrigin == origin,
+        )
         .map((entry) => entry.key)
         .toList();
   }
