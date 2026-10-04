@@ -15,11 +15,11 @@ import '../models/graphics/graphics.dart';
 import 'file_picker_utils.dart';
 
 Future<List<Graphics>?> onImportHttp(
-  BuildContext context,
-  String parse,
-  String type,
-  String url,
-) async {
+    BuildContext context,
+    String parse,
+    String type,
+    String url,
+    ) async {
   Uri uriObject = Uri.parse(url);
 
   if (type == 'Auto') {
@@ -65,15 +65,15 @@ Future<List<Graphics>?> onImportHttp(
 }
 
 Future<List<Graphics>?> onImport(
-  BuildContext context,
-  String type,
-  String compression,
-  FilePickerResult filePickerResult,
-) async {
+    BuildContext context,
+    String type,
+    String compression,
+    List<PlatformFile> files,
+    ) async {
   // Handle multiple files
   final allGraphics = <Graphics>[];
 
-  for (var platformFile in filePickerResult.files) {
+  for (var platformFile in files) {
     final filePath = platformFile.path!;
     final fileName = platformFile.name;
 
@@ -152,10 +152,10 @@ Future<List<Graphics>?> onImport(
 }
 
 Future<List<Graphics>?> onImportFromClipboard(
-  BuildContext context,
-  String type,
-  String compression,
-) async {
+    BuildContext context,
+    String type,
+    String compression,
+    ) async {
   ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
   if (type == 'Auto') {
     type = 'Source';
@@ -196,10 +196,10 @@ String resolveType(String path) {
 }
 
 List<int> _decompress(
-  String inputPath,
-  String compression,
-  BuildContext context,
-) {
+    String inputPath,
+    String compression,
+    BuildContext context,
+    ) {
   var content = <int>[];
   // decompress to a temp file
   var systemTempDir = Directory.systemTemp;

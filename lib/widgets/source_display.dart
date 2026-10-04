@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../core/download_stub.dart'
-    if (dart.library.html) '../models/download.dart';
+if (dart.library.html) '../models/download.dart';
 
 class SourceDisplay extends StatelessWidget {
   final String name;
@@ -41,24 +42,24 @@ class SourceDisplay extends StatelessWidget {
             ),
             kIsWeb
                 ? IconButton(
-                    iconSize: 18,
-                    icon: const Icon(Icons.download),
-                    onPressed: () => downloadString(source, name),
-                  )
+              iconSize: 18,
+              icon: const Icon(Icons.download),
+              onPressed: () => downloadString(source, name),
+            )
                 : IconButton(
-                    iconSize: 18,
-                    icon: const Icon(Icons.save_as),
-                    onPressed: () async {
-                      var fileName = await FilePicker.platform.saveFile(
-                        allowedExtensions: [extension],
-                        fileName: name,
-                      );
-                      if (fileName != null) {
-                        var file = File(fileName);
-                        file.writeAsString(source);
-                      }
-                    },
-                  ),
+              iconSize: 18,
+              icon: const Icon(Icons.save_as),
+              onPressed: () async {
+                final Uri? output = await FilePicker.saveFile(
+                  allowedExtensions: [extension],
+                  fileName: name,
+                  bytes: Uint8List.fromList(utf8.encode(source)),
+                );
+                if (output != null) {
+                  await File(output.toFilePath()).writeAsString(source);
+                }
+              },
+            ),
           ],
         ),
         Align(

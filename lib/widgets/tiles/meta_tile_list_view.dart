@@ -25,7 +25,7 @@ class MetaTileListView extends StatelessWidget {
     int index,
     MetaTile? tileInfo,
     int tileOrigin,
-    var metaTile,
+    metaTile,
   ) {
     String title = "${index.toString()} ${decimalToHex(index, prefix: true)}";
     if (tileOrigin > 0) {
@@ -91,7 +91,7 @@ class MetaTileListView extends StatelessWidget {
     );
   }
 
-  Widget _buildUnmappedHeader(BuildContext context, var metaTile) {
+  Widget _buildUnmappedHeader(BuildContext context, metaTile) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
@@ -181,7 +181,7 @@ class MetaTileListView extends StatelessWidget {
     BuildContext context,
     List<MetaTile?> metaTilesInfo,
     int tileOrigin,
-    var metaTile,
+    metaTile,
   ) {
     List<Widget> items = [];
     String? currentSource;

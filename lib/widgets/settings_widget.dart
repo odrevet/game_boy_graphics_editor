@@ -131,7 +131,7 @@ class SettingsWidget extends StatelessWidget {
                               onPressed: kIsWeb
                                   ? null
                                   : () {
-                                      FilePicker.platform.getDirectoryPath().then((
+                                      FilePicker.getDirectoryPath().then((
                                         dir,
                                       ) async {
                                         if (dir != null) {

@@ -111,8 +111,7 @@ class GraphicsListWidget extends StatelessWidget {
                       )
                     : ReorderableListView.builder(
                         itemCount: state.graphics.length,
-                        onReorder: (oldIndex, newIndex) {
-                          if (newIndex > oldIndex) newIndex--;
+                        onReorderItem: (oldIndex, newIndex) {
                           context.read<GraphicsCubit>().reorderGraphics(
                             oldIndex,
                             newIndex,
@@ -598,9 +597,8 @@ class _GraphicListTile extends StatelessWidget {
                                 vertical: 4,
                               ),
                               decoration: BoxDecoration(
-                                color: Theme.of(
-                                  context,
-                                ).primaryColor.withValues(alpha: 0.1),
+                                color: Theme.of(context).primaryColor
+                                    .withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(

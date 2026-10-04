@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -69,7 +70,7 @@ void onFileSaveAsBinTile(BuildContext context, Graphics graphics) async {
   if (kIsWeb) {
     downloadBytes(bytes, '${name}.bin');
   } else {
-    String? directory = await FilePicker.platform.getDirectoryPath();
+    String? directory = await FilePicker.getDirectoryPath();
 
     if (directory != null) {
       File("$directory/$name.bin").writeAsBytesSync(bytes);
@@ -84,7 +85,7 @@ void onFileSaveAsBinBackground(BuildContext context, Graphics graphics) async {
   if (kIsWeb) {
     downloadBytes(bytes, '$name.bin');
   } else {
-    String? directory = await FilePicker.platform.getDirectoryPath();
+    String? directory = await FilePicker.getDirectoryPath();
     if (directory != null) {
       File("$directory/$name.bin").writeAsBytesSync(bytes);
     }
@@ -101,7 +102,7 @@ void onFileTilesSaveAsPNG(BuildContext context, Graphics graphics) async {
   if (kIsWeb) {
     downloadBytes(png, "$tileName.png");
   } else {
-    FilePicker.platform.getDirectoryPath().then((directory) {
+    FilePicker.getDirectoryPath().then((directory) {
       if (directory != null) {
         File("$directory/$tileName.png").writeAsBytesSync(png);
       }
@@ -121,7 +122,7 @@ void onFileBackgroundSaveAsPNG(
   if (kIsWeb) {
     downloadBytes(png, "$backgroundName.png");
   } else {
-    FilePicker.platform.getDirectoryPath().then((directory) {
+    FilePicker.getDirectoryPath().then((directory) {
       if (directory != null) {
         File("$directory/$backgroundName.png").writeAsBytesSync(png);
       }
@@ -150,7 +151,7 @@ Future<String?> _saveSourceToDirectory(
   String name,
   SourceConverter sourceConverter,
 ) async {
-  String? directory = await FilePicker.platform.getDirectoryPath();
+  String? directory = await FilePicker.getDirectoryPath();
 
   if (directory != null) {
     File(
@@ -223,16 +224,17 @@ Future<void> onFileSaveUpdatedSourceCode(
     }
 
     // Save as new file
-    final result = await FilePicker.platform.saveFile(
+    final Uri? result = await FilePicker.saveFile(
       dialogTitle: 'Save Updated Source Code',
       fileName: '${graphics.name}.c',
       type: FileType.custom,
       allowedExtensions: ['c', 'h', 'cpp', 'hpp'],
+      bytes: Uint8List.fromList(utf8.encode(updatedSource)),
     );
 
     if (result == null) return; // User cancelled
 
-    final file = File(result);
+    final file = File(result.toFilePath());
     await file.writeAsString(updatedSource);
 
     if (context.mounted) {
