@@ -107,11 +107,13 @@ class GraphicFormState extends State<GraphicForm> {
                 decoration: const InputDecoration(labelText: 'Width'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (value == null || value.isEmpty)
+                  if (value == null || value.isEmpty) {
                     return 'Please enter width';
+                  }
                   final width = int.tryParse(value);
-                  if (width == null || width < 0)
+                  if (width == null || width < 0) {
                     return 'Please enter a valid non-negative number';
+                  }
                   return null;
                 },
               ),
@@ -121,11 +123,13 @@ class GraphicFormState extends State<GraphicForm> {
                 decoration: const InputDecoration(labelText: 'Height'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (value == null || value.isEmpty)
+                  if (value == null || value.isEmpty) {
                     return 'Please enter height';
+                  }
                   final height = int.tryParse(value);
-                  if (height == null || height < 0)
+                  if (height == null || height < 0) {
                     return 'Please enter a valid non-negative number';
+                  }
                   return null;
                 },
               ),
@@ -135,11 +139,13 @@ class GraphicFormState extends State<GraphicForm> {
                 decoration: const InputDecoration(labelText: 'Tile Origin'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (value == null || value.isEmpty)
+                  if (value == null || value.isEmpty) {
                     return 'Please enter tile origin';
+                  }
                   final origin = int.tryParse(value);
-                  if (origin == null || origin < 0)
+                  if (origin == null || origin < 0) {
                     return 'Please enter a valid non-negative number';
+                  }
                   return null;
                 },
               ),
@@ -170,14 +176,15 @@ class GraphicFormState extends State<GraphicForm> {
     );
   }
 
-  _readPropertiesFromFile() async {
-    final result = await selectFile(['*'], false);
+  Future<void> _readPropertiesFromFile() async {
+    final files = await selectFile(['*'], false);
+    if (files.isEmpty) return; // User cancelled
 
-    final source = ''; // TODO await readStringFromFilePickerResult(result);
+    final source = await readStringFromPlatformFile(files.first);
     _parseAndSetProperties(source);
   }
 
-  _readPropertiesFromClipboard() async {
+  Future<void> _readPropertiesFromClipboard() async {
     try {
       final clipboardData = await Clipboard.getData('text/plain');
       if (clipboardData?.text != null) {
