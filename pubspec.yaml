@@ -11,7 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.0
   file_picker: ^13.1.0
   image: ^4.10.1
   flutter_bloc: ^9.1.0
@@ -21,11 +20,12 @@ dependencies:
   path: ^1.8.3
   http: ^1.6.0
   equatable: ^3.0.0
-  petitparser: ^7.0.1
+  petitparser: ^7.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^6.0.0
 
 flutter:
   uses-material-design: true
