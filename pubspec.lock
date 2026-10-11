@@ -141,10 +141,10 @@ packages:
     dependency: transitive
     description:
       name: file_picker_darwin
-      sha256: "3df1dc8e881de9ffd3953c9e482ac5d6e1ffe1e7f7b231b5695543e251ab7918"
+      sha256: aa8f8f44e4d26202f39c5f1c27c4f0fd101f54a98fed22e24dd5ae7871e76496
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.3"
+    version: "2.1.4"
   file_picker_linux:
     dependency: transitive
     description:
