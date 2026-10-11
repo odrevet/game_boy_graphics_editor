@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../core/download_stub.dart'
-if (dart.library.html) '../models/download.dart';
+if (dart.library.js_interop) '../core/download.dart';
 
 class SourceDisplay extends StatelessWidget {
   final String name;

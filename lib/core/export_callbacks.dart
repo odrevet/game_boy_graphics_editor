@@ -14,14 +14,14 @@ import '../cubits/meta_tile_cubit.dart';
 import '../models/graphics/graphics.dart';
 import '../models/sourceConverters/gbdk_tile_converter.dart';
 import '../models/sourceConverters/source_converter.dart';
-import 'download_stub.dart' if (dart.library.html) '../../models/download.dart';
+import 'download_stub.dart' if (dart.library.js_interop) 'download.dart';
 import 'png.dart';
 
 void onFileSaveAsSourceCode(
-  BuildContext context,
-  String parse,
-  Graphics graphics,
-) {
+    BuildContext context,
+    String parse,
+    Graphics graphics,
+    ) {
   if (parse == 'Tile') {
     if (kIsWeb) {
       // Tile on Web
@@ -111,9 +111,9 @@ void onFileTilesSaveAsPNG(BuildContext context, Graphics graphics) async {
 }
 
 void onFileBackgroundSaveAsPNG(
-  BuildContext context,
-  Graphics background,
-) async {
+    BuildContext context,
+    Graphics background,
+    ) async {
   MetaTile metaTile = context.read<MetaTileCubit>().state;
   List<int> colorSet = context.read<AppStateCubit>().state.colorSet;
   String backgroundName = background.name;
@@ -131,11 +131,11 @@ void onFileBackgroundSaveAsPNG(
 }
 
 void _saveGraphics(
-  Graphics graphics,
-  String name,
-  SourceConverter sourceConverter,
-  BuildContext context,
-) {
+    Graphics graphics,
+    String name,
+    SourceConverter sourceConverter,
+    BuildContext context,
+    ) {
   _saveSourceToDirectory(graphics, name, sourceConverter).then((directory) {
     if (directory != null) {
       var snackBar = SnackBar(
@@ -147,10 +147,10 @@ void _saveGraphics(
 }
 
 Future<String?> _saveSourceToDirectory(
-  Graphics graphics,
-  String name,
-  SourceConverter sourceConverter,
-) async {
+    Graphics graphics,
+    String name,
+    SourceConverter sourceConverter,
+    ) async {
   String? directory = await FilePicker.getDirectoryPath();
 
   if (directory != null) {
@@ -167,10 +167,10 @@ Future<String?> _saveSourceToDirectory(
 
 /// Save updated source code - replaces the original array definition
 Future<void> onFileSaveUpdatedSourceCode(
-  BuildContext context,
-  Graphics graphics,
-  String updatedSource,
-) async {
+    BuildContext context,
+    Graphics graphics,
+    String updatedSource,
+    ) async {
   try {
     // If we have a source path, offer to overwrite or save as new
     if (graphics.sourceInfo?.path != null &&
