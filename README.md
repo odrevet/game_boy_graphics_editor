@@ -1,11 +1,16 @@
 This is a graphic editor compatible with [GBDK png2asset](https://github.com/gbdk-2020/gbdk-2020), 
 [`GameBoyTileDesigner (GBTD)` and `GameBoyMapBuilder (GBMB)`](https://github.com/gbdk-2020/GBTD_GBMB) 
 
-# Online version
 
-game_boy_graphics_editor can run in a browser !
 
-https://odrevet.github.io/game_boy_graphics_editor
+# versions
+
+Linux and windows builds are available in github releases
+
+An online version is also available
+
+[![Online version](https://img.shields.io/badge/Online-Web%20Browser-4285F4?logo=googlechrome&logoColor=white)](https://odrevet.github.io/kingdomino_score)
+
 
 # Features
 
@@ -22,6 +27,7 @@ https://odrevet.github.io/game_boy_graphics_editor
 | Editor | Export |
 |--------|--------|
 | [![Editor](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/editor.png)](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/editor.png) | [![Export](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/export.png)](https://raw.githubusercontent.com/odrevet/game_boy_graphics_editor/main/screenshots/export.png) |
+
 # How to Use
 
 ## Workflow Overview
