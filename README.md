@@ -9,7 +9,7 @@ Linux and windows builds are available in github releases
 
 An online version is also available
 
-[![Online version](https://img.shields.io/badge/Online-Web%20Browser-4285F4?logo=googlechrome&logoColor=white)](https://odrevet.github.io/kingdomino_score)
+[![Online version](https://img.shields.io/badge/Online-Web%20Browser-4285F4?logo=googlechrome&logoColor=white)](https://odrevet.github.io/game_boy_graphics_editor)
 
 
 # Features
